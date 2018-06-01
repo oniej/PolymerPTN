@@ -1,0 +1,315 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-item/paper-item-body.html">
+<link rel="import" href="../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-query.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/vaadin-dialog/vaadin-dialog.html">
+<link rel="import" href="../bower_components/vaadin-button/vaadin-button.html">
+<!-- <link rel="import" href="../bower_components/vaadin-dialog/theme/lumo/vaadin-dialog.html"> -->
+
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="my-icons.html">
+<link rel="import" href="short-unique-id.html">
+
+<dom-module id="my-hotel-edit">
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+            }
+
+            app-header {
+                color: rgb(255, 255, 255);
+                background-color: darkorange;
+            }
+
+            app-header paper-icon-button {
+                --paper-icon-button-ink-color: #000000;
+            }
+
+            app-drawer-layout:not([narrow]) [drawer-toggle] {
+                display: none;
+            }
+
+            app-drawer {
+                --app-drawer-content-container: {
+                    background-color: #F4F5F6;
+                }
+            }
+
+            @media (max-width: 768px) {
+                .docu {
+                    margin-left: 16px;
+                    margin-right: 16px;
+                    padding: 16px;
+                }
+                #buttonform {
+                    display: none;
+                }
+                #created {
+                    display: none;
+                }
+                #modified {
+                    display: none;
+                }
+                #iconcreated {
+                    display: inline-block
+                }
+                #buttonform {
+                    display: none;
+
+                }
+                iron-icon#iconform {
+                    display: inline-block;
+                }
+            }
+
+            @media (min-width: 768px) {
+                .docu {
+                    padding: 16px;
+                }
+                #iconform {
+                    display: none;
+                }
+            }
+
+            paper-dialog#hotelDelete {
+                border-color: #4caf50;
+                background-color: #f1f8e9;
+            }
+
+            paper-toast {
+                width: 20%;
+                position: fixed;
+                bottom: 1opx;
+                left: 10px;
+                margin-left: 20%;
+            }
+
+            paper-checkbox {
+                font-size: 14px;
+                margin-right: 5px;
+            }
+
+            hr {
+                background-color: #eee;
+                border: 0 none;
+                color: #eee;
+                height: 1px;
+            }
+        </style>
+
+        <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_hotelsLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
+
+        <app-drawer-layout fullbleed narrow="{{narrow}}" id="drawerLayout">
+            <app-header-layout id="appheader" has-scrolling-region>
+                <app-header fixed slot="header">
+                    <app-toolbar>
+                        <a href="/hotels">
+                            <paper-icon-button noink class="menu" style="color: white;" icon="my-icons:arrow-back"></paper-icon-button>
+                        </a>
+                        <div main-title>Edit Hotel</div>
+                        <paper-icon-button class="menu" icon="my-icons:delete-forever" on-tap="_openDelete"></paper-icon-button>
+                    </app-toolbar>
+                </app-header>
+                <div class="docu">
+                    <div class="docu-header">
+                        <div>
+                            <iron-icon id="iconcreated" icon="my-icons:flag" style="color:gray;"></iron-icon>
+                            <span id="created">Created by:</span> {{createdby}}&nbsp;
+                            <time-ago datetime$="{{_timeStampToDateTime(createdAt)}}">{{_timeStampToDateTime(createdAt)}}</time-ago>
+                        </div>
+                        <div>
+                            <iron-icon id="iconcreated" icon="my-icons:update" style="color:gray;"></iron-icon>
+                            <span id="modified">Last Modified by:</span> {{updatedby}}&nbsp;
+                            <time-ago datetime$="{{_timeStampToDateTime(updatedAt)}}">{{_timeStampToDateTime(updatedAt)}}</time-ago>
+
+                        </div>
+                    </div>
+                    <div class="details" id="form">
+                        <paper-input value="{{id}}" float-label label="Id" style="display: none"></paper-input>
+                        <paper-input value="{{hotel}}" float-label label="Hotel"></paper-input>
+                        <paper-input value="{{room1}}" float-label label="Room"></paper-input>
+                        <paper-input value="{{room2}}" float-label label="Room"></paper-input>
+                        <paper-input value="{{room3}}" float-label label="Room"></paper-input>
+                        <span id="writeHere"></span>
+                    </div>
+                    <div>
+                        <span>
+                            <paper-button on-tap="_openField" id="buttonform" style="color: cornflowerblue;">
+                                <iron-icon icon="my-icons:add-box" on-tap="_openField" style="color: cornflowerblue;"></iron-icon>
+                                Add more room</paper-button>
+                        </span>
+                        <iron-icon id="iconform" icon="my-icons:add-box" on-tap="_openField" style="color: cornflowerblue;"></iron-icon>
+                    </div>
+                    <br>
+                    <br>
+                    <span style="color:red; font-size:13px; float:left; margin-top: -16px;">{{msg}}</span>
+                    <span style="float: right; margin-top: -30px;">
+                        <a href="/hotels" style="text-decoration:none">
+                            <paper-button id="favright" class="cancel" on-tap="_cancel">Cancel</paper-button>
+                        </a>
+                        <paper-button id="favleft" class="darkorange" on-click="_openUpdate" raised>Update</paper-button>
+
+                    </span>
+                </div>
+            </app-header-layout>
+            <vaadin-dialog id="hotelDelete" no-close-on-esc no-close-on-outside-click>
+                <template>
+                    <h3 style="text-align: center">Confirm to Delete?</h3>
+                    <hr>
+                    <paper-button on-tap="_delete" style="color: red">Yes</paper-button>
+                    <paper-button on-tap="_close">No</paper-button>
+                </template>
+            </vaadin-dialog>
+            <vaadin-dialog id="successModalDelete" no-close-on-esc no-close-on-outside-click>
+                <template>
+                    <h3 style="text-align: center">Deleted Successfully</h3>
+                    <hr>
+                    <!-- <a href="/hotels"> -->
+                    <paper-button on-tap="_ok" style="float: right">Ok</paper-button>
+                    <!-- </a> -->
+                </template>
+            </vaadin-dialog>
+            <vaadin-dialog id="UpdateModal" no-close-on-esc no-close-on-outside-click>
+                <template>
+                    <h3 style="text-align: center">Save Changes?</h3>
+                    <hr>
+                    <paper-button on-tap="_update">Yes</paper-button>
+                    <paper-button on-tap="_close">No</paper-button>
+                </template>
+            </vaadin-dialog>
+            <vaadin-dialog id="successModalUpdate" no-close-on-esc no-close-on-outside-click>
+                <template>
+                    <h3 style="text-align: center">Successfully Updated.</h3>
+                    <hr>
+                    <!-- <a href="/hotels"> -->
+                    <paper-button on-tap="_ok" style="float: right">Ok</paper-button>
+                    <!-- </a> -->
+                </template>
+            </vaadin-dialog>
+        </app-drawer-layout>
+        <iron-ajax verbose id="ajax" method="[[method]]" on-response="_handleResponse"></iron-ajax>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'my-hotel-edit',
+            properties: {
+                editKey: {
+                    type: String,
+                    observer: '_editKeyChanged'
+                },
+                // editHotel: String,
+                // editRoom: String,
+                route: Object,
+                data: Object,
+                createdAt: String,
+            },
+
+            _editKeyChanged() {
+                if (this.editKey) {
+                    // /hotel/readMe/{{editKey}}
+                    this.url = '/hotel/readMe/' + this.editKey;
+                }
+                else {
+                    this.url = '/hotel/dummy';
+                }
+            },
+            _openUpdate() {
+                this.$.UpdateModal.opened = true;
+            },
+            _openDelete() {
+                this.$.hotelDelete.opened = true;
+            },
+            _close() {
+                this.$.hotelDelete.opened = false;
+                this.$.UpdateModal.opened = false;
+            },
+            _openField() {
+                var node = Polymer.dom(this.root).querySelector("#writeHere").innerHTML += '<span> <paper-input float-label label="Room" id="room"></paper-input></span>\r\n';
+            },
+            _update() {
+                if (this.hotel && this.room1) {
+                    if (this.editKey) {
+                        this.method = 'PUT';
+                        this.$.ajax.url = '/hotel/update/' + this.editKey;
+                        this.$.ajax.contentType = "application/json";
+                        this.$.ajax.body = {
+                            hotel: this.hotel,
+                            room1: this.room1,
+                            room2: this.room2,
+                            room3: this.room3,
+                            // updated_date: timeToday
+                        };
+                        this.$.ajax.generateRequest();
+                        this.$.successModalUpdate.opened = true;
+                        this.$.UpdateModal.opened = false;
+                        this.url = '/hotel/dummy';
+                    }
+                    else {
+                        this.msg = "All fields required";
+                    }
+                }
+            },
+            _delete() {
+                if (this.editKey) {
+                    this.method = 'DELETE';
+                    this.$.ajax.url = '/hotel/delete/' + this.editKey;
+                    this.$.ajax.generateRequest();
+                    // this.$.successModalDelete.open();
+                    this.url = '/hotel/dummy';
+                    this.$.hotelDelete.opened = false;
+                    this.$.successModalDelete.opened = true;
+                }
+
+            },
+            _ok() {
+                this.$.successModalDelete.opened = false;
+                this.$.successModalUpdate.opened = false;
+                window.location.assign("/hotels");
+            },
+            toggleDrawer() { },
+            _cancel() { },
+            ready() {
+            },
+            _hotelsLoaded(data) {
+                if (this.editKey) {
+                    if (this.url === '/hotel/readMe/' + this.editKey) {
+                        this.id = data.detail.response.data._id;
+                        this.hotel = data.detail.response.data.hotel;
+                        this.room1 = data.detail.response.data.room1;
+                        this.room2 = data.detail.response.data.room2;
+                        this.room3 = data.detail.response.data.room3;
+                        this.createdby = data.detail.response.data.created_by;
+                        this.createdAt = data.detail.response.data.createdAt;
+                        this.updatedby = data.detail.response.data.updated_by;
+                        this.updatedAt = data.detail.response.data.updatedAt;
+                        // this.hotels = data.detail.response.data.hotels;
+                        // console.log(this.createdAt);
+                    }
+                }
+            },
+            _timeStampToDateTime(ts) {
+                return new Date(ts);
+            },
+            _handleResponse() { }
+        })
+    </script>
+</dom-module>

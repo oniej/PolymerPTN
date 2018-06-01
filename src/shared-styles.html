@@ -1,0 +1,205 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+
+<!-- shared styles for all views -->
+<dom-module id="shared-styles">
+  <template>
+    <style>
+      .card {
+        margin: 24px;
+        padding: 16px;
+        color: #757575;
+        border-radius: 5px;
+        background-color: #fff;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+      }
+
+      .circle {
+        display: inline-block;
+        width: 64px;
+        height: 64px;
+        text-align: center;
+        color: #555;
+        border-radius: 50%;
+        background: #ddd;
+        font-size: 30px;
+        line-height: 64px;
+      }
+
+      .circle-mini {
+        display: inline-block;
+        width: 32px;
+        height: 32px;
+        text-align: center;
+        color: #555;
+        border-radius: 50%;
+        background: rgb(247, 246, 246);
+        border: 1px solid #bdbdbd;
+        /* font-size: 30px; */
+        line-height: 32px;
+        margin-right: 8px;
+      }
+
+      .circle-mini::before {
+        content: '';
+        display: block;
+        border-left: 1px solid #bdbdbd;
+        width: 0;
+        height: 16px;
+        z-index: 1;
+        margin-top: -16px;
+        margin-left: 15px;
+      }
+
+      .circle-mini::after {
+        content: '';
+        display: block;
+        border-left: 1px solid #bdbdbd;
+        width: 0;
+        height: 16px;
+        z-index: 1;
+        margin-top: 1px;
+        margin-left: 15px;
+      }
+
+
+      .circle-mini-first {
+        display: inline-block;
+        width: 32px;
+        height: 32px;
+        text-align: center;
+        color: #555;
+        border-radius: 50%;
+        background: rgb(247, 246, 246);
+        border: 1px solid #bdbdbd;
+        /* font-size: 30px; */
+        line-height: 32px;
+        margin-right: 8px;
+      }
+
+      .circle-mini-first::after {
+        content: '';
+        display: block;
+        border-left: 1px solid #bdbdbd;
+        width: 0;
+        height: 16px;
+        z-index: 1;
+        margin-top: 1px;
+        margin-left: 15px;
+      }
+
+      .circle-mini-last {
+        display: inline-block;
+        width: 32px;
+        height: 32px;
+        text-align: center;
+        color: #555;
+        border-radius: 50%;
+        background: rgb(247, 246, 246);
+        border: 1px solid #bdbdbd;
+        /* font-size: 30px; */
+        line-height: 32px;
+        margin-right: 8px;
+      }
+
+      .circle-mini-last::before {
+        content: '';
+        display: block;
+        border-left: 1px solid #bdbdbd;
+        width: 0;
+        height: 16px;
+        z-index: 1;
+        margin-top: -16px;
+        margin-left: 15px;
+      }
+
+
+      h1 {
+        margin: 16px 0;
+        color: #212121;
+        font-size: 22px;
+      }
+
+      .my-app-header {
+        margin-left: 16px;
+        margin-right: 5px;
+        --iron-icon-height: 48px;
+        --iron-icon-width: 48px;
+        /* color: #673AB7; */
+      }
+
+
+      .docu {
+        /* height: 100vh; */
+        max-width: 800px;
+        margin: 0 auto;
+        margin-top: 32px;
+        margin-bottom: 32px;
+        padding: 16px;
+        color: #757575;
+        background-color: #fff;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+      }
+
+      .docu-header {
+        height: 48px;
+        /* font-weight: bold; */
+        vertical-align: middle;
+        width: 100%;
+      }
+
+      .docu-header-toolbar {
+        display: inline-block;
+        height: 48px;
+        font-weight: bold;
+      }
+
+      paper-button.darkorange {
+        background: white;
+        height: 32px;
+        font-size: 12px;
+        font-weight: 400;
+        background-color: darkorange;
+        color: white;
+        width: 80px;
+      }
+
+      paper-button.gold {
+        color: white;
+        background-color: gold;
+        height: 32px;
+        font-size: 12px;
+        font-weight: 400;
+        width: 80px;
+      }
+
+      paper-button.cancel {
+        background: white;
+        height: 32px;
+        font-size: 12px;
+        font-weight: 400;
+        width: 80px;
+        text-decoration: none;
+      }
+
+      paper-button.ok {
+        background: white;
+        height: 32px;
+        font-size: 12px;
+        font-weight: 400;
+        width: 80px;
+        text-decoration: none;
+        float: right;
+      }
+    </style>
+  </template>
+</dom-module>

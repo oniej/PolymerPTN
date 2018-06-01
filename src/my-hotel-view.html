@@ -1,0 +1,215 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-item/paper-item-body.html">
+<link rel="import" href="../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/iron-scroll-threshold/iron-scroll-threshold.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-list/iron-list.html">
+
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="my-icons.html">
+<link rel="import" href="short-unique-id.html">
+
+<dom-module id="my-hotel-view">
+    <template>
+        <style include="shared-styles">
+            :host {
+                height: 100vh;
+                margin: 0;
+                display: flex;
+                flex-direction: column;
+            }
+
+            app-header {
+                color: rgb(255, 255, 255);
+                background-color: darkorange;
+            }
+
+            app-header paper-icon-button {
+                --paper-icon-button-ink-color: #000000;
+            }
+
+            app-drawer-layout:not([narrow]) [drawer-toggle] {
+                display: none;
+            }
+
+            app-drawer {
+                --app-drawer-content-container: {
+                    background-color: #F4F5F6;
+                }
+            }
+
+            @media (max-width: 768px) {
+                div.availability {
+                    margin: 16px;
+                    /* margin-top: 16px; */
+                    display: flex;
+                    /* height: 100vh; */
+                    flex-direction: column;
+                    border-radius: 3px;
+                    /* box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2); */
+                }
+                paper-search-bar {
+                    margin-left: 80px;
+                    width: 50%;
+                    color: black;
+                }
+            }
+
+            @media (min-width: 768px) {
+                div.availability {
+                    width: 765px;
+                    margin: 16px auto;
+                    /* margin-bottom: 1000px; */
+                    /* height: 100vh; */
+                    border-radius: 3px;
+                    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+                }
+                paper-search-bar {
+                    margin-left: 50px;
+                    width: 50%;
+                    color: black;
+                }
+                #modified {
+                    float: left;
+                    /* display: flex; */
+                }
+            }
+
+
+            paper-dialog#hotelDelete {
+                border-color: #4caf50;
+                background-color: #f1f8e9;
+            }
+
+            paper-toast {
+                width: 20%;
+                position: fixed;
+                bottom: 1opx;
+                left: 10px;
+                margin-left: 20%;
+            }
+
+            paper-checkbox {
+                font-size: 14px;
+                margin-right: 5px;
+            }
+        </style>
+
+        <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_hotelsLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
+        <app-drawer-layout fullbleed narrow="{{narrow}}" id="drawerLayout">
+            <app-header-layout id="appheader" has-scrolling-region>
+                <app-header fixed slot="header">
+                    <app-toolbar>
+                        <a href="/hotels">
+                            <paper-icon-button noink class="menu" style="color: white;" icon="my-icons:arrow-back"></paper-icon-button>
+                        </a>
+                        <div main-title>Hotel Details</div>
+                    </app-toolbar>
+                </app-header>
+                <!-- <iron> -->
+                <iron-scroll-document id="threshold">
+                    <div class="availability">
+                        <div id="header" class="header" style="background-color:cornflowerblue; padding: 16px; padding-bottom: 5px; font-size: 14px;">
+                            <div style="margin-top: 5px;">
+                                <iron-icon icon="my-icons:location-city" id="date" style="color: white"></iron-icon>
+                                <span style="color: white">Hotel</span>
+                            </div>
+                            <span id="type" style="color: white; margin-left: 5%; font-size: 30px;">
+                                {{hotel}}
+                                <!-- Shangrila [[item.hotel]] -->
+                            </span>
+                        </div>
+                        <div style="padding: 16px; background-color: white; font-size: 14px;">
+                            <!-- <hr style="border-color: gray; size: -1cm"> -->
+                            <div style="margin-top: 2px;">
+                                <span style="color: gray; size: 12px;">
+                                    <iron-icon icon="my-icons:weekend" style="color: gray"></iron-icon> Rooms:</span>
+                            </div>
+                            <div style="font-size: 16px">
+                                <span id="type" style="color:black; margin-left: 30px; ">
+                                    {{room}}
+                                    <!-- Standard -->
+                                </span>
+                                <!-- <span id="type" style="color:black; margin-left: 30px; ">
+                                    Deluxe
+                                </span>
+                                <span id="type" style="color:black; margin-left: 30px; ">
+                                    Superior
+                                </span> -->
+
+                            </div>
+                            <!--   <span id="type" style="color:black; margin-left: 30px; ">
+                            <iron-icon icon="my-icons:event" id="date" style="color: gray"></iron-icon> [[item.createdAt]]
+                        </span>
+                        <div style="margin-top: 2px;">
+                            <span style="color: gray">Modified:</span>
+                        </div>
+                        <span id="type" style="color:black; margin-left: 30px; ">
+                            <iron-icon icon="my-icons:update" id="date" style="color: gray"></iron-icon> [[item.updated_by]]
+                        </span>
+                        <span id="type" style="color:black; margin-left: 30px; ">
+                            <iron-icon icon="my-icons:event" id="date" style="color: gray"></iron-icon> [[item.updatedAt]]
+                        </span> -->
+                        </div>
+                        <div style="padding: 2px; background-color: white; font-size: 11px;">
+                            <hr style="opacity: 99%">
+                            <div style="margin-top: 2px; margin-left: 5px;">
+                                <span style="color: gray">Created:
+                                    <!-- <iron-icon icon="my-icons:flag" id="date" style="color: gray; size: 10px;"></iron-icon> -->
+                                    &nbsp;&nbsp;&nbsp;Peter R. Villaceran&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mon May 21 2018
+                                    <!-- <iron-icon icon="my-icons:event" id="date" style="color: gray;size: 10px;"></iron-icon>Mon May 21 2018 -->
+                                </span>
+                            </div>
+                            <div style="margin-top: 2px; margin-left: 5px;">
+                                <span style="color: gray">Updated:
+                                    <!-- <iron-icon icon="my-icons:edit" id="date" style="color: gray; size: 10px;"></iron-icon> -->
+                                    &nbsp;&nbsp;&nbsp;Peter R. Villaceran&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mon May 27 2018
+                                    <!-- <iron-icon icon="my-icons:event" id="date" style="color: gray;size: 10px;"></iron-icon>Mon May 27 2018 -->
+                                </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </iron-scroll-document>
+            </app-header-layout>
+        </app-drawer-layout>
+        <iron-ajax verbose id="ajax" method="[[method]]" on-response="_handleResponse"></iron-ajax>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'my-hotel-view',
+            properties: {
+                dateCreated: String,
+                editKey: String,
+                route: Object,
+                data: Object,
+            },
+            toggleDrawer() { },
+            _cancel() { },
+            ready() {
+                var data = this.editKey.split("-");
+                var [id, hotel, room] = data;
+                // this.id = id;
+                this.hotel = hotel;
+                this.room = room;
+            }
+        })
+    </script>
+</dom-module>

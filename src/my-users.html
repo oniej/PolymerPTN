@@ -1,0 +1,325 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-messaging.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-query.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-button-group/paper-button-group.html">
+<link rel="import" href="../bower_components/paper-buttons-group/paper-buttons-group.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../bower_components/paper-item/paper-item-body.html">
+<link rel="import" href="../bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
+<link rel="import" href="../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../bower_components/iron-scroll-threshold/iron-scroll-threshold.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/datetime-picker/date-picker.html">
+<link rel="import" href="../bower_components/bwt-datatable/bwt-datatable.html">
+<link rel="import" href="../bower_components/bwt-datatable/bwt-datatable-card.html">
+
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="my-new-user.html">
+<link rel="import" href="my-edit-user.html">
+
+<dom-module id="my-users">
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+
+                padding: 10px;
+            }
+
+            paper-fab.blue {
+                position: fixed;
+                bottom: 32px;
+                right: 32px;
+
+            }
+
+            app-header {
+                color: rgb(255, 255, 255);
+                background-color: darkorange;
+                /* background-color: var(--paper-indigo-500); */
+                /* background-color: #388E3C; */
+            }
+
+            paper-icon-button.delete {
+                color: rgb(233, 79, 164);
+            }
+
+            paper-icon-button.edit {
+                color: rgb(233, 79, 164);
+            }
+
+            paper-icon-button.edit {
+                color: rgb(233, 79, 164);
+            }
+        </style>
+        <custom-style>
+            <style is="custom-style">
+                paper-fab.blue {
+                    /* --paper-fab-background: var(--paper-indigo-500); */
+                    --paper-fab-background: darkorange;
+                    --paper-fab-keyboard-focus-background: var(--paper-light-blue-900);
+                }
+            </style>
+        </custom-style>
+        <app-route route="{{route}}" pattern="/edit/:_id" data="{{editData}}" active="{{editActive}}"></app-route>
+        <div>
+            <iron-pages selected="[[route.path]]" attr-for-selected="name" fallback-selection="view404" role="main">
+                <div name="">
+                    <app-header-layout fullbleed has-scrolling-region>
+                        <app-header fixed slot="header">
+                            <app-toolbar primary id="tool1">
+                                <paper-icon-button class="menu" icon="my-icons:menu" drawer-toggle on-tap="toggleDrawer"></paper-icon-button>
+                                <div main-title>Hotel & Rooms</div>
+                            </app-toolbar>
+                        </app-header>
+
+                        <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_usersLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
+
+                        <paper-datatable-card style="padding:17px;" header-fixed id-property="_id" header="Users" id="datatableCard">
+                            <div slot="toolbar-select-single">
+                                <a style="text-decoration:none" href="users/edit/{{_id}}">
+                                    <paper-icon-button id="edit" class="edit" alt="{{_id}}" id="{{_id}}" data-args="{{_id}}" icon="datatable:editable"></paper-icon-button>
+                                </a>
+                                <!-- <paper-icon-button hidden="{{block}}" id="activate" class="delete" icon="my-icons:assignment-turned-in" no-ink on-tap="_activateSelected"></paper-icon-button>
+                                <paper-icon-button hidden="{{!block}}" id="deactivate" class="delete" icon="my-icons:block" no-ink on-tap="_deactivateSelected"></paper-icon-button> -->
+                            </div>
+                            <paper-datatable data="{{user_datas}}" id="datatable" header-fixed multi-selection selectable selected-items="{{selectedItem}}">
+                                <div no-results>
+                                    Loading or no more items...
+                                </div>
+                                <paper-datatable-column header="Account No" type="String" property="account_key" sortable></paper-datatable-column>
+                                <paper-datatable-column header="Fullname" type="String" property="fullname" sortable>
+                                    <!-- <template>
+                                    <span>[[value.fullaname]]</span>
+                                    <span>[[value.middlename]]</span>
+                                    <span>[[value.lastname]]</span>
+                                    <span>[[value.suffix]]</span>
+                                </template> -->
+                                </paper-datatable-column>
+                                <paper-datatable-column header="Email" type="String" property="email" sortable></paper-datatable-column>
+                                <paper-datatable-column header="Account_Type" type="String" property="account_type" sortable></paper-datatable-column>
+                                <paper-datatable-column header="Group" type="String" property="group" sortable></paper-datatable-column>
+                                <paper-datatable-column header="Active" type="Boolean" property="active" sortable></paper-datatable-column>
+                            </paper-datatable>
+                        </paper-datatable-card>
+
+                    </app-header-layout>
+                    <a href="/users/new" style="text-decoration: none; ">
+                        <paper-fab noink on-tap="_usernew" icon="my-icons:add" class="blue"></paper-fab>
+                    </a>
+                </div>
+                <div name="/new">
+                    <div id="usernew"></div>
+                    <my-user-new id="d23" path=" " prev-route="{{route.prefix}}"></my-user-new>
+                </div>
+
+                <!-- <div name="/edit">
+                <div id="hoteledit"></div>
+                <my-hotel-edit id="d24" edit-key='{{editData._id}}' prev-route="{{route.prefix}}"></my-hotel-edit>
+            </div> -->
+
+                <div name="view404 ">Not found.</div>
+            </iron-pages>
+        </div>
+        <template is="dom-if" if="{{editActive}}" restamp>
+            <!-- <div hidden$="{{!editActive}}"> -->
+            <div id="useredit"></div>
+            <my-edit-user id="d25" edit-key='{{editData._id}}' prev-route="{{route.prefix}}"></my-edit-user>
+            <!-- </div> -->
+        </template>
+
+        <vaadin-dialog id="deactivate" no-close-on-esc no-close-on-outside-click>
+            <template>
+                <h3 style="text-align: center">Deactivated User?</h3>
+                <hr>
+                <paper-button on-tap="_deactivate">Yes</paper-button>
+                <paper-button on-tap="_close">No</paper-button>
+            </template>
+        </vaadin-dialog>
+        <vaadin-dialog id="activate" no-close-on-esc no-close-on-outside-click>
+            <template>
+                <h3 style="text-align: center">Successfully Updated.</h3>
+                <hr>
+                <paper-button on-tap="_deactivated">Yes</paper-button>
+                <paper-button on-tap="_close">No</paper-button>
+            </template>
+        </vaadin-dialog>
+        <vaadin-dialog id="deactivateSuccess" no-close-on-esc no-close-on-outside-click>
+            <template>
+                <h3 style="text-align: center">User Deactivated</h3>
+                <hr>
+                <paper-button on-tap="_close">Ok</paper-button>
+            </template>
+        </vaadin-dialog>
+
+        <iron-ajax verbose id="ajax" method="[[method]]" on-response="_handleResponse"></iron-ajax>
+
+    </template>
+
+    <script>
+        Polymer({
+            is: 'my-users',
+            properties: {
+                route: Object,
+                routeData: Object,
+                data: Object,
+                account_key: {
+                    type: String,
+                    value: '',
+                },
+                selectedItem: {
+                    type: String,
+                    observer: '_selectedItemChanged'
+                },
+                activate: String
+            },
+            _selectedItemChanged() {
+                if (this.selectedItem.length > 0) {
+                    if (this.selectedItem.length > 1) {
+                        this.selectedItems = this.selectedItem;
+                        // console.log(this.selectedItems);
+                    } else {
+                        this._id = this.selectedItem[0]._id;
+                        this.fullname = this.selectedItem[0].fullname;
+                        this.email = this.selectedItem[0].email;
+                        this.account_type = this.selectedItem[0].account_type;
+                        this.active = this.selectedItem[0].activate;
+                        if (this.selectedItem[0].active == false) {
+                            this.block = false;
+                        } else {
+                            this.block = true;
+                        }
+                        // console.log(this.active);
+                    }
+                }
+            },
+            _deactivateSelected() {
+                this.$.deactivate.opened = true;
+            },
+
+            _activateSelected() {
+                this.$.activate.opened = true;
+            },
+            _close() {
+                this.$.activate.opened = false;
+                this.$.deactivate.opened = false;
+                this.$.deactivateSuccess = false;
+            },
+            _deactivate() {
+                if (this.selectedItem.length > 0) {
+                    this.editKey = this.selectedItem[0]._id;
+                    if (this.editKey) {
+                        this.method = 'PUT';
+                        this.$.ajax.url = '/users/block/' + this.editKey;
+                        this.$.ajax.contentType = "application/json";
+                        this.$.ajax.body = {
+                            active: this.active = false,
+                        };
+                        // console.log(this.$.ajax.body);
+                        this.$.ajax.generateRequest();
+                        this.$.deactivateSuccess = true;
+                        this.url = '/users/dummy';
+                        // console.log(this.editKey);
+                    }
+
+                    else { }
+
+                }
+            },
+            ready() {
+                this._selectedItemChanged(" ");
+                // super.ready();
+                this.selectedItem = " ";
+                this.url = '/users/read';
+                // console.log(createdAt);
+            },
+            _handleResponse(e) {
+                this.url = '/users/read';
+                this.id = '';
+                this.hotel = '';
+                this.room = '';
+                this.method = '';
+            },
+            _usersLoaded(data) {
+                // console.log(data);
+                if (data.detail.response.data !== null) {
+                    this.user_datas = data.detail.response.data;
+                    // this.account_key = data.detail.response.data._id;
+                    // console.log(this.account_key);
+                }
+            },
+            _usernew() {
+                var node = Polymer.dom(this.root).querySelector("#usernew");
+                if (node) {
+                    var oldDiv = Polymer.dom(node.parentNode).querySelector("#d23");
+                    if (oldDiv) {
+                        Polymer.dom(node.parentNode).removeChild(oldDiv);
+
+                    }
+                    var newDiv = document.createElement("my-new-user");
+                    newDiv.setAttribute("id", "d23");
+                    newDiv.setAttribute("prev-route", this.route.prefix);
+                    // newDiv.setAttribute("block", "3")
+                    //if open existing
+                    var currentDiv = document.getElementById("usernew");
+                    Polymer.dom(node.parentNode).insertBefore(newDiv, currentDiv);
+                }
+            },
+            editDetails(e) {
+                var data_args = Polymer.dom(e).rootTarget.getAttribute("alt");
+                var node = Polymer.dom(this.root).querySelector("#useredit");
+                if (node) {
+                    var oldDiv = Polymer.dom(node.parentNode).querySelector("#d25");
+                    if (oldDiv) {
+                        Polymer.dom(node.parentNode).removeChild(oldDiv);
+                    }
+                    var newDiv = document.createElement("my-edit-user");
+                    newDiv.setAttribute("id", "d25")
+                    newDiv.setAttribute("edit-key", data_args)
+                    newDiv.setAttribute("prev-route", this.route.prefix);
+                    // console.log(newDiv);
+                    //if open existing
+                    var currentDiv = document.getElementById("useredit");
+                    Polymer.dom(node.parentNode).insertBefore(newDiv, currentDiv);
+                }
+            },
+            toggleDrawer() {
+                this.dispatchEvent(new CustomEvent('toggleDrawer', {
+                    bubbles: true, composed: true, detail: {
+                        narrow: this.$.narrow
+                    }
+                }));
+                this.$.narrow = !this.$.narrow;
+            }
+
+
+        });
+    </script>
+</dom-module>

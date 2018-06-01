@@ -1,0 +1,320 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-item/paper-item-body.html">
+<link rel="import" href="../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/vaadin-dialog/vaadin-dialog.html">
+<link rel="import" href="../bower_components/vaadin-button/vaadin-button.html">
+
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="my-icons.html">
+<link rel="import" href="short-unique-id.html">
+
+<dom-module id="my-edit-user">
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+            }
+
+            app-header {
+                color: rgb(255, 255, 255);
+                background-color: darkorange;
+            }
+
+            app-header paper-icon-button {
+                --paper-icon-button-ink-color: #000000;
+            }
+
+            app-drawer-layout:not([narrow]) [drawer-toggle] {
+                display: none;
+            }
+
+            app-drawer {
+                --app-drawer-content-container: {
+                    background-color: #F4F5F6;
+                }
+            }
+
+            @media (max-width: 768px) {
+                .docu {
+                    margin-left: 16px;
+                    margin-right: 16px;
+                    padding: 16px;
+                }
+            }
+
+            @media (min-width: 768px) {
+                .docu {
+                    /* margin-left: 16px;
+                    margin-right: 16px; */
+                    padding: 16px;
+                }
+            }
+
+            paper-toast {
+                width: 20%;
+                position: fixed;
+                bottom: 1opx;
+                left: 10px;
+                margin-left: 20%;
+            }
+
+            paper-checkbox {
+                font-size: 14px;
+                margin-right: 5px;
+            }
+
+            hr {
+                background-color: #eee;
+                border: 0 none;
+                color: #eee;
+                height: 1px;
+            }
+        </style>
+        <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_usersLoad" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
+        <app-drawer-layout fullbleed narrow="{{narrow}}" id="drawerLayout">
+            <app-header-layout id="appheader" has-scrolling-region>
+                <app-header fixed slot="header">
+                    <app-toolbar>
+                        <a href="/users">
+                            <paper-icon-button noink class="menu" style="color: white;" icon="my-icons:arrow-back"></paper-icon-button>
+                        </a>
+                        <div main-title>Edit User</div>
+                        <!-- <paper-icon-button hidden="{{block}}" class="delete" icon="my-icons:assignment-turned-in" no-ink on-tap="_activateSelected"></paper-icon-button>
+                        <paper-icon-button hidden="{{!block}}" class="delete" icon="my-icons:block" no-ink on-tap="_deactivateSelected"></paper-icon-button> -->
+                    </app-toolbar>
+                </app-header>
+
+                <div class="docu">
+                    <div class="details">
+                        <paper-input value="{{fullname}}" float-label label="Full Name"></paper-input>
+                        <paper-input value="{{email}}" float-label label="Email"></paper-input>
+                        <paper-dropdown-menu style="cursor:pointer" label="Account Type" value="{{account_type}}">
+                            <paper-listbox slot="dropdown-content" class="dropdown-content" selected="{{roleAdd}}">
+                                <paper-item>Staff</paper-item>
+                                <paper-item>Agent</paper-item>
+                            </paper-listbox>
+                        </paper-dropdown-menu>
+                        <paper-dropdown-menu style="cursor:pointer" label="Group" value="{{group}}">
+                            <paper-listbox slot="dropdown-content" class="dropdown-content" selected="{{groupAdd}}">
+                                <paper-item>Tabikobu</paper-item>
+                                <paper-item>PTN</paper-item>
+                            </paper-listbox>
+                        </paper-dropdown-menu>
+                    </div>
+                    <br>
+                    <br>
+                    <span style="color:red; font-size:13px; float:left; margin-top: -16px;">{{msg}}</span>
+                    <span style="float: right; margin-top: -30px;">
+                        <a href="/users" style="text-decoration:none">
+                            <paper-button id="favright" class="cancel" on-tap="_cancel">Cancel</paper-button>
+                        </a>
+                        <paper-button id="favleft" class="darkorange" on-click="_submit" raised>Update</paper-button>
+                    </span>
+                </div>
+
+                <vaadin-dialog id="UpdateModal" no-close-on-esc no-close-on-outside-click>
+                    <template>
+                        <h3 style="text-align: center">Save Changes?</h3>
+                        <hr>
+                        <paper-button on-tap="_update">Yes</paper-button>
+                        <paper-button on-tap="_close">No</paper-button>
+                    </template>
+                </vaadin-dialog>
+                <vaadin-dialog id="successModal" no-close-on-esc no-close-on-outside-click>
+                    <template>
+                        <h3 style="text-align: center">Successfully Updated.</h3>
+                        <hr>
+                        <paper-button on-tap="_ok" style="float: right">Ok</paper-button>
+                    </template>
+                </vaadin-dialog>
+            </app-header-layout>
+        </app-drawer-layout>
+
+
+        <vaadin-dialog id="activate" no-close-on-esc no-close-on-outside-click>
+            <template>
+                <h3 style="text-align: center">Successfully Updated.</h3>
+                <hr>
+                <paper-button on-tap="_activate">Yes</paper-button>
+                <paper-button on-tap="_close">No</paper-button>
+            </template>
+        </vaadin-dialog>
+
+        <vaadin-dialog id="deactivate" no-close-on-esc no-close-on-outside-click>
+            <template>
+                <h3 style="text-align: center">Deactivated User?</h3>
+                <hr>
+                <paper-button on-tap="_deactivate">Yes</paper-button>
+                <paper-button on-tap="_close">No</paper-button>
+            </template>
+        </vaadin-dialog>
+        <vaadin-dialog id="deactivateSuccess" no-close-on-esc no-close-on-outside-click>
+            <template>
+                <h3 style="text-align: center">User Deactivated</h3>
+                <hr>
+                <paper-button on-tap="_ok" style="float: right">Ok</paper-button>
+            </template>
+        </vaadin-dialog>
+
+        <iron-ajax verbose id="ajax" method="[[method]]" on-response="_handleResponse"></iron-ajax>
+
+
+
+    </template>
+    <script>
+        Polymer({
+            is: 'my-edit-user',
+            properties: {
+                editKey: {
+                    type: String,
+                    notify: true,
+                    observer: '_editKeyChanged'
+                },
+                selectedItem: {
+                    observer: '_selectedItemChanged'
+                },
+                selectedItems: {
+                    type: Object,
+                },
+                roleAdd: {
+                    type: Number,
+                    observer: 'roleAddChanged'
+                },
+                role: {
+                    type: String,
+                    value: ''
+                },
+                groupAd: {
+                    type: Number,
+                    observer: '_groupAddChanged',
+                },
+                group: {
+                    type: String,
+                }
+            },
+            _groupAddChanged() {
+                if (this.groupAd == 0) {
+                    this.group = 'Tabikobu'
+                } else {
+                    this.group = 'PTN'
+                }
+            },
+            roleAddChanged() {
+                if (this.roleAdd == 0) {
+                    this.account_type = 'Staff';
+                }
+                else if (this.roleAdd == 1) {
+                    this.account_type = 'Agent';
+                }
+            },
+            // getpath() {
+            //     this.accountkey = this.guid();
+            //     this.path = 'accountlist/' + this.accountkey;
+            //     return this.path;
+            // },
+            guid: function () {
+                var uid = new ShortUniqueId();
+                return uid.randomUUID(6);
+            },
+            _submit() {
+                this.$.UpdateModal.opened = true;
+            },
+            _close() {
+                this.$.deactivateSuccess.opened = false;
+                this.$.deactivate.opened = false;
+                // window.location.assign('/users');
+            }, _ok() {
+                this.$.deactivateSuccess.opened = false;
+                window.location.assign('/users');
+            },
+            _deactivateSelected() {
+                this.$.deactivate.opened = true;
+            },
+            _deactivate() {
+                if (this.editKey) {
+                    this.method = 'PUT';
+                    this.$.ajax.url = '/users/block/' + this.editKey;
+                    this.$.ajax.contentType = "application/json";
+                    this.$.ajax.body = {
+                        active: this.active = false,
+                    };
+                    // console.log(this.$.ajax.body);
+                    this.$.ajax.generateRequest();
+                    this.$.deactivate.opened = false;
+                    this.$.deactivateSuccess.opened = true;
+                    this.url = '/users/dummy';
+                }
+                else {
+                    this.msg = "All fields required";
+                }
+            },
+            _update() {
+                if (this.fullname && this.email) {
+                    if (this.editKey) {
+                        this.method = 'PUT';
+                        this.$.ajax.url = '/users/update/' + this.editKey;
+                        this.$.ajax.contentType = "application/json";
+                        this.$.ajax.body = {
+                            fullname: this.fullname,
+                            email: this.email,
+                            account_type: this.account_type,
+                            group: this.group,
+                            active: false,
+
+                        };
+                        // console.log(this.$.ajax.body);
+                        this.$.ajax.generateRequest();
+
+                        this.$.UpdateModal.opened = false;
+                        this.$.successModal.opened = true;
+                        this.url = '/users/dummy';
+                    }
+                    else {
+                        this.msg = "All fields required";
+                    }
+                }
+            },
+            _ok() {
+                this.$.successModal.opened = false;
+                window.location.assign('/users');
+            },
+            _editKeyChanged() {
+                if (this.editKey) {
+                    this.url = '/users/readMe/' + this.editKey;
+                }
+                else {
+                    this.url = '/users/dummy';
+                }
+            },
+            _usersLoad(data) {
+                if (this.editKey) {
+                    if (this.url === '/users/readMe/' + this.editKey) {
+                        this.fullname = data.detail.response.data.fullname;
+                        this.email = data.detail.response.data.email;
+                        this.account_type = data.detail.response.data.account_type;
+                        this.group = data.detail.response.data.group;
+                    }
+                }
+            },
+            toggleDrawer() { },
+            _cancel() { },
+            _handleResponse() { }
+        })
+    </script>
+</dom-module>

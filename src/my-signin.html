@@ -1,0 +1,185 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-input-container.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="my-icons.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner.html">
+
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+
+<dom-module id="my-signin">
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+                /* overflow: hidden; */
+            }
+
+            @media (min-width: 767px) {
+                .main-container {
+                    height: 100%;
+                    background-color: white;
+                    max-width: 370px;
+                    margin: 16px auto;
+                    padding: 40px;
+                    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+                }
+
+            }
+
+            @media (max-width: 767px) {
+                :host {
+                    height: 100%;
+                }
+                .main-container {
+                    height: 100%;
+                    background-color: white;
+                    margin: 0 auto;
+                    padding: 40px;
+                    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+
+                }
+
+            }
+
+            .action {
+                /* display: inline-block; */
+                float: right;
+            }
+
+            .action paper-button {
+                height: 32px;
+                font-size: 12px;
+                font-weight: 400;
+                width: 80px;
+            }
+
+            .moreoption {
+                /* display: inline-block; */
+                float: left;
+            }
+
+            .footer {
+                height: 48px;
+                /* align-items: middle; */
+            }
+
+            .header {
+                font-size: 28px;
+                font-weight: 400;
+                text-align: center;
+            }
+
+            #errorMsgDiv {
+                color: red;
+            }
+        </style>
+        <!-- <firebase-auth id="auth" user="{{user}}" provider="password" on-error="handleError"></firebase-auth> -->
+        <div class="main-container">
+            <center>
+                <a style="text-decoration:none;" href="/">
+                    <iron-image placeholder="images/ptn.jpg" data-src="images/ptn.jpg" sizing="cover" preload fade style="width:300px; height:155px;"></iron-image>
+                </a>
+            </center>
+            <div class="header">Sign in</div>
+            <br>
+            <div id="errorMsgDiv" style="display: none;">
+                <iron-icon icon="my-icons:error-outline"></iron-icon>&nbsp;{{validationMessage}}</div>
+
+            <paper-input label="Email" id="email" value="{{email}}" always-float-label required auto-validate error-message=""></paper-input>
+            <paper-input label="Password" type="password" id="password" value="{{password}}" always-float-label required auto-validate
+                error-message=""></paper-input>
+            <br>
+            <div class="footer">
+                <div class="action">
+                    <paper-button on-tap="_signIn" id="next" toggles raised class="gold">Next</paper-button>
+                </div>
+                <paper-spinner id="spinnerNext" active style="float:right; margin-right:10px; display:none"></paper-spinner>
+            </div>
+        </div>
+    </template>
+    <script>
+        Polymer({
+            is: 'my-signin',
+            properties: {
+                email: {
+                    type: String,
+                    observer: 'emailChanged'
+                },
+                password: {
+                    type: String,
+                    observer: 'passwordChanged'
+                }
+            },
+            // emailChanged() {
+            //     Polymer.dom(this.root).querySelector("#spinnerNext").style.display = "none";
+            //     Polymer.dom(this.root).querySelector("#next").disabled = false;
+            // },
+
+            // passwordChanged() {
+            //     Polymer.dom(this.root).querySelector("#spinnerNext").style.display = "none";
+            //     Polymer.dom(this.root).querySelector("#next").disabled = false;
+            // },
+
+            handleError() {
+                var errormsg = Polymer.dom(this.root).querySelector("#errorMsgDiv");
+                errormsg.setAttribute("style", "font-size:12px; display: block; background-color:red; color:white; text-align:center; border-radius: 5px; opacity:0.5; padding:5px");
+                this.validationMessage = 'Invalid email or password.';
+            },
+
+            _signIn() {
+                window.location.assign('/availability');
+                // if (!this.email && !this.password) {
+                //     this.validationMessage = "provide email and password correctly";
+                // } else {
+                //     this.method = 'POST';
+                //     this.$.ajax.url = '/user/login';
+                //     this.$.ajax.contentType = "application/json";
+                //     this.$.ajax.body = {
+                //         password: this.password,
+                //         email: this.email,
+                //     };
+                //     this.$.ajax.generateRequest();
+                //     this.url = '';
+
+                // }
+
+
+
+                // this.$.auth.createUserWithEmailAndPassword('hbsantillan@yahoo.com', '1'); 
+                // Polymer.dom(this.root).querySelector("#spinnerNext").style.display = "block";
+                // Polymer.dom(this.root).querySelector("#next").disabled = true;
+                // if (!this.email || !this.password) {
+                //     var errormsg = Polymer.dom(this.root).querySelector("#errorMsgDiv");
+                //     errormsg.setAttribute("style", "font-size:12px; display: block; background-color:red; color:white; text-align:center; border-radius: 5px; opacity:0.5; padding:5px");
+                //     this.validationMessage = 'Invalid empty email or password.';
+                // }
+                // else {
+                //     this.$.auth.signInWithEmailAndPassword(this.email, this.password)
+                //         .then(function (response) {
+                //             app = this.document.querySelector('my-app');
+                //             app.set('route.path', '/');
+                //         });
+                // }
+            },
+            showPassword() {
+                var showPw = Polymer.dom(this.root).querySelector("#password");
+                if (showPw.type === "password") {
+                    showPw.type = "text";
+                } else {
+                    showPw.type = "password";
+                }
+            }
+        })
+
+    </script>
+</dom-module>

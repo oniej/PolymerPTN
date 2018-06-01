@@ -1,0 +1,476 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-button-group/paper-button-group.html">
+<link rel="import" href="../bower_components/paper-buttons-group/paper-buttons-group.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../bower_components/paper-item/paper-item-body.html">
+<link rel="import" href="../bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
+<link rel="import" href="../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../bower_components/iron-scroll-threshold/iron-scroll-threshold.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/datetime-picker/date-picker.html">
+<link rel="import" href="../bower_components/pf-calendar/pf-calendar.html">
+<link rel="import" href="../bower_components/pf-calendar-events/pf-calendar-events.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-radio-button/paper-radio-button.html">
+<link rel="import" href="../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-tooltip/paper-tooltip.html">
+<link rel="import" href="../bower_components/vaadin-dialog/vaadin-dialog.html">
+
+<link rel="import" href="time-element.html">
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="my-hotel-new.html">
+<link rel="import" href="my-hotel-edit.html">
+<!-- <link rel="import" href="my-hotel-view.html"> -->
+
+<link rel="import" href="search-bar.html">
+<dom-module id="my-hotels">
+    <template>
+        <style include="shared-styles">
+            :host {
+                height: 100vh;
+                margin: 0;
+                display: flex;
+                flex-direction: column;
+            }
+
+            @media (max-width: 768px) {
+                div .availability {
+                    margin: 16px;
+                    /* margin-top: 16px; */
+                    display: flex;
+                    /* height: 100vh; */
+                    flex-direction: column;
+                    border-radius: 3px;
+                    /* box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2); */
+                }
+                paper-search-bar {
+                    margin-left: 80px;
+                    width: 50%;
+                    color: black;
+                }
+            }
+
+            @media (min-width: 768px) {
+                div .availability {
+                    width: 765px;
+                    margin: 16px auto;
+                    /* margin-bottom: 1000px; */
+                    /* height: 100vh; */
+                    border-radius: 3px;
+
+                    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+                }
+                paper-search-bar {
+                    margin-left: 50px;
+                    width: 50%;
+                    color: black;
+                }
+                #modified {
+                    float: left;
+                    /* display: flex; */
+                }
+            }
+
+            paper-fab.blue {
+                position: fixed;
+                bottom: 32px;
+                right: 32px;
+
+            }
+
+            app-header {
+                color: rgb(255, 255, 255);
+                background-color: darkorange;
+                /* background-color: var(--paper-indigo-500); */
+                /* background-color: #388E3C; */
+            }
+
+            #tool1 {
+                color: rgb(255, 255, 255);
+                background-color: darkorange;
+            }
+
+            #tool2 {
+                background-color: white;
+            }
+
+            .item {
+                @apply --layout-horizontal;
+                /* padding: 20px; */
+                background-color: white;
+                border-bottom: 1px solid #ddd;
+                cursor: pointer;
+                margin-bottom: 10px;
+                box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+            }
+
+            .pad {
+                padding: 0 16px;
+                @apply --layout-flex;
+                @apply --layout-vertical;
+            }
+
+            #action {
+                /* display: inline-block; */
+                margin-top: 10px;
+                float: right;
+            }
+
+            div .option {
+                position: absolute;
+                left: 300px;
+                top: 200px;
+            }
+
+            #btn-clear {
+                position: fixed;
+                right: 80px;
+                color: gray;
+            }
+
+            #btn-arrow {
+                position: absolute;
+                color: black;
+            }
+
+            #btn-menu {
+                color: gray;
+                position: fixed;
+                right: 40px;
+            }
+
+            hr {
+                background-color: #eee;
+                border: 0 none;
+                color: #eee;
+                height: 1px;
+            }
+        </style>
+        <custom-style>
+            <style is="custom-style">
+                paper-fab.blue {
+                    /* --paper-fab-background: var(--paper-indigo-500); */
+                    --paper-fab-background: darkorange;
+                    /* --paper-fab-background: darkorange; */
+                    /* --paper-fab-keyboard-focus-background: var(--paper-light-blue-900); */
+                }
+
+                paper-radio-button {
+                    --paper-radio-button-label-spacing: 5px;
+                    --paper-radio-button-size: 24px;
+                }
+
+                paper-radio-button.close {
+                    --paper-radio-button-label-color: red;
+                }
+
+                paper-radio-button.limited {
+                    --paper-radio-button-label-color: yellow;
+                }
+
+                /* paper-radio-button.available {
+                    --paper-radio-button-label-color: red;
+                } */
+            </style>
+        </custom-style>
+
+        <app-route route="{{route}}" pattern="/edit/:_id" data="{{editData}}" active="{{editActive}}"></app-route>
+        <app-route route="{{route}}" pattern="/view/:_id" data="{{viewData}}" active="{{viewActive}}"></app-route>
+
+        <iron-pages selected="[[route.path]]" attr-for-selected="name" fallback-selection="view404" role="main">
+            <div name="">
+                <app-header-layout fullbleed has-scrolling-region>
+                    <app-header fixed slot="header">
+                        <template is="dom-if" if="{{openSearch}}">
+                            <app-toolbar primary id="tool2">
+                                <paper-icon-button id="btn-arrow" icon="my-icons:arrow-back" drawer-toggle on-tap="toggleReturn"></paper-icon-button>
+                                <paper-search-bar id="search" query="{{search}}" disable-filter-button></paper-search-bar>
+                                <template is="dom-if" if="{{search}}">
+                                    <paper-icon-button id="btn-clear" icon="my-icons:close" drawer-toggle on-tap="toggleClear"></paper-icon-button>
+                                </template>
+                                <paper-menu-button id="btn-menu" horizontal-align="right">
+                                    <paper-icon-button slot="dropdown-trigger" icon="my-icons:tune"></paper-icon-button>
+                                    <paper-listbox style="cursor:pointer" slot="dropdown-content" selected="{{filterBy}}">
+                                        <paper-item style="display:none;">Filter By</paper-item>
+                                        <paper-item>Hotels</paper-item>
+                                        <paper-item>Rooms</paper-item>
+                                    </paper-listbox>
+                                </paper-menu-button>
+                            </app-toolbar>
+                        </template>
+                        <template is="dom-if" if="{{!openSearch}}">
+                            <app-toolbar primary id="tool1">
+                                <paper-icon-button class="menu" icon="my-icons:menu" drawer-toggle on-tap="toggleDrawer"></paper-icon-button>
+                                <div main-title>Hotels</div>
+                                <paper-icon-button class="menu" icon="my-icons:search" drawer-toggle on-tap="toggleSearch"></paper-icon-button>
+                            </app-toolbar>
+                        </template>
+                    </app-header>
+
+                    <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_hotelsLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
+                    <iron-scroll-document id="threshold">
+                        <template is="dom-repeat" items="[[hotels]]" as="item">
+                            <div class="availability">
+                                <div id="header" class="header" style="background-color:cornflowerblue; padding: 16px; padding-bottom: 5px; font-size: 14px;">
+                                    <div style="color: white;">
+                                        <a href="/hotels/edit/{{item._id}}">
+                                            <paper-icon-button style="float: right; margin-top:-10px; margin-right:-10px;color: white;" on-tap="_edithotel" icon="my-icons:edit"
+                                                alt="{{item._id}}"></paper-icon-button>
+                                        </a>
+                                        <iron-icon icon="my-icons:location-city" id="date" style="margin-top: -10px"></iron-icon>
+                                        <span id="type" style="font-size: 30px;">
+                                            [[item.hotel]]
+                                        </span>
+                                    </div>
+                                </div>
+                                <div style="padding: 16px; background-color: white; font-size: 14px;">
+                                    <div style="margin-top: 2px;">
+                                        <span style="color: gray; size: 12px;">
+                                            <iron-icon icon="my-icons:hotel" style="color: gray"></iron-icon> Rooms:</span>
+                                    </div>
+                                    <div style="font-size: 16px;">
+                                        <span id="type" style="color:black; margin-left: 30px; ">
+                                            [[item.room1]]
+                                        </span>
+                                        <br>
+                                        <span id="type" style="color:black; margin-left: 30px; ">
+                                            [[item.room2]]
+                                        </span>
+                                        <br>
+                                        <span id="type" style="color:black; margin-left: 30px; ">
+                                            [[item.room3]]
+                                        </span>
+
+                                    </div>
+                                </div>
+                                <div style="padding: 2px; background-color: white; font-size: 11px;">
+                                    <hr>
+                                    <div style="margin-top: 2px; margin-left: 5px;">
+                                        <span style="color: gray">Created: &nbsp;
+                                            <time-ago datetime$="{{_timeStampToDateTime(item.createdAt)}}">{{_timeStampToDateTime(item.createdAt)}}</time-ago>
+                                            &nbsp;by&nbsp;[[item.created_by]]
+
+                                        </span>
+                                    </div>
+                                    <div style="margin-top: 2px; margin-left: 5px;">
+                                        <span style="color: gray">Updated: &nbsp;
+                                            <time-ago datetime$="{{_timeStampToDateTime(item.updatedAt)}}">{{_timeStampToDateTime(item.updatedAt)}}</time-ago>
+                                            &nbsp;by&nbsp;[[item.updated_by]]
+                                        </span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+
+                    </iron-scroll-document>
+
+                    <paper-dialog id="openAdd">
+                        <h2>Confirm to Delete?</h2>
+                        <div class="buttons">
+                            <paper-button dialog-confirm on-tap="_delete">Yes</paper-button>
+                            <paper-button dialog-dismiss autofocus>No</paper-button>
+                        </div>
+                    </paper-dialog>
+
+                </app-header-layout>
+                <a href="/hotels/new" style="text-decoration: none; ">
+                    <paper-fab noink on-tap="_hotelnew" icon="my-icons:add" class="blue"></paper-fab>
+                </a>
+            </div>
+            <div name="/new">
+                <div id="hotelnew"></div>
+                <my-hotel-new id="d23" path=" " prev-route="{{route.prefix}}"></my-hotel-new>
+            </div>
+
+            <!-- <div name="/edit">
+                <div id="hoteledit"></div>
+                <my-hotel-edit id="d24" edit-key='{{editData._id}}' prev-route="{{route.prefix}}"></my-hotel-edit>
+            </div> -->
+
+            <div name="view404 ">Not found.</div>
+        </iron-pages>
+        <!-- <template is="dom-if" if="{{notActive}}"> -->
+        <div hidden$="{{!editActive}}">
+            <div id="hoteledit"></div>
+            <my-hotel-edit id="d24" edit-key='{{editData._id}}' prev-route="{{route.prefix}}"></my-hotel-edit>
+        </div>
+
+        <div hidden$="{{!viewActive}}">
+            <div id="hotelview"></div>
+            <my-hotel-view id="d25" edit-key='{{viewData._id}}' prev-route="{{route.prefix}}"></my-hotel-view>
+        </div>
+        <!-- </template> -->
+        <!-- <iron-ajax verbose id="ajax" method="[[method]]" on-response="_handleResponse"></iron-ajax> -->
+    </template>
+
+    <script>
+        Polymer({
+            is: 'my-hotels',
+            properties: {
+                route: Object,
+                routeData: Object,
+                data: Object,
+                openSearch: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                },
+                narrow: {
+                    type: Boolean,
+                    notify: true
+                },
+                search: {
+                    type: String,
+                    value: '',
+                },
+                filterBy: {
+                    type: Number,
+                    value: 2
+                },
+                observers: [
+                    '_searchChanged(filterBy, search)',]
+            },
+            ready() {
+                //  super.ready();
+                this.url = '/hotel/read';
+                // console.log(this.url);
+            },
+            _handleResponse(e) {
+                this.url = '/hotel/read';
+                this.id = '';
+                this.hotel = '';
+                this.room = '';
+                this.method = '';
+                // console.log(this.hotel);
+
+            },
+            _hotelsLoaded(data) {
+                // console.log(data);
+                if (this.url === '/hotel/read') {
+                    this.hotels = data.detail.response.data;
+                    // console.log(this.hotels);
+                }
+            },
+            toggleSearch() {
+                this.openSearch = true;
+            },
+            toggleReturn() {
+                this.openSearch = false;
+                this.search = '';
+            },
+            toggleClear() {
+                this.search = '';
+            },
+            _searchChanged(p, r) {
+                // if (p) {
+                //     console.log(p);
+                //     if (p == 1) {
+                //         if (r) {
+                //             this.loadingData = 'hotel';
+                //         }
+
+                //         }
+                //     }
+
+            },
+            getClassForItem(item, selected) {
+                return selected ? 'item expanded' : 'item';
+            },
+            _getEditAppLink(e) {
+                return '/hotels/edit/' + e.toString();
+            },
+            _hotelnew() {
+                this.$.openAdd.open();
+                // var node = Polymer.dom(this.root).querySelector("#hotelnew");
+                // if (node) {
+                //     var oldDiv = Polymer.dom(node.parentNode).querySelector("#d23");
+                //     if (oldDiv) {
+                //         Polymer.dom(node.parentNode).removeChild(oldDiv);
+
+                //     }
+                //     var newDiv = document.createElement("my-hotel-new");
+                //     newDiv.setAttribute("id", "d23");
+                //     newDiv.setAttribute("prev-route", this.route.prefix);
+                //     // newDiv.setAttribute("block ", "3 ")
+                //     //if open existing
+                //     var currentDiv = document.getElementById("hotelnew");
+                //     Polymer.dom(node.parentNode).insertBefore(newDiv, currentDiv);
+                // }
+            },
+            _edithotel(e) {
+                var data_args = Polymer.dom(e).rootTarget.getAttribute("alt");
+                var node = Polymer.dom(this.root).querySelector("#hoteledit");
+                if (node) {
+                    var oldDiv = Polymer.dom(node.parentNode).querySelector("#d24");
+                    if (oldDiv) {
+                        Polymer.dom(node.parentNode).removeChild(oldDiv);
+                    }
+                    var newDiv = document.createElement("my-hotel-edit");
+                    newDiv.setAttribute("id", "d24")
+                    newDiv.setAttribute("edit-key", data_args);
+                    newDiv.setAttribute("prev-route", this.route.prefix);
+                    var currentDiv = document.getElementById("hoteledit");
+                    Polymer.dom(node.parentNode).insertBefore(newDiv, currentDiv);
+                    // console.log(newDiv);
+                }
+            },
+            _viewHotel(e) {
+                var editKey = Polymer.dom(e).rootTarget.getAttribute("alt");
+                var node = Polymer.dom(this.root).querySelector("#hotelview");
+                if (node) {
+                    var oldDiv = Polymer.dom(node.parentNode).querySelector("#d25");
+                    if (oldDiv) {
+                        Polymer.dom(node.parentNode).removeChild(oldDiv);
+                    }
+                    var newDiv = document.createElement("my-hotel-view");
+                    newDiv.setAttribute("id", "d25")
+                    newDiv.setAttribute("edit-key", editKey);
+                    newDiv.setAttribute("prev-route", this.route.prefix);
+                    var currentDiv = document.getElementById("hotelview");
+                    Polymer.dom(node.parentNode).insertBefore(newDiv, currentDiv);
+
+                }
+            },
+            toggleDrawer() {
+                this.dispatchEvent(new CustomEvent('toggleDrawer', {
+                    bubbles: true, composed: true, detail: {
+                        narrow: this.$.narrow
+                    }
+                }));
+                this.$.narrow = !this.$.narrow;
+            },
+            _save() {
+
+            },
+            _timeStampToDateTime(ts) {
+                return new Date(ts);
+            },
+        });
+    </script>
+</dom-module>

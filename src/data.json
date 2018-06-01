@@ -1,0 +1,35 @@
+[
+  {
+    "index": 0,
+    "created_by": "Peter Pedro",
+    "created_on": "Mon May 25 2018 10:33:06",
+    "hotel": "Shangrila",
+    "modify_by": "Peter Pedro",
+    "modify_on": "Mon May 28 2018 03:27:03",
+    "notes": "updated Shangrila room standard to close",
+    "modify_ago": "3 minutes ago",
+    "created_ago": "1day ago"
+  },
+  {
+    "index": 0,
+    "created_by": "Jieno Solivio",
+    "created_on": "Sun Aug 15 2018 03:27:03 ",
+    "hotel": "Anemone",
+    "modify_by": "Jieno Solivio",
+    "modify_on": "Mon May 25 2018 10:33:06",
+    "notes": "Updated Anemone room deluxe to close",
+    "modify_ago": "1 hour ago",
+    "created_ago": "1day ago"
+  },
+  {
+    "index": 0,
+    "created_by": "Ardie Dierrayal",
+    "created_on": "Tue May 15 2018 03:27:03",
+    "hotel": "Cebu Pacific",
+    "modify_on": "Tue May 15 2018 03:27:03",
+    "modify_by": "Ardie Dierrayal",
+    "notes": "Updated ebu Pacific room deluxe to close",
+    "modify_ago": "1 day ago",
+    "created_ago": "1day ago"
+  }
+]

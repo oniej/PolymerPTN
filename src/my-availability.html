@@ -1,0 +1,382 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-messaging.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-query.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-button-group/paper-button-group.html">
+<link rel="import" href="../bower_components/paper-buttons-group/paper-buttons-group.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../bower_components/paper-item/paper-item-body.html">
+<link rel="import" href="../bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
+<link rel="import" href="../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../bower_components/iron-scroll-threshold/iron-scroll-threshold.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/datetime-picker/date-picker.html">
+<link rel="import" href="../bower_components/pf-calendar/pf-calendar.html">
+<link rel="import" href="../bower_components/pf-calendar-events/pf-calendar-events.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-radio-button/paper-radio-button.html">
+<link rel="import" href="../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+
+<link rel="import" href="time-element.html">
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="my-availability-new.html">
+<link rel="import" href="my-availability-edit.html">
+
+<link rel="import" href="search-bar.html">
+<dom-module id="my-availability">
+    <template>
+        <style include="shared-styles">
+            :host {
+                height: 100vh;
+                margin: 0;
+                display: flex;
+                flex-direction: column;
+            }
+
+            @media (max-width: 768px) {
+                div .availability {
+                    margin: 16px;
+                    /* margin-top: 16px; */
+                    display: flex;
+                    /* height: 100vh; */
+                    flex-direction: column;
+                    border-radius: 3px;
+                    /* box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2); */
+                }
+                paper-search-bar {
+                    margin-left: 80px;
+                    width: 50%;
+                    color: black;
+                }
+            }
+
+            @media (min-width: 768px) {
+                div .availability {
+                    width: 765px;
+                    margin: 16px auto;
+                    /* margin-bottom: 1000px; */
+                    /* height: 100vh; */
+                    border-radius: 3px;
+
+                    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+                }
+                paper-search-bar {
+                    margin-left: 50px;
+                    width: 50%;
+                    color: black;
+                }
+            }
+
+            paper-fab.blue {
+                position: fixed;
+                bottom: 32px;
+                right: 32px;
+
+            }
+
+            app-header {
+                color: rgb(255, 255, 255);
+                background-color: darkorange;
+                /* background-color: var(--paper-indigo-500); */
+                /* background-color: #388E3C; */
+            }
+
+            #tool1 {
+                color: rgb(255, 255, 255);
+                background-color: darkorange;
+            }
+
+            #tool2 {
+                background-color: white;
+            }
+
+            .item {
+                @apply --layout-horizontal;
+                /* padding: 20px; */
+                background-color: white;
+                border-bottom: 1px solid #ddd;
+                cursor: pointer;
+                margin-bottom: 10px;
+                box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+            }
+
+            .pad {
+                padding: 0 16px;
+                @apply --layout-flex;
+                @apply --layout-vertical;
+            }
+
+            #action {
+                /* display: inline-block; */
+                margin-top: 10px;
+                float: right;
+            }
+
+            div .option {
+                position: absolute;
+                left: 300px;
+                top: 200px;
+            }
+
+            #btn-clear {
+                position: fixed;
+                right: 80px;
+                color: gray;
+            }
+
+            #btn-arrow {
+                position: absolute;
+                color: black;
+            }
+
+            #btn-menu {
+                color: gray;
+                position: fixed;
+                right: 40px;
+            }
+        </style>
+        <custom-style>
+            <style is="custom-style">
+                paper-fab.blue {
+                    /* --paper-fab-background: var(--paper-indigo-500); */
+                    --paper-fab-background: darkorange;
+                    /* --paper-fab-background: var(--paper-light-blue-900); */
+                    /* --paper-fab-keyboard-focus-background: var(--paper-light-blue-900); */
+                }
+
+                paper-radio-button {
+                    --paper-radio-button-label-spacing: 5px;
+                    --paper-radio-button-size: 24px;
+                }
+
+                paper-radio-button.close {
+                    --paper-radio-button-label-color: red;
+                }
+
+                paper-radio-button.limited {
+                    --paper-radio-button-label-color: yellow;
+                }
+
+                /* paper-radio-button.available {
+                    --paper-radio-button-label-color: red;
+                } */
+            </style>
+        </custom-style>
+
+        <app-route route="{{route}}" pattern="/edit/:_id" data="{{editData}}" active="{{editActive}}"></app-route>
+
+        <iron-pages selected="[[route.path]]" attr-for-selected="name" fallback-selection="view404" role="main">
+            <div name="">
+                <app-header-layout fullbleed has-scrolling-region>
+                    <app-header fixed slot="header">
+                        <template is="dom-if" if="{{openSearch}}">
+                            <app-toolbar primary id="tool2">
+                                <paper-icon-button id="btn-arrow" icon="my-icons:arrow-back" drawer-toggle on-tap="toggleReturn"></paper-icon-button>
+                                <paper-search-bar id="search" query="{{search}}" disable-filter-button></paper-search-bar>
+                                <template is="dom-if" if="{{search}}">
+                                    <paper-icon-button id="btn-clear" icon="my-icons:close" drawer-toggle on-tap="toggleClear"></paper-icon-button>
+                                </template>
+                                <paper-menu-button id="btn-menu" horizontal-align="right">
+                                    <paper-icon-button slot="dropdown-trigger" icon="my-icons:tune"></paper-icon-button>
+                                    <paper-listbox style="cursor:pointer" slot="dropdown-content" selected="{{filterBy}}">
+                                        <paper-item style="display:none;">Filter By</paper-item>
+                                        <paper-item>Staff Lastname</paper-item>
+                                        <paper-item>Hotel</paper-item>
+                                    </paper-listbox>
+                                </paper-menu-button>
+                            </app-toolbar>
+                        </template>
+                        <template is="dom-if" if="{{!openSearch}}">
+                            <app-toolbar primary id="tool1">
+                                <paper-icon-button class="menu" icon="my-icons:menu" drawer-toggle on-tap="toggleDrawer"></paper-icon-button>
+                                <div main-title>Availability</div>
+                                <paper-icon-button class="menu" icon="my-icons:search" drawer-toggle on-tap="toggleSearch"></paper-icon-button>
+                            </app-toolbar>
+                        </template>
+                    </app-header>
+                    <iron-scroll-document id="threshold">
+                        <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_availabilityLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
+                        <template is="dom-repeat" items="[[availabilities]]" as="item">
+                            <div class="availability">
+                                <div id="header" class="header" style="background-color:cornflowerblue; padding: 16px; padding-bottom: 5px; font-size: 14px;">
+                                    <a href="/availability/edit/{{item._id}}">
+                                        <paper-icon-button id="{{item._id}}" noink on-tap="_editAvailavility" data-args="{{item._id}}" icon="my-icons:edit" alt="{{item._id}}"
+                                            style="float: right; margin-top:-10px; margin-right:-10px;color: white;"></paper-icon-button>
+                                    </a>
+                                    <div style="color: white">
+                                        <iron-icon icon="my-icons:flag" id="date" style="color: white"></iron-icon>
+                                        Created
+                                        <span>
+                                            <time-ago datetime$="{{_timeStampToDateTime(item.createdAt)}}">{{_timeStampToDateTime(item.createdAt)}}</time-ago>
+                                            &nbsp;by&nbsp;[[item.created_by]]</span>
+                                    </div>
+                                    <div style="color: white">
+                                        <iron-icon icon="my-icons:update" id="date" style="color: white"></iron-icon>
+                                        Last Modified
+                                        <span>
+                                            <time-ago datetime$="{{_timeStampToDateTime(item.updatedAt)}}">{{_timeStampToDateTime(item.updatedAt)}}</time-ago>
+                                            &nbsp;by&nbsp;[[item.updated_by]]</span>
+                                    </div>
+                                </div>
+                                <div style="padding: 16px; background-color: white;">
+                                    <div style="margin-top: 5px;">
+                                        <iron-icon icon="my-icons:location-city" id="date" style="color: gray; margin-top: -10px"></iron-icon>
+                                        <span id="type" style="font-size: 24px;">
+                                            [[item.hotel]]
+                                        </span>
+                                    </div>
+                                    <div style="margin-top: 12px; font-size: 14px;">
+                                        <iron-icon icon="my-icons:speaker-notes" id="date" style="color: gray"></iron-icon>
+                                        <span id="type" style="color:gray;font-size: 14px; ">
+                                            [[item.notes]]
+                                        </span>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </template>
+                    </iron-scroll-document>
+                </app-header-layout>
+                <a href="/availability/new" style="text-decoration: none; ">
+                    <paper-fab noink on-tap="_availnew" icon="my-icons:add" class="blue"></paper-fab>
+                </a>
+            </div>
+
+            <div name="/new">
+                <div id="availnew"></div>
+                <my-availability-new id="d23" path=" " prev-route="{{route.prefix}}"></my-availability-new>
+            </div>
+            <div name="view404 ">Not found.</div>
+        </iron-pages>
+
+        <div hidden$="{{!editActive}}">
+            <div id="availedit"></div>
+            <my-availability-edit id="d24" edit-key='{{editData._id}}' prev-route="{{route.prefix}}"></my-availability-edit>
+        </div>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'my-availability',
+            properties: {
+                route: Object,
+                routeData: Object,
+                data: Object,
+                year: Number,
+                monthly: String,
+                openSearch: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                },
+                search: {
+                    type: String,
+                    value: '',
+                },
+                filterBy: {
+                    type: Number,
+                    value: 2
+                },
+                observers: [
+                    '_searchChanged(filterBy, search)',]
+                // isMousedown: { type: Boolean, value: false, }
+            },
+
+            toggleSearch() {
+                this.openSearch = true;
+            },
+            toggleReturn() {
+                this.openSearch = false;
+                this.search = '';
+            },
+            toggleClear() {
+                this.search = '';
+            },
+            _searchChanged(g, e) {
+
+            },
+            _availabilityLoaded(data) {
+                if (this.url === '/availability/read') {
+                    this.availabilities = data.detail.response.data;
+                    // console.log(this.hotels);
+                }
+            },
+            _availnew() {
+                var node = Polymer.dom(this.root).querySelector("#availnew");
+                if (node) {
+                    var oldDiv = Polymer.dom(node.parentNode).querySelector("#d23");
+                    if (oldDiv) {
+                        Polymer.dom(node.parentNode).removeChild(oldDiv);
+
+                    }
+                    var newDiv = document.createElement("my-availability-new");
+                    newDiv.setAttribute("id", "d23");
+                    newDiv.setAttribute("prev-route", this.route.prefix);
+                    // newDiv.setAttribute("block ", "3 ")
+                    //if open existing
+                    var currentDiv = document.getElementById("availnew");
+                    Polymer.dom(node.parentNode).insertBefore(newDiv, currentDiv);
+                }
+            },
+            _editAvailavility(e) {
+                var data_args = Polymer.dom(e).rootTarget.getAttribute("alt");
+                var node = Polymer.dom(this.root).querySelector("#availedit");
+                if (node) {
+                    var oldDiv = Polymer.dom(node.parentNode).querySelector("#d24");
+                    if (oldDiv) {
+                        Polymer.dom(node.parentNode).removeChild(oldDiv);
+                    }
+                    var newDiv = document.createElement("my-availability-edit");
+                    newDiv.setAttribute("id", "d24");
+                    newDiv.setAttribute("edit-key", data_args);
+                    newDiv.setAttribute("prev-route", this.route.prefix);
+                    // newDiv.setAttribute("block ", "3 ")
+                    //if open existing
+                    // console.log(newDiv);
+                    var currentDiv = document.getElementById("availedit");
+                    Polymer.dom(node.parentNode).insertBefore(newDiv, currentDiv);
+                }
+            },
+            toggleDrawer() {
+                this.dispatchEvent(new CustomEvent('toggleDrawer', {
+                    bubbles: true, composed: true, detail: {
+                        narrow: this.$.narrow
+                    }
+                }));
+                this.$.narrow = !this.$.narrow;
+            },
+            ready() {
+                this.url = '/availability/read';
+            },
+            _timeStampToDateTime(ts) {
+                return new Date(ts);
+            },
+        });
+    </script>
+</dom-module>

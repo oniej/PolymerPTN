@@ -1,0 +1,662 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-item/paper-item-body.html">
+<link rel="import" href="../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<!-- <link rel="import" href="../bower_components/polymerfire/firebase-document.html"> -->
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-dropdown/paper-dropdown.html">
+<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/vaadin-dialog/vaadin-dialog.html">
+<link rel="import" href="../bower_components/vaadin-button/vaadin-button.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="my-icons.html">
+<link rel="import" href="short-unique-id.html">
+
+<dom-module id="my-availability-edit">
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+
+                padding: 10px;
+            }
+
+            @media (max-width: 768px) {
+                paper-checkbox {
+                    display: inline-block;
+                    padding: 5px;
+                    margin-left: 16px;
+                }
+                #action {
+                    margin-top: 10px;
+                    float: right;
+                }
+                .addNotes {
+                    float: left;
+                    width: 200px;
+                }
+                #created {
+                    display: none;
+                }
+                .option {
+                    margin-top: 40px;
+                }
+                #Notes {
+                    display: none;
+                }
+
+            }
+
+            @media (min-width: 768px) {
+                paper-checkbox {
+                    display: inline-block;
+                    padding: 5px;
+                    margin-left: 16px auto;
+                }
+                #icon_notes {
+                    display: block;
+                }
+
+                .addNotes {
+                    float: right;
+                    cursor: pointer;
+                    margin-right: -15px;
+                    width: 300px;
+                }
+
+                .hotelSearch {
+                    margin-left: -5px;
+                }
+
+            }
+
+            #hotels {
+                font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+                border-collapse: collapse;
+                width: 100%;
+            }
+
+            #hotels td,
+            #hotels th {
+                text-align: center;
+                border: 1px solid #ddd;
+                padding: 2px;
+            }
+
+            #hotels th {
+                padding-top: 12px;
+                padding-bottom: 12px;
+            }
+
+            paper-fab.blue {
+                position: fixed;
+                bottom: 32px;
+                right: 32px;
+
+            }
+
+            app-header {
+                color: rgb(255, 255, 255);
+                background-color: darkorange;
+            }
+
+            paper-dialog#openNewNotes {
+                border-color: #4caf50;
+                background-color: #f1f8e9;
+            }
+
+            paper-dialog#availabilitySave {
+                border-color: #4caf50;
+                background-color: #f1f8e9;
+            }
+
+            paper-dialog#availabilityDelete {
+                border-color: #4caf50;
+                background-color: #f1f8e9;
+            }
+
+            #action {
+                margin-top: 10px;
+                float: right;
+            }
+
+            .red {
+                background: red;
+                color: white;
+            }
+
+            .yellow {
+                background: yellow;
+                color: white;
+            }
+
+            .green {
+                background: green;
+                color: black;
+            }
+
+            hr {
+                background-color: #eee;
+                border: 0 none;
+                color: #eee;
+                height: 1px;
+            }
+        </style>
+        <custom-style>
+            <style is="custom-style">
+                paper-fab.blue {
+                    /* --paper-fab-background: var(--paper-indigo-500); */
+                    --paper-fab-background: darkorange;
+                    --paper-fab-keyboard-focus-background: darkorange;
+                }
+
+                paper-checkbox {
+                    --paper-checkbox-label-spacing: 5px;
+                }
+
+                paper-checkbox.close {
+                    --paper-checkbox-unchecked-color: red;
+                    --paper-checkbox-checked-color: red;
+                    --paper-checkbox-label-color: red
+                }
+
+                paper-checkbox.limited {
+                    --paper-checkbox-unchecked-color: yellow;
+                    --paper-checkbox-checked-color: yellow;
+                    --paper-checkbox-label-color: yellow
+                }
+
+                paper-checkbox.available {
+                    --paper-checkbox-unchecked-color: green;
+                    --paper-checkbox-checked-color: green;
+                    --paper-checkbox-label-color: green
+                }
+            </style>
+        </custom-style>
+        <!-- <firebase-query id="query" path="{{getpath()}}" data="{{account}}"></firebase-query> -->
+        <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_availabilityLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
+
+        <app-drawer-layout fullbleed narrow="{{narrow}}" id="drawerLayout">
+            <app-header-layout id="appheader" has-scrolling-region>
+                <app-header fixed slot="header">
+                    <app-toolbar>
+                        <a href="/availability">
+                            <paper-icon-button noink class="menu" style="color: white;" icon="my-icons:arrow-back"></paper-icon-button>
+                        </a>
+                        <div main-title>Edit Availability</div>
+                        <paper-icon-button class="menu" icon="my-icons:delete-forever" on-tap="_openDelete"></paper-icon-button>
+                    </app-toolbar>
+                </app-header>
+
+                <div class="card">
+                    <div>
+                        <iron-icon icon="my-icons:flag" slot="prefix"></iron-icon>
+                        <span id="created">Created by:</span> {{created_by}}&nbsp;
+                        <time-ago datetime$="{{_timeStampToDateTime(createdAt)}}">{{_timeStampToDateTime(createdAt)}}</time-ago>
+                    </div>
+                    <div>
+                        <iron-icon icon="my-icons:update" slot="prefix"></iron-icon>
+                        <span id="created">Last Modified by:</span>{{updated_by}}&nbsp;
+                        <time-ago datetime$="{{_timeStampToDateTime(updatedAt)}}">{{_timeStampToDateTime(updatedAt)}}</time-ago>
+                    </div>
+                    <div class="hotels" style="padding:26px; margin-top:-30px; margin-bottom:56px; ">
+                        <div class="hotelSearch">
+                            <div style="float:left;">
+                                <div style="display:flex;">
+                                    <paper-dropdown-menu style="cursor:pointer;width:150px" value="{{hotel}}" label="Hotel" searchable>
+                                        <paper-listbox slot="dropdown-content" class="dropdown-content" selected="{{selectedHotels}}">
+                                            <paper-item>Pacific</paper-item>
+                                            <paper-item>Resorts World</paper-item>
+                                            <paper-item>Cebu Shangrila</paper-item>
+                                        </paper-listbox>
+                                    </paper-dropdown-menu>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="addNotes">
+                            <paper-input label="Notes" value="{{notes}}">
+                                <iron-icon icon="my-icons:speaker-notes" slot="prefix"></iron-icon>
+                            </paper-input>
+                        </div>
+                    </div>
+                    <br>
+                    <div class=" option">
+                        <hr>
+                        <paper-checkbox class="close" on-tap="_close">Close</paper-checkbox>
+                        <paper-checkbox class="limited" on-tap="_limited">Limited</paper-checkbox>
+                        <paper-checkbox class="available" on-tap="_available">Open</paper-checkbox>
+                    </div>
+                    <div style="margin-top: 10px; float: right">
+                        <paper-icon-button noink on-tap="_preMonth" style="color: black;" icon="my-icons:keyboard-arrow-left"></paper-icon-button>
+                        <span id="monthToday">{{month}}</span>
+                        <paper-icon-button noink on-tap="_nextMonth" style="color: black;" icon="my-icons:keyboard-arrow-right"></paper-icon-button>
+                    </div>
+                    <div id="table" style="width:100%;overflow-x:auto;">
+                        <table id="hotels">
+                            <tr>
+                                <!-- <th>May 2018</th> -->
+                                <th>June 2018</th>
+                                <th>1</th>
+                                <th>2</th>
+                                <th>3</th>
+                                <th>4</th>
+                                <th>5</th>
+                                <th>6</th>
+                                <th>7</th>
+                                <th>8</th>
+                                <th>9</th>
+                                <th>10</th>
+                                <th>11</th>
+                                <th>12</th>
+                                <th>13</th>
+                                <th>14</th>
+                                <th>15</th>
+                                <th>16</th>
+                                <th>17</th>
+                                <th>18</th>
+                                <th>19</th>
+                                <th>20</th>
+                                <th>21</th>
+                                <th>22</th>
+                                <th>23</th>
+                                <th>24</th>
+                                <th>25</th>
+                                <th>26</th>
+                                <th>27</th>
+                                <th>28</th>
+                                <th>29</th>
+                                <th>30</th>
+                                <!-- <th>31</th> -->
+                            </tr>
+                            <tr style=" background-color: #f2f2f2;">
+                                <!-- <td>Hotel</td> -->
+                                <td>Rooms</td>
+                                <td style="color: black;">Fri</td>
+                                <td style="color: black;">Sat</td>
+                                <td style="color: red;">Sun</td>
+                                <td style="color: black;">Mon</td>
+                                <td style="color: black;">Tue</td>
+                                <td style="color: black;">Wed</td>
+                                <td style="color: black;">Thu</td>
+                                <td style="color: black;">Fri</td>
+                                <td style="color: black;">Sat</td>
+                                <td style="color: red;">Sun</td>
+                                <td style="color: black;">Mon</td>
+                                <td style="color: black;">Tue</td>
+                                <td style="color: black;">Wed</td>
+                                <td style="color: black;">Thu</td>
+                                <td style="color: black;">Fri</td>
+                                <td style="color: black;">Sat</td>
+                                <td style="color: red;">Sun</td>
+                                <td style="color: black;">Mon</td>
+                                <td style="color: black;">Tue</td>
+                                <td style="color: black;">Wed</td>
+                                <td style="color: black;">Thu</td>
+                                <td style="color: black;">Fri</td>
+                                <td style="color: black;">Sat</td>
+                                <td style="color: red;">Sun</td>
+                                <td style="color: black;">Mon</td>
+                                <td style="color: black;">Tue</td>
+                                <td style="color: black;">Wed</td>
+                                <td style="color: black;">Thu</td>
+                                <td style="color: black;">Fri</td>
+                                <td style="color: black;">Sat</td>
+                                <!-- <td style="color: black;">Tue</td> -->
+                            </tr>
+                            <tr>
+                                <!-- <td style="color: black;">{{hotelResult}}</td> -->
+                                <td class="white">DELUXE</td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <!-- <td class="white"></td> -->
+                            </tr>
+                            <tr style="text-align: center">
+                                <!-- <td style="color: black;"> ANEMONE</td> -->
+                                <td class="white">STANDARD</td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <!-- <td class="white"></td> -->
+                            </tr>
+                            <tr style="text-align: center">
+                                <!-- <td style="color: black;"> CEBU MARINE</td> -->
+                                <td class="white">SUPERIOR</td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <!-- <td class="white"></td> -->
+                            </tr>
+                            <tr style="text-align: center">
+                                <!-- <td style="color: black;">CEBU MARINE</td> -->
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <td class="white"></td>
+                                <!-- <td class="white"></td> -->
+                            </tr>
+                            <tr>
+                            </tr>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+            </app-header-layout>
+            <paper-fab noink on-tap="_openSave" icon="my-icons:save" class="blue"></paper-fab>
+
+            <vaadin-dialog id="availabilitySave" no-close-on-esc no-close-on-outside-click>
+                <template>
+                    <h3 style="text-align: center">Save Changes?</h3>
+                    <hr>
+                    <paper-button on-tap="_update">Yes</paper-button>
+                    <paper-button on-tap="_closeDialog">No</paper-button>
+                </template>
+            </vaadin-dialog>
+            <vaadin-dialog id="availabilityDelete" no-close-on-esc no-close-on-outside-click>
+                <template>
+                    <h3 style="text-align: center">Confirm to Delete?</h3>
+                    <hr>
+                    <paper-button on-tap="_delete" style="color: red">Yes</paper-button>
+                    <paper-button on-tap="_closeDialog">No</paper-button>
+                </template>
+            </vaadin-dialog>
+            <vaadin-dialog id="successModal" no-close-on-esc no-close-on-outside-click>
+                <template>
+                    <h3 style="text-align: center">Deleted Successfully</h3>
+                    <hr>
+                    <paper-button on-tap="_closeModal" style="float: right">Ok</paper-button>
+                </template>
+            </vaadin-dialog>
+            <vaadin-dialog id="successUpdate" no-close-on-esc no-close-on-outside-click>
+                <template>
+                    <h3 style="text-align: center">Updated Successfully</h3>
+                    <hr>
+                    <paper-button on-tap="_closeModal" style="float: right">Ok</paper-button>
+                </template>
+            </vaadin-dialog>
+            </div>
+        </app-drawer-layout>
+        <iron-ajax verbose id="ajax" method="[[method]]" on-response="_handleResponse"></iron-ajax>
+
+    </template>
+
+    <script>
+        Polymer({
+            is: 'my-availability-edit',
+
+            properties: {
+                editKey: { type: String, notify: true, observer: '_onkeyChanged' },
+                route: Object,
+                year: Number,
+                month: String,
+                mynotes: {
+                    type: String,
+                    value: '',
+                },
+                selectedHotels: {
+                    type: Number,
+                    value: '',
+                    observer: '_hotelChanged',
+                },
+                hotelResult: {
+                    type: String,
+                    value: '',
+                },
+                me: String,
+
+                // isMousedown: { type: Boolean, value: false, }
+            },
+            _hotelChanged() {
+                if (this.selectedHotels == 0) {
+                    this.hotelResult = 'Pacific';
+                } else if (this.selectedHotels == 1) {
+                    this.hotelResult = 'Resorts World';
+                } else if (this.selectedHotels == 2) {
+                    this.hotelResult = 'Cebu Shangrila';
+                }
+                // } else if (this.selectedHotels == 3) {
+                //     this.hotelResult = 'Cebu Shangrila';
+                // }
+            },
+            _openSave() {
+                this.$.availabilitySave.opened = true;
+            },
+            _openDelete() {
+                this.$.availabilityDelete.opened = true;
+            },
+            _closeDialog() {
+                this.$.availabilitySave.opened = false;
+                this.$.availabilityDelete.opened = false;
+            },
+            _closeModal() {
+                this.$.successModal.opened = false;
+                this.$.successUpdate.opened = false;
+                window.location.assign('/availability');
+            },
+            _update() {
+                if (this.hotel) {
+                    if (this.editKey) {
+                        this.method = 'PUT';
+                        this.$.ajax.url = '/availability/update/' + this.editKey;
+                        this.$.ajax.contentType = "application/json";
+                        this.$.ajax.body = {
+                            hotel: this.hotel,
+                            notes: this.notes,
+                            created_by: this.created_by,
+                            updated_by: this.updated_by,
+                        };
+                        this.$.ajax.generateRequest();
+                        this.$.availabilitySave.opened = false;
+                        this.$.successUpdate.opened = true;
+                        this.url = '/availability/dummy';
+                    }
+                    else {
+                        this.msg = "All fields required";
+                    }
+                }
+            },
+            _delete() {
+                if (this.editKey) {
+                    this.method = 'DELETE';
+                    this.$.ajax.url = '/availability/delete/' + this.editKey;
+                    this.$.ajax.generateRequest();
+                    // this.$.successModalDelete.open();
+                    this.url = '/availability/dummy';
+                    this.$.availabilityDelete.opened = false;
+                    this.$.successModal.opened = true;
+                }
+            },
+            _close() {
+                var cells = Polymer.dom(this.root).querySelectorAll("td");
+                for (var i = 0; i < cells.length; i++) {
+                    cells[i].addEventListener("click", function () {
+                        this.className = this.className == "white" ? "red" : "white";
+                    });
+                }
+                // var table = Polymer.dom(this.root).querySelector("#hotels");
+            },
+            ready() {
+                // console.log(this.editKey);
+                var monthNames = ["January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December"
+                ];
+                var currentMonths = new Date()
+                this.month = monthNames[currentMonths.getMonth()] + " " + currentMonths.getDate() + " " + currentMonths.getFullYear();
+            },
+            _limited() {
+                var cells = Polymer.dom(this.root).querySelectorAll("td");
+                for (var i = 0; i < cells.length; i++) {
+                    cells[i].addEventListener("click", function () {
+                        this.className = this.className == "white" ? "yellow" : "white";
+                    });
+                }
+            },
+            _available() {
+                var cells = Polymer.dom(this.root).querySelectorAll("td");
+
+                for (var i = 0; i < cells.length; i++) {
+                    cells[i].addEventListener("click", function () {
+                        this.className = this.className == "white" ? "green" : "white";
+                    });
+                }
+            },
+            _preMonth() {
+
+            },
+            toggleDrawer() {
+                this.dispatchEvent(new CustomEvent('toggleDrawer', {
+                    bubbles: true, composed: true, detail: {
+                        narrow: this.$.narrow
+                    }
+                }));
+                this.$.narrow = !this.$.narrow;
+            },
+            _onkeyChanged() {
+                if (this.editKey) {
+                    this.url = '/availability/readEdit/' + this.editKey;
+                } else {
+                    this.url = '/availability/dummy';
+                }
+            },
+            _availabilityLoaded(data) {
+                if (this.editKey) {
+                    if (this.url === '/availability/readEdit/' + this.editKey) {
+                        this.hotel = data.detail.response.data.hotel;
+                        this.notes = data.detail.response.data.notes;
+                        this.createdAt = data.detail.response.data.createdAt;
+                        this.updatedAt = data.detail.response.data.updatedAt;
+                        this.created_by = data.detail.response.data.created_by;
+                        this.updated_by = data.detail.response.data.updated_by;
+                    }
+                }
+            },
+            _handleResponse() { },
+            _timeStampToDateTime(ts) {
+                return new Date(ts);
+            },
+        })
+    </script>
+</dom-module>
