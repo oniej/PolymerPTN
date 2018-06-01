@@ -1,0 +1,1 @@
+var mongoose=require("mongoose"),Schema=mongoose.Schema,CommentsSchema=new Schema({author:String,text:String},{timestamps:!0});module.exports=mongoose.model("Comment",CommentsSchema);

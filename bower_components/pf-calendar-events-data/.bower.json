@@ -1,0 +1,31 @@
+{
+  "name": "pf-calendar-events-data",
+  "main": "pf-calendar-events-data.html",
+  "dependencies": {
+    "polymer": "^2.0.2",
+    "polymerfire": "firebase/polymerfire#^2.1.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page",
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers",
+    "web-component-tester": "v6",
+    "webcomponentsjs": "webcomponents/webcomponentsjs"
+  },
+  "resolutions": {
+    "polymer": "^2.0.0-rc.2",
+    "polymerfire": "^2.1.0",
+    "firebase": "^4.1.1",
+    "app-storage": "1 - 2"
+  },
+  "homepage": "https://github.com/PFElements/pf-calendar-events-data",
+  "version": "0.3.0",
+  "_release": "0.3.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.3.0",
+    "commit": "6d8e1f1ab2291c8b4a00bee727fd4d8dd405431e"
+  },
+  "_source": "https://github.com/PFElements/pf-calendar-events-data.git",
+  "_target": "*",
+  "_originalSource": "PFElements/pf-calendar-events-data"
+}

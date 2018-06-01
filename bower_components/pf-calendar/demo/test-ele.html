@@ -1,0 +1,272 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../paper-dialog/paper-dialog.html">
+<link rel="import" href="../../paper-dialog-scrollable/paper-dialog-scrollable.html">
+<link rel="import" href="../../paper-listbox/paper-listbox.html">
+<link rel="import" href="../../paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../paper-input/paper-input.html">
+<link rel="import" href="../../paper-button/paper-button.html">
+<link rel="import" href="../../paper-item/paper-item.html">
+<link rel="import" href="../../iron-icons/iron-icons.html">
+<link rel="import" href="../l2t-paper-color/l2t-paper-color.html">
+<link rel="import" href="../pf-calendar.html">
+
+<!--
+`pf-calendar`
+
+
+@demo demo/index.html
+-->
+
+<dom-module id="test-ele">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+
+
+        </style>
+
+        <style is="custom-style">
+
+
+        #EventColor{
+            width:82.5%;
+        }
+
+        #editEventColor{
+            width:82%;
+        }
+
+        .submit-button{
+            background-color: #009688;
+            color: white;
+            margin-left: 22px;
+            margin-top: 28px;
+            height: 35px;
+        }
+
+        .cancel-button{
+            background-color: #009688;
+            color: white;
+            margin-left: 5px;
+            margin-top: 28px;
+            height: 35px;
+        }
+
+        .update-button{
+            background-color: #009688;
+            color: white;
+            margin-left: 32px;
+            margin-top: 28px;
+            height: 35px;
+        }
+
+
+        </style>
+
+
+        <body>
+
+        <pf-calendar id="mycal" databasename="pf-calendar-firebase"  databasepath="testdata" ></pf-calendar>
+        <paper-dialog class="content" id="eveDialog" >
+            <paper-input class="paperInput" id="EventName" label="Event Name" required
+                         error-message="Enter Event Name" char-counter ></paper-input>
+            <paper-input class="paperInput" id="EventDesc"  label="Event Description"
+                         value="" char-counter></paper-input>
+            <paper-input class="paperInput" id="EventCat"  label="Event Category"
+                         value="" char-counter></paper-input>
+
+            <l2t-paper-color id="EventColor"></l2t-paper-color>
+
+            <!--<paper-input class="paperInput" id="EventColor"  label="Event Color" required-->
+                         <!--char-counter></paper-input>-->
+            <!--
+               <paper-dropdown-menu id="eventColor" label="Color" vertical-align="bottom"
+                                          horizontal-align="left">
+                   <paper-listbox class="dropdown-content"  attr-for-selected="label">
+                       <paper-item label="blue">Blue</paper-item>
+                       <paper-item label="orange">Orange</paper-item>
+                       <paper-item label="green">Green</paper-item>
+                       <paper-item label="yellow">Yellow</paper-item>
+                   </paper-listbox>
+               </paper-dropdown-menu>
+   -->
+            <paper-button raised class="submit-button" on-tap="_AddNewEvent" autofocus>Submit</paper-button>
+            <paper-button raised class="cancel-button" dialog-dismiss>Cancel</paper-button>
+        </paper-dialog>
+        <paper-dialog class="content" id="editEventDialog">
+            <paper-input class="paperInput" id="editEventName" label="Event Name" required auto-validate
+                         error-message="Enter Event Name" char-counter value="{{eventsdata.eventName}}"></paper-input>
+            <paper-input class="paperInput" id="editEventDesc"  label="Event Description"
+                         char-counter value="{{eventsdata.description }}"></paper-input>
+            <paper-input class="paperInput" id="editEventCat"  label="Event Category"
+                         char-counter value="{{eventsdata.category}}"
+            ></paper-input>
+
+            <l2t-paper-color id="editEventColor" value="{{eventsdata.color}}"></l2t-paper-color>
+
+
+
+
+
+            <!--<paper-input class="paperInput" id="editEventColor"  label="Event Color" value="{{eventsdata.color}}" required auto-validate-->
+                         <!--char-counter></paper-input>-->
+            <!--
+               <paper-dropdown-menu id="eventColor" label="Color" vertical-align="bottom"
+                                          horizontal-align="left">
+                   <paper-listbox class="dropdown-content"  attr-for-selected="label">
+                       <paper-item label="blue">Blue</paper-item>
+                       <paper-item label="orange">Orange</paper-item>
+                       <paper-item label="green">Green</paper-item>
+                       <paper-item label="yellow">Yellow</paper-item>
+                   </paper-listbox>
+               </paper-dropdown-menu>
+   -->
+            <paper-button raised class="update-button" on-tap="_updateEvent" autofocus>Update</paper-button>
+            <paper-button raised class="cancel-button" dialog-dismiss>Cancel</paper-button>
+        </paper-dialog>
+        <paper-dialog class="content" id="deleteEventDialog">
+            <h3>The event will be deleted.</h3>
+            <paper-button on-tap="_deleteEvent" autofocus>Delete</paper-button>
+            <paper-button dialog-dismiss>Cancel</paper-button>
+        </paper-dialog>
+        </body>
+    </template>
+
+    <script>
+        class TestEle extends Polymer.Element {
+            static get is() { return 'test-ele'; }
+
+            static get properties() {
+                return {
+                    prop1: {
+                        type: String,
+                        value: 'test-ele'
+                    },
+                    date: {
+                        type: Object
+                    },
+                    calendarstyle:{
+                        type:String
+                    }, eventsdata:{
+                        type:Object
+                    }
+                };
+            }
+
+            ready() {
+                super.ready();
+
+                this.$.mycal.addEventListener('date-select', e => this._date(e)
+            );
+                this.$.mycal.addEventListener('event-select', e => this._handleClick(e)
+            );
+                this.$.mycal.addEventListener('event-edit', e => this._editEvent(e)
+            );
+                this.$.mycal.addEventListener('event-delete', e => this._handleDeletelistner(e)
+            );
+                this.$.mycal.addEventListener('event-add', e => this._addEvent(e)
+            );
+            }
+            _addEvent(e) {
+                this.$.eveDialog.open()
+                var selectedDate = e.detail.date
+                this.date=moment(selectedDate).valueOf()
+            }
+
+            _AddNewEvent(){
+                var validation = true;
+
+                if (!this.$.EventName.validate()) {
+                    validation = false
+                }
+                if (!this.$.EventCat.validate()) {
+                    validation = false
+                }
+                if (!this.$.EventColor.validate()) {
+                    validation = false
+                }
+
+                if (validation) {
+                    var mData = {
+                        eventName:this.$.EventName.value,
+                        category:this.$.EventCat.value,
+                        color:this.$.EventColor.value,
+                        date:this.date,
+                        description:this.$.EventDesc.value
+                    }
+                    this.$.mycal.addNewEvent(mData);
+                    this.$.EventName.value=null,
+                      this.$.EventCat.value=null,
+                        this.$.EventColor.value=null,
+
+                        this.$.EventDesc.value=null
+                    this.$.eveDialog.close()
+                }
+            }
+
+
+
+            _editEvent(e){
+
+                this.eventsdata=""
+                this.eventsdata = e.detail.event
+                this.date=moment(this.eventsdata.date).valueOf()
+                this.$.editEventDialog.open();
+
+            }
+
+
+            _updateEvent(){
+                var validation = true
+                if (!this.$.editEventName.validate()) {
+                    validation = false
+                }
+                if (!this.$.editEventCat.validate()) {
+                    validation = false
+                }
+                if (!this.$.editEventColor.validate()) {
+                    validation = false
+                }
+
+
+                if (validation) {
+                    var mData = {
+                        eventName:this.$.editEventName.value,
+                        category:this.$.editEventCat.value,
+                        color:this.$.editEventColor.value,
+                        date:this.date,
+                        description:this.$.editEventDesc.value
+
+                    }
+                    this.$.mycal.updateEvent(this.eventsdata.$key,mData);
+                    this.$.editEventDialog.close()
+                }
+            }
+            _handleDeletelistner(e){
+                this.eventsdata=""
+                this.$.deleteEventDialog.open()
+                this.eventsdata = e.detail.event
+            }
+            _deleteEvent(){
+                this.$.mycal.deleteEvent(this.eventsdata.$key);
+                this.$.deleteEventDialog.close()
+            }
+            _date(e) {
+                var day = e.detail.date;
+                var eve = e.detail.events;
+            }
+            _handleClick(e) {
+                var eve = e.detail.event
+            }
+            _handleEvent(e){
+                var event = e.detail.event
+            }
+
+
+        }
+
+        window.customElements.define(TestEle.is, TestEle);
+    </script>
+</dom-module>

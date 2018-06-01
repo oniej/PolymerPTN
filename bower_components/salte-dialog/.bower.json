@@ -1,0 +1,62 @@
+{
+  "name": "salte-dialog",
+  "description": "`salte-dialog` is an material dialog with a few extra conveniences",
+  "version": "3.0.1",
+  "authors": "The Salte Authors",
+  "keywords": [
+    "web-components",
+    "polymer",
+    "dialog"
+  ],
+  "main": "salte-dialog.html",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/salte-io/salte-dialog"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/salte-io/salte-dialog",
+  "ignore": [],
+  "dependencies": {
+    "polymer": "Polymer/polymer#1.9 - 2",
+    "iron-flex-layout": "PolymerElements/iron-flex-layout#1 - 2",
+    "paper-dialog-behavior": "PolymerElements/paper-dialog-behavior#1 - 2",
+    "neon-animation": "PolymerElements/neon-animation#1 - 2"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#1 - 2",
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#1 - 2",
+    "paper-toggle-button": "PolymerElements/paper-toggle-button#1 - 2",
+    "web-animations-js": "web-animations/web-animations-js#^2.2.0",
+    "web-component-tester": "^6.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0"
+  },
+  "variants": {
+    "1.x": {
+      "dependencies": {
+        "polymer": "Polymer/polymer#^1.9",
+        "iron-flex-layout": "PolymerElements/iron-flex-layout#^1.0.0",
+        "paper-dialog-behavior": "PolymerElements/paper-dialog-behavior#^1.0.0",
+        "neon-animation": "PolymerElements/neon-animation#^1.0.0"
+      },
+      "devDependencies": {
+        "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+        "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",
+        "paper-toggle-button": "PolymerElements/paper-toggle-button#^1.0.0",
+        "web-animations-js": "web-animations/web-animations-js#^2.2.0",
+        "web-component-tester": "Polymer/web-component-tester#^4.0.0",
+        "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+      }
+    }
+  },
+  "_release": "3.0.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "3.0.1",
+    "commit": "7aca25e6b67621387dd9bd639f39ab97b70183d0"
+  },
+  "_source": "https://github.com/salte-io/salte-dialog.git",
+  "_target": "^3.0.1",
+  "_originalSource": "salte-io/salte-dialog",
+  "_direct": true
+}
