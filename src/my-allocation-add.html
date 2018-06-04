@@ -237,18 +237,20 @@
                         <vaadin-button on-click="_add">Add More</vaadin-button>
 
                         <br>
-                        <!-- <span id="writeHere"></span> -->
+                        <span id="writeHere"></span>
                         <dom-bind>
-                            <template>
+                            <template is="dom-repeat" items="{{employees}}">
 
                                 <!-- <x-array-data-provider items="{{items}}" size="200"></x-array-data-provider> -->
                                 <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_commentsLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
                                 <vaadin-grid theme="compact" id="grid" items="{{items}}" as="item" style="height: 200px;">
 
-
+                            
+                       
                                     <vaadin-grid-column resizable>
                                         <template class="header">ROOM</template>
                                         <template>
+                                                <div>First name: <span>{{item.first}}</span></div>
                                             <vaadin-text-field style="width: 120px;" id="room" value="{{item.room}}"></vaadin-text-field>
                                         </template>
                                     </vaadin-grid-column>
@@ -256,6 +258,7 @@
                                     <vaadin-grid-column resizable>
                                         <template class="header">PEAK</template>
                                         <template>
+                                                <div>Last name: <span>{{item.last}}</span></div>
                                             <vaadin-text-field style="width: 120px;" id="peak" value="{{item.peak}}"></vaadin-text-field>
                                         </template>
                                     </vaadin-grid-column>
@@ -364,6 +367,8 @@
                         <paper-button id="submitButton" class="darkorange" on-click="_submit" raised>Add</paper-button>
                     </span>
                 </div> -->
+
+         
                 </div>
                 <paper-fab on-tap="_submit" style=" float: right; " class="fab" icon="my-icons:save"></paper-fab>
             </app-header-layout>
@@ -374,6 +379,15 @@
     <script>
         Polymer({
             is: 'my-allocation-add',
+
+         ready: function() {
+        this.employees = [
+            {first: 'Bob', last: 'Smith'},
+            {first: 'Sally', last: 'Johnson'}
+           
+        ];
+      },
+
             properties: {
 
                 dateCreated: String,
@@ -394,27 +408,31 @@
             },
         
             _add() {
+                if (this.room !== '' && this.peak !== '' && this.pdays !== '' && this.nonpeak !== '' && this.nonpdays !== '') {
                 var allocationval = [];
                 var room = Polymer.dom(this.root).querySelector("#room");
-                var peak = Polymer.dom(this.root).querySelector("#peak");
-                var cutoff = Polymer.dom(this.root).querySelector("pdays");
-                var nonpeak = Polymer.dom(this.root).querySelector("#nonpeak");
+                var peaksn = Polymer.dom(this.root).querySelector("#peak");
+                var cutoff = Polymer.dom(this.root).querySelector("#pdays");
+                var nonpeakssn = Polymer.dom(this.root).querySelector("#nonpeak");
                 var nonpeakday = Polymer.dom(this.root).querySelector("#nonpdays");
                 
-                allocationval.unshift(room.value,peak.value,cutoff.value,nonpeak.value,nonpeakday.value);
-                console.log(allocationval.unshift(room.value,peak.value,cutoff.value,nonpeak.value,nonpeakday.value));
+                // allocationval.unshift(room.value,peak.value,cutoff.value,nonpeak.value,nonpeakday.value);
+                console.log(room.value,peaksn.value,cutoff.value,nonpeakssn.value,nonpeakday.value);
+                
                 // if (this.room !== '' && this.peak !== '' && this.pdays !== '' && this.nonpeak !== '' && this.nonpdays !== '') {
-                //     this.items.unshift({ room: this.$.room.value, peak: this.$.peak.value, pdays: this.$.pdays.value, nonpeak: this.$.nonpeak.value, nonpdays: this.$.nonpdays.value });
-                //     this.$.grid.clearCache();
+                //    this.$.items.unshift({ room: room.value, peak:peaksn.value, pdays: cutoff.value, nonpeak: nonpeakssn.value, nonpdays: nonpeakday.value });
+                //    this.$.grid.clearCache();
 
-                //     this.room = '';
-                //     this.peak = '';
-                //     this.pdays = '';
-                //     this.nonpeak = '';
-                //     this.nonpdays = '';
-                // } else {
-                //     alert('Please Input All');
-                // }
+                    this.room = '';
+                    this.peak = '';
+                    this.pdays = '';
+                    this.nonpeak = '';
+                    this.nonpdays = '';
+
+                    //  var node = Polymer.dom(this.root).querySelector("#writeHere").innerHTML = allocationval[room.value,peaksn.value,cutoff.value,nonpeakssn.value,nonpeakday.value];
+                 }else {
+                    alert('Please Input All');
+                }
             },
             _submit() {
                 // for (var i = 0; i < 5000; i++) {

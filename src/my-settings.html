@@ -71,9 +71,34 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
                 }
             }
+
+            .avatar-container-profile {
+                position: relative;
+                border: 2px solid darkorange;
+                border-radius: 50%;
+                height: 90px;
+                padding: 2px;
+                width: 90px;
+                margin: 20px auto;
+            }
+
+            .image {
+                background-image: url('../images/lady.jpg');
+                background-size: contain;
+                border-radius: 50%;
+                height: 100%;
+                width: 100%;
+            }
+
             app-header {
                 color: rgb(255, 255, 255);
                 background-color: darkorange;
+            }
+            .content{
+                /* background-color: darkgrey; */
+                width: 500px;
+                position: relative;
+                left: 260px;                
             }
         </style>
         <iron-pages selected="[[route.path]]" attr-for-selected="name" fallback-selection="view404" role="main">
@@ -87,12 +112,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     </app-header>
 
                     <div class="card">
-                        <div class="circle">4</div>
-                        <h1>View Four</h1>
-                        <p>Modus commodo minimum eum te, vero utinam assueverit per eu.</p>
-                        <p>Ea duis bonorum nec, falli paulo aliquid ei eum.Has at minim mucius aliquam, est id tempor laoreet.Pro
-                            saepe pertinax ei, ad pri animal labores suscipiantur.</p>
+                        <div class="avatar-container-profile">
+                            <div class="image">
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <div class="content">
+                            <paper-input label="Username"></paper-input>
+                            <paper-input label="Password"></paper-input>
+                            <paper-input label="New Password"></paper-input>
+                            <paper-input label="First Name"></paper-input>
+                            <paper-input label="Last Name"></paper-input>
+
+                        </div>
+                     
                     </div>
+
+                    
+
+                    <!-- <div> Employee list: </div>
+                    <template is="dom-repeat" items="{{employees}}">
+                        <div># <span>{{index}}</span></div>
+                        <div>First name: <span>{{item.first}}</span></div>
+                        <div>Last name: <span>{{item.last}}</span></div>
+                    </template> -->
                 </app-header-layout>
         </iron-pages>
 
@@ -103,6 +148,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             is: 'my-settings',
             properties: {
             },
+    //         ready: function() {
+    //     this.employees = [
+    //         {first: 'Bob', last: 'Smith'},
+    //         {first: 'Sally', last: 'Johnson'}
+           
+    //     ];
+    //   },
             toggleDrawer() {
                 this.dispatchEvent(new CustomEvent('toggleDrawer', {
                     bubbles: true, composed: true, detail: {
