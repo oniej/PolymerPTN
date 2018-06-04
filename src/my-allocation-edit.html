@@ -255,75 +255,78 @@
                     <vaadin-text-field style="width: 180px;" id="nonpdays" value="{{nonpdays}}" label="NONPEAKDAYS"></vaadin-text-field>
                     <vaadin-button on-click="_add">Add</vaadin-button>
                     <br>
-                  
-               
-
-                     <dom-bind>
-                        <template>
-                            <!-- <x-array-data-provider items="{{items}}" size="200"></x-array-data-provider> -->
-                            <br>
-                            <iron-ajax auto  url="{{url}}" handle-as="json" last-response="{{allocations}}"></iron-ajax>
-                            <vaadin-grid items="{{allocations}}" style="height: 200px;">
-                            
+            
+                    <dom-bind>
+                            <template>
+                                     <x-array-data-provider items="{{items}}" size="200"></x-array-data-provider>
                                 <!-- <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_allocationsLoaded" debounce-duration="300"></iron-ajax> -->
-                                <!-- <vaadin-grid theme="compact" id="grid" items="[[allocations]]" as="item" style="height: 200px;"> -->
+                                <vaadin-grid theme="compact" id="grid" items="[[items]]" style="height: 200px;">
 
+                         
+                                    <vaadin-grid-column resizable>
+                                        <template class="header">ROOM</template>
+                                        <template>
+                                                <vaadin-text-field style="width: 100%;" id="room" value="[[item.room]]"></vaadin-text-field>
+                                            <!-- <vaadin-text-field style="width: 90px;" id="first-[[index]]" value="[[item.room]]" on-input="_storeFirst" readonly$="[[!_isEditing(editing, item)]]"></vaadin-text-field> -->
+                                        </template>
+                                    </vaadin-grid-column>
 
-                                <vaadin-grid-column resizable>
-                                    <template class="header">ROOM</template>
-                                    <template>
-                                        <vaadin-text-field style="width: 160px;" value="{{item.room}}" on-input="_storeFirst" readonly$="[[!_isEditing(editing, item)]]"></vaadin-text-field>
-                                    </template>
-                                </vaadin-grid-column>
+                                    <vaadin-grid-column resizable>
+                                        <template class="header">PEAK</template>
+                                        <template>
+                                                <vaadin-text-field style="width: 100%;" id="peak" value="[[item.peak]]"></vaadin-text-field>
+                                            <!-- <vaadin-text-field style="width: 90px;" id="last-[[index]]" value="[[item.peak]]" on-input="_storeFirst" readonly$="[[!_isEditing(editing, item)]]"></vaadin-text-field> -->
+                                        </template>
+                                    </vaadin-grid-column>
 
-                                <vaadin-grid-column resizable>
-                                    <template class="header">PEAK</template>
-                                    <template>
-                                        <vaadin-text-field style="width: 160px;" value="{{item.peak}}" on-input="_storeFirst" readonly$="[[!_isEditing(editing, item)]]"></vaadin-text-field>
-                                    </template>
-                                </vaadin-grid-column>
+                                    <vaadin-grid-column resizable>
+                                        <template class="header">CUT-OFF</template>
+                                        <template>
+                                                <vaadin-text-field style="width: 100%;" id="pdays" value="[[item.pdays]]"></vaadin-text-field>
+                                            <!-- <vaadin-text-field style="width: 90px;" id="last-[[index]]" value="[[item.pdays]]" on-input="_storeFirst" readonly$="[[!_isEditing(editing, item)]]"></vaadin-text-field> -->
 
-                                <vaadin-grid-column resizable>
-                                    <template class="header">CUT-OFF</template>
-                                    <template>
-                                        <vaadin-text-field style="width: 160px;" value="{{item.pdays}}" on-input="_storeFirst" readonly$="[[!_isEditing(editing, item)]]"></vaadin-text-field>
+                                        </template>
+                                    </vaadin-grid-column>
+                                    <vaadin-grid-column resizable>
+                                        <template class="header">NON-PEAK</template>
+                                        <template>
+                                                <vaadin-text-field style="width: 100%;" id="nonpeak" value="[[item.nonpeak]]"></vaadin-text-field>
+                                            <!-- <vaadin-text-field style="width: 90px;" id="last-[[index]]" value="[[item.nonpeak]]" on-input="_storeFirst" readonly$="[[!_isEditing(editing, item)]]"></vaadin-text-field> -->
+                                        </template>
+                                    </vaadin-grid-column>
 
-                                    </template>
-                                </vaadin-grid-column>
-                                <vaadin-grid-column resizable>
-                                    <template class="header">NON-PEAK</template>
-                                    <template>
+                                    <vaadin-grid-column resizable>
+                                        <template class="header">DAYS</template>
+                                        <template>
+                                                <vaadin-text-field style="width: 100%;" id="nonpdays" value="[[item.nonpdays]]"></vaadin-text-field>
+                                            <!-- <vaadin-text-field style="width: 90px;" id="last-[[index]]" value="[[item.nonpdays]]" on-input="_storeFirst" readonly$="[[!_isEditing(editing, item)]]"></vaadin-text-field> -->
 
-                                        <vaadin-text-field style="width: 160px;" value="{{item.nonpeak}}" on-input="_storeFirst" readonly$="[[!_isEditing(editing, item)]]"></vaadin-text-field>
-                                    </template>
-                                </vaadin-grid-column>
+                                        </template>
+                                    </vaadin-grid-column>
 
-                                <vaadin-grid-column resizable>
-                                    <template class="header">DAYS</template>
-                                    <template>
-                                        <vaadin-text-field style="width: 160px;" value="{{item.nonpdays}}" on-input="_storeFirst" readonly$="[[!_isEditing(editing, item)]]"></vaadin-text-field>
+                                    <!-- <vaadin-grid-column resizable>
+                                        <template class="header"> <vaadin-button on-click="_openField">Add</vaadin-button></template>
+                                      
+                                    </vaadin-grid-column> -->
 
-                                    </template>
-                                </vaadin-grid-column>
+                                    <!-- <vaadin-grid-column resizable>
+                                        <template>
+                                            <div style="text-align: right;">
+                                                <vaadin-button id="edit-button" hidden="[[editing]]" on-click="_edit" focus-target$="[[!editing]]" theme="icon" aria-label="Edit">
+                                                    <iron-icon icon="lumo:edit"></iron-icon>
+                                                </vaadin-button>
+                                                <vaadin-button hidden="[[editing]]" on-click="_remove" theme="icon error" aria-label="Delete">
+                                                    <iron-icon icon="lumo:cross"></iron-icon>
+                                                </vaadin-button>
+                                                <vaadin-button hidden="[[!_isEditing(editing, item)]]" on-click="_save" focus-target$="[[editing]]" theme="primary">Save</vaadin-button>
+                                                <vaadin-button hidden="[[!_isEditing(editing, item)]]" on-click="_cancel">Cancel</vaadin-button>
+                                            </div>
+                                        </template>
+                                    </vaadin-grid-column> -->
 
-                                <vaadin-grid-column resizable>
-                                    <template>
-                                        <div style="text-align: right;">
-                                            <vaadin-button id="edit-button" hidden="[[editing]]" on-click="_edit" focus-target$="[[!editing]]" theme="icon" aria-label="Edit">
-                                                <iron-icon icon="lumo:edit"></iron-icon>
-                                            </vaadin-button>
-                                            <vaadin-button hidden="[[editing]]" on-click="_remove" theme="icon error" aria-label="Delete">
-                                                <iron-icon icon="lumo:cross"></iron-icon>
-                                            </vaadin-button>
-                                            <vaadin-button hidden="[[!_isEditing(editing, item)]]" on-click="_save" focus-target$="[[editing]]" theme="primary">Save</vaadin-button>
-                                            <vaadin-button hidden="[[!_isEditing(editing, item)]]" on-click="_cancel">Cancel</vaadin-button>
-                                        </div>
-                                    </template>
-                                </vaadin-grid-column>
-
-                            </vaadin-grid>
-                        </template>
-                    </dom-bind> 
+                                </vaadin-grid>
+                            </template>
+                        </dom-bind>
                     <div>
                         <h3>PEAK SEASONS</h3>
                     </div>
@@ -335,6 +338,40 @@
                     </div>
 
                     <div>
+                            <dom-bind id="my-allocation">
+                                    <template>
+                                            <x-array-data-provider items="{{items}}" size="200"></x-array-data-provider>
+                                            <vaadin-grid theme="compact" id="grid" items="[[items]]" style="height: 200px;">
+        
+                                            <vaadin-grid-column resizable>
+                                                <template class="header">DURATION</template>
+                                                <template>
+                                                        <!-- <vaadin-date-picker placeholder="Start" id="date" value="[[item.date]]" ></vaadin-date-picker> -->
+                                                        <vaadin-text-field style="width: 100%;" id="date" value="[[item.date]]"></vaadin-text-field>
+                                                    <!-- <vaadin-text-field id="first-[[index]]" style="width: 100%;" value="[[item.date]]" on-input="_storeFirst" readonly$="[[!_isEditing(editing, item)]]"></vaadin-text-field> -->
+        
+                                                </template>
+                                            </vaadin-grid-column>
+        
+        
+                                            <!-- <vaadin-grid-column resizable>
+                                                <template>
+                                                    <div style="text-align: right;">
+                                                        <vaadin-button id="edit-button" hidden="[[editing]]" on-click="_edit" focus-target$="[[!editing]]" theme="icon" aria-label="Edit">
+                                                            <iron-icon icon="lumo:edit"></iron-icon>
+                                                        </vaadin-button>
+                                                        <vaadin-button hidden="[[editing]]" on-click="_remove" theme="icon error" aria-label="Delete">
+                                                            <iron-icon icon="lumo:cross"></iron-icon>
+                                                        </vaadin-button> -->
+                                                        <!-- <vaadin-button hidden="[[!_isEditing(editing, item)]]" on-click="_save" focus-target$="[[editing]]" theme="primary">Save</vaadin-button>
+                            <vaadin-button hidden="[[!_isEditing(editing, item)]]" on-click="_cancel">Cancel</vaadin-button> -->
+                                                    <!-- </div>
+                                                </template>
+                                            </vaadin-grid-column> -->
+        
+                                        </vaadin-grid>
+                                    </template>
+                                </dom-bind>
                     </div>
             </app-header-layout>
             <paper-fab noink on-tap="_openSave" icon="my-icons:check" class="blue"></paper-fab>

@@ -78,37 +78,39 @@
                 right: 30px;
                 background-color: #3F51B5;
             }
-            .card{
-          margin: 20px auto auto 220px;
 
-          padding: 16px;
-          padding-bottom: 50px;
-          padding-top: 50px;
-          width: 600px;
-          /* color: #757575; */
-          border-radius: 4px;
-          background-color: #fff;
-          margin-bottom: 30px;
+            .card {
+                margin: 20px auto auto 220px;
 
-          box-shadow: 0 3px 5px rgba(0, 0, 0, .23), 0 3px 5px rgba(0, 0, 0, .16);
+                padding: 16px;
+                padding-bottom: 50px;
+                padding-top: 50px;
+                width: 600px;
+                /* color: #757575; */
+                border-radius: 4px;
+                background-color: #fff;
+                margin-bottom: 30px;
 
-          transition: all 400ms cubic-bezier(0.165, 0.840, 0.440, 1.000);
-          opacity: 0;
-                    /* make things invisible upon start */
-                    -webkit-animation: fadeIn ease-in 1;
-                    /* call our keyframe named fadeIn, use animattion ease-in and repeat it only 1 time */
-                    -moz-animation: fadeIn ease-in 1;
-                    animation: fadeIn ease-in 1;
+                box-shadow: 0 3px 5px rgba(0, 0, 0, .23), 0 3px 5px rgba(0, 0, 0, .16);
 
-                    -webkit-animation-fill-mode: forwards;
-                    /* this makes sure that after animation is done we remain at the last keyframe value (opacity: 1)*/
-                    -moz-animation-fill-mode: forwards;
-                    animation-fill-mode: forwards;
+                transition: all 400ms cubic-bezier(0.165, 0.840, 0.440, 1.000);
+                opacity: 0;
+                /* make things invisible upon start */
+                -webkit-animation: fadeIn ease-in 1;
+                /* call our keyframe named fadeIn, use animattion ease-in and repeat it only 1 time */
+                -moz-animation: fadeIn ease-in 1;
+                animation: fadeIn ease-in 1;
 
-                    -webkit-animation-duration: 0.5s;
-                    -moz-animation-duration: 0.5s;
-                    animation-duration: 0.5s;
-        }
+                -webkit-animation-fill-mode: forwards;
+                /* this makes sure that after animation is done we remain at the last keyframe value (opacity: 1)*/
+                -moz-animation-fill-mode: forwards;
+                animation-fill-mode: forwards;
+
+                -webkit-animation-duration: 0.5s;
+                -moz-animation-duration: 0.5s;
+                animation-duration: 0.5s;
+            }
+
             @media (max-width: 768px) {
                 .docu {
                     margin-left: 16px;
@@ -205,10 +207,12 @@
                 </app-header>
 
                 <div class="docu">
+
                     <div class="docu-header">
                         <div>
                             <iron-icon id="iconcreated" icon="my-icons:flag" style="color:gray;"></iron-icon>
-                            <span id="created">Created by:</span> Jeino <!-- user name here {{username}} or something -->
+                            <span id="created">Created by:</span> Jeino
+                            <!-- user name here {{username}} or something -->
                         </div>
                     </div>
                     <div class="details" id="form">
@@ -224,57 +228,61 @@
 
                             </template>
                         </range-datepicker-input>
-                        <vaadin-text-field style="width: 110px;" id="room" value="{{room}}" label="ROOM"></vaadin-text-field>
-                        <vaadin-text-field style="width: 110px;" id="peak" value="{{peak}}" label="PEAK"></vaadin-text-field>
-                        <vaadin-text-field style="width: 110px;" id="pdays" value="{{pdays}}" label="CUT-OFF"></vaadin-text-field>
-                        <vaadin-text-field style="width: 110px;" id="nonpeak" value="{{nonpeak}}" label="NON-PEAK"></vaadin-text-field>
-                        <vaadin-text-field style="width: 110px;" id="nonpdays" value="{{nonpdays}}" label="NONPEAKDAYS"></vaadin-text-field>
-                        <!-- <vaadin-button on-click="_add">Add</vaadin-button> -->
-                        <br>
-                        <!-- <dom-bind>
-                            <template>
-                                <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_allocationsLoaded" debounce-duration="300"></iron-ajax>
-                                <vaadin-grid theme="compact" id="grid" items="[[items]]" style="height: 200px;">
 
-                         
+                        <vaadin-text-field style="width: 130px;" id="room" value="{{room}}" label="ROOM"></vaadin-text-field>
+                        <vaadin-text-field style="width: 130px;" id="peak" value="{{peak}}" label="PEAK"></vaadin-text-field>
+                        <vaadin-text-field style="width: 130px;" id="pdays" value="{{pdays}}" label="CUT-OFF"></vaadin-text-field>
+                        <vaadin-text-field style="width: 130px;" id="nonpeak" value="{{nonpeak}}" label="NON-PEAK"></vaadin-text-field>
+                        <vaadin-text-field style="width: 130px;" id="nonpdays" value="{{nonpdays}}" label="NONPEAKDAYS"></vaadin-text-field>
+                        <vaadin-button on-click="_openField">Add</vaadin-button>
+
+                        <br>
+                        <!-- <span id="writeHere"></span> -->
+                        <dom-bind>
+                            <template>
+
+                                <!-- <x-array-data-provider items="{{items}}" size="200"></x-array-data-provider> -->
+                                <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_commentsLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
+                                <vaadin-grid theme="compact" id="grid" items="{{items}}" as="item" style="height: 200px;">
+
+
                                     <vaadin-grid-column resizable>
                                         <template class="header">ROOM</template>
                                         <template>
-
-                                            <vaadin-text-field style="width: 90px;" id="first-[[index]]" value="[[item.room]]" on-input="_storeFirst" readonly$="[[!_isEditing(editing, item)]]"></vaadin-text-field>
+                                            <vaadin-text-field style="width: 120px;" id="room" value="{{item.room}}"></vaadin-text-field>
                                         </template>
                                     </vaadin-grid-column>
 
                                     <vaadin-grid-column resizable>
                                         <template class="header">PEAK</template>
                                         <template>
-
-                                            <vaadin-text-field style="width: 90px;" id="last-[[index]]" value="[[item.peak]]" on-input="_storeFirst" readonly$="[[!_isEditing(editing, item)]]"></vaadin-text-field>
+                                            <vaadin-text-field style="width: 120px;" id="peak" value="{{item.peak}}"></vaadin-text-field>
                                         </template>
                                     </vaadin-grid-column>
 
                                     <vaadin-grid-column resizable>
                                         <template class="header">CUT-OFF</template>
                                         <template>
-                                            <vaadin-text-field style="width: 90px;" id="last-[[index]]" value="[[item.pdays]]" on-input="_storeFirst" readonly$="[[!_isEditing(editing, item)]]"></vaadin-text-field>
+                                            <vaadin-text-field style="width: 120px;" id="pdays" value="{{item.pdays}}"></vaadin-text-field>
 
                                         </template>
                                     </vaadin-grid-column>
                                     <vaadin-grid-column resizable>
                                         <template class="header">NON-PEAK</template>
                                         <template>
-
-                                            <vaadin-text-field style="width: 90px;" id="last-[[index]]" value="[[item.nonpeak]]" on-input="_storeFirst" readonly$="[[!_isEditing(editing, item)]]"></vaadin-text-field>
+                                            <vaadin-text-field style="width: 120px;" id="nonpeak" value="{{item.nonpeak}}"></vaadin-text-field>
                                         </template>
                                     </vaadin-grid-column>
 
                                     <vaadin-grid-column resizable>
                                         <template class="header">DAYS</template>
                                         <template>
-                                            <vaadin-text-field style="width: 90px;" id="last-[[index]]" value="[[item.nonpdays]]" on-input="_storeFirst" readonly$="[[!_isEditing(editing, item)]]"></vaadin-text-field>
+                                            <vaadin-text-field style="width: 120px;" id="nonpdays" value="{{item.nonpdays}}"></vaadin-text-field>
 
                                         </template>
                                     </vaadin-grid-column>
+
+
 
                                     <vaadin-grid-column resizable>
                                         <template>
@@ -294,7 +302,7 @@
                                 </vaadin-grid>
                             </template>
                         </dom-bind>
-                        <br> -->
+                        <br>
                         <div>
                             <h3>PEAK SEASONS</h3>
                         </div>
@@ -302,9 +310,9 @@
                             <vaadin-date-picker placeholder="Start" id="date" value="{{startValue}}" max="{{endValue}}" date-format="DD-MMMM-YYYY"></vaadin-date-picker>
                             <vaadin-date-picker placeholder="End" id="date" value="{{endValue}}" min="{{startValue}}" date-format="DD-MMMM-YYYY"></vaadin-date-picker>
 
-                            <!-- <vaadin-button on-click="_add">Add</vaadin-button> -->
+                            <vaadin-button on-click="_add">Add</vaadin-button>
                         </div>
-                        <!-- <dom-bind id="my-allocation">
+                        <dom-bind id="my-allocation">
                             <template>
                                 <vaadin-grid theme="compact" id="grid" items="[[items]]" style="height: 200px; top: 100px;">
 
@@ -328,14 +336,14 @@
                                                     <iron-icon icon="lumo:cross"></iron-icon>
                                                 </vaadin-button>
                                                 <!-- <vaadin-button hidden="[[!_isEditing(editing, item)]]" on-click="_save" focus-target$="[[editing]]" theme="primary">Save</vaadin-button>
-                    <vaadin-button hidden="[[!_isEditing(editing, item)]]" on-click="_cancel">Cancel</vaadin-button> 
+                    <vaadin-button hidden="[[!_isEditing(editing, item)]]" on-click="_cancel">Cancel</vaadin-button> -->
                                             </div>
                                         </template>
                                     </vaadin-grid-column>
 
                                 </vaadin-grid>
                             </template>
-                        </dom-bind> -->
+                        </dom-bind>
                     </div>
                     <!-- <div>
                         <span>
@@ -355,7 +363,11 @@
                         <paper-button id="submitButton" class="darkorange" on-click="_submit" raised>Add</paper-button>
                     </span>
                 </div> -->
-                    <paper-fab on-tap="_submit" style=" float: right; " class="fab" icon="my-icons:save"></paper-fab>
+
+
+
+                </div>
+                <paper-fab on-tap="_submit" style=" float: right; " class="fab" icon="my-icons:save"></paper-fab>
             </app-header-layout>
         </app-drawer-layout>
         <iron-ajax verbose id="ajax" method="[[method]]" on-response="_handleResponse"></iron-ajax>
@@ -376,8 +388,26 @@
                     value: 'Ardie Derrayal'
                 }
             },
+
             _openField() {
-                var node = Polymer.dom(this.root).querySelector("#writeHere").innerHTML += '<span> <paper-input float-label label="Room" id="room"></paper-input></span>\r\n';
+                var node = Polymer.dom(this.root).querySelector("#writeHere").innerHTML += '<span><td><vaadin-text-field style="width: 130px;" id="room" value="{{room}}"  ></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="peak" ></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="pdays" ></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="nonpeak" ></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="nonpdays" ></vaadin-text-field></td></span><br> \r\n';
+
+            },
+            _add() {
+                if (this.room !== '' && this.peak !== '' && this.pdays !== '' && this.nonpeak !== '' && this.nonpdays !== '') {
+                    // console.log(  this.items.unshift({ room: this.room, peak: this.peak, pdays: this.pdays, nonpeak: this.nonpeak, nonpdays: this.nonpdays }));
+                    // this.items.unshift({ room: this.$.room.value, peak: this.$.peak.value, pdays: this.$.pdays.value, nonpeak: this.$.nonpeak.value, nonpdays: this.$.nonpdays.value });
+                    this.items.unshift({ room: this.room, peak: this.peak, pdays: this.pdays, nonpeak: this.nonpeak, nonpdays: this.nonpdays });
+                    this.$.grid.clearCache();
+
+                    this.room = '';
+                    this.peak = '';
+                    this.pdays = '';
+                    this.nonpeak = '';
+                    this.nonpdays = '';
+                } else {
+                    alert('Please Input All');
+                }
             },
             _submit() {
                 // for (var i = 0; i < 5000; i++) {
@@ -420,8 +450,16 @@
                 this.fullname = "";
                 this.room = "";
                 this.msg = "";
+                this.url = '/allocation/read';
             },
-            _handleResponse() { }
+            _commentsLoaded(data) {
+
+                if (this.url === '/allocation/read') {
+                    // console.log(data.detail.response.data);
+                    this.allocations = data.detail.response.data;
+
+                }
+            }
         })
     </script>
 </dom-module>
