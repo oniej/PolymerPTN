@@ -13,4 +13,19 @@ const UsersSchema = new Schema({
     // created_date: String,
 }, { timestamps: true });
 // export our module to use in server.js
-module.exports = mongoose.model('user_data', UsersSchema);
+var User = module.exports = mongoose.model('user_data', UsersSchema);
+module.exports.getUserById = function (id, callback) {
+    User.findById(id, callback);
+    module.exports.getUserByEmail = function (email, callback) {
+        var query = { email: email };
+        User.findOne(query, callback);
+    }
+}
+// module.exports.createUser = function (newUser, callback) {
+//     bcrypt.gensalt(10, function (err, salt) {
+//         bcrypt.hash(newUser, salt, function (err, hash) {
+//             newUser.password = hash;
+//             newUser.save(callback);
+//         });
+//     });
+// }

@@ -22,6 +22,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../bower_components/paper-item/paper-item-body.html">
 
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="my-icons.html">
@@ -30,7 +35,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="lazy-import" href="my-blocking.html">
 <link rel="lazy-import" href="my-hotels.html">
 <link rel="lazy-import" href="my-users.html">
-<link rel="lazy-import" href="my-view1.html">
+<link rel="lazy-import" href="my-settings.html">
+<!-- <link rel="lazy-import" href="my-view1.html"> -->
 <!-- <link rel="lazy-import" href="my-signin.html"> -->
 <!--<link rel="lazy-import" href="my-view2.html">
 
@@ -88,7 +94,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       app-drawer {
         --app-drawer-content-container: {
-          background-color: #F4F5F6;
+          /* background-color: #F4F5F6; */
         }
       }
 
@@ -109,6 +115,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       .avatar {
+
         height: 40px;
         width: 40px;
         border-radius: 20px;
@@ -203,7 +210,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       .avatar-container .image {
-        /* background-image: url('//app-layout-assets.appspot.com/assets/pesto/avatar.jpg'); */
+        background-image: url('../images/lady.jpg');
         background-size: contain;
         border-radius: 50%;
         height: 100%;
@@ -257,15 +264,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <app-route route="{{route}}" pattern="[[rootPath]]:page" data="{{routeData}}" tail="{{subroute}}">
     </app-route>
 
-    <!-- <template is="dom-if" if="{{_needToSignin(user,statusKnown)}}"></template> -->
-    <!-- <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
-      <my-signin name="signin" user="{{user}}"></my-signin>
-    </iron-pages> -->
     <!-- <template is="dom-if" if="{{notLogin}}">
+    <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
       <my-signin name="signin"></my-signin>
-    </template> -->
+    </iron-pages>
+  </template> -->
     <app-drawer-layout fullbleed narrow="{{narrow}}" id="drawerLayout">
-      <!-- Drawer content -->
       <app-drawer id="drawerMain" slot="drawer" swipe-open="[[narrow]]">
         <div style="height: 100%; overflow: auto;">
           <app-header fixed slot="header">
@@ -274,10 +278,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </div>
             </div>
             <div class="contact-info">
-              <div class="name">[[user.email]]</div>
-              <!-- <div class="email">{{_roleAcc(myaccount)}}</div> -->
+              <div class="name">pvillac95@gmail.com</div>
+              <div class="email">Staff</div>
             </div>
           </app-header>
+
           <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
             <a name="availability" href="[[rootPath]]availability">
               <paper-icon-item toggles="true" class="menuSelected">
@@ -303,33 +308,38 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <span>Users</span>
               </paper-icon-item>
             </a>
+            <a name="settings" href="[[rootPath]]settings">
+              <paper-icon-item toggles="true" class="menuSelected">
+                <iron-icon icon="my-icons:build" slot="item-icon"></iron-icon>
+                <span>Settings</span>
+              </paper-icon-item>
+            </a>
             <a on-tap="_signOut" href="/">
               <paper-icon-item toggles="true">
                 <iron-icon icon="my-icons:power-settings-new" slot="item-icon"></iron-icon>
                 <span>Sign-out</span>
               </paper-icon-item>
             </a>
-            <!-- <p style="font-size:12px; margin-left: 16px; color: gray;">v0.0.1</p> -->
           </iron-selector>
         </div>
       </app-drawer>
       <!-- Main content -->
-      </app-header>
       <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
         <my-availability name="availability" route="{{subroute}}"></my-availability>
         <my-blocking name="blocking" route="{{subroute}}"></my-blocking>
         <my-allocation name="allocation" route="{{subroute}}"></my-allocation>
         <my-hotels name="hotels" route="{{subroute}}"></my-hotels>
         <my-users name="users" route="{{subroute}}"></my-users>
+        <my-settings name="settings" route="{{subroute}}"></my-settings>
         <my-view404 name="view404"></my-view404>
       </iron-pages>
-
+    </app-drawer-layout>
   </template>
 
   <script>
     // Gesture events like tap and track generated from touch will not be
     // preventable, allowing for better scrolling performance.
-    Polymer.setPassiveTouchGestures(true);
+    // Polymer.setPassiveTouchGestures(true);
 
     class MyApp extends Polymer.Element {
       static get is() { return 'my-app'; }

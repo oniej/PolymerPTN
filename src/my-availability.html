@@ -279,6 +279,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <div id="availedit"></div>
             <my-availability-edit id="d24" edit-key='{{editData._id}}' prev-route="{{route.prefix}}"></my-availability-edit>
         </div>
+
+        <iron-ajax verbose id="ajax" method="[[method]]" on-response="_handleResponse"></iron-ajax>
+
     </template>
 
     <script>
@@ -301,7 +304,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 },
                 filterBy: {
                     type: Number,
-                    value: 2
+                    value: 0
                 },
                 observers: [
                     '_searchChanged(filterBy, search)',]
@@ -310,7 +313,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             toggleSearch() {
                 this.openSearch = true;
-                
+
             },
             toggleReturn() {
                 this.openSearch = false;
@@ -320,7 +323,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.search = '';
             },
             _searchChanged(g, e) {
-
+                if (g) {
+                    if (g == 0) {
+                        if (e) {
+                            // this.url = '/availability/search';
+                        }
+                    }
+                }
             },
             _availabilityLoaded(data) {
                 if (this.url === '/availability/read') {
@@ -374,6 +383,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
             ready() {
                 this.url = '/availability/read';
+                var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+                var now = new Date();
+                var date = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+                // console.log(date);
             },
             _timeStampToDateTime(ts) {
                 return new Date(ts);

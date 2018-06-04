@@ -26,11 +26,17 @@ router.post('/add', (req, res) => {
         return res.json({ success: true });
     });
 });
+router.get('/search', (req, res) => {
+    Availability.find({ "hotel": "Pacific" }, (err, availability) => {
+        if (err) return res.json({ success: false, error: err });
+        return res.json({ success: true, data: availability });
+    });
+});
 router.get('/read', (req, res) => {
     Availability.find((err, availability) => {
         if (err) return res.json({ success: false, error: err });
         return res.json({ success: true, data: availability });
-    }).limit(20);
+    }).sort({ _id: -1 }).limit(20);
 });
 router.get('/readEdit/:editKey', (req, res) => {
     const editKey = req.params.editKey;
@@ -47,7 +53,7 @@ router.put('/update/:editKey', (req, res) => {
     }
     Availability.findById(editKey, (error, availability) => {
         if (error) return res.json({ success: false, error });
-        const { hotel, notes, updated_by, created_by,} = req.body;
+        const { hotel, notes, updated_by, created_by, } = req.body;
         if (hotel) availability.hotel = hotel;
         if (notes) availability.notes = notes;
         if (updated_by) availability.updated_by = updated_by;
@@ -60,7 +66,6 @@ router.put('/update/:editKey', (req, res) => {
 });
 router.delete('/delete/:editKey', (req, res) => {
     const { editKey } = req.params;
-    // console.log(editKey);
     if (!editKey) {
         return res.json({ success: false, error: 'No comment id provided' });
     }

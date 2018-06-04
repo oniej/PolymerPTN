@@ -248,40 +248,9 @@
                     </div>
                     <div id="table" style="width:100%;overflow-x:auto;">
                         <table id="hotels">
-                            <tr>
+                            <tr id="headDays">
                                 <!-- <th>May 2018</th> -->
-                                <th>June 2018</th>
-                                <th>1</th>
-                                <th>2</th>
-                                <th>3</th>
-                                <th>4</th>
-                                <th>5</th>
-                                <th>6</th>
-                                <th>7</th>
-                                <th>8</th>
-                                <th>9</th>
-                                <th>10</th>
-                                <th>11</th>
-                                <th>12</th>
-                                <th>13</th>
-                                <th>14</th>
-                                <th>15</th>
-                                <th>16</th>
-                                <th>17</th>
-                                <th>18</th>
-                                <th>19</th>
-                                <th>20</th>
-                                <th>21</th>
-                                <th>22</th>
-                                <th>23</th>
-                                <th>24</th>
-                                <th>25</th>
-                                <th>26</th>
-                                <th>27</th>
-                                <th>28</th>
-                                <th>29</th>
-                                <th>30</th>
-                                <!-- <th>31</th> -->
+                                <!-- <th>{{monthToday}}</th> -->
                             </tr>
                             <tr style=" background-color: #f2f2f2;">
                                 <!-- <td>Hotel</td> -->
@@ -510,8 +479,6 @@
             properties: {
                 editKey: { type: String, notify: true, observer: '_onkeyChanged' },
                 route: Object,
-                year: Number,
-                month: String,
                 mynotes: {
                     type: String,
                     value: '',
@@ -526,6 +493,8 @@
                     value: '',
                 },
                 me: String,
+                mot: Number,
+                yer: Number
 
                 // isMousedown: { type: Boolean, value: false, }
             },
@@ -599,12 +568,37 @@
                 // var table = Polymer.dom(this.root).querySelector("#hotels");
             },
             ready() {
-                // console.log(this.editKey);
                 var monthNames = ["January", "February", "March", "April", "May", "June",
                     "July", "August", "September", "October", "November", "December"
                 ];
                 var currentMonths = new Date()
                 this.month = monthNames[currentMonths.getMonth()] + " " + currentMonths.getDate() + " " + currentMonths.getFullYear();
+
+                //for days in month//
+                var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+                var nowdays = new Date();
+                var date = new Date(nowdays.getFullYear(), nowdays.getMonth() + 1, 0).getDate() + " " + days[nowdays.getDay()];
+                // console.log(date);
+
+                //for days in month
+                // var daysToday = new Date();
+                var todadys = days[nowdays.getDay()];
+                // console.log(todadys);
+                //for dates in month//
+                var trHead = Polymer.dom(this.root).querySelector('#headDays');
+                var now = new Date();
+                var date = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+
+                var currentMonthly = new Date()
+                var months = currentMonthly.getMonth();
+                var years = currentMonthly.getFullYear();
+                this._nextDates(date, monthNames[currentMonths.getMonth()], currentMonths.getFullYear());
+
+                var mon = this._selectMonth(months);
+                this.mot = months;
+                this.yer = years;
+                // this.month = mon + " " + years;
+                var date = new Date(years, months + 1, 0).getDate();
             },
             _limited() {
                 var cells = Polymer.dom(this.root).querySelectorAll("td");
@@ -624,8 +618,72 @@
                 }
             },
             _preMonth() {
+                if (this.mot < 1) {
+                    var x = 11;
+                    var y = this.yer - 1;
+                    var m = this._selectMonth(x);
+                    this.mot = x;
+                    this.yer = y;
+                    this.month = m + " " + y;
+                    var date = new Date(y, x + 1, 0).getDate();
+                    this._nextDates(date, m, y)
+                    // console.log(date);
 
+                } else {
+                    var x = this.mot - 1;
+                    var m = this._selectMonth(x);
+                    this.mot = x;
+                    this.month = m + " " + this.yer;
+                    var date = new Date(this.yer, x + 1, 0).getDate();
+                    this._nextDates(date, m, this.yer)
+                }
             },
+
+            _nextMonth() {
+                if (this.mot > 10) {
+                    var x = 0;
+                    var y = this.yer + 1;
+                    var m = this._selectMonth(x);
+                    this.mot = x;
+                    this.yer = y;
+                    this.month = m + " " + y;
+                    var date = new Date(y, x + 1, 0).getDate();
+                    this._nextDates(date, m, y)
+
+                } else {
+                    var x = this.mot + 1;
+                    var m = this._selectMonth(x);
+                    this.mot = x;
+                    this.month = m + " " + this.yer;
+                    var date = new Date(this.yer, x + 1, 0).getDate();
+                    this._nextDates(date, m, this.yer)
+                }
+            },
+            _nextDates(f, g, h) {
+                var oldtrHead = Polymer.dom(this.root).querySelector('#headDays');
+                while (oldtrHead.hasChildNodes()) {
+                    oldtrHead.removeChild(oldtrHead.lastChild);
+                }
+
+                var th = document.createElement('th');
+                var t = document.createTextNode(g + " " + h);
+                th.append(t);
+                oldtrHead.append(th);
+
+                for (i = 1; i < f + 1; ++i) {
+                    var th = document.createElement('th');
+                    var t = document.createTextNode(i);
+                    th.append(t);
+                    oldtrHead.append(th);
+                };
+            },
+            _selectMonth(e) {
+                var nextmonthNames = ["January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December"
+                ];
+                return nextmonthNames[e];
+            },
+
             toggleDrawer() {
                 this.dispatchEvent(new CustomEvent('toggleDrawer', {
                     bubbles: true, composed: true, detail: {

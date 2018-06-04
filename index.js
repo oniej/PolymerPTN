@@ -1,12 +1,15 @@
 const prpl = require('prpl-server');
 const express = require('express');
+const expressSession = require('express-session');
 const bodyParser = require('body-parser');
+const passport = require('passport');
+const localStrategy = require('passport-local').Strategy;
+const passportlocalMongoose = require('passport-local-mongoose');
 const logger = require('morgan');
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 const cors = require('cors');
-const passport = require('passport');
-const localStrategy = require('passport-local');
-const passportlocalMongoose = require('passport-local-mongoose');
+
 const User = ('./models/user')
 
 // and create our instances
@@ -38,6 +41,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //   resave: false,
 //   saveUninitialized: false
 // }));
+app.use(expressSession({
+  secret: 'Die Hard',
+  resave: true,
+  saveUninitialized: false
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 // passport.use(new localStrategy(User.authenticate()));
