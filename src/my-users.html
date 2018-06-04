@@ -44,6 +44,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="my-new-user.html">
 <link rel="import" href="my-edit-user.html">
 
+<link rel="import" href="../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animations.html">
+<script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+
 <dom-module id="my-users">
     <template>
         <style include="shared-styles">
@@ -52,6 +56,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
                 padding: 10px;
             }
+            
+            @-webkit-keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @-moz-keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
 
             paper-fab.blue {
                 position: fixed;
@@ -78,6 +109,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             paper-icon-button.edit {
                 color: rgb(233, 79, 164);
             }
+
+            .users{
+                -webkit-animation: fadeIn ease-in 1;
+           -moz-animation: fadeIn ease-in 1;
+          animation: fadeIn ease-in 1;
+
+          -webkit-animation-fill-mode: forwards;
+          -moz-animation-fill-mode: forwards;
+          animation-fill-mode: forwards;
+
+          -webkit-animation-duration: 0.5s;
+          -moz-animation-duration: 0.5s;
+          animation-duration: 0.5s;
+            }
         </style>
         <custom-style>
             <style is="custom-style">
@@ -91,7 +136,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <app-route route="{{route}}" pattern="/edit/:_id" data="{{editData}}" active="{{editActive}}"></app-route>
         <div>
             <iron-pages selected="[[route.path]]" attr-for-selected="name" fallback-selection="view404" role="main">
-                <div name="">
+                <div name="" class="users">
                     <app-header-layout fullbleed has-scrolling-region>
                         <app-header fixed slot="header">
                             <app-toolbar primary id="tool1">
