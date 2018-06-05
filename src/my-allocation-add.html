@@ -1,0 +1,419 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-item/paper-item-body.html">
+<link rel="import" href="../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-query.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/vaadin-dialog/vaadin-dialog.html">
+<link rel="import" href="../bower_components/vaadin-button/vaadin-button.html">
+
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/vaadin-grid/vaadin-grid.html">
+<link rel="import" href="../bower_components/vaadin-grid/vaadin-grid-selection-column.html">
+<link rel="import" href="../bower_components/vaadin-grid/vaadin-grid-sorter.html">
+<link rel="import" href="../bower_components/vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="../bower_components/vaadin-button/vaadin-button.html">
+<link rel="import" href="../bower_components/vaadin-lumo-styles/icons.html">
+<link rel="import" href="../bower_components/vaadin-date-picker/vaadin-date-picker.html">
+<link rel="import" href="../bower_components/vaadin-notification/vaadin-notification.html">
+<link rel="import" href="../bower_components/vaadin-dialog/vaadin-dialog.html">
+<link rel="import" href="../bower_components/range-datepicker/range-datepicker-input.html">
+
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animations.html">
+<link rel="import" href="../bower_components/paper-toolbar/paper-toolbar.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
+
+
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="my-icons.html">
+<link rel="import" href="short-unique-id.html">
+
+<script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+
+
+<dom-module id="my-allocation-add">
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+            }
+
+            app-header {
+                color: rgb(255, 255, 255);
+                background-color: darkorange;
+            }
+
+            app-header paper-icon-button {
+                --paper-icon-button-ink-color: #000000;
+            }
+
+            app-drawer-layout:not([narrow]) [drawer-toggle] {
+                display: none;
+            }
+
+            app-drawer {
+                --app-drawer-content-container: {
+                    background-color: #F4F5F6;
+                }
+            }
+
+            paper-fab.fab {
+                position: fixed;
+                bottom: 30px;
+                right: 30px;
+                background-color: #3F51B5;
+            }
+            @-webkit-keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @-moz-keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+          
+
+            @media (max-width: 768px) {
+                .docu {
+                    margin-left: 16px;
+                    margin-right: 16px;
+                    padding: 16px;
+
+
+                    background-color: #fff;
+                    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+
+                    opacity: 0;
+                    /* make things invisible upon start */
+                    -webkit-animation: fadeIn ease-in 1;
+                    /* call our keyframe named fadeIn, use animattion ease-in and repeat it only 1 time */
+                    -moz-animation: fadeIn ease-in 1;
+                    animation: fadeIn ease-in 1;
+
+                    -webkit-animation-fill-mode: forwards;
+                    /* this makes sure that after animation is done we remain at the last keyframe value (opacity: 1)*/
+                    -moz-animation-fill-mode: forwards;
+                    animation-fill-mode: forwards;
+
+                    -webkit-animation-duration: 0.5s;
+                    -moz-animation-duration: 0.5s;
+                    animation-duration: 0.5s;
+                }
+                #buttonform {
+                    display: none;
+
+                }
+                iron-icon#iconform {
+                    display: inline-block;
+                }
+                #iconcreated {
+                    display: inline-block
+                }
+                #created {
+                    display: none;
+                }
+            }
+
+            @media (min-width: 768px) {
+                .docu {
+                    /* margin-left: 16px;
+                    margin-right: 16px; */
+                    padding: 16px;
+                }
+                #iconform {
+                    display: none;
+                }
+            }
+
+            paper-toast {
+                width: 20%;
+                position: fixed;
+                bottom: 1opx;
+                left: 10px;
+                margin-left: 20%;
+            }
+
+            paper-checkbox {
+                font-size: 14px;
+                margin-right: 5px;
+            }
+
+            hr {
+                background-color: #eee;
+                border: 0 none;
+                color: #eee;
+                height: 1px;
+            }
+        </style>
+        <!-- <firebase-document id="idd" path="{{getpath()}}" data="{{newdata}}"></firebase-document> -->
+        <!-- <firebase-query id="query" path="{{getpath()}}" data="{{account}}"></firebase-query> -->
+        <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_commentsLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
+
+        <app-drawer-layout fullbleed narrow="{{narrow}}" id="drawerLayout">
+            <app-header-layout id="appheader" has-scrolling-region>
+                <app-header fixed slot="header">
+                    <app-toolbar>
+                        <a href="/allocation">
+                            <paper-icon-button noink class="menu" style="color: white;" icon="my-icons:arrow-back"></paper-icon-button>
+                        </a>
+                        <div main-title>New Allocation</div>
+                    </app-toolbar>
+
+                    <vaadin-dialog id="successModal" no-close-on-esc no-close-on-outside-click>
+                        <template>
+                            <h3 style="text-align: center">Successfully Added.</h3>
+                            <hr>
+                            <paper-button on-tap="_ok" style="float: right">Ok</paper-button>
+                        </template>
+                    </vaadin-dialog>
+                </app-header>
+
+                <div class="docu">
+
+                    <div class="docu-header">
+                        <div>
+                            <iron-icon id="iconcreated" icon="my-icons:flag" style="color:gray;"></iron-icon>
+                            <span id="created">Created by:</span> Jeino
+                            <!-- user name here {{username}} or something -->
+                        </div>
+                    </div>
+                    <div class="details" id="form">
+                        <paper-toggle-button style="float: right;" value="{{active}}" on-tap="{{_active}}">ACTIVE</paper-toggle-button>
+                        <paper-input always-float-label value={{hotel}} label="HOTEL"></paper-input>
+                        <paper-textarea always-float-label value="{{note}}" label="REMARKS" style="width: 49%; float: right;"></paper-textarea>
+                        <range-datepicker-input class="" date-format="DD-MMMM-YYYY" style="width: 49%; ">
+                            <template>
+                                <div id="daterange">
+                                    <paper-input label="DURATION" value="{{dateFrom}} - {{dateTo}}"></paper-input>
+                                    <paper-input label="Date To" value="{{dateTo}}" hidden></paper-input>
+                                </div>
+
+                            </template>
+                        </range-datepicker-input>
+                        <vaadin-text-field style="width: 130px;" id="room" value="{{room}}" label="ROOM"></vaadin-text-field>
+                        <!-- <vaadin-text-field style="width: 130px;" id="room1" value="{{room1}}" label="ROOM"></vaadin-text-field> -->
+                        <vaadin-text-field style="width: 130px;" id="peak" value="{{peak}}" label="PEAK"></vaadin-text-field>
+                        <vaadin-text-field style="width: 130px;" id="pdays" value="{{pdays}}" label="CUT-OFF"></vaadin-text-field>
+                        <vaadin-text-field style="width: 130px;" id="nonpeak" value="{{nonpeak}}" label="NON-PEAK"></vaadin-text-field>
+                        <vaadin-text-field style="width: 130px;" id="nonpdays" value="{{nonpdays}}" label="NONPEAKDAYS"></vaadin-text-field>
+                        <vaadin-button on-click="_add">Add More</vaadin-button>
+
+                        <br>
+                        <template is="dom-if" if="{{addAllocation}}">
+                       <div style="border-style: solid; border-color: gray; border-radius: 5px; padding: 5px; border-width: 2px;">
+                        <span id="writeHere" style="left: 50px;position: relative;"></span>
+                       </div>
+                       </template> 
+                        <br>
+
+                        <div>
+                            <h3>PEAK SEASONS</h3>
+                        </div>
+                        <div style="margin-bottom: 20px">
+                            <vaadin-date-picker placeholder="Start" id="startdate" value="{{startValue}}" max="{{endValue}}" date-format="DD-MMMM-YYYY"></vaadin-date-picker>
+                            <vaadin-date-picker placeholder="End" id="enddate" value="{{endValue}}" min="{{startValue}}" date-format="DD-MMMM-YYYY"></vaadin-date-picker>
+
+                            <vaadin-button on-click="_adddate">Add More</vaadin-button>
+                            <br>
+                        
+                        <span id="writeHeredate"></span>
+                 
+                        <br>
+                        </div>
+                        
+                    </div>
+                </div>
+                <paper-fab on-tap="_submit" style=" float: right; " class="fab" icon="my-icons:save"></paper-fab>
+            </app-header-layout>
+        </app-drawer-layout>
+        <iron-ajax verbose id="ajax" method="[[method]]" on-response="_handleResponse"></iron-ajax>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'my-allocation-add',
+
+    //      ready: function() {
+    //     this.employees = [
+    //         {first: 'Bob', last: 'Smith'},
+    //         {first: 'Sally', last: 'Johnson'}
+           
+    //     ];
+    //   },
+
+            properties: {
+                addAllocation: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                },
+                dateCreated: String,
+                msg: String,
+                created_by: {
+                    type: String,
+                    value: 'Peter Villaceran'
+                },
+                updated_by: {
+                    type: String,
+                    value: 'Ardie Derrayal'
+                }
+            },
+
+            _openField() {
+                var node = Polymer.dom(this.root).querySelector("#writeHere").innerHTML += '<span><td><vaadin-text-field style="width: 130px;" id="room" value="{{room}}"  ></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="peak" ></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="pdays" ></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="nonpeak" ></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="nonpdays" ></vaadin-text-field></td></span><br> \r\n';
+
+            },
+        
+            _add() {
+            
+                if (this.room !== '' && this.peak !== '' && this.pdays !== '' && this.nonpeak !== '' && this.nonpdays !== '') {
+                this.addAllocation = true;
+                var allocationval = [];
+                var room1 = Polymer.dom(this.root).querySelector("#room");
+                var peaksn = Polymer.dom(this.root).querySelector("#peak");
+                var cutoff = Polymer.dom(this.root).querySelector("#pdays");
+                var nonpeakssn = Polymer.dom(this.root).querySelector("#nonpeak");
+                var nonpeakday = Polymer.dom(this.root).querySelector("#nonpdays");
+                
+                console.log(room1.value,peaksn.value,cutoff.value,nonpeakssn.value,nonpeakday.value);
+                
+                var node = Polymer.dom(this.root).querySelector("#writeHere").innerHTML += '<span><td><vaadin-text-field style="width: 130px;" id="room" value="'+room1.value+'"></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="peak" value="'+peaksn.value+'"></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="pdays" value="'+cutoff.value+'"></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="nonpeak" value="'+nonpeakssn.value+'" ></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="nonpdays" value="'+nonpeakday.value+'"></vaadin-text-field></td></span><br>';
+                // if (this.room !== '' && this.peak !== '' && this.pdays !== '' && this.nonpeak !== '' && this.nonpdays !== '') {
+                //    this.$.items.unshift({ room: room.value, peak:peaksn.value, pdays: cutoff.value, nonpeak: nonpeakssn.value, nonpdays: nonpeakday.value });
+                //    this.$.grid.clearCache();
+                    
+
+                // if (this.room !== '' && this.peak !== '' && this.pdays !== '' && this.nonpeak !== '' && this.nonpdays !== '') {
+                //    this.$.items.unshift({ room: room.value, peak:peaksn.value, pdays: cutoff.value, nonpeak: nonpeakssn.value, nonpdays: nonpeakday.value });
+                //    this.$.grid.clearCache();
+
+                    this.room = '';
+                    this.peak = '';
+                    this.pdays = '';
+                    this.nonpeak = '';
+                    this.nonpdays = ''; 
+                    this.nonpdays = '';
+
+                 }else {
+                    alert('Please Input All');
+                }
+            },
+
+             _adddate() {
+                if (this.startValue !== '' && this.endValue !== '') {
+            
+                var datestart = Polymer.dom(this.root).querySelector("#startdate");
+                var dateend = Polymer.dom(this.root).querySelector("#enddate");
+
+                console.log(datestart.value,dateend.value);
+                
+                var node = Polymer.dom(this.root).querySelector("#writeHeredate").innerHTML += '<span><td><vaadin-date-picker placeholder="Start" id="startdate" value="'+ datestart.value +'" max="'+ dateend.value+ '" date-format="DD-MMMM-YYYY"></vaadin-date-picker></td> <td> <vaadin-date-picker placeholder="End" id="enddate" value="'+dateend.value+'" min="'+datestart.value+'" date-format="DD-MMMM-YYYY"></vaadin-date-picker></td></span><br> \r\n';
+            
+                    this.startValue = '';
+                    this.endValue = '';
+              
+
+                 }else {
+                    alert('Please Input All');
+                }
+            },
+            _submit() {
+                // for (var i = 0; i < 5000; i++) {
+                if (!this.hotel || !this.dateFrom || !this.dateTo || !this.note) {
+                    this.msg = "All fields required";
+                    alert(this.msg);
+                }
+                else {
+                    // for (var i = 0; i < 4; i++) {
+                var room1 = Polymer.dom(this.root).querySelector("#room");
+                var peaksn = Polymer.dom(this.root).querySelector("#peak");
+                var cutoff = Polymer.dom(this.root).querySelector("#pdays");
+                var nonpeakssn = Polymer.dom(this.root).querySelector("#nonpeak");
+                var nonpeakday = Polymer.dom(this.root).querySelector("#nonpdays");
+
+                    this.method = 'POST';
+                    this.$.ajax.url = '/allocation/add';
+                    this.$.ajax.contentType = "application/json";
+                    this.$.ajax.body = {
+                        hotel: this.hotel,
+                        dateFrom: this.dateFrom,
+                        dateTo: this.dateTo,
+                        // room: this.room,
+                        room: [{room: this.room},
+                                {room: room1.value}
+                            ],
+                        peak: this.peak,
+                        pdays: this.pdays,
+                        nonpeak: this.nonpeak,
+                        nonpdays: this.nonpdays,
+                        note: this.note,
+                        startValue: this.startValue,
+                        endValue: this.endValue
+
+                    };
+                    this.$.ajax.generateRequest();
+                    this.$.successModal.opened = true;
+                    this.url = '';
+                    // }
+                }
+            },
+            _ok() {
+                this.$.successModal.opened = false;
+                window.location.assign('/allocation');
+            },
+            toggleDrawer() { },
+            _cancel() { },
+            ready() {
+                this.fullname = "";
+                this.room = "";
+                this.msg = "";
+                this.url = '/allocation/read';
+            },
+            _commentsLoaded(data) {
+
+                if (this.url === '/allocation/read') {
+                    // console.log(data.detail.response.data);
+                    this.allocations = data.detail.response.data;
+
+                }
+            }
+        })
+    </script>
+</dom-module>

@@ -45,14 +45,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="time-element.html">
 <link rel="import" href="shared-styles.html">
-<link rel="import" href="my-availability-new.html">
-<link rel="import" href="my-availability-edit.html">
+<link rel="import" href="my-allocation-add.html">
+<link rel="import" href="my-allocation-edit.html">
 
 <link rel="import" href="../bower_components/neon-animation/web-animations.html">
 <link rel="import" href="../bower_components/neon-animation/neon-animations.html">
 <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+
+
 <link rel="import" href="search-bar.html">
-<dom-module id="my-availability">
+<dom-module id="my-allocation">
     <template>
         <style include="shared-styles">
             :host {
@@ -61,36 +63,36 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 display: flex;
                 flex-direction: column;
             }
-
+            
             @-webkit-keyframes fadeIn {
-                from {
-                    opacity: 0;
-                }
-                to {
-                    opacity: 1;
-                }
-            }
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
 
-            @-moz-keyframes fadeIn {
-                from {
-                    opacity: 0;
-                }
-                to {
-                    opacity: 1;
-                }
-            }
+      @-moz-keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
 
-            @keyframes fadeIn {
-                from {
-                    opacity: 0;
-                }
-                to {
-                    opacity: 1;
-                }
-            }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
 
             @media (max-width: 768px) {
-                div .availability {
+                div .allocation {
                     margin: 16px;
                     /* margin-top: 16px; */
                     display: flex;
@@ -98,17 +100,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     flex-direction: column;
                     border-radius: 3px;
                     /* box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2); */
-                    -webkit-animation: fadeIn ease-in 1;
-                    -moz-animation: fadeIn ease-in 1;
-                    animation: fadeIn ease-in 1;
+              
+                      opacity: 0;
+        
+          -webkit-animation: fadeIn ease-in 1;
+           -moz-animation: fadeIn ease-in 1;
+          animation: fadeIn ease-in 1;
 
-                    -webkit-animation-fill-mode: forwards;
-                    -moz-animation-fill-mode: forwards;
-                    animation-fill-mode: forwards;
+          -webkit-animation-fill-mode: forwards;
+          -moz-animation-fill-mode: forwards;
+          animation-fill-mode: forwards;
 
-                    -webkit-animation-duration: 0.5s;
-                    -moz-animation-duration: 0.5s;
-                    animation-duration: 0.5s;
+          -webkit-animation-duration: 0.5s;
+          -moz-animation-duration: 0.5s;
+          animation-duration: 0.5s;
                 }
                 paper-search-bar {
                     margin-left: 80px;
@@ -118,7 +123,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
             @media (min-width: 768px) {
-                div .availability {
+                div .allocation {
                     width: 765px;
                     margin: 16px auto;
                     /* margin-bottom: 1000px; */
@@ -126,18 +131,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     border-radius: 3px;
 
                     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+                    
+                    opacity: 0;
+        
+          -webkit-animation: fadeIn ease-in 1;
+           -moz-animation: fadeIn ease-in 1;
+          animation: fadeIn ease-in 1;
 
-                    -webkit-animation: fadeIn ease-in 1;
-                    -moz-animation: fadeIn ease-in 1;
-                    animation: fadeIn ease-in 1;
+          -webkit-animation-fill-mode: forwards;
+          -moz-animation-fill-mode: forwards;
+          animation-fill-mode: forwards;
 
-                    -webkit-animation-fill-mode: forwards;
-                    -moz-animation-fill-mode: forwards;
-                    animation-fill-mode: forwards;
-
-                    -webkit-animation-duration: 0.5s;
-                    -moz-animation-duration: 0.5s;
-                    animation-duration: 0.5s;
+          -webkit-animation-duration: 0.5s;
+          -moz-animation-duration: 0.5s;
+          animation-duration: 0.5s;
+                    
                 }
                 paper-search-bar {
                     margin-left: 50px;
@@ -150,7 +158,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 position: fixed;
                 bottom: 32px;
                 right: 32px;
-
+                /* background-color: #3F51B5; */
             }
 
             app-header {
@@ -268,18 +276,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <template is="dom-if" if="{{!openSearch}}">
                             <app-toolbar primary id="tool1">
                                 <paper-icon-button class="menu" icon="my-icons:menu" drawer-toggle on-tap="toggleDrawer"></paper-icon-button>
-                                <div main-title>Availability</div>
+                                <div main-title>Allocation</div>
                                 <paper-icon-button class="menu" icon="my-icons:search" drawer-toggle on-tap="toggleSearch"></paper-icon-button>
                             </app-toolbar>
                         </template>
                     </app-header>
                     <iron-scroll-document id="threshold">
-                        <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_availabilityLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
-                        <template is="dom-repeat" items="[[availabilities]]" as="item">
-                            <div class="availability">
-                                <div id="header" class="header" style="background-color:cornflowerblue; padding: 16px; padding-bottom: 5px; font-size: 14px;">
-                                    <a href="/availability/edit/{{item._id}}">
-                                        <paper-icon-button id="{{item._id}}" noink on-tap="_editAvailavility" data-args="{{item._id}}" icon="my-icons:edit" alt="{{item._id}}"
+                        <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_allocationLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
+                        <template is="dom-repeat" items="[[allocations]]" as="item">
+                            <div class="allocation">
+                                <div id="header" class="header" style="background-color: #3F51B5; padding: 16px; padding-bottom: 5px; font-size: 14px;">
+                                    <a href="/allocation/edit/{{item._id}}">
+                                        <paper-icon-button id="{{item._id}}" noink on-tap="_editAllocation" data-args="{{item._id}}" icon="my-icons:edit" alt="{{item._id}}"
                                             style="float: right; margin-top:-10px; margin-right:-10px;color: white;"></paper-icon-button>
                                     </a>
                                     <div style="color: white">
@@ -287,14 +295,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                         Created
                                         <span>
                                             <time-ago datetime$="{{_timeStampToDateTime(item.createdAt)}}">{{_timeStampToDateTime(item.createdAt)}}</time-ago>
-                                            &nbsp;by&nbsp;[[item.created_by]]</span>
+                                            &nbsp;by&nbsp;<!--[[item.created_by]]-->Jeino</span>
                                     </div>
                                     <div style="color: white">
                                         <iron-icon icon="my-icons:update" id="date" style="color: white"></iron-icon>
                                         Last Modified
                                         <span>
                                             <time-ago datetime$="{{_timeStampToDateTime(item.updatedAt)}}">{{_timeStampToDateTime(item.updatedAt)}}</time-ago>
-                                            &nbsp;by&nbsp;[[item.updated_by]]</span>
+                                            &nbsp;by&nbsp;<!--[[item.updated_by]]-->Jeino</span>
                                     </div>
                                 </div>
                                 <div style="padding: 16px; background-color: white;">
@@ -304,11 +312,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                             [[item.hotel]]
                                         </span>
                                     </div>
-                                    <!-- [[item.room1]] -->
                                     <div style="margin-top: 12px; font-size: 14px;">
                                         <iron-icon icon="my-icons:speaker-notes" id="date" style="color: gray"></iron-icon>
                                         <span id="type" style="color:gray;font-size: 14px; ">
-                                            [[item.notes]]
+                                            [[item.note]]
                                         </span>
                                     </div>
 
@@ -317,30 +324,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         </template>
                     </iron-scroll-document>
                 </app-header-layout>
-                <a href="/availability/new" style="text-decoration: none; ">
+                <a href="/allocation/add" style="text-decoration: none; ">
                     <paper-fab noink on-tap="_availnew" icon="my-icons:add" class="blue"></paper-fab>
                 </a>
             </div>
 
-            <div name="/new">
+            <div name="/add">
                 <div id="availnew"></div>
-                <my-availability-new id="d23" path=" " prev-route="{{route.prefix}}"></my-availability-new>
+                <my-allocation-add id="d23" path=" " prev-route="{{route.prefix}}"></my-allocation-add>
             </div>
             <div name="view404 ">Not found.</div>
         </iron-pages>
 
         <div hidden$="{{!editActive}}">
             <div id="availedit"></div>
-            <my-availability-edit id="d24" edit-key='{{editData._id}}' prev-route="{{route.prefix}}"></my-availability-edit>
+            <my-allocation-edit id="d24" edit-key='{{editData._id}}' prev-route="{{route.prefix}}"></my-allocation-edit>
         </div>
-
-        <iron-ajax verbose id="ajax" method="[[method]]" on-response="_handleResponse"></iron-ajax>
-
     </template>
 
     <script>
         Polymer({
-            is: 'my-availability',
+            is: 'my-allocation',
             properties: {
                 route: Object,
                 routeData: Object,
@@ -358,7 +362,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 },
                 filterBy: {
                     type: Number,
-                    value: 0
+                    value: 2
                 },
                 observers: [
                     '_searchChanged(filterBy, search)',]
@@ -367,7 +371,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             toggleSearch() {
                 this.openSearch = true;
-
+                
             },
             toggleReturn() {
                 this.openSearch = false;
@@ -377,17 +381,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.search = '';
             },
             _searchChanged(g, e) {
-                if (g) {
-                    if (g == 0) {
-                        if (e) {
-                            // this.url = '/availability/search';
-                        }
-                    }
-                }
+
             },
-            _availabilityLoaded(data) {
-                if (this.url === '/availability/read') {
-                    this.availabilities = data.detail.response.data;
+            _allocationLoaded(data) {
+                if (this.url === '/allocation/read') {
+                    this.allocations = data.detail.response.data;
                     // console.log(this.hotels);
                 }
             },
@@ -399,7 +397,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         Polymer.dom(node.parentNode).removeChild(oldDiv);
 
                     }
-                    var newDiv = document.createElement("my-availability-new");
+                    var newDiv = document.createElement("my-allocation-add");
                     newDiv.setAttribute("id", "d23");
                     newDiv.setAttribute("prev-route", this.route.prefix);
                     // newDiv.setAttribute("block ", "3 ")
@@ -408,7 +406,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     Polymer.dom(node.parentNode).insertBefore(newDiv, currentDiv);
                 }
             },
-            _editAvailavility(e) {
+            _editAllocation(e) {
                 var data_args = Polymer.dom(e).rootTarget.getAttribute("alt");
                 var node = Polymer.dom(this.root).querySelector("#availedit");
                 if (node) {
@@ -416,7 +414,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     if (oldDiv) {
                         Polymer.dom(node.parentNode).removeChild(oldDiv);
                     }
-                    var newDiv = document.createElement("my-availability-edit");
+                    var newDiv = document.createElement("my-allocation-edit");
                     newDiv.setAttribute("id", "d24");
                     newDiv.setAttribute("edit-key", data_args);
                     newDiv.setAttribute("prev-route", this.route.prefix);
@@ -436,11 +434,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.$.narrow = !this.$.narrow;
             },
             ready() {
-                this.url = '/availability/read';
-                var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
-                var now = new Date();
-                var date = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-                // console.log(date);
+                this.url = '/allocation/read';
             },
             _timeStampToDateTime(ts) {
                 return new Date(ts);

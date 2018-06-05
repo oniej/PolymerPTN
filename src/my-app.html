@@ -35,6 +35,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="lazy-import" href="my-blocking.html">
 <link rel="lazy-import" href="my-hotels.html">
 <link rel="lazy-import" href="my-users.html">
+<link rel="lazy-import" href="my-allocation.html">
+
 <link rel="lazy-import" href="my-settings.html">
 <!-- <link rel="lazy-import" href="my-view1.html"> -->
 <!-- <link rel="lazy-import" href="my-signin.html"> -->
@@ -296,6 +298,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <span>Blocking</span>
               </paper-icon-item>
             </a>
+            <a name="allocation" href="[[rootPath]]allocation">
+              <paper-icon-item toggles="true" class="menuSelected">
+                <iron-icon icon="my-icons:dashboard" slot="item-icon"></iron-icon>
+                <span>Allocation</span>
+              </paper-icon-item>
+            </a>
             <a name="hotels" href="[[rootPath]]hotels">
               <paper-icon-item toggles="true" class="menuSelected">
                 <iron-icon icon="my-icons:location-city" slot="item-icon"></iron-icon>
@@ -330,7 +338,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <my-allocation name="allocation" route="{{subroute}}"></my-allocation>
         <my-hotels name="hotels" route="{{subroute}}"></my-hotels>
         <my-users name="users" route="{{subroute}}"></my-users>
-        <my-settings name="settings" route="{{subroute}}"></my-settings>
+        <my-settings name="settings" route="{{subroute}}"></my-settings> 
         <my-view404 name="view404"></my-view404>
       </iron-pages>
     </app-drawer-layout>
