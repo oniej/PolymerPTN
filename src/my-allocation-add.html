@@ -108,33 +108,7 @@
           opacity: 1;
         }
       }
-            /* .card {
-                margin: 20px auto auto 220px;
-
-                padding: 16px;
-                padding-bottom: 50px;
-                padding-top: 50px;
-                width: 600px;
-                border-radius: 4px;
-                background-color: #fff;
-                margin-bottom: 30px;
-
-                box-shadow: 0 3px 5px rgba(0, 0, 0, .23), 0 3px 5px rgba(0, 0, 0, .16);
-
-                transition: all 400ms cubic-bezier(0.165, 0.840, 0.440, 1.000);
-                opacity: 0;
-                -webkit-animation: fadeIn ease-in 1;
-                -moz-animation: fadeIn ease-in 1;
-                animation: fadeIn ease-in 1;
-
-                -webkit-animation-fill-mode: forwards;
-                 -moz-animation-fill-mode: forwards;
-                animation-fill-mode: forwards;
-
-                -webkit-animation-duration: 0.5s;
-                -moz-animation-duration: 0.5s;
-                animation-duration: 0.5s;
-            } */
+          
 
             @media (max-width: 768px) {
                 .docu {
@@ -264,148 +238,25 @@
                         <br>
                         
                         <span id="writeHere"></span>
-                         <!-- <x-array-data-provider items="{{items}}" size="200"></x-array-data-provider> -->
-                        <!-- <dom-bind>
-                            <template>
-
-                               
-                                <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_commentsLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
-                                <vaadin-grid theme="compact" id="grid" items="{{items}}" as="item" style="height: 200px;">
-                        <span id="writeHere"></span>
-                        <dom-bind>
-                            <template is="dom-repeat" items="{{employees}}">
-
-                                <!-- <x-array-data-provider items="{{items}}" size="200"></x-array-data-provider> -->
-                                <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_commentsLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
-                                <vaadin-grid theme="compact" id="grid" items="{{items}}" as="item" style="height: 200px;">
-
-                                    <vaadin-grid-column resizable>
-                                        <template class="header">ROOM</template>
-                                        <template>
-                                                <div>First name: <span>{{item.first}}</span></div>
-                                            <vaadin-text-field style="width: 120px;" id="room" value="{{item.room}}"></vaadin-text-field>
-                                        </template>
-                                    </vaadin-grid-column>
-
-                                    <vaadin-grid-column resizable>
-                                        <template class="header">PEAK</template>
-                                        <template>
-                                                <div>Last name: <span>{{item.last}}</span></div>
-                                            <vaadin-text-field style="width: 120px;" id="peak" value="{{item.peak}}"></vaadin-text-field>
-                                        </template>
-                                    </vaadin-grid-column>
-
-                                    <vaadin-grid-column resizable>
-                                        <template class="header">CUT-OFF</template>
-                                        <template>
-                                            <vaadin-text-field style="width: 120px;" id="pdays" value="{{item.pdays}}"></vaadin-text-field>
-
-                                        </template>
-                                    </vaadin-grid-column>
-                                    <vaadin-grid-column resizable>
-                                        <template class="header">NON-PEAK</template>
-                                        <template>
-                                            <vaadin-text-field style="width: 120px;" id="nonpeak" value="{{item.nonpeak}}"></vaadin-text-field>
-                                        </template>
-                                    </vaadin-grid-column>
-
-                                    <vaadin-grid-column resizable>
-                                        <template class="header">DAYS</template>
-                                        <template>
-                                            <vaadin-text-field style="width: 120px;" id="nonpdays" value="{{item.nonpdays}}"></vaadin-text-field>
-
-                                        </template>
-                                    </vaadin-grid-column>
-
-
-
-                                    <vaadin-grid-column resizable>
-                                        <template>
-                                            <div style="text-align: right;">
-                                                <vaadin-button id="edit-button" hidden="[[editing]]" on-click="_edit" focus-target$="[[!editing]]" theme="icon" aria-label="Edit">
-                                                    <iron-icon icon="lumo:edit"></iron-icon>
-                                                </vaadin-button>
-                                                <vaadin-button hidden="[[editing]]" on-click="_remove" theme="icon error" aria-label="Delete">
-                                                    <iron-icon icon="lumo:cross"></iron-icon>
-                                                </vaadin-button>
-                                                <vaadin-button hidden="[[!_isEditing(editing, item)]]" on-click="_save" focus-target$="[[editing]]" theme="primary">Save</vaadin-button>
-                                                <vaadin-button hidden="[[!_isEditing(editing, item)]]" on-click="_cancel">Cancel</vaadin-button>
-                                            </div>
-                                        </template>
-                                    </vaadin-grid-column>
-
-                                </vaadin-grid>
-                            </template>
-                        </dom-bind> -->
+                 
                         <br>
 
-                        <titanium-grid></titanium-grid>
-
-                        </dom-bind>
-                        <br>
                         <div>
                             <h3>PEAK SEASONS</h3>
                         </div>
                         <div style="margin-bottom: 20px">
-                            <vaadin-date-picker placeholder="Start" id="date" value="{{startValue}}" max="{{endValue}}" date-format="DD-MMMM-YYYY"></vaadin-date-picker>
-                            <vaadin-date-picker placeholder="End" id="date" value="{{endValue}}" min="{{startValue}}" date-format="DD-MMMM-YYYY"></vaadin-date-picker>
+                            <vaadin-date-picker placeholder="Start" id="startdate" value="{{startValue}}" max="{{endValue}}" date-format="DD-MMMM-YYYY"></vaadin-date-picker>
+                            <vaadin-date-picker placeholder="End" id="enddate" value="{{endValue}}" min="{{startValue}}" date-format="DD-MMMM-YYYY"></vaadin-date-picker>
 
-                            <vaadin-button on-click="_add">Add More</vaadin-button>
+                            <vaadin-button on-click="_adddate">Add More</vaadin-button>
+                            <br>
+                        
+                        <span id="writeHeredate"></span>
+                 
+                        <br>
                         </div>
-                        <dom-bind id="my-allocation">
-                            <template>
-                                <vaadin-grid theme="compact" id="grid" items="[[items]]" style="height: 200px; top: 100px;">
-
-                                    <vaadin-grid-column resizable>
-                                        <template class="header">DURATION</template>
-                                        <template>
-
-                                            <vaadin-text-field id="first-[[index]]" style="width: 100%;" value="[[item.date]]" on-input="_storeFirst" readonly$="[[!_isEditing(editing, item)]]"></vaadin-text-field>
-
-                                        </template>
-                                    </vaadin-grid-column>
-
-
-                                    <vaadin-grid-column resizable>
-                                        <template>
-                                            <div style="text-align: right;">
-                                                <vaadin-button id="edit-button" hidden="[[editing]]" on-click="_edit" focus-target$="[[!editing]]" theme="icon" aria-label="Edit">
-                                                    <iron-icon icon="lumo:edit"></iron-icon>
-                                                </vaadin-button>
-                                                <vaadin-button hidden="[[editing]]" on-click="_remove" theme="icon error" aria-label="Delete">
-                                                    <iron-icon icon="lumo:cross"></iron-icon>
-                                                </vaadin-button>
-                                                <!-- <vaadin-button hidden="[[!_isEditing(editing, item)]]" on-click="_save" focus-target$="[[editing]]" theme="primary">Save</vaadin-button>
-                    <vaadin-button hidden="[[!_isEditing(editing, item)]]" on-click="_cancel">Cancel</vaadin-button> -->
-                                            </div>
-                                        </template>
-                                    </vaadin-grid-column>
-
-                                </vaadin-grid>
-                            </template>
-                        </dom-bind>
                         
                     </div>
-                    <!-- <div>
-                        <span>
-                            <paper-button on-tap="_openField" id="buttonform" style="color: cornflowerblue;">
-                                <iron-icon icon="my-icons:add-box" on-tap="_openField" style="color: cornflowerblue;"></iron-icon>
-                                Add more room</paper-button>
-                        </span>
-                        <iron-icon id="iconform" icon="my-icons:add-box" on-tap="_openField" style="color: cornflowerblue;"></iron-icon>
-                    </div>
-                    <br>
-                    <br>
-                    <span style="color:red; font-size:13px; float:left; margin-top: -16px;">{{msg}}</span>
-                    <span style="float: right; margin-top: -30px;">
-                        <a href="/hotels" style="text-decoration:none">
-                            <paper-button id="cancelButton" class="cancel" on-tap="_cancel">Cancel</paper-button>
-                        </a>
-                        <paper-button id="submitButton" class="darkorange" on-click="_submit" raised>Add</paper-button>
-                    </span>
-                </div> -->
-
-         
                 </div>
                 <paper-fab on-tap="_submit" style=" float: right; " class="fab" icon="my-icons:save"></paper-fab>
             </app-header-layout>
@@ -416,14 +267,6 @@
     <script>
         Polymer({
             is: 'my-allocation-add',
-
-    //      ready: function() {
-    //     this.employees = [
-    //         {first: 'Bob', last: 'Smith'},
-    //         {first: 'Sally', last: 'Johnson'}
-           
-    //     ];
-    //   },
 
          ready: function() {
         this.employees = [
@@ -482,6 +325,25 @@
                     this.nonpdays = '';
 
                     //  var node = Polymer.dom(this.root).querySelector("#writeHere").innerHTML = allocationval[room.value,peaksn.value,cutoff.value,nonpeakssn.value,nonpeakday.value];
+                 }else {
+                    alert('Please Input All');
+                }
+            },
+
+             _adddate() {
+                if (this.startValue !== '' && this.endValue !== '') {
+            
+                var datestart = Polymer.dom(this.root).querySelector("#startdate");
+                var dateend = Polymer.dom(this.root).querySelector("#enddate");
+
+                console.log(datestart.value,dateend.value);
+                
+                var node = Polymer.dom(this.root).querySelector("#writeHeredate").innerHTML += '<span><td><vaadin-date-picker placeholder="Start" id="startdate" value="'+ datestart.value +'" max="'+ dateend.value+ '" date-format="DD-MMMM-YYYY"></vaadin-date-picker></td> <td> <vaadin-date-picker placeholder="End" id="enddate" value="'+dateend.value+'" min="'+datestart.value+'" date-format="DD-MMMM-YYYY"></vaadin-date-picker></td></span><br> \r\n';
+            
+                    this.startValue = '';
+                    this.endValue = '';
+              
+
                  }else {
                     alert('Please Input All');
                 }
