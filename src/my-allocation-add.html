@@ -227,8 +227,8 @@
 
                             </template>
                         </range-datepicker-input>
-
                         <vaadin-text-field style="width: 130px;" id="room" value="{{room}}" label="ROOM"></vaadin-text-field>
+                        <!-- <vaadin-text-field style="width: 130px;" id="room1" value="{{room1}}" label="ROOM"></vaadin-text-field> -->
                         <vaadin-text-field style="width: 130px;" id="peak" value="{{peak}}" label="PEAK"></vaadin-text-field>
                         <vaadin-text-field style="width: 130px;" id="pdays" value="{{pdays}}" label="CUT-OFF"></vaadin-text-field>
                         <vaadin-text-field style="width: 130px;" id="nonpeak" value="{{nonpeak}}" label="NON-PEAK"></vaadin-text-field>
@@ -236,9 +236,11 @@
                         <vaadin-button on-click="_add">Add More</vaadin-button>
 
                         <br>
-                        
-                        <span id="writeHere"></span>
-                 
+                        <template is="dom-if" if="{{addAllocation}}">
+                       <div style="border-style: solid; border-color: gray; border-radius: 5px; padding: 5px; border-width: 2px;">
+                        <span id="writeHere" style="left: 50px;position: relative;"></span>
+                       </div>
+                       </template> 
                         <br>
 
                         <div>
@@ -268,16 +270,20 @@
         Polymer({
             is: 'my-allocation-add',
 
-         ready: function() {
-        this.employees = [
-            {first: 'Bob', last: 'Smith'},
-            {first: 'Sally', last: 'Johnson'}
+    //      ready: function() {
+    //     this.employees = [
+    //         {first: 'Bob', last: 'Smith'},
+    //         {first: 'Sally', last: 'Johnson'}
            
-        ];
-      },
+    //     ];
+    //   },
 
             properties: {
-
+                addAllocation: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                },
                 dateCreated: String,
                 msg: String,
                 created_by: {
@@ -296,18 +302,19 @@
             },
         
             _add() {
+            
                 if (this.room !== '' && this.peak !== '' && this.pdays !== '' && this.nonpeak !== '' && this.nonpdays !== '') {
+                this.addAllocation = true;
                 var allocationval = [];
-                var room = Polymer.dom(this.root).querySelector("#room");
+                var room1 = Polymer.dom(this.root).querySelector("#room");
                 var peaksn = Polymer.dom(this.root).querySelector("#peak");
                 var cutoff = Polymer.dom(this.root).querySelector("#pdays");
                 var nonpeakssn = Polymer.dom(this.root).querySelector("#nonpeak");
                 var nonpeakday = Polymer.dom(this.root).querySelector("#nonpdays");
                 
-                // allocationval.unshift(room.value,peak.value,cutoff.value,nonpeak.value,nonpeakday.value);
-                console.log(room.value,peaksn.value,cutoff.value,nonpeakssn.value,nonpeakday.value);
+                console.log(room1.value,peaksn.value,cutoff.value,nonpeakssn.value,nonpeakday.value);
                 
-                var node = Polymer.dom(this.root).querySelector("#writeHere").innerHTML += '<span><td><vaadin-text-field style="width: 130px;" id="room" value="'+room.value+'"></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="peak" value="'+peaksn.value+'"></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="pdays" value="'+cutoff.value+'"></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="nonpeak" value="'+nonpeakssn.value+'" ></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="nonpdays" value="'+nonpeakday.value+'"></vaadin-text-field></td></span><br> \r\n';
+                var node = Polymer.dom(this.root).querySelector("#writeHere").innerHTML += '<span><td><vaadin-text-field style="width: 130px;" id="room" value="'+room1.value+'"></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="peak" value="'+peaksn.value+'"></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="pdays" value="'+cutoff.value+'"></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="nonpeak" value="'+nonpeakssn.value+'" ></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="nonpdays" value="'+nonpeakday.value+'"></vaadin-text-field></td></span><br>';
                 // if (this.room !== '' && this.peak !== '' && this.pdays !== '' && this.nonpeak !== '' && this.nonpdays !== '') {
                 //    this.$.items.unshift({ room: room.value, peak:peaksn.value, pdays: cutoff.value, nonpeak: nonpeakssn.value, nonpdays: nonpeakday.value });
                 //    this.$.grid.clearCache();
@@ -324,7 +331,6 @@
                     this.nonpdays = ''; 
                     this.nonpdays = '';
 
-                    //  var node = Polymer.dom(this.root).querySelector("#writeHere").innerHTML = allocationval[room.value,peaksn.value,cutoff.value,nonpeakssn.value,nonpeakday.value];
                  }else {
                     alert('Please Input All');
                 }
@@ -356,6 +362,12 @@
                 }
                 else {
                     // for (var i = 0; i < 4; i++) {
+                var room1 = Polymer.dom(this.root).querySelector("#room");
+                var peaksn = Polymer.dom(this.root).querySelector("#peak");
+                var cutoff = Polymer.dom(this.root).querySelector("#pdays");
+                var nonpeakssn = Polymer.dom(this.root).querySelector("#nonpeak");
+                var nonpeakday = Polymer.dom(this.root).querySelector("#nonpdays");
+
                     this.method = 'POST';
                     this.$.ajax.url = '/allocation/add';
                     this.$.ajax.contentType = "application/json";
@@ -363,7 +375,10 @@
                         hotel: this.hotel,
                         dateFrom: this.dateFrom,
                         dateTo: this.dateTo,
-                        room: this.room,
+                        // room: this.room,
+                        room: [{room: this.room},
+                                {room: room1.value}
+                            ],
                         peak: this.peak,
                         pdays: this.pdays,
                         nonpeak: this.nonpeak,

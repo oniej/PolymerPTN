@@ -8,7 +8,7 @@ const router = express.Router();
 router.get('/dummy', (req, res) => {
     return res.json({ success: true, data: [] });
 });
-router.post('/add', (req, res) => {
+router.post('/add', (req, res) => { 
     const allocation = new Allocation();
     // body parser lets us use the req.body
     const {hotel,dateFrom,dateTo,room,peak,pdays,nonpeak,nonpdays,note,startValue,endValue } = req.body;
@@ -23,6 +23,7 @@ router.post('/add', (req, res) => {
     allocation.dateFrom = dateFrom;
     allocation.dateTo = dateTo;
     allocation.room = room;
+    // allocation.room1 = room1;
     allocation.peak = peak;
     allocation.pdays = pdays;
     allocation.nonpeak = nonpeak;

@@ -6,11 +6,27 @@ const AllocationSchema = new Schema({
     hotel: String,
     dateFrom: String,
     dateTo: String,
-    room: String,
+   
+    room: [{
+        room: {type: String},
+        // room1: {type: String}
+    }],
     peak: String,
+    // peak:  [{
+    //     peak1: {type: String},
+    // }],
     pdays: String,
+    // pdays:  [{
+    //     cutoff: {type: String},
+    // }],
     nonpeak: String,
-    nonpdays: String,
+    // nonpeak:  [{
+    //    nonpeak1: {type: String},
+    // }],
+    nonpdays: String,   
+    // nonpdays:  [{
+    //     nonpeakday: {type: String},
+    // }],
     note: String,
     startValue: String,
     endValue: String
