@@ -74,7 +74,9 @@
     "moment": "^2.22.1",
     "salte-dialog": "salte-io/salte-dialog#^3.0.1",
     "vaadin-dialog": "vaadin/vaadin-dialog#^2.0.2",
-    "vaadin-grid": "vaadin/vaadin-grid#^5.0.4"
+    "vaadin-grid": "vaadin/vaadin-grid#^5.0.4",
+    "vaadin-date-picker": "vaadin/vaadin-date-picker#^3.1.0",
+    "vaadin-notification": "vaadin/vaadin-notification#^1.0.0"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^6.0.0"
