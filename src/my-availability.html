@@ -48,6 +48,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="my-availability-new.html">
 <link rel="import" href="my-availability-edit.html">
 
+<link rel="import" href="../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animations.html">
+<script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
 <link rel="import" href="search-bar.html">
 <dom-module id="my-availability">
     <template>
@@ -59,6 +62,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 flex-direction: column;
             }
 
+            @-webkit-keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
+            }
+
+            @-moz-keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
+            }
+
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
+            }
+
             @media (max-width: 768px) {
                 div .availability {
                     margin: 16px;
@@ -68,6 +98,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     flex-direction: column;
                     border-radius: 3px;
                     /* box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2); */
+                    -webkit-animation: fadeIn ease-in 1;
+                    -moz-animation: fadeIn ease-in 1;
+                    animation: fadeIn ease-in 1;
+
+                    -webkit-animation-fill-mode: forwards;
+                    -moz-animation-fill-mode: forwards;
+                    animation-fill-mode: forwards;
+
+                    -webkit-animation-duration: 0.5s;
+                    -moz-animation-duration: 0.5s;
+                    animation-duration: 0.5s;
                 }
                 paper-search-bar {
                     margin-left: 80px;
@@ -85,6 +126,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     border-radius: 3px;
 
                     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+
+                    -webkit-animation: fadeIn ease-in 1;
+                    -moz-animation: fadeIn ease-in 1;
+                    animation: fadeIn ease-in 1;
+
+                    -webkit-animation-fill-mode: forwards;
+                    -moz-animation-fill-mode: forwards;
+                    animation-fill-mode: forwards;
+
+                    -webkit-animation-duration: 0.5s;
+                    -moz-animation-duration: 0.5s;
+                    animation-duration: 0.5s;
                 }
                 paper-search-bar {
                     margin-left: 50px;

@@ -42,7 +42,6 @@
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-toast/paper-toast.html">
 
-<link rel="import" href="../bower_components/titanium-grid/titanium-grid.html">
 
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="my-icons.html">
@@ -263,6 +262,7 @@
                         <vaadin-button on-click="_add">Add More</vaadin-button>
 
                         <br>
+<<<<<<< HEAD
                         
                         <span id="writeHere"></span>
                          <!-- <x-array-data-provider items="{{items}}" size="200"></x-array-data-provider> -->
@@ -270,6 +270,13 @@
                             <template>
 
                                
+                                <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_commentsLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
+                                <vaadin-grid theme="compact" id="grid" items="{{items}}" as="item" style="height: 200px;">
+                        <span id="writeHere"></span>
+                        <dom-bind>
+                            <template is="dom-repeat" items="{{employees}}">
+
+                                <!-- <x-array-data-provider items="{{items}}" size="200"></x-array-data-provider> -->
                                 <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_commentsLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
                                 <vaadin-grid theme="compact" id="grid" items="{{items}}" as="item" style="height: 200px;">
 
@@ -284,7 +291,7 @@
                                     <vaadin-grid-column resizable>
                                         <template class="header">PEAK</template>
                                         <template>
-                                             
+                                                <div>Last name: <span>{{item.last}}</span></div>
                                             <vaadin-text-field style="width: 120px;" id="peak" value="{{item.peak}}"></vaadin-text-field>
                                         </template>
                                     </vaadin-grid-column>
@@ -335,6 +342,8 @@
 
                         <titanium-grid></titanium-grid>
 
+                        </dom-bind>
+                        <br>
                         <div>
                             <h3>PEAK SEASONS</h3>
                         </div>
@@ -351,6 +360,10 @@
                                     <vaadin-grid-column resizable>
                                         <template class="header">DURATION</template>
                                         <template>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 7ceae1e9d4a4d278759f450a6bc555676f161830
                                             <vaadin-text-field id="first-[[index]]" style="width: 100%;" value="[[item.date]]" on-input="_storeFirst" readonly$="[[!_isEditing(editing, item)]]"></vaadin-text-field>
 
                                         </template>
@@ -416,6 +429,14 @@
     //     ];
     //   },
 
+         ready: function() {
+        this.employees = [
+            {first: 'Bob', last: 'Smith'},
+            {first: 'Sally', last: 'Johnson'}
+           
+        ];
+      },
+
             properties: {
 
                 dateCreated: String,
@@ -452,11 +473,17 @@
                 //    this.$.items.unshift({ room: room.value, peak:peaksn.value, pdays: cutoff.value, nonpeak: nonpeakssn.value, nonpdays: nonpeakday.value });
                 //    this.$.grid.clearCache();
                     
+
+                // if (this.room !== '' && this.peak !== '' && this.pdays !== '' && this.nonpeak !== '' && this.nonpdays !== '') {
+                //    this.$.items.unshift({ room: room.value, peak:peaksn.value, pdays: cutoff.value, nonpeak: nonpeakssn.value, nonpdays: nonpeakday.value });
+                //    this.$.grid.clearCache();
+
                     this.room = '';
                     this.peak = '';
                     this.pdays = '';
                     this.nonpeak = '';
                     this.nonpdays = ''; 
+                    this.nonpdays = '';
 
                     //  var node = Polymer.dom(this.root).querySelector("#writeHere").innerHTML = allocationval[room.value,peaksn.value,cutoff.value,nonpeakssn.value,nonpeakday.value];
                  }else {
