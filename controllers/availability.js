@@ -10,7 +10,7 @@ router.get('/dummy', (req, res) => {
 });
 router.post('/add', (req, res) => {
     const availabilityAdd = new Availability();
-    const { hotel, notes, created_by, updated_by, } = req.body;
+    const { hotel, notes, room1, room2, room3, created_by, updated_by, } = req.body;
     if (!hotel) {
         return res.json({
             success: false,
@@ -19,7 +19,12 @@ router.post('/add', (req, res) => {
     }
     availabilityAdd.hotel = hotel;
     availabilityAdd.notes = notes;
-    availabilityAdd.created_by = created_by;
+    availabilityAdd.room1 = room1,
+        availabilityAdd.room2 = room2,
+        availabilityAdd.room3 = room3,
+        // availabilityAdd.date = date,
+        // console.log(room2)
+        availabilityAdd.created_by = created_by;
     availabilityAdd.updated_by = updated_by;
     availabilityAdd.save(err => {
         if (err) return res.json({ success: false, error: err });
@@ -53,9 +58,12 @@ router.put('/update/:editKey', (req, res) => {
     }
     Availability.findById(editKey, (error, availability) => {
         if (error) return res.json({ success: false, error });
-        const { hotel, notes, updated_by, created_by, } = req.body;
+        const { hotel, notes, room1, room2, room3, updated_by, created_by, } = req.body;
         if (hotel) availability.hotel = hotel;
         if (notes) availability.notes = notes;
+        if (room1) availability.room1 = room1;
+        if (room2) availability.room2 = room2;
+        if (room3) availability.room3 = room3;
         if (updated_by) availability.updated_by = updated_by;
         if (created_by) availability.created_by = created_by;
         availability.save(error => {

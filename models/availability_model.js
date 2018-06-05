@@ -6,9 +6,12 @@ const AvailabilitySchema = new Schema({
     hotel: String,
     created_by: String,
     updated_by: String,
-    notes: String
-    // room2: String,
-    // room3: String,
+    notes: String,
+    room1: String,
+    color: String,
+    room2: String,
+    room3: String,
+    date: String
     // room4: String,
     // room5: String,
     // created_date: String,

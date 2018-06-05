@@ -9,11 +9,6 @@ const HotelsSchema = new Schema({
     room3: String,
     created_by: String,
     updated_by: String
-    // room2: String,
-    // room3: String,
-    // room4: String,
-    // room5: String,
-    // created_date: String,
 }, { timestamps: true });
 // export our module to use in server.js
 module.exports = mongoose.model('hotel', HotelsSchema);

@@ -235,199 +235,30 @@
                         </div>
                     </div>
                     <br>
-                    <div class=" option">
+                    <div class="option">
                         <hr>
-                        <paper-checkbox class="close" on-tap="_close">Close</paper-checkbox>
-                        <paper-checkbox class="limited" on-tap="_limited">Limited</paper-checkbox>
-                        <paper-checkbox class="available" on-tap="_available">Open</paper-checkbox>
-                    </div>
-                    <div style="margin-top: 10px; float: right">
-                        <paper-icon-button noink on-tap="_preMonth" style="color: black;" icon="my-icons:keyboard-arrow-left"></paper-icon-button>
-                        <span id="monthToday">{{month}}</span>
-                        <paper-icon-button noink on-tap="_nextMonth" style="color: black;" icon="my-icons:keyboard-arrow-right"></paper-icon-button>
+                        <paper-checkbox class="close" on-tap="_close" id="close">Close</paper-checkbox>
+                        <paper-checkbox class="limited" on-tap="_limited" id="limited">Limited</paper-checkbox>
+                        <paper-checkbox class="available" on-tap="_available" id="available">Open</paper-checkbox>
+                        <span style="margin-top: 10px; float: right">
+                            <paper-icon-button noink on-tap="_preMonth" style="color: black;" icon="my-icons:keyboard-arrow-left"></paper-icon-button>
+                            {{month}}
+                            <paper-icon-button noink on-tap="_nextMonth" style="color: black;" icon="my-icons:keyboard-arrow-right"></paper-icon-button>
+                        </span>
                     </div>
                     <div id="table" style="width:100%;overflow-x:auto;">
                         <table id="hotels">
                             <tr id="headDays">
-                                <!-- <th>May 2018</th> -->
-                                <!-- <th>{{monthToday}}</th> -->
                             </tr>
-                            <tr style=" background-color: #f2f2f2;">
-                                <!-- <td>Hotel</td> -->
-                                <td>Rooms</td>
-                                <td style="color: black;">Fri</td>
-                                <td style="color: black;">Sat</td>
-                                <td style="color: red;">Sun</td>
-                                <td style="color: black;">Mon</td>
-                                <td style="color: black;">Tue</td>
-                                <td style="color: black;">Wed</td>
-                                <td style="color: black;">Thu</td>
-                                <td style="color: black;">Fri</td>
-                                <td style="color: black;">Sat</td>
-                                <td style="color: red;">Sun</td>
-                                <td style="color: black;">Mon</td>
-                                <td style="color: black;">Tue</td>
-                                <td style="color: black;">Wed</td>
-                                <td style="color: black;">Thu</td>
-                                <td style="color: black;">Fri</td>
-                                <td style="color: black;">Sat</td>
-                                <td style="color: red;">Sun</td>
-                                <td style="color: black;">Mon</td>
-                                <td style="color: black;">Tue</td>
-                                <td style="color: black;">Wed</td>
-                                <td style="color: black;">Thu</td>
-                                <td style="color: black;">Fri</td>
-                                <td style="color: black;">Sat</td>
-                                <td style="color: red;">Sun</td>
-                                <td style="color: black;">Mon</td>
-                                <td style="color: black;">Tue</td>
-                                <td style="color: black;">Wed</td>
-                                <td style="color: black;">Thu</td>
-                                <td style="color: black;">Fri</td>
-                                <td style="color: black;">Sat</td>
-                                <!-- <td style="color: black;">Tue</td> -->
+                            <tr id="Weekdays" style="background-color: #f2f2f2;">
                             </tr>
-                            <tr>
-                                <!-- <td style="color: black;">{{hotelResult}}</td> -->
-                                <td class="white">DELUXE</td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <!-- <td class="white"></td> -->
+                            <tr id="room1">
+                                <td>{{room1}}</td>
                             </tr>
-                            <tr style="text-align: center">
-                                <!-- <td style="color: black;"> ANEMONE</td> -->
-                                <td class="white">STANDARD</td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <!-- <td class="white"></td> -->
+                            <tr id="room2">
+                                <td> {{room2}}</td>
                             </tr>
-                            <tr style="text-align: center">
-                                <!-- <td style="color: black;"> CEBU MARINE</td> -->
-                                <td class="white">SUPERIOR</td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <!-- <td class="white"></td> -->
-                            </tr>
-                            <tr style="text-align: center">
-                                <!-- <td style="color: black;">CEBU MARINE</td> -->
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <!-- <td class="white"></td> -->
-                            </tr>
-                            <tr>
+                            <tr id="room3">
                             </tr>
                         </table>
                     </div>
@@ -485,7 +316,6 @@
                 },
                 selectedHotels: {
                     type: Number,
-                    value: '',
                     observer: '_hotelChanged',
                 },
                 hotelResult: {
@@ -494,7 +324,7 @@
                 },
                 me: String,
                 mot: Number,
-                yer: Number
+                yer: Number,
 
                 // isMousedown: { type: Boolean, value: false, }
             },
@@ -526,6 +356,10 @@
                 window.location.assign('/availability');
             },
             _update() {
+                var Row1 = Polymer.dom(this.root).querySelector("#room1").innerHTML;
+                var Row2 = Polymer.dom(this.root).querySelector("#room2").innerHTML;
+                var Row3 = Polymer.dom(this.root).querySelector("#room3").innerHTML;
+
                 if (this.hotel) {
                     if (this.editKey) {
                         this.method = 'PUT';
@@ -534,6 +368,9 @@
                         this.$.ajax.body = {
                             hotel: this.hotel,
                             notes: this.notes,
+                            room1: Row1,
+                            room2: Row2,
+                            room3: Row3,
                             created_by: this.created_by,
                             updated_by: this.updated_by,
                         };
@@ -571,34 +408,75 @@
                 var monthNames = ["January", "February", "March", "April", "May", "June",
                     "July", "August", "September", "October", "November", "December"
                 ];
+                var nameofDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
                 var currentMonths = new Date()
                 this.month = monthNames[currentMonths.getMonth()] + " " + currentMonths.getDate() + " " + currentMonths.getFullYear();
-
-                //for days in month//
-                var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-                var nowdays = new Date();
-                var date = new Date(nowdays.getFullYear(), nowdays.getMonth() + 1, 0).getDate() + " " + days[nowdays.getDay()];
-                // console.log(date);
-
-                //for days in month
-                // var daysToday = new Date();
-                var todadys = days[nowdays.getDay()];
-                // console.log(todadys);
-                //for dates in month//
                 var trHead = Polymer.dom(this.root).querySelector('#headDays');
                 var now = new Date();
                 var date = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-
                 var currentMonthly = new Date()
                 var months = currentMonthly.getMonth();
                 var years = currentMonthly.getFullYear();
-                this._nextDates(date, monthNames[currentMonths.getMonth()], currentMonths.getFullYear());
+                var dayToday = currentMonthly.getDay();
 
+                this._nextDates(date, monthNames[currentMonths.getMonth()], currentMonths.getFullYear(), currentMonths.getMonth());
                 var mon = this._selectMonth(months);
                 this.mot = months;
                 this.yer = years;
-                // this.month = mon + " " + years;
-                var date = new Date(years, months + 1, 0).getDate();
+                this.days = dayToday;
+                // console.log(this.days);
+                // var dateToday = nameofDays[currentMonths.getDay()];
+                // var day = this._selectDays(dateToday);
+                // console.log(day);
+                // var doc = parser.parseFromString(this.room1, "text/html")
+            },
+            _availabilityLoaded(data) {
+                if (this.editKey) {
+                    if (this.url === '/availability/readEdit/' + this.editKey) {
+                        this.hotel = data.detail.response.data.hotel;
+                        this.notes = data.detail.response.data.notes;
+                        this.room1 = data.detail.response.data.room1;
+                        this.room2 = data.detail.response.data.room2;
+                        this.room3 = data.detail.response.data.room3;
+                        //this.room2 = data.detail.response.data.room2;
+                        // console.log(this.room1);
+                        this.createdAt = data.detail.response.data.createdAt;
+                        this.updatedAt = data.detail.response.data.updatedAt;
+                        this.created_by = data.detail.response.data.created_by;
+                        this.updated_by = data.detail.response.data.updated_by;
+
+                        var html1 = this.room1;
+                        var html2 = this.room2;
+                        var html3 = this.room3;
+                        var table1 = Polymer.dom(this.root).querySelector("#room1");
+                        var table2 = Polymer.dom(this.root).querySelector("#room2");
+                        var table3 = Polymer.dom(this.root).querySelector("#room3");
+                        while (table1.hasChildNodes()) {
+                            table1.removeChild(table1.lastChild);
+                        }
+                        while (table2.hasChildNodes()) {
+                            table2.removeChild(table2.lastChild);
+                        }
+                        while (table3.hasChildNodes()) {
+                            table3.removeChild(table3.lastChild);
+                        }
+                        var range1 = document.createRange();
+                        range1.selectNodeContents(table1);
+                        var frag1 = range1.createContextualFragment(html1);
+                        table1.append(frag1);
+
+                        var range2 = document.createRange();
+                        range2.selectNodeContents(table2);
+                        var frag2 = range2.createContextualFragment(html2);
+                        table2.append(frag2);
+
+                        var range3 = document.createRange();
+                        range3.selectNodeContents(table3);
+                        var frag3 = range3.createContextualFragment(html3);
+                        table3.append(frag3);
+                        // console.log(table);
+                    }
+                }
             },
             _limited() {
                 var cells = Polymer.dom(this.root).querySelectorAll("td");
@@ -626,7 +504,7 @@
                     this.yer = y;
                     this.month = m + " " + y;
                     var date = new Date(y, x + 1, 0).getDate();
-                    this._nextDates(date, m, y)
+                    this._nextDates(date, m, y, x)
                     // console.log(date);
 
                 } else {
@@ -635,10 +513,9 @@
                     this.mot = x;
                     this.month = m + " " + this.yer;
                     var date = new Date(this.yer, x + 1, 0).getDate();
-                    this._nextDates(date, m, this.yer)
+                    this._nextDates(date, m, this.yer, x)
                 }
             },
-
             _nextMonth() {
                 if (this.mot > 10) {
                     var x = 0;
@@ -648,7 +525,7 @@
                     this.yer = y;
                     this.month = m + " " + y;
                     var date = new Date(y, x + 1, 0).getDate();
-                    this._nextDates(date, m, y)
+                    this._nextDates(date, m, y, x)
 
                 } else {
                     var x = this.mot + 1;
@@ -656,26 +533,89 @@
                     this.mot = x;
                     this.month = m + " " + this.yer;
                     var date = new Date(this.yer, x + 1, 0).getDate();
-                    this._nextDates(date, m, this.yer)
+                    this._nextDates(date, m, this.yer, x)
                 }
             },
-            _nextDates(f, g, h) {
-                var oldtrHead = Polymer.dom(this.root).querySelector('#headDays');
-                while (oldtrHead.hasChildNodes()) {
-                    oldtrHead.removeChild(oldtrHead.lastChild);
+            _nextDates(numDays, months, years, daysWeek) {
+                var headMonths = Polymer.dom(this.root).querySelector('#headDays');
+                var weekdays = Polymer.dom(this.root).querySelector('#Weekdays');
+                var room1 = Polymer.dom(this.root).querySelector("#room1");
+                var room2 = Polymer.dom(this.root).querySelector("#room2");
+                var room3 = Polymer.dom(this.root).querySelector("#room3");
+
+                while (headMonths.hasChildNodes()) {
+                    headMonths.removeChild(headMonths.lastChild);
+                }
+                while (weekdays.hasChildNodes()) {
+                    weekdays.removeChild(weekdays.lastChild);
+                }
+                while (room1.hasChildNodes()) {
+                    room1.removeChild(room1.lastChild);
+                }
+                while (room2.hasChildNodes()) {
+                    room2.removeChild(room2.lastChild);
+                }
+                while (room3.hasChildNodes()) {
+                    room3.removeChild(room3.lastChild);
                 }
 
                 var th = document.createElement('th');
-                var t = document.createTextNode(g + " " + h);
+                var t = document.createTextNode(months + " " + years);
                 th.append(t);
-                oldtrHead.append(th);
+                headMonths.append(th);
 
-                for (i = 1; i < f + 1; ++i) {
-                    var th = document.createElement('th');
-                    var t = document.createTextNode(i);
-                    th.append(t);
-                    oldtrHead.append(th);
-                };
+                var throoms = document.createElement('td');
+                var t = document.createTextNode("Rooms");
+                throoms.append(t);
+                weekdays.append(throoms);
+
+                var tdroom1 = document.createElement('td');
+                var td = document.createTextNode("Deluxe");
+                tdroom1.append(td);
+                room1.append(tdroom1);
+
+                var tdroom2 = document.createElement('td');
+                var td = document.createTextNode("Superior");
+                tdroom2.append(td);
+                room2.append(tdroom2);
+
+                var tdroom3 = document.createElement('td');
+                var td1 = document.createTextNode("Standard");
+                tdroom3.append(td1);
+                room3.append(tdroom3);
+
+                for (i = 1; i < numDays + 1; ++i) {
+                    var td1 = document.createElement('td');
+                    room1.append(td1);
+
+                    var td2 = document.createElement('td');
+                    room2.append(td2);
+
+                    var td3 = document.createElement('td');
+                    room3.append(td3);
+                    //week
+                    var thweek = document.createElement('td');
+                    var date = new Date(years, daysWeek, i)
+                    var x = date.getDay();
+                    var now = this._selectDays(x);
+                    if (now == "Sun") {
+                        var tdays = document.createTextNode(now);
+                        thweek.setAttribute("style", "color:red");
+                        thweek.append(tdays);
+                        weekdays.append(thweek);
+                    }
+                    else {
+                        var tdays = document.createTextNode(now);
+                        // thweek.setAttribute("style", "color:red");
+                        thweek.append(tdays);
+                        weekdays.append(thweek);
+                    }
+                    //num of days in month
+                    var thMonths = document.createElement('th');
+                    var tmonths = document.createTextNode(i);
+                    thMonths.append(tmonths);
+                    headMonths.append(thMonths);
+                }
             },
             _selectMonth(e) {
                 var nextmonthNames = ["January", "February", "March", "April", "May", "June",
@@ -683,7 +623,10 @@
                 ];
                 return nextmonthNames[e];
             },
-
+            _selectDays(g) {
+                var weekOfdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+                return weekOfdays[g];
+            },
             toggleDrawer() {
                 this.dispatchEvent(new CustomEvent('toggleDrawer', {
                     bubbles: true, composed: true, detail: {
@@ -699,22 +642,10 @@
                     this.url = '/availability/dummy';
                 }
             },
-            _availabilityLoaded(data) {
-                if (this.editKey) {
-                    if (this.url === '/availability/readEdit/' + this.editKey) {
-                        this.hotel = data.detail.response.data.hotel;
-                        this.notes = data.detail.response.data.notes;
-                        this.createdAt = data.detail.response.data.createdAt;
-                        this.updatedAt = data.detail.response.data.updatedAt;
-                        this.created_by = data.detail.response.data.created_by;
-                        this.updated_by = data.detail.response.data.updated_by;
-                    }
-                }
-            },
             _handleResponse() { },
             _timeStampToDateTime(ts) {
                 return new Date(ts);
             },
-        })
+        })  
     </script>
 </dom-module>
