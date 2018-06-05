@@ -8,7 +8,7 @@ const AvailabilitySchema = new Schema({
     updated_by: String,
     notes: String,
     room1: String,
-    color: String,
+    // color: String,
     room2: String,
     room3: String,
     date: String

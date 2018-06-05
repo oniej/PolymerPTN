@@ -1,6 +1,6 @@
 {
   "name": "bwt-datatable",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "authors": [
     "Blue Water Tracks"
   ],
@@ -49,11 +49,11 @@
     "paper-dialog-scrollable": "PolymerElements/paper-dialog-scrollable#^1.1.5",
     "google-map": "GoogleWebComponents/google-map#^1.2.0"
   },
-  "_release": "2.1.0",
+  "_release": "2.2.0",
   "_resolution": {
     "type": "version",
-    "tag": "2.1.0",
-    "commit": "0ac7e870e51a6afe9e9f6b4adf8da36578f471cd"
+    "tag": "2.2.0",
+    "commit": "192f3251bf9917d9c4c60bb177a056d9ab619210"
   },
   "_source": "https://github.com/bluewatertracks/bwt-datatable.git",
   "_target": "^2.0.4",
