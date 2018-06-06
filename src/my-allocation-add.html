@@ -109,7 +109,16 @@
         }
       }
           
-
+    .griddiv{
+        border-style: solid;
+        border-color: gray; 
+        border-radius: 5px; 
+        padding: 5px; 
+        border-width: 2px;
+        height: 200px;
+        overflow: scroll;
+        
+    }
             @media (max-width: 768px) {
                 .docu {
                     margin-left: 16px;
@@ -208,14 +217,27 @@
                 <div class="docu">
 
                     <div class="docu-header">
+                            <div>
+                                    <iron-icon id="iconcreated" icon="my-icons:flag" style="color:gray;"></iron-icon>
+                                    <span id="created">Created by:</span> Jeino
+                                    <!-- user name here {{username}} or something -->
+                                </div>
                         <div>
-                            <iron-icon id="iconcreated" icon="my-icons:flag" style="color:gray;"></iron-icon>
-                            <span id="created">Created by:</span> Jeino
-                            <!-- user name here {{username}} or something -->
-                        </div>
+                            <paper-toggle-button style="position: relative; left: 350px;" value="{{active}}" id="active" on-tap="_active">ACTIVE</paper-toggle-button>
+                      </div>
+                        <div style="position: absolute; top: 20px; right: 145px;">
+                                    <paper-dropdown-menu style="cursor:pointer;width:150px;" label="Workspace" searchable>
+                                            <paper-listbox slot="dropdown-content" class="dropdown-content">
+                                                    <paper-item>PTN</paper-item>
+                                                <paper-item>Tabikupo</paper-item>
+    
+                                            </paper-listbox>
+                                        </paper-dropdown-menu>
+                            </div>
+                      
+                      
                     </div>
                     <div class="details" id="form">
-                        <paper-toggle-button style="float: right;" value="{{active}}" on-tap="{{_active}}">ACTIVE</paper-toggle-button>
                         <paper-input always-float-label value={{hotel}} label="HOTEL"></paper-input>
                         <paper-textarea always-float-label value="{{note}}" label="REMARKS" style="width: 49%; float: right;"></paper-textarea>
                         <range-datepicker-input class="" date-format="DD-MMMM-YYYY" style="width: 49%; ">
@@ -224,9 +246,11 @@
                                     <paper-input label="DURATION" value="{{dateFrom}} - {{dateTo}}"></paper-input>
                                     <paper-input label="Date To" value="{{dateTo}}" hidden></paper-input>
                                 </div>
-
+                    
                             </template>
                         </range-datepicker-input>
+                    
+                        <br>
                         <vaadin-text-field style="width: 130px;" id="room" value="{{room}}" label="ROOM"></vaadin-text-field>
                         <!-- <vaadin-text-field style="width: 130px;" id="room1" value="{{room1}}" label="ROOM"></vaadin-text-field> -->
                         <vaadin-text-field style="width: 130px;" id="peak" value="{{peak}}" label="PEAK"></vaadin-text-field>
@@ -234,30 +258,73 @@
                         <vaadin-text-field style="width: 130px;" id="nonpeak" value="{{nonpeak}}" label="NON-PEAK"></vaadin-text-field>
                         <vaadin-text-field style="width: 130px;" id="nonpdays" value="{{nonpdays}}" label="NONPEAKDAYS"></vaadin-text-field>
                         <vaadin-button on-click="_add">Add More</vaadin-button>
-
+                    
                         <br>
-                        <template is="dom-if" if="{{addAllocation}}">
-                       <div style="border-style: solid; border-color: gray; border-radius: 5px; padding: 5px; border-width: 2px;">
-                        <span id="writeHere" style="left: 50px;position: relative;"></span>
-                       </div>
-                       </template> 
+                        <!-- <dom-bind>
+                                <template>
+                                                  <iron-ajax auto url="{{url}}" handle-as="json" last-response="{{allocations}}"></iron-ajax>
+                                              
+                                                  <vaadin-grid theme="row-dividers" items="[[allocations]]" column-reordering-allowed multi-sort>
+                                                    <vaadin-grid-column width="9em">
+                                                  <template class="header">
+                                                    <vaadin-grid-sorter path="room">Room</vaadin-grid-sorter>
+                                                  </template>
+                                                  <template>[[item.room]]</template>
+                                                </vaadin-grid-column>
+                                          
+                                                <vaadin-grid-column width="9em">
+                                                  <template class="header">
+                                                    <vaadin-grid-sorter path="peak">Peak</vaadin-grid-sorter>
+                                                  </template>
+                                                  <template>[[item.peak]]</template>
+                                                </vaadin-grid-column>
+                                          
+                                                <vaadin-grid-column width="15em" flex-grow="2">
+                                                  <template class="header">
+                                                    <vaadin-grid-sorter path="nonpeak">Non-Peak</vaadin-grid-sorter>
+                                                  </template>
+                                                  <template>[[nonpeak]]</template>
+                                                </vaadin-grid-column>
+                                          
+                                              </vaadin-grid>
+                                </template>
+                            </dom-bind> -->
+                 
+                            <div class="griddiv">
+                                <span>
+                                    
+                                <vaadin-text-field style="width: 130px;" value="Room" readonly></vaadin-text-field>
+                                <vaadin-text-field style="width: 130px;" value="Peak" readonly></vaadin-text-field>
+                                <vaadin-text-field style="width: 130px;" value="Cut-Off" readonly></vaadin-text-field>
+                                <vaadin-text-field style="width: 130px;" value="Non-Peak" readonly></vaadin-text-field>
+                                <vaadin-text-field style="width: 130px;" value="Non-Peak Days" readonly></vaadin-text-field>
+                                     
+                                </span><br>
+                                <span id="writeHere"></span>
+                            </div>
+                      
                         <br>
-
+                    
                         <div>
                             <h3>PEAK SEASONS</h3>
                         </div>
                         <div style="margin-bottom: 20px">
                             <vaadin-date-picker placeholder="Start" id="startdate" value="{{startValue}}" max="{{endValue}}" date-format="DD-MMMM-YYYY"></vaadin-date-picker>
                             <vaadin-date-picker placeholder="End" id="enddate" value="{{endValue}}" min="{{startValue}}" date-format="DD-MMMM-YYYY"></vaadin-date-picker>
-
+                    
                             <vaadin-button on-click="_adddate">Add More</vaadin-button>
                             <br>
-                        
-                        <span id="writeHeredate"></span>
-                 
-                        <br>
+                            <div class="griddiv">
+                                    <span>
+                                            <td><vaadin-text-field style="width: 192px;" value="Peak Start" readonly></vaadin-text-field></td>
+                                            <td><vaadin-text-field style="width: 192px;" value="Peak End" readonly></vaadin-text-field></td>
+                                          
+                                    </span><br>
+                                    <span id="writeHeredate"></span>
+                                </div>
+                         
+                            <br>
                         </div>
-                        
                     </div>
                 </div>
                 <paper-fab on-tap="_submit" style=" float: right; " class="fab" icon="my-icons:save"></paper-fab>
@@ -279,7 +346,8 @@
     //   },
 
             properties: {
-                addAllocation: {
+              
+                selectActive: {
                     type: Boolean,
                     value: false,
                     notify: true
@@ -295,7 +363,13 @@
                     value: 'Ardie Derrayal'
                 }
             },
-
+            
+            _active(){
+                // console.log(this.selectActive);
+                // this.selectActive = true;
+                // console.log(this.selectActive);
+                console.log(this.$.active.checked);
+            },
             _openField() {
                 var node = Polymer.dom(this.root).querySelector("#writeHere").innerHTML += '<span><td><vaadin-text-field style="width: 130px;" id="room" value="{{room}}"  ></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="peak" ></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="pdays" ></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="nonpeak" ></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="nonpdays" ></vaadin-text-field></td></span><br> \r\n';
 
@@ -304,7 +378,7 @@
             _add() {
             
                 if (this.room !== '' && this.peak !== '' && this.pdays !== '' && this.nonpeak !== '' && this.nonpdays !== '') {
-                this.addAllocation = true;
+           
                 var allocationval = [];
                 var room1 = Polymer.dom(this.root).querySelector("#room");
                 var peaksn = Polymer.dom(this.root).querySelector("#peak");
@@ -314,7 +388,8 @@
                 
                 console.log(room1.value,peaksn.value,cutoff.value,nonpeakssn.value,nonpeakday.value);
                 
-                var node = Polymer.dom(this.root).querySelector("#writeHere").innerHTML += '<span><td><vaadin-text-field style="width: 130px;" id="room" value="'+room1.value+'"></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="peak" value="'+peaksn.value+'"></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="pdays" value="'+cutoff.value+'"></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="nonpeak" value="'+nonpeakssn.value+'" ></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="nonpdays" value="'+nonpeakday.value+'"></vaadin-text-field></td></span><br>';
+                var node = Polymer.dom(this.root).querySelector("#writeHere").innerHTML += '<span><td><vaadin-text-field style="width: 130px;" id="room" value="'+room1.value+'" readonly></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="peak" value="'+peaksn.value+'" readonly></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="pdays" value="'+cutoff.value+'" readonly></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="nonpeak" value="'+nonpeakssn.value+'" readonly></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="nonpdays" value="'+nonpeakday.value+'"readonly></vaadin-text-field></td></span><br>';
+                console.log(node);
                 // if (this.room !== '' && this.peak !== '' && this.pdays !== '' && this.nonpeak !== '' && this.nonpdays !== '') {
                 //    this.$.items.unshift({ room: room.value, peak:peaksn.value, pdays: cutoff.value, nonpeak: nonpeakssn.value, nonpdays: nonpeakday.value });
                 //    this.$.grid.clearCache();
@@ -344,7 +419,7 @@
 
                 console.log(datestart.value,dateend.value);
                 
-                var node = Polymer.dom(this.root).querySelector("#writeHeredate").innerHTML += '<span><td><vaadin-date-picker placeholder="Start" id="startdate" value="'+ datestart.value +'" max="'+ dateend.value+ '" date-format="DD-MMMM-YYYY"></vaadin-date-picker></td> <td> <vaadin-date-picker placeholder="End" id="enddate" value="'+dateend.value+'" min="'+datestart.value+'" date-format="DD-MMMM-YYYY"></vaadin-date-picker></td></span><br> \r\n';
+                var node = Polymer.dom(this.root).querySelector("#writeHeredate").innerHTML += '<span><td><vaadin-date-picker placeholder="Start" id="startdate" value="'+ datestart.value +'" max="'+ dateend.value+ '" date-format="DD-MMMM-YYYY" readonly></vaadin-date-picker></td> <td> <vaadin-date-picker placeholder="End" id="enddate" value="'+dateend.value+'" min="'+datestart.value+'" date-format="DD-MMMM-YYYY" readonly></vaadin-date-picker></td></span><br> \r\n';
             
                     this.startValue = '';
                     this.endValue = '';
@@ -386,7 +461,7 @@
                         note: this.note,
                         startValue: this.startValue,
                         endValue: this.endValue
-                            
+
                     };
                     this.$.ajax.generateRequest();
                     this.$.successModal.opened = true;

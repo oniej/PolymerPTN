@@ -301,6 +301,15 @@
                         <!--{{updated_by}}-->Jeino &nbsp;
                         <time-ago datetime$="{{_timeStampToDateTime(updatedAt)}}">{{_timeStampToDateTime(updatedAt)}}</time-ago>
                     </div>
+                    <div style="position: absolute; top: 20px; right: 40px;">
+                            <paper-dropdown-menu style="cursor:pointer;width:150px;" label="Workspace" searchable>
+                                    <paper-listbox slot="dropdown-content" class="dropdown-content">
+                                            <paper-item>PTN</paper-item>
+                                        <paper-item>Tabikupo</paper-item>
+
+                                    </paper-listbox>
+                                </paper-dropdown-menu>
+                    </div>
                     <paper-toggle-button style="float: right;" value="{{active}}" on-tap="{{_active}}">ACTIVE</paper-toggle-button>
                     <paper-input always-float-label value={{hotel}} label="HOTEL"></paper-input>
                     <paper-textarea always-float-label value="{{note}}" label="REMARKS" style="width: 49%; float: right;"></paper-textarea>
