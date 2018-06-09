@@ -1,4 +1,5 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-repeat.html">
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../bower_components/paper-item/paper-item-body.html">
@@ -241,6 +242,17 @@
                     opacity: 1;
                 }
             }
+
+            .griddiv {
+                border-style: solid;
+                border-color: gray;
+                border-radius: 5px;
+                padding: 5px;
+                border-width: 2px;
+                height: 200px;
+                overflow: scroll;
+
+            }
         </style>
         <custom-style>
             <style is="custom-style">
@@ -273,7 +285,6 @@
                 }
             </style>
         </custom-style>
-        <!-- <firebase-query id="query" path="{{getpath()}}" data="{{account}}"></firebase-query> -->
         <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_allocationLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
 
         <app-drawer-layout fullbleed narrow="{{narrow}}" id="drawerLayout">
@@ -301,14 +312,16 @@
                         <!--{{updated_by}}-->Jeino &nbsp;
                         <time-ago datetime$="{{_timeStampToDateTime(updatedAt)}}">{{_timeStampToDateTime(updatedAt)}}</time-ago>
                     </div>
+                    <!-- <paper-input always-float-label  value="{{workspace}}"></paper-input> -->
+                    <!-- <paper-input always-float-label  value="{{active}}"></paper-input> -->
                     <div style="position: absolute; top: 20px; right: 40px;">
-                            <paper-dropdown-menu style="cursor:pointer;width:150px;" label="Workspace" searchable>
-                                    <paper-listbox slot="dropdown-content" class="dropdown-content">
-                                            <paper-item>PTN</paper-item>
-                                        <paper-item>Tabikupo</paper-item>
+                        <paper-dropdown-menu always-float-label style="cursor:pointer;width:150px;" label="Workspace">
+                            <paper-listbox  attr-for-selected="name" slot="dropdown-content" class="dropdown-content" selected="{{workspace}}">
+                                <paper-item name="PTN">PTN</paper-item>
+                                <paper-item name="Tabikupo">Tabikupo</paper-item>
 
-                                    </paper-listbox>
-                                </paper-dropdown-menu>
+                            </paper-listbox>
+                        </paper-dropdown-menu>
                     </div>
                     <paper-toggle-button style="float: right;" value="{{active}}" on-tap="{{_active}}">ACTIVE</paper-toggle-button>
                     <paper-input always-float-label value={{hotel}} label="HOTEL"></paper-input>
@@ -322,134 +335,115 @@
 
                         </template>
                     </range-datepicker-input>
-
-                    <vaadin-text-field style="width: 180px;" id="room" value="{{room}}" label="ROOM"></vaadin-text-field>
-                    <vaadin-text-field style="width: 180px;" id="peak" value="{{peak}}" label="PEAK"></vaadin-text-field>
-                    <vaadin-text-field style="width: 180px;" id="pdays" value="{{pdays}}" label="CUT-OFF"></vaadin-text-field>
-                    <vaadin-text-field style="width: 180px;" id="nonpeak" value="{{nonpeak}}" label="NON-PEAK"></vaadin-text-field>
-                    <vaadin-text-field style="width: 180px;" id="nonpdays" value="{{nonpdays}}" label="NONPEAKDAYS"></vaadin-text-field>
+                    <vaadin-text-field style="width: 180px;" id="room" value="{{rooms}}" label="ROOM"></vaadin-text-field>
+                    <vaadin-text-field style="width: 180px;" id="peak" value="{{peaks}}" label="PEAK"></vaadin-text-field>
+                    <vaadin-text-field style="width: 180px;" id="pdays" value="{{pdayss}}" label="CUT-OFF"></vaadin-text-field>
+                    <vaadin-text-field style="width: 180px;" id="nonpeak" value="{{nonpeaks}}" label="NON-PEAK"></vaadin-text-field>
+                    <vaadin-text-field style="width: 180px;" id="nonpdays" value="{{nonpdayss}}" label="NONPEAKDAYS"></vaadin-text-field>
+                    <!-- <vaadin-text-field style="width: 180px;" id="room" label="ROOM"></vaadin-text-field>
+                    <vaadin-text-field style="width: 180px;" id="peak"label="PEAK"></vaadin-text-field>
+                    <vaadin-text-field style="width: 180px;" id="pdays"label="CUT-OFF"></vaadin-text-field>
+                    <vaadin-text-field style="width: 180px;" id="nonpeak"label="NON-PEAK"></vaadin-text-field>
+                    <vaadin-text-field style="width: 180px;" id="nonpdays"label="NONPEAKDAYS"></vaadin-text-field> -->
                     <vaadin-button on-click="_add">Add</vaadin-button>
                     <br>
+                    <div class="griddiv">
+                        <span>
 
-                    <dom-bind>
-                        <template>
-                            <x-array-data-provider items="{{items}}" size="200"></x-array-data-provider>
-                            <!-- <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_allocationsLoaded" debounce-duration="300"></iron-ajax> -->
-                            <vaadin-grid theme="compact" id="grid" items="[[items]]" style="height: 200px;">
-
-
-                                <vaadin-grid-column resizable>
-                                    <template class="header">ROOM</template>
-                                    <template>
-                                        <vaadin-text-field style="width: 100%;" id="room" value="[[item.room]]"></vaadin-text-field>
-                                        <!-- <vaadin-text-field style="width: 90px;" id="first-[[index]]" value="[[item.room]]" on-input="_storeFirst" readonly$="[[!_isEditing(editing, item)]]"></vaadin-text-field> -->
-                                    </template>
-                                </vaadin-grid-column>
-
-                                <vaadin-grid-column resizable>
-                                    <template class="header">PEAK</template>
-                                    <template>
-                                        <vaadin-text-field style="width: 100%;" id="peak" value="[[item.peak]]"></vaadin-text-field>
-                                        <!-- <vaadin-text-field style="width: 90px;" id="last-[[index]]" value="[[item.peak]]" on-input="_storeFirst" readonly$="[[!_isEditing(editing, item)]]"></vaadin-text-field> -->
-                                    </template>
-                                </vaadin-grid-column>
-
-                                <vaadin-grid-column resizable>
-                                    <template class="header">CUT-OFF</template>
-                                    <template>
-                                        <vaadin-text-field style="width: 100%;" id="pdays" value="[[item.pdays]]"></vaadin-text-field>
-                                        <!-- <vaadin-text-field style="width: 90px;" id="last-[[index]]" value="[[item.pdays]]" on-input="_storeFirst" readonly$="[[!_isEditing(editing, item)]]"></vaadin-text-field> -->
-
-                                    </template>
-                                </vaadin-grid-column>
-                                <vaadin-grid-column resizable>
-                                    <template class="header">NON-PEAK</template>
-                                    <template>
-                                        <vaadin-text-field style="width: 100%;" id="nonpeak" value="[[item.nonpeak]]"></vaadin-text-field>
-                                        <!-- <vaadin-text-field style="width: 90px;" id="last-[[index]]" value="[[item.nonpeak]]" on-input="_storeFirst" readonly$="[[!_isEditing(editing, item)]]"></vaadin-text-field> -->
-                                    </template>
-                                </vaadin-grid-column>
-
-                                <vaadin-grid-column resizable>
-                                    <template class="header">DAYS</template>
-                                    <template>
-                                        <vaadin-text-field style="width: 100%;" id="nonpdays" value="[[item.nonpdays]]"></vaadin-text-field>
-                                        <!-- <vaadin-text-field style="width: 90px;" id="last-[[index]]" value="[[item.nonpdays]]" on-input="_storeFirst" readonly$="[[!_isEditing(editing, item)]]"></vaadin-text-field> -->
-
-                                    </template>
-                                </vaadin-grid-column>
-
-                                <!-- <vaadin-grid-column resizable>
-                                        <template class="header"> <vaadin-button on-click="_openField">Add</vaadin-button></template>
-                                      
-                                    </vaadin-grid-column> -->
-
-                                <!-- <vaadin-grid-column resizable>
-                                        <template>
-                                            <div style="text-align: right;">
-                                                <vaadin-button id="edit-button" hidden="[[editing]]" on-click="_edit" focus-target$="[[!editing]]" theme="icon" aria-label="Edit">
-                                                    <iron-icon icon="lumo:edit"></iron-icon>
-                                                </vaadin-button>
-                                                <vaadin-button hidden="[[editing]]" on-click="_remove" theme="icon error" aria-label="Delete">
-                                                    <iron-icon icon="lumo:cross"></iron-icon>
-                                                </vaadin-button>
-                                                <vaadin-button hidden="[[!_isEditing(editing, item)]]" on-click="_save" focus-target$="[[editing]]" theme="primary">Save</vaadin-button>
-                                                <vaadin-button hidden="[[!_isEditing(editing, item)]]" on-click="_cancel">Cancel</vaadin-button>
-                                            </div>
+                            <vaadin-text-field style="width: 160px;" value="Room" readonly></vaadin-text-field>&nbsp;
+                            <vaadin-text-field style="width: 160px;" value="Peak" readonly></vaadin-text-field>&nbsp;
+                            <vaadin-text-field style="width: 160px;" value="Cut-Off" readonly></vaadin-text-field>&nbsp;
+                            <vaadin-text-field style="width: 160px;" value="Non-Peak" readonly></vaadin-text-field>&nbsp;
+                            <vaadin-text-field style="width: 160px;" value="Non-Peak Days" readonly></vaadin-text-field>
+                            <!-- <vaadin-button on-click="_addnew">Save</vaadin-button> -->
+                        </span>
+                        <br>
+                        <span id="writeHere"></span>
+                        <span>
+                            <table>
+                                <tr>
+                                    <td>
+                                        <template is="dom-repeat" items="{{allocations.room}}" as="room">
+                                            <vaadin-text-field style="width: 160px;" id="roomval" value="{{room.room}}"></vaadin-text-field>
+                                            <br>
                                         </template>
-                                    </vaadin-grid-column> -->
+                                    </td>
+                                    <td>
+                                        <template is="dom-repeat" items="{{allocations.peak}}" as="peak">
+                                            <vaadin-text-field style="width: 160px;" id="peakval" value="{{peak.peak}}"></vaadin-text-field>
+                                            <br>
+                                        </template>
+                                    </td>
+                                    <td>
+                                        <template is="dom-repeat" items="{{allocations.pdays}}" as="pdays">
+                                            <vaadin-text-field style="width: 160px;" id="pdaysval" value="{{pdays.pdays}}"></vaadin-text-field>
+                                            <br>
+                                        </template>
+                                    </td>
+                                    <td>
+                                        <template is="dom-repeat" items="{{allocations.nonpeak}}" as="nonpeak">
+                                            <vaadin-text-field style="width: 160px;" id="nonpeakval" value="{{nonpeak.nonpeak}}"></vaadin-text-field>
+                                            <br>
+                                        </template>
+                                    </td>
+                                    <td>
+                                        <template is="dom-repeat" items="{{allocations.nonpdays}}" as="nonpdays">
+                                            <vaadin-text-field style="width: 160px;" id="nonpdaysval" value="{{nonpdays.nonpdays}}"></vaadin-text-field>
+                                            <br>
+                                        </template>
+                                    </td>
 
-                            </vaadin-grid>
-                        </template>
-                    </dom-bind>
+                                </tr>
+                            </table>
+                        </span>
+
+                    </div>
+
+
                     <div>
                         <h3>PEAK SEASONS</h3>
                     </div>
                     <div style="margin-bottom: 20px">
-                        <vaadin-date-picker placeholder="Start" id="date" value="{{startValue}}" max="{{endValue}}" date-format="DD-MMMM-YYYY"></vaadin-date-picker>
-                        <vaadin-date-picker placeholder="End" id="date" value="{{endValue}}" min="{{startValue}}" date-format="DD-MMMM-YYYY"></vaadin-date-picker>
+                        <vaadin-date-picker placeholder="Start" id="startdate" value="{{startValue}}" max="{{endValue}}" date-format="DD-MMMM-YYYY"></vaadin-date-picker>
+                        <vaadin-date-picker placeholder="End" id="enddate" value="{{endValue}}" min="{{startValue}}" date-format="DD-MMMM-YYYY"></vaadin-date-picker>
 
-                        <vaadin-button on-click="_add">Add</vaadin-button>
+                        <vaadin-button on-click="_adddate">Add</vaadin-button>
                     </div>
 
-                    <div>
-                        <dom-bind id="my-allocation">
-                            <template>
-                                <x-array-data-provider items="{{items}}" size="200"></x-array-data-provider>
-                                <vaadin-grid theme="compact" id="grid" items="[[items]]" style="height: 200px;">
+                    <div class="griddiv">
+                        <span>
+                            <vaadin-text-field style="width: 192px;" value="Peak Start" readonly></vaadin-text-field>&nbsp;
+                            <vaadin-text-field style="width: 192px;" value="Peak End" readonly></vaadin-text-field>
 
-                                    <vaadin-grid-column resizable>
-                                        <template class="header">DURATION</template>
-                                        <template>
-                                            <!-- <vaadin-date-picker placeholder="Start" id="date" value="[[item.date]]" ></vaadin-date-picker> -->
-                                            <vaadin-text-field style="width: 100%;" id="date" value="[[item.date]]"></vaadin-text-field>
-                                            <!-- <vaadin-text-field id="first-[[index]]" style="width: 100%;" value="[[item.date]]" on-input="_storeFirst" readonly$="[[!_isEditing(editing, item)]]"></vaadin-text-field> -->
+                        </span>
+                        <br>
+                        <span id="writeHeredate"></span>
 
+                        <span>
+                            <table>
+                                <tr>
+                                    <td>
+                                        <template is="dom-repeat" items="{{allocations.startValue}}" as="startValue">
+                                            <vaadin-text-field style="width: 192px;" id="startValue" value="{{startValue.startValue}}"></vaadin-text-field>
+                                            <br>
                                         </template>
-                                    </vaadin-grid-column>
+                                    </td>
+                                    <td>
+                                        <template is="dom-repeat" items="{{allocations.endValue}}" as="endValue">
+                                            <vaadin-text-field style="width: 192px;" id="endValue" value="{{endValue.endValue}}"></vaadin-text-field>
+                                            <br>
+                                        </template>
+                                    </td>
+                                </tr>
+                            </table>
+                        </span>
 
 
-                                    <!-- <vaadin-grid-column resizable>
-                                                <template>
-                                                    <div style="text-align: right;">
-                                                        <vaadin-button id="edit-button" hidden="[[editing]]" on-click="_edit" focus-target$="[[!editing]]" theme="icon" aria-label="Edit">
-                                                            <iron-icon icon="lumo:edit"></iron-icon>
-                                                        </vaadin-button>
-                                                        <vaadin-button hidden="[[editing]]" on-click="_remove" theme="icon error" aria-label="Delete">
-                                                            <iron-icon icon="lumo:cross"></iron-icon>
-                                                        </vaadin-button> -->
-                                    <!-- <vaadin-button hidden="[[!_isEditing(editing, item)]]" on-click="_save" focus-target$="[[editing]]" theme="primary">Save</vaadin-button>
-                            <vaadin-button hidden="[[!_isEditing(editing, item)]]" on-click="_cancel">Cancel</vaadin-button> -->
-                                    <!-- </div>
-                                                </template>
-                                            </vaadin-grid-column> -->
-
-                                </vaadin-grid>
-                            </template>
-                        </dom-bind>
                     </div>
+
                 </div>
-            </app-header-layout>
+            </app-header-layout>    
+                                                         <!-- save -->
             <paper-fab noink on-tap="_openSave" icon="my-icons:check" class="blue"></paper-fab>
 
             <vaadin-dialog id="allocationSave" no-close-on-esc no-close-on-outside-click>
@@ -472,6 +466,13 @@
             <vaadin-dialog id="successModal" no-close-on-esc no-close-on-outside-click>
                 <template>
                     <h3 style="text-align: center">Deleted Successfully</h3>
+                    <hr>
+                    <paper-button on-tap="_closeModal" style="float: right">Ok</paper-button>
+                </template>
+            </vaadin-dialog>
+            <vaadin-dialog id="successAddModal" no-close-on-esc no-close-on-outside-click>
+                <template>
+                    <h3 style="text-align: center">Added Successfully</h3>
                     <hr>
                     <paper-button on-tap="_closeModal" style="float: right">Ok</paper-button>
                 </template>
@@ -502,6 +503,14 @@
                     type: String,
                     value: '',
                 },
+                idnum: {
+                    type: Number,
+                    value: 1
+                },
+                idnumdate: {
+                    type: Number,
+                    value: 1
+                },
                 selectedHotels: {
                     type: Number,
                     value: '',
@@ -527,22 +536,126 @@
                 //     this.hotelResult = 'Cebu Shangrila';
                 // }
             },
+            // _allocationLoadedR(data) {
+            //     if (this.url === '/allocation/read') {
+            //         this.allocations = data.detail.response.data;
+            //         // console.log(this.allocations);
+            //     }
+            // },
             _allocationLoaded(data) {
-                if (this.url === '/allocation/read') {
-                    this.allocations = data.detail.response.data;
-                    // console.log(this.hotels);
+                if (this.editKey) {
+                    if (this.url === '/allocation/readEdit/' + this.editKey) {
+                        this.allocations = data.detail.response.data;
+                        this.workspace = data.detail.response.data.workspace;
+                        this.active = data.detail.response.data.active;
+                        this.hotel = data.detail.response.data.hotel;
+                        this.dateFrom = data.detail.response.data.dateFrom;
+                        this.dateTo = data.detail.response.data.dateTo;
+                        this.note = data.detail.response.data.note;
+                        this.room = data.detail.response.data.room;
+                        this.peak = data.detail.response.data.peak;
+                        this.pdays = data.detail.response.data.pdays;
+                        this.nonpeak = data.detail.response.data.nonpeak;
+                        this.nonpdays = data.detail.response.data.nonpdays;
+                        this.startValue = data.detail.response.data.startValue;
+                        this.endValue = data.detail.response.data.endValue;
+                        this.createdAt = data.detail.response.data.createdAt;
+                        this.updatedAt = data.detail.response.data.updatedAt;
+                        this.created_by = data.detail.response.data.created_by;
+                        this.updated_by = data.detail.response.data.updated_by;
+                        
+                    }
                 }
             },
-            _add(e) {
-                if (this.$.room.value !== '' && this.$.peak.value !== '' && this.$.pdays.value !== '' && this.$.nonpeak.value !== '' && this.$.nonpdays.value !== '') {
-                    this.items.unshift({ name: { room: this.$.room.value, peak: this.$.peak.value, pdays: this.$.pdays.value, nonpeak: this.$.nonpeak.value, nonpdays: this.$.nonpdays.value } });
-                    this.$.grid.clearCache();
+            _add() {
 
-                    this.$.room.value = '';
-                    this.$.peak.value = '';
-                    this.$.pdays.value = '';
-                    this.$.nonpeak.value = '';
-                    this.$.nonpdays.value = '';
+                if (this.room !== '' && this.peak !== '' && this.pdays !== '' && this.nonpeak !== '' && this.nonpdays !== '') {
+
+                    var allocationval = [];
+                    var room1 = Polymer.dom(this.root).querySelector("#room");
+                    var peaksn = Polymer.dom(this.root).querySelector("#peak");
+                    var cutoff = Polymer.dom(this.root).querySelector("#pdays");
+                    var nonpeakssn = Polymer.dom(this.root).querySelector("#nonpeak");
+                    var nonpeakday = Polymer.dom(this.root).querySelector("#nonpdays");
+
+                    console.log(this.idnum);
+
+                    // console.log(room1.value,peaksn.value,cutoff.value,nonpeakssn.value,nonpeakday.value);
+                    var fieldbody = '<span><vaadin-text-field style="width: 160px;" id="room' + this.idnum + '" value="' + room1.value + '" ></vaadin-text-field>&nbsp; <vaadin-text-field style="width: 160px;" id="peak' + this.idnum + '" value="' + peaksn.value + '" ></vaadin-text-field>&nbsp; <vaadin-text-field style="width: 160px;" id="pdays' + this.idnum + '" value="' + cutoff.value + '" ></vaadin-text-field>&nbsp; <vaadin-text-field style="width: 160px;" id="nonpeak' + this.idnum + '" value="' + nonpeakssn.value + '" ></vaadin-text-field>&nbsp; <vaadin-text-field style="width: 160px;" id="nonpdays' + this.idnum + '" value="' + nonpeakday.value + '"></vaadin-text-field></span><br>'
+                    var node = Polymer.dom(this.root).querySelector("#writeHere").innerHTML += fieldbody;
+                    console.log(node);
+
+
+                    this.rooms = '';
+                    this.peaks = '';
+                    this.pdayss = '';
+                    this.nonpeaks = '';
+                    this.nonpdayss = '';
+                    this.idnum = this.idnum + 1;
+                } else {
+                    alert('Please Input All');
+                }
+            },
+            _addnew(){
+                if (this.editKey) {
+                      var room1 = Polymer.dom(this.root).querySelector("#room1");
+
+                        // incremented peak
+                        // var peaksn1 = Polymer.dom(this.root).querySelector("#peak1");
+
+                        // // incremented cutoff
+                        // var cutoff1 = Polymer.dom(this.root).querySelector("#pdays1");
+
+                        // // incremented nonpeak
+                        // var nonpeakssn1 = Polymer.dom(this.root).querySelector("#nonpeak1");
+
+                        // // incremented non peak days
+                        // var nonpeakday1 = Polymer.dom(this.root).querySelector("#nonpdays1");
+
+                        // // incremented peak season date start
+                        // var datestart1 = Polymer.dom(this.root).querySelector("#startdate1");
+
+                        // // incremented peak season date end
+                        // var dateend1 = Polymer.dom(this.root).querySelector("#enddate1");
+
+                          this.method = 'POST';
+                    this.$.ajax.url = '/allocation/add';
+                    this.$.ajax.contentType = "application/json";
+                    this.$.ajax.body = {
+                        
+                        room: [{room: room1.value}]
+                        // peak: [{peak: peaksn1.value}],
+                        // pdays: [{pdays: cutoff1.value}],
+                        // nonpeak: [{nonpeak: nonpeakssn1.value}],
+                        // nonpdays: [{nonpdays:nonpeakday1.value}],
+                        };
+                   
+                   this.$.ajax.generateRequest();
+                   this.$.successAddModal.opened = true;
+                //    this.url = '';
+                }
+            },
+            _active() {
+                // console.log(this.selectActive);
+                // this.selectActive = true;
+                // console.log(this.selectActive);
+                this.$.active.checked;
+            },
+            _adddate() {
+                if (this.startValue !== '' && this.endValue !== '') {
+
+                    var datestart = Polymer.dom(this.root).querySelector("#startdate");
+                    var dateend = Polymer.dom(this.root).querySelector("#enddate");
+
+                    console.log(this.idnumdate);
+                    console.log(datestart.value, dateend.value);
+
+                    var node = Polymer.dom(this.root).querySelector("#writeHeredate").innerHTML += '<span><vaadin-date-picker placeholder="Start" id="startdate' + this.idnumdate + '" value="' + datestart.value + '" max="' + dateend.value + '" date-format="DD-MMMM-YYYY" ></vaadin-date-picker>&nbsp; <vaadin-date-picker placeholder="End" id="enddate' + this.idnumdate + '" value="' + dateend.value + '" min="' + datestart.value + '" date-format="DD-MMMM-YYYY" ></vaadin-date-picker></span><br> \r\n';
+
+                    this.startValue = '';
+                    this.endValue = '';
+                    this.idnumdate = this.idnumdate + 1;
+
                 } else {
                     alert('Please Input All');
                 }
@@ -563,35 +676,76 @@
                 window.location.assign('/allocation');
             },
             _update() {
-                if (this.hotel) {
-                    if (this.editKey) {
-                        this.method = 'PUT';
-                        this.$.ajax.url = '/allocation/update/' + this.editKey;
-                        this.$.ajax.contentType = "application/json";
-                        this.$.ajax.body = {
-                            hotel: this.hotel,
-                            dateFrom: this.dateFrom,
-                            dateTo: this.dateTo,
-                            room: this.room,
-                            peak: this.peak,
-                            pdays: this.pdays,
-                            nonpeak: this.nonpeak,
-                            nonpdays: this.nonpdays,
-                            note: this.note,
-                            startValue: this.startValue,
-                            endValue: this.endValue,
-                            created_by: this.created_by,
-                            updated_by: this.updated_by,
-                        };
-                        this.$.ajax.generateRequest();
-                        this.$.allocationSave.opened = false;
-                        this.$.successUpdate.opened = true;
-                        this.url = '/allocation/dummy';
-                    }
-                    else {
-                        this.msg = "All fields required";
-                    }
-                }
+
+                var rooms = this.allocations.room;
+                var RoomData = [];
+                rooms.forEach(element => {
+                    RoomData.push(element.room);
+                });
+                console.log(RoomData);
+                
+                // var peaks = this.allocations.peak;
+                // var PeakData = [];
+                // peaks.forEach(element => {
+                //     PeakData.push(element.peak);
+                // });
+
+                //  var cuts = this.allocations.pdays;
+                // var CutData = [];
+                // cuts.forEach(element => {
+                //     CutData.push(element.pdays);
+                // });
+
+                //  var nonpeaks = this.allocations.nonpeak;
+                // var NonPeakData = [];
+                // nonpeaks.forEach(element => {
+                //     NonPeakData.push(element.nonpeak);
+                // });
+
+                //  var nonpeakds = this.allocations.nonpdays;
+                // var NonPeakDData = [];
+                // nonpeakds.forEach(element => {
+                //     NonPeakDData.push(element.nonpdays);
+                // });
+  
+           
+                // console.log(PeakData);
+                // console.log(CutData);
+                // console.log(NonPeakData);
+                // console.log(NonPeakDData);
+                // if (this.hotel) {
+                //     if (this.editKey) {
+                //         this.method = 'PUT';
+                //         this.$.ajax.url = '/allocation/update/' + this.editKey;
+                //         this.$.ajax.contentType = "application/json";
+                //         this.$.ajax.body = {
+                //             hotel: this.hotel,
+                //             dateFrom: this.dateFrom,
+                //             dateTo: this.dateTo,
+
+                //             room: [{room: RoomData}],
+                //             peak: [{peak: PeakData}],
+                //             pdays: [{pdays: CutData}],
+                //             nonpeak: [{nonpeak: NonPeakData}],
+                //             nonpdays: [{nonpdays: NonPeakDData}],
+
+                //             note: this.note,
+
+                //             startValue: this.startValue,
+                //             endValue: this.endValue,
+
+                //             created_by: this.created_by,
+                //             updated_by: this.updated_by,
+                //         };
+                //         this.$.ajax.generateRequest();
+                //         this.$.allocationSave.opened = false;
+                //         this.$.successUpdate.opened = true;
+                //         this.url = '/allocation/dummy';
+                //     } 
+                //     else {
+                //         this.msg = "All fields required";
+                //     }
+                // }
             },
             _delete() {
                 if (this.editKey) {
@@ -629,18 +783,6 @@
                     });
                 }
             },
-            _available() {
-                var cells = Polymer.dom(this.root).querySelectorAll("td");
-
-                for (var i = 0; i < cells.length; i++) {
-                    cells[i].addEventListener("click", function () {
-                        this.className = this.className == "white" ? "green" : "white";
-                    });
-                }
-            },
-            _preMonth() {
-
-            },
             toggleDrawer() {
                 this.dispatchEvent(new CustomEvent('toggleDrawer', {
                     bubbles: true, composed: true, detail: {
@@ -654,27 +796,6 @@
                     this.url = '/allocation/readEdit/' + this.editKey;
                 } else {
                     this.url = '/allocation/dummy';
-                }
-            },
-            _allocationLoaded(data) {
-                if (this.editKey) {
-                    if (this.url === '/allocation/readEdit/' + this.editKey) {
-                        this.hotel = data.detail.response.data.hotel;
-                        this.dateFrom = data.detail.response.data.dateFrom;
-                        this.dateTo = data.detail.response.data.dateTo;
-                        this.note = data.detail.response.data.note;
-                        this.room = data.detail.response.data.room;
-                        this.peak = data.detail.response.data.peak;
-                        this.pdays = data.detail.response.data.pdays;
-                        this.nonpeak = data.detail.response.data.nonpeak;
-                        this.nonpdays = data.detail.response.data.nonpdays;
-                        this.startValue = data.detail.response.data.startValue;
-                        this.endValue = data.detail.response.data.endValue;
-                        this.createdAt = data.detail.response.data.createdAt;
-                        this.updatedAt = data.detail.response.data.updatedAt;
-                        this.created_by = data.detail.response.data.created_by;
-                        this.updated_by = data.detail.response.data.updated_by;
-                    }
                 }
             },
             _handleResponse() { },

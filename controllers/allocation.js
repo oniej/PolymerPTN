@@ -11,14 +11,16 @@ router.get('/dummy', (req, res) => {
 router.post('/add', (req, res) => { 
     const allocation = new Allocation();
     // body parser lets us use the req.body
-    const {hotel,dateFrom,dateTo,room,peak,pdays,nonpeak,nonpdays,note,startValue,endValue } = req.body;
-    if (!hotel || !dateFrom || !dateTo || !note) {
+    const {active, workspace,hotel,dateFrom,dateTo,room,peak,pdays,nonpeak,nonpdays,note,startValue,endValue } = req.body;
+    if (!workspace || !hotel || !dateFrom || !dateTo || !note) {
         // we should throw an error. we can do this check on the front end
         return res.json({
             success: false,
             error: 'Not Found'
         });
     }
+    allocation.active = active;
+    allocation.workspace = workspace;
     allocation.hotel = hotel;
     allocation.dateFrom = dateFrom;
     allocation.dateTo = dateTo;
@@ -50,6 +52,8 @@ router.get('/readEdit/:editKey', (req, res) => {
         return res.json({ success: true, data: hotels });
     });
 });
+
+
 router.put('/update/:editKey', (req, res) => {
     const { editKey } = req.params;
     if (!editKey) {
@@ -57,15 +61,15 @@ router.put('/update/:editKey', (req, res) => {
     }
     Allocation.findById(editKey, (error, allocation) => {
         if (error) return res.json({ success: false, error });
-        const { hotel,dateFrom,dateTo,room,peak,peaknumday,nonpeak,nonpeaknumday,note,startValue,endValue } = req.body;
+        const { hotel,dateFrom,dateTo,room,peak,pdays,nonpeak,nonpdays,note,startValue,endValue } = req.body;
         if (hotel) allocation.hotel = hotel;
         if (dateFrom) allocation.dateFrom = dateFrom;
         if (dateTo) allocation.dateTo = dateTo;
         if (room) allocation.room = room;
         if (peak) allocation.peak = peak;
-        if (peaknumday) allocation.peaknumday = peaknumday;
+        if (pdays) allocation.pdays = pdays;
         if (nonpeak) allocation.nonpeak = nonpeak;
-        if (nonpeaknumday) allocation.nonpeaknumday = nonpeaknumday;
+        if (nonpdays) allocation.nonpdays = nonpdays;
         if (note) allocation.note = note;
         if (startValue) allocation.startValue = startValue;
         if (endValue) allocation.endValue = endValue;
