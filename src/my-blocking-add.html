@@ -260,7 +260,8 @@
 
                         <!-- <vaadin-text-field style="width: 130px;" id="room" value="{{room}}" label="ROOM"></vaadin-text-field> -->
                         <vaadin-text-field style="width: 130px;" id="peak" value="{{peak}}" label="PEAK"></vaadin-text-field>
-                        <vaadin-text-field style="width: 130px;" id="cancell" value="{{cancel}}" label="CANCELLATION"></vaadin-text-field>
+                        <!-- <vaadin-text-field style="width: 130px;" id="cancell" value="{{cancel}}" label="CANCELLATION"></vaadin-text-field> -->
+                        <vaadin-date-picker style="width: 130px;" id="cancell" value="{{cancel}}" label="CANCELLATION"></vaadin-date-picker>
                         <vaadin-text-field style="width: 130px;" id="nonpeak" value="{{nonpeak}}" label="NON-PEAK"></vaadin-text-field>
                         <vaadin-text-field style="width: 130px;" id="nonpdays" value="{{nonpdays}}" label="NONPEAKDAYS"></vaadin-text-field>
 
@@ -411,7 +412,7 @@
                     this.rooms.push(rooms);
 
                     // console.log(room1.value,peaksn.value,cutoff.value,nonpeakssn.value,nonpeakday.value);
-                    var fieldbody = '<span><td><vaadin-text-field style="width: 130px;" id="room' + this.idnum + '" value="' + room1.value + '" ></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="peak' + this.idnum + '" value="' + peaksn.value + '" ></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="cancell' + this.idnum + '" value="' + cancel.value + '" ></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="nonpeak' + this.idnum + '" value="' + nonpeakssn.value + '" ></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="nonpdays' + this.idnum + '" value="' + nonpeakday.value + '"></vaadin-text-field></td> <paper-icon-button icon="my-icons:close" style="color:red;"></paper-icon-button></span><br>'
+                    var fieldbody = '<span><td><vaadin-text-field style="width: 130px;" id="room' + this.idnum + '" value="' + room1.value + '" ></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="peak' + this.idnum + '" value="' + peaksn.value + '" ></vaadin-text-field></td><td> <vaadin-date-picker style="width: 130px;" id="cancell' + this.idnum + '" value="' + cancel.value + '"></vaadin-date-picker></td><td> <vaadin-text-field style="width: 130px;" id="nonpeak' + this.idnum + '" value="' + nonpeakssn.value + '" ></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="nonpdays' + this.idnum + '" value="' + nonpeakday.value + '"></vaadin-text-field></td> <paper-icon-button icon="my-icons:close" style="color:red;"></paper-icon-button></span><br>'
                     var node = Polymer.dom(this.root).querySelector("#writeHere").innerHTML += fieldbody;
                     this.room = '';
                     this.peak = '';
