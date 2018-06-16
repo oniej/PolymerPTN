@@ -6,6 +6,11 @@
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
@@ -41,7 +46,6 @@
             :host {
                 display: block;
             }
-
             app-header {
                 color: rgb(255, 255, 255);
                 background-color: darkorange;
@@ -60,78 +64,13 @@
                     background-color: #F4F5F6;
                 }
             }
-
             paper-fab.fab {
                 position: fixed;
                 bottom: 30px;
                 right: 30px;
-                background-color: #3F51B5;
+                background-color: darkorange;
             }
-
-            @-webkit-keyframes fadeIn {
-                from {
-                    opacity: 0;
-                }
-                to {
-                    opacity: 1;
-                }
-            }
-
-            @-moz-keyframes fadeIn {
-                from {
-                    opacity: 0;
-                }
-                to {
-                    opacity: 1;
-                }
-            }
-
-            @keyframes fadeIn {
-                from {
-                    opacity: 0;
-                }
-                to {
-                    opacity: 1;
-                }
-            }
-
-            .griddiv {
-                border-style: solid;
-                border-color: gray;
-                border-radius: 5px;
-                padding: 5px;
-                border-width: 2px;
-                height: 200px;
-                overflow: scroll;
-
-            }
-
             @media (max-width: 768px) {
-                .docu {
-                    margin-left: 16px;
-                    margin-right: 16px;
-                    padding: 16px;
-
-
-                    background-color: #fff;
-                    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-
-                    opacity: 0;
-                    /* make things invisible upon start */
-                    -webkit-animation: fadeIn ease-in 1;
-                    /* call our keyframe named fadeIn, use animattion ease-in and repeat it only 1 time */
-                    -moz-animation: fadeIn ease-in 1;
-                    animation: fadeIn ease-in 1;
-
-                    -webkit-animation-fill-mode: forwards;
-                    /* this makes sure that after animation is done we remain at the last keyframe value (opacity: 1)*/
-                    -moz-animation-fill-mode: forwards;
-                    animation-fill-mode: forwards;
-
-                    -webkit-animation-duration: 0.5s;
-                    -moz-animation-duration: 0.5s;
-                    animation-duration: 0.5s;
-                }
                 #buttonform {
                     display: none;
 
@@ -157,20 +96,6 @@
                     display: none;
                 }
             }
-
-            paper-toast {
-                width: 20%;
-                position: fixed;
-                bottom: 1opx;
-                left: 10px;
-                margin-left: 20%;
-            }
-
-            paper-checkbox {
-                font-size: 14px;
-                margin-right: 5px;
-            }
-
             hr {
                 background-color: #eee;
                 border: 0 none;
@@ -390,6 +315,15 @@
             _add() {
 
                 if (this.room !== '' && this.peak !== '' && this.pdays !== '' && this.nonpeak !== '' && this.nonpdays !== '') {
+
+                this.addAllocation = true;
+                var allocationval = [];
+                var room1 = Polymer.dom(this.root).querySelector("#room");
+                var peaksn = Polymer.dom(this.root).querySelector("#peak");
+                var cutoff = Polymer.dom(this.root).querySelector("#pdays");
+                var nonpeakssn = Polymer.dom(this.root).querySelector("#nonpeak");
+                var nonpeakday = Polymer.dom(this.root).querySelector("#nonpdays");
+ 
 
                     var room1 = Polymer.dom(this.root).querySelector("#room");
                     var peaksn = Polymer.dom(this.root).querySelector("#peak");

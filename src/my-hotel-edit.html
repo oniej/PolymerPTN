@@ -114,7 +114,7 @@
             }
         </style>
 
-        <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_hotelsLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
+        <iron-ajax auto url="/hotel/readMe/{{editKey}}" handle-as="json" on-response="_hotelsLoaded" debounce-duration="300"></iron-ajax>
 
         <app-drawer-layout fullbleed narrow="{{narrow}}" id="drawerLayout">
             <app-header-layout id="appheader" has-scrolling-region>
@@ -141,29 +141,24 @@
 
                         </div>
                     </div>
-                    <div class="details" id="form">
-                        <paper-input value="{{id}}" float-label label="Id" style="display: none"></paper-input>
-                        <paper-input value="{{hotel}}" float-label label="Hotel"></paper-input>
-                        <paper-input value="{{room1}}" float-label label="Room"></paper-input>
-                        <paper-input value="{{room2}}" float-label label="Room"></paper-input>
-                        <paper-input value="{{room3}}" float-label label="Room"></paper-input>
-                        <span id="writeHere"></span>
+                    <div id="writeHere">
+                        <paper-input value="{{hotel}}" always-float-label label="Hotel" autofocus></paper-input>
                     </div>
                     <div>
                         <span>
-                            <paper-button on-tap="_openField" id="buttonform" style="color: cornflowerblue;">
-                                <iron-icon icon="my-icons:add-box" on-tap="_openField" style="color: cornflowerblue;"></iron-icon>
+                            <paper-button on-tap="addField" id="buttonform" style="color: cornflowerblue;">
+                                <iron-icon icon="my-icons:add-box" on-tap="addField" style="color: cornflowerblue;"></iron-icon>
                                 Add more room</paper-button>
                         </span>
-                        <iron-icon id="iconform" icon="my-icons:add-box" on-tap="_openField" style="color: cornflowerblue;"></iron-icon>
+                        <iron-icon id="iconform" icon="my-icons:add-box" on-tap="addField" style="color: cornflowerblue;"></iron-icon>
                     </div>
                     <br>
                     <br>
                     <span style="color:red; font-size:13px; float:left; margin-top: -16px;">{{msg}}</span>
                     <span style="float: right; margin-top: -30px;">
-                        <a href="/hotels" style="text-decoration:none">
-                            <paper-button id="favright" class="cancel" on-tap="_cancel">Cancel</paper-button>
-                        </a>
+                        <!-- ? <a href="/hotels" style="text-decoration:none"> -->
+                        <paper-button id="favright" class="cancel" on-tap="_cancel">Cancel</paper-button>
+                        <!-- </a> -->
                         <paper-button id="favleft" class="darkorange" on-click="_openUpdate" raised>Update</paper-button>
 
                     </span>
@@ -171,10 +166,13 @@
             </app-header-layout>
             <vaadin-dialog id="hotelDelete" no-close-on-esc no-close-on-outside-click>
                 <template>
-                    <h3 style="text-align: center">Confirm to Delete?</h3>
+                    <h3 style="text-align: center">Delete {{hotel}}?
+                    </h3>
                     <hr>
-                    <paper-button on-tap="_delete" style="color: red">Yes</paper-button>
-                    <paper-button on-tap="_close">No</paper-button>
+                    <span style="float: right">
+                        <paper-button on-tap="_delete" style="color: red">Yes</paper-button>
+                        <paper-button on-tap="_close">No</paper-button>
+                    </span>
                 </template>
             </vaadin-dialog>
             <vaadin-dialog id="successModalDelete" no-close-on-esc no-close-on-outside-click>
@@ -188,10 +186,12 @@
             </vaadin-dialog>
             <vaadin-dialog id="UpdateModal" no-close-on-esc no-close-on-outside-click>
                 <template>
-                    <h3 style="text-align: center">Save Changes?</h3>
+                    <h3 style="text-align: center">Update {{hotel}}?</h3>
                     <hr>
-                    <paper-button on-tap="_update">Yes</paper-button>
-                    <paper-button on-tap="_close">No</paper-button>
+                    <span style="float: right">
+                        <paper-button on-tap="_update">Yes</paper-button>
+                        <paper-button on-tap="_close">No</paper-button>
+                    </span>
                 </template>
             </vaadin-dialog>
             <vaadin-dialog id="successModalUpdate" no-close-on-esc no-close-on-outside-click>
@@ -211,26 +211,24 @@
         Polymer({
             is: 'my-hotel-edit',
             properties: {
-                editKey: {
-                    type: String,
-                    observer: '_editKeyChanged'
-                },
-                // editHotel: String,
-                // editRoom: String,
+                editKey: String,
                 route: Object,
                 data: Object,
                 createdAt: String,
+                rooms: {
+                    type: Array,
+                    value: []
+                },
+                lastRoom: {
+                    type: Number,
+                    value: 0
+                },
+                roomdata: {
+                    type: String,
+                    value: []
+                }
             },
 
-            _editKeyChanged() {
-                if (this.editKey) {
-                    // /hotel/readMe/{{editKey}}
-                    this.url = '/hotel/readMe/' + this.editKey;
-                }
-                else {
-                    this.url = '/hotel/dummy';
-                }
-            },
             _openUpdate() {
                 this.$.UpdateModal.opened = true;
             },
@@ -241,38 +239,59 @@
                 this.$.hotelDelete.opened = false;
                 this.$.UpdateModal.opened = false;
             },
-            _openField() {
-                var node = Polymer.dom(this.root).querySelector("#writeHere").innerHTML += '<span> <paper-input float-label label="Room" id="room"></paper-input></span>\r\n';
+
+            addField() {
+                this._openField(null, this);
+            },
+            _openField(el, _this) {
+                var roomNumber = _this.lastRoom + 1;
+                _this.lastRoom = roomNumber;
+                _this.rooms.push(roomNumber);
+                var div = Polymer.dom(_this.root).querySelector("#writeHere");
+                var paperInput = document.createElement('paper-input');
+                paperInput.setAttribute('id', "room" + roomNumber);
+                paperInput.setAttribute("label", "Room " + roomNumber);
+                if (el) {
+                    paperInput.setAttribute("value", el);
+                }
+                paperInput.setAttribute("always-float-label", true);
+                div.append(paperInput);
             },
             _update() {
-                if (this.hotel && this.room1) {
-                    if (this.editKey) {
+                var roomupdate = [];
+                this.rooms.forEach(element => {
+                    var data = Polymer.dom(this.root).querySelector("#room" + element).value;
+                    if (data) {
+                        roomupdate.push(data);
+                    }
+                });
+
+                if (this.editKey) {
+                    if (!this.hotel) {
+                        this.msg = "Hotel fields required";
+                    }
+                    else {
                         this.method = 'PUT';
                         this.$.ajax.url = '/hotel/update/' + this.editKey;
                         this.$.ajax.contentType = "application/json";
                         this.$.ajax.body = {
                             hotel: this.hotel,
-                            room1: this.room1,
-                            room2: this.room2,
-                            room3: this.room3,
-                            // updated_date: timeToday
+                            room: roomupdate,
                         };
                         this.$.ajax.generateRequest();
                         this.$.successModalUpdate.opened = true;
                         this.$.UpdateModal.opened = false;
-                        this.url = '/hotel/dummy';
-                    }
-                    else {
-                        this.msg = "All fields required";
                     }
                 }
+            },
+            _cancel() {
+                window.location.assign('/hotels');
             },
             _delete() {
                 if (this.editKey) {
                     this.method = 'DELETE';
                     this.$.ajax.url = '/hotel/delete/' + this.editKey;
                     this.$.ajax.generateRequest();
-                    // this.$.successModalDelete.open();
                     this.url = '/hotel/dummy';
                     this.$.hotelDelete.opened = false;
                     this.$.successModalDelete.opened = true;
@@ -284,26 +303,20 @@
                 this.$.successModalUpdate.opened = false;
                 window.location.assign("/hotels");
             },
-            toggleDrawer() { },
-            _cancel() { },
-            ready() {
-            },
             _hotelsLoaded(data) {
                 if (this.editKey) {
-                    if (this.url === '/hotel/readMe/' + this.editKey) {
-                        this.id = data.detail.response.data._id;
-                        this.hotel = data.detail.response.data.hotel;
-                        this.room1 = data.detail.response.data.room1;
-                        this.room2 = data.detail.response.data.room2;
-                        this.room3 = data.detail.response.data.room3;
-                        this.createdby = data.detail.response.data.created_by;
-                        this.createdAt = data.detail.response.data.createdAt;
-                        this.updatedby = data.detail.response.data.updated_by;
-                        this.updatedAt = data.detail.response.data.updatedAt;
-                        // this.hotels = data.detail.response.data.hotels;
-                        // console.log(this.createdAt);
-                    }
+                    this.hotel = data.detail.response.data.hotel;
+                    var roomdata = data.detail.response.data.room;
+                    var _this = this;
+                    roomdata.forEach(element => {
+                        _this._openField(element, _this);
+                    });
+                    this.createdby = data.detail.response.data.created_by;
+                    this.createdAt = data.detail.response.data.createdAt;
+                    this.updatedby = data.detail.response.data.updated_by;
+                    this.updatedAt = data.detail.response.data.updatedAt;
                 }
+
             },
             _timeStampToDateTime(ts) {
                 return new Date(ts);

@@ -36,9 +36,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="lazy-import" href="my-blocking.html">
 <link rel="lazy-import" href="my-hotels.html">
 <link rel="lazy-import" href="my-users.html">
+<link rel="lazy-import" href="my-group.html">
 <link rel="lazy-import" href="my-allocation.html">
-
 <link rel="lazy-import" href="my-settings.html">
+<link rel="lazy-import" href="my-inquiry2.html">
+
 <!-- <link rel="lazy-import" href="my-view1.html"> -->
 <!-- <link rel="lazy-import" href="my-signin.html"> -->
 <!--<link rel="lazy-import" href="my-view2.html">
@@ -311,6 +313,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <span>Allocation</span>
               </paper-icon-item>
             </a>
+            <a name="inquiry2" href="[[rootPath]]inquiry2">
+              <paper-icon-item toggles="true" class="menuSelected">
+                <iron-icon icon="my-icons:dashboard" slot="item-icon"></iron-icon>
+                <span>Inquiry 2</span>
+              </paper-icon-item>
+            </a>
             <a name="hotels" href="[[rootPath]]hotels">
               <paper-icon-item toggles="true" class="menuSelected">
                 <iron-icon icon="my-icons:location-city" slot="item-icon"></iron-icon>
@@ -321,6 +329,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <paper-icon-item toggles="true" class="menuSelected">
                 <iron-icon icon="my-icons:account-circle" slot="item-icon"></iron-icon>
                 <span>Users</span>
+              </paper-icon-item>
+            </a>
+            <a name="group" href="[[rootPath]]group">
+              <paper-icon-item toggles="true" class="menuSelected">
+                <iron-icon icon="my-icons:group" slot="item-icon"></iron-icon>
+                <span>Group</span>
               </paper-icon-item>
             </a>
             <a name="settings" href="[[rootPath]]settings">
@@ -344,9 +358,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <my-availability name="availability" route="{{subroute}}"></my-availability>
         <my-blocking name="blocking" route="{{subroute}}"></my-blocking>
         <my-allocation name="allocation" route="{{subroute}}"></my-allocation>
+        <my-inquiry2 name="inquiry2" route="{{subroute}}"></my-inquiry2>
         <my-hotels name="hotels" route="{{subroute}}"></my-hotels>
         <my-users name="users" route="{{subroute}}"></my-users>
-        <my-settings name="settings" route="{{subroute}}"></my-settings> 
+        <my-group name="group" route="{{subroute}}"></my-group>
+        <my-settings name="settings" route="{{subroute}}"></my-settings>
         <my-view404 name="view404"></my-view404>
       </iron-pages>
     </app-drawer-layout>

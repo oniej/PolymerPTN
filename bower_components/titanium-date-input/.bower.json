@@ -1,7 +1,7 @@
 {
   "name": "titanium-date-input",
   "main": "titanium-date-input.html",
-  "version": "1.0.28",
+  "version": "1.0.31",
   "authors": [
     "Kasey Hinton kasey-hinton@leavitt.com"
   ],
@@ -26,11 +26,11 @@
     "Demo": "demo/index.html"
   },
   "homepage": "https://github.com/LssPolymerElements/titanium-date-input",
-  "_release": "1.0.28",
+  "_release": "1.0.31",
   "_resolution": {
     "type": "version",
-    "tag": "1.0.28",
-    "commit": "b2e75b650326d9663eb0f1f081a79e93ea6e578c"
+    "tag": "1.0.31",
+    "commit": "7e5ad56aad25a7205de4d065fe734c7c00c69165"
   },
   "_source": "https://github.com/LssPolymerElements/titanium-date-input.git",
   "_target": "^1.0.25",
