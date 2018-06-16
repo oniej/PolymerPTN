@@ -12,15 +12,12 @@
 <link rel="import" href="../bower_components/paper-menu-button/paper-menu-button.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
 <link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
-<!-- <link rel="import" href="../bower_components/polymerfire/firebase-document.html"> -->
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../bower_components/paper-dropdown/paper-dropdown.html">
-<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../bower_components/vaadin-dialog/vaadin-dialog.html">
-<!-- <link rel="import" href="../bower_components/vaadin-button/vaadin-button.html"> -->
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 
 <link rel="import" href="shared-styles.html">
@@ -115,21 +112,6 @@
                 background-color: darkorange;
             }
 
-            paper-dialog#openNewNotes {
-                border-color: #4caf50;
-                background-color: #f1f8e9;
-            }
-
-            paper-dialog#availabilitySave {
-                border-color: #4caf50;
-                background-color: #f1f8e9;
-            }
-
-            paper-dialog#availabilityDelete {
-                border-color: #4caf50;
-                background-color: #f1f8e9;
-            }
-
             #action {
                 margin-top: 10px;
                 float: right;
@@ -151,7 +133,7 @@
             }
 
             hr {
-                background-color: #eee;
+                background-color: rgb(238, 238, 238);
                 border: 0 none;
                 color: #eee;
                 height: 1px;
@@ -190,7 +172,6 @@
         </custom-style>
         <!-- <firebase-query id="query" path="{{getpath()}}" data="{{account}}"></firebase-query> -->
         <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_availabilityLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
-
         <app-drawer-layout fullbleed narrow="{{narrow}}" id="drawerLayout">
             <app-header-layout id="appheader" has-scrolling-region>
                 <app-header fixed slot="header">
@@ -218,18 +199,14 @@
                         <div class="hotelSearch">
                             <div style="float:left;">
                                 <div style="display:flex;">
-                                    <paper-dropdown-menu style="cursor:pointer;width:150px" value="{{hotel}}" label="Hotel" searchable>
-                                        <paper-listbox slot="dropdown-content" class="dropdown-content" selected="{{selectedHotels}}">
-                                            <paper-item>Pacific</paper-item>
-                                            <paper-item>Resorts World</paper-item>
-                                            <paper-item>Cebu Shangrila</paper-item>
-                                        </paper-listbox>
-                                    </paper-dropdown-menu>
+                                    <paper-input always-float-label label="Hotel" value="{{hotel}}" readonly style="width: 160px;">
+                                        <iron-icon icon="my-icons:location-city" slot="prefix"></iron-icon>
+                                    </paper-input>
                                 </div>
                             </div>
                         </div>
                         <div class="addNotes">
-                            <paper-input label="Notes" value="{{notes}}">
+                            <paper-input always-float-label label="Notes" value="{{mynotes}}">
                                 <iron-icon icon="my-icons:speaker-notes" slot="prefix"></iron-icon>
                             </paper-input>
                         </div>
@@ -241,25 +218,13 @@
                         <paper-checkbox class="limited" on-tap="_limited" id="limited">Limited</paper-checkbox>
                         <paper-checkbox class="available" on-tap="_available" id="available">Open</paper-checkbox>
                         <span style="margin-top: 10px; float: right">
-                            <paper-icon-button noink on-tap="_preMonth" style="color: black;" icon="my-icons:keyboard-arrow-left"></paper-icon-button>
+                            <paper-icon-button id="previous" noink on-tap="_preMonth" style="color: black;" icon="my-icons:keyboard-arrow-left"></paper-icon-button>
                             {{month}}
-                            <paper-icon-button noink on-tap="_nextMonth" style="color: black;" icon="my-icons:keyboard-arrow-right"></paper-icon-button>
+                            <paper-icon-button id="next" noink on-tap="_nextMonth" style="color: black;" icon="my-icons:keyboard-arrow-right"></paper-icon-button>
                         </span>
                     </div>
                     <div id="table" style="width:100%;overflow-x:auto;">
                         <table id="hotels">
-                            <tr id="headDays">
-                            </tr>
-                            <tr id="Weekdays" style="background-color: #f2f2f2;">
-                            </tr>
-                            <tr id="room1">
-                                <td>{{room1}}</td>
-                            </tr>
-                            <tr id="room2">
-                                <td> {{room2}}</td>
-                            </tr>
-                            <tr id="room3">
-                            </tr>
                         </table>
                     </div>
                     <div>
@@ -269,25 +234,31 @@
 
             <vaadin-dialog id="availabilitySave" no-close-on-esc no-close-on-outside-click>
                 <template>
-                    <h3 style="text-align: center">Save Changes?</h3>
+                    <h3 style="text-align: center">Save changes for month of {{updateDate}}?</h3>
                     <hr>
-                    <paper-button on-tap="_update">Yes</paper-button>
-                    <paper-button on-tap="_closeDialog">No</paper-button>
+                    <span style="float: right">
+                        <paper-button on-tap="_update">Yes</paper-button>
+                        <paper-button on-tap="_closeDialog">No</paper-button>
+                    </span>
                 </template>
             </vaadin-dialog>
             <vaadin-dialog id="availabilityDelete" no-close-on-esc no-close-on-outside-click>
                 <template>
-                    <h3 style="text-align: center">Confirm to Delete?</h3>
+                    <h3 style="text-align: center">Are you sure to delete "{{hotel}}"
+                        <br> availability records permanently?
+                        <br>there will be no undo</h3>
                     <hr>
-                    <paper-button on-tap="_delete" style="color: red">Yes</paper-button>
-                    <paper-button on-tap="_closeDialog">No</paper-button>
+                    <span style="float: right">
+                        <paper-button on-tap="_delete" style="color: red">Yes</paper-button>
+                        <paper-button on-tap="_closeDialog">No</paper-button>
+                    </span>
                 </template>
             </vaadin-dialog>
             <vaadin-dialog id="successModal" no-close-on-esc no-close-on-outside-click>
                 <template>
                     <h3 style="text-align: center">Deleted Successfully</h3>
                     <hr>
-                    <paper-button on-tap="_closeModal" style="float: right">Ok</paper-button>
+                    <paper-button on-tap="_back" style="float: right">Ok</paper-button>
                 </template>
             </vaadin-dialog>
             <vaadin-dialog id="successUpdate" no-close-on-esc no-close-on-outside-click>
@@ -297,48 +268,55 @@
                     <paper-button on-tap="_closeModal" style="float: right">Ok</paper-button>
                 </template>
             </vaadin-dialog>
+            <paper-dialog id="saveNext">
+                <h3 style="text-align: center">Save changes for month of {{updateDate}}?</h3>
+                <hr>
+                <span style="float: right">
+                    <paper-button on-tap="_saveToDB" auto-focus>Yes</paper-button>
+                    <paper-button on-tap="_closeDialog">No</paper-button>
+            </paper-dialog>
             </div>
         </app-drawer-layout>
         <iron-ajax verbose id="ajax" method="[[method]]" on-response="_handleResponse"></iron-ajax>
-
     </template>
-
     <script>
         Polymer({
             is: 'my-availability-edit',
-
             properties: {
                 editKey: { type: String, notify: true, observer: '_onkeyChanged' },
                 route: Object,
-                mynotes: {
-                    type: String,
-                    value: '',
-                },
-                selectedHotels: {
-                    type: Number,
-                    observer: '_hotelChanged',
-                },
-                hotelResult: {
-                    type: String,
-                    value: '',
-                },
-                me: String,
+                mynotes: String,
                 mot: Number,
                 yer: Number,
-
-                // isMousedown: { type: Boolean, value: false, }
-            },
-            _hotelChanged() {
-                if (this.selectedHotels == 0) {
-                    this.hotelResult = 'Pacific';
-                } else if (this.selectedHotels == 1) {
-                    this.hotelResult = 'Resorts World';
-                } else if (this.selectedHotels == 2) {
-                    this.hotelResult = 'Cebu Shangrila';
-                }
-                // } else if (this.selectedHotels == 3) {
-                //     this.hotelResult = 'Cebu Shangrila';
-                // }
+                yearly: String,
+                monthly: String,
+                editId: String,
+                date: String,
+                prevmonth: String,
+                prevyear: String,
+                updateDate: String,
+                availabilityItem: {
+                    type: Array,
+                    value: [],
+                },
+                availabilities: {
+                    type: Array,
+                    notify: true,
+                    value: []
+                },
+                roomType: {
+                    type: Array,
+                    notify: true,
+                    value: [],
+                },
+                type: {
+                    type: Array,
+                    value: [],
+                },
+                roomData: {
+                    type: Array,
+                    value: [],
+                },
             },
             _openSave() {
                 this.$.availabilitySave.opened = true;
@@ -353,147 +331,267 @@
             _closeModal() {
                 this.$.successModal.opened = false;
                 this.$.successUpdate.opened = false;
+                // window.location.assign('/availability/edit/' + this.editId);
+            },
+            _back() {
+                this.$.successModal.opened = false;
+                this.$.successUpdate.opened = false;
                 window.location.assign('/availability');
             },
-            _update() {
-                var Row1 = Polymer.dom(this.root).querySelector("#room1").innerHTML;
-                var Row2 = Polymer.dom(this.root).querySelector("#room2").innerHTML;
-                var Row3 = Polymer.dom(this.root).querySelector("#room3").innerHTML;
-
-                if (this.hotel) {
-                    if (this.editKey) {
-                        this.method = 'PUT';
-                        this.$.ajax.url = '/availability/update/' + this.editKey;
-                        this.$.ajax.contentType = "application/json";
-                        this.$.ajax.body = {
-                            hotel: this.hotel,
-                            notes: this.notes,
-                            room1: Row1,
-                            room2: Row2,
-                            room3: Row3,
-                            created_by: this.created_by,
-                            updated_by: this.updated_by,
-                        };
-                        this.$.ajax.generateRequest();
-                        this.$.availabilitySave.opened = false;
-                        this.$.successUpdate.opened = true;
-                        this.url = '/availability/dummy';
-                    }
-                    else {
-                        this.msg = "All fields required";
-                    }
-                }
-            },
             _delete() {
-                if (this.editKey) {
+                if (this.hotel) {
                     this.method = 'DELETE';
-                    this.$.ajax.url = '/availability/delete/' + this.editKey;
+                    this.$.ajax.url = '/availability/delete/' + this.hotel;
                     this.$.ajax.generateRequest();
-                    // this.$.successModalDelete.open();
                     this.url = '/availability/dummy';
                     this.$.availabilityDelete.opened = false;
                     this.$.successModal.opened = true;
                 }
             },
-            _close() {
+            _limited() {
+                var close = Polymer.dom(this.root).querySelector("#close").checked = false;
+                var available = Polymer.dom(this.root).querySelector("#available").checked = false;
                 var cells = Polymer.dom(this.root).querySelectorAll("td");
+                var _this = this;
                 for (var i = 0; i < cells.length; i++) {
-                    cells[i].addEventListener("click", function () {
-                        this.className = this.className == "white" ? "red" : "white";
-                    });
+                    cells[i].onclick = function (event) {
+                        if (event.target.id != "") {
+                            this.className = this.className === '' || this.className === "white" ? "yellow" : "white";
+                            if (this.className == 'yellow') {
+                                var [room, date] = event.target.id.split("_");
+                                var classColor = event.target.getAttribute("class");
+                                var data = {
+                                    date: date,
+                                    room: room,
+                                    classColor: classColor,
+                                    status: 'limited'
+                                }
+                                _this.availabilities.push(data);
+                                _this.notifySplices('availabilities');
+                            }
+                            else {
+                                var [room, date] = event.target.id.split("_");
+                                var classColor = "white";
+                                var data = {
+                                    date: date,
+                                    room: room,
+                                    classColor: classColor,
+                                    status: ''
+                                }
+                                _this.availabilities.push(data);
+                                _this.notifySplices('availabilities');
+                            }
+                        }
+                    }
+                    // var next = Polymer.dom(this.root).querySelector("#next").disabled = true;
                 }
-                // var table = Polymer.dom(this.root).querySelector("#hotels");
             },
-            ready() {
-                var monthNames = ["January", "February", "March", "April", "May", "June",
-                    "July", "August", "September", "October", "November", "December"
-                ];
-                var nameofDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-                var currentMonths = new Date()
-                this.month = monthNames[currentMonths.getMonth()] + " " + currentMonths.getDate() + " " + currentMonths.getFullYear();
-                var trHead = Polymer.dom(this.root).querySelector('#headDays');
-                var now = new Date();
-                var date = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-                var currentMonthly = new Date()
-                var months = currentMonthly.getMonth();
-                var years = currentMonthly.getFullYear();
-                var dayToday = currentMonthly.getDay();
+            _available() {
+                var limited = Polymer.dom(this.root).querySelector("#limited").checked = false;
+                var close = Polymer.dom(this.root).querySelector("#close").checked = false;
+                var cells = Polymer.dom(this.root).querySelectorAll("td");
+                var _this = this;
+                for (var i = 0; i < cells.length; i++) {
+                    cells[i].onclick = function (event) {
+                        if (event.target.id != "") {
+                            this.className = this.className === '' || this.className === "white" ? "green" : "white";
+                            if (this.className == 'green') {
+                                var [room, date] = event.target.id.split("_");
+                                var classColor = event.target.getAttribute("class");
+                                var data = {
+                                    date: date,
+                                    room: room,
+                                    classColor: classColor,
+                                    status: 'open'
+                                }
+                                _this.availabilities.push(data);
+                                _this.notifySplices('availabilities');
+                            }
+                            else {
+                                var [room, date] = event.target.id.split("_");
+                                var classColor = "white";
+                                var data = {
+                                    date: date,
+                                    room: room,
+                                    classColor: classColor,
+                                    status: ''
+                                }
+                                _this.availabilities.push(data);
+                                _this.notifySplices('availabilities');
+                            }
+                        }
+                    }
+                    // var next = Polymer.dom(this.root).querySelector("#next").disabled = true;
+                }
+            },
+            _close() {
+                var limited = Polymer.dom(this.root).querySelector("#limited").checked = false;
+                var available = Polymer.dom(this.root).querySelector("#available").checked = false;
+                var cells = Polymer.dom(this.root).querySelectorAll("td");
+                var _this = this;
+                for (var i = 0; i < cells.length; i++) {
+                    cells[i].onclick = function (event) {
+                        if (event.target.id != "") {
+                            this.className = this.className === '' || this.className === "white" ? "red" : "white";
+                            if (this.className == 'red') {
+                                var [room, date] = event.target.id.split("_");
+                                var classColor = event.target.getAttribute("class");
+                                var data = {
+                                    date: date,
+                                    room: room,
+                                    classColor: classColor,
+                                    status: 'closed'
+                                }
+                                _this.availabilities.push(data);
+                                _this.notifySplices('availabilities');
+                            }
+                            else {
+                                var [room, date] = event.target.id.split("_");
+                                var classColor = "white";
+                                var data = {
+                                    date: date,
+                                    room: room,
+                                    classColor: classColor,
+                                    status: ''
+                                }
+                                _this.availabilities.push(data);
+                                _this.notifySplices('availabilities');
+                            }
+                        }
+                    }
+                    // var next = Polymer.dom(this.root).querySelector("#next").disabled = true;
+                }
+            },
+            _saveToDB(e) {
+                if (this.hotel) {
+                    var dateSave = this.mot + "," + this.yer;
+                    if (this.editId && this.date == dateSave) {
+                        var types = [];
+                        this.roomType.forEach(element => {
+                            types.push(element);
+                        });
+                        var year = this.yer;
+                        var monthly = this.mot;
+                        this.method = 'PUT';
+                        this.$.ajax.url = '/availability/update/' + this.editId;
+                        this.$.ajax.contentType = "application/json";
+                        this.$.ajax.body = {
+                            hotel: this.hotel,
+                            notes: this.mynotes,
+                            availabilities: this.availabilities,
+                            date: monthly + "," + year,
+                            type: types,
+                            month: {
+                                month: monthly,
+                                yearly: year,
+                            },
+                            created_by: this.created_by,
+                            updated_by: this.updated_by,
+                        };
+                        this.$.ajax.generateRequest();
+                        this.$.availabilitySave.opened = false;
+                        this.$.successUpdate.opened = e;
+                        this.availabilities = [];
+                    } else {
+                        var types = [];
+                        this.roomType.forEach(element => {
+                            types.push(element);
+                        });
+                        var year = this.yer;
+                        var monthly = this.mot;
+                        this.method = 'POST';
+                        this.$.ajax.url = '/availability/add';
+                        this.$.ajax.contentType = "application/json";
+                        this.$.ajax.body = {
+                            hotel: this.hotel,
+                            notes: this.mynotes,
+                            availabilities: this.availabilities,
+                            date: monthly + "," + year,
+                            type: types,
+                            month: {
+                                month: monthly,
+                                yearly: year,
+                            },
+                            created_by: this.created_by,
+                            updated_by: this.updated_by,
+                        };
+                        this.$.ajax.generateRequest();
+                        this.$.availabilitySave.opened = false;
+                        this.$.successUpdate.opened = e;
+                        this.availabilities = [];
+                    }
 
-                this._nextDates(date, monthNames[currentMonths.getMonth()], currentMonths.getFullYear(), currentMonths.getMonth());
-                var mon = this._selectMonth(months);
-                this.mot = months;
-                this.yer = years;
-                this.days = dayToday;
-                // console.log(this.days);
-                // var dateToday = nameofDays[currentMonths.getDay()];
-                // var day = this._selectDays(dateToday);
-                // console.log(day);
-                // var doc = parser.parseFromString(this.room1, "text/html")
+                }
+            },
+            _update() {
+                this._saveToDB(true);
             },
             _availabilityLoaded(data) {
                 if (this.editKey) {
                     if (this.url === '/availability/readEdit/' + this.editKey) {
                         this.hotel = data.detail.response.data.hotel;
-                        this.notes = data.detail.response.data.notes;
-                        this.room1 = data.detail.response.data.room1;
-                        this.room2 = data.detail.response.data.room2;
-                        this.room3 = data.detail.response.data.room3;
-                        //this.room2 = data.detail.response.data.room2;
-                        // console.log(this.room1);
+                        this.date = data.detail.response.data.date;
+                        this.mynotes = data.detail.response.data.notes;
+                        this.monthly = data.detail.response.data.month.month;
+                        this.yearly = data.detail.response.data.month.yearly;
                         this.createdAt = data.detail.response.data.createdAt;
                         this.updatedAt = data.detail.response.data.updatedAt;
                         this.created_by = data.detail.response.data.created_by;
                         this.updated_by = data.detail.response.data.updated_by;
+                        var data1 = data.detail.response.data.availability;
+                        this.roomType = data.detail.response.data.type;
 
-                        var html1 = this.room1;
-                        var html2 = this.room2;
-                        var html3 = this.room3;
-                        var table1 = Polymer.dom(this.root).querySelector("#room1");
-                        var table2 = Polymer.dom(this.root).querySelector("#room2");
-                        var table3 = Polymer.dom(this.root).querySelector("#room3");
-                        while (table1.hasChildNodes()) {
-                            table1.removeChild(table1.lastChild);
-                        }
-                        while (table2.hasChildNodes()) {
-                            table2.removeChild(table2.lastChild);
-                        }
-                        while (table3.hasChildNodes()) {
-                            table3.removeChild(table3.lastChild);
-                        }
-                        var range1 = document.createRange();
-                        range1.selectNodeContents(table1);
-                        var frag1 = range1.createContextualFragment(html1);
-                        table1.append(frag1);
-
-                        var range2 = document.createRange();
-                        range2.selectNodeContents(table2);
-                        var frag2 = range2.createContextualFragment(html2);
-                        table2.append(frag2);
-
-                        var range3 = document.createRange();
-                        range3.selectNodeContents(table3);
-                        var frag3 = range3.createContextualFragment(html3);
-                        table3.append(frag3);
-                        // console.log(table);
+                        var year = parseInt(this.yearly);
+                        var month = parseInt(this.monthly);
+                        var currentMonthly = new Date(year, month)
+                        var months = currentMonthly.getMonth();
+                        var years = currentMonthly.getFullYear();
+                        var dayToday = currentMonthly.getDay();
+                        var daynow = this._selectDays(dayToday);
+                        var mon = this._selectMonth(months);
+                        this.mot = months;
+                        this.yer = years;
+                        this.month = mon + " " + years;
+                        var date = new Date(years, months + 1, 0).getDate();
+                        this._nextDates(date, mon, years, months, data1);
+                        this.availabilities = data1;
                     }
+                    this.method = 'GET';
+                    this.$.ajax.url = '/availability/filter/' + this.hotel + "~" + this.mot + "~" + this.yer;
+                    this.$.ajax.handleAs = "json";
+                    this.$.ajax.generateRequest();
                 }
-            },
-            _limited() {
-                var cells = Polymer.dom(this.root).querySelectorAll("td");
-                for (var i = 0; i < cells.length; i++) {
-                    cells[i].addEventListener("click", function () {
-                        this.className = this.className == "white" ? "yellow" : "white";
-                    });
-                }
-            },
-            _available() {
-                var cells = Polymer.dom(this.root).querySelectorAll("td");
 
-                for (var i = 0; i < cells.length; i++) {
-                    cells[i].addEventListener("click", function () {
-                        this.className = this.className == "white" ? "green" : "white";
-                    });
-                }
+            },
+            _handleResponse(data) {
+                var availability = [];
+                var data = data.detail.response.data;
+                data.forEach(element => {
+                    this.editId = element._id;
+                    this.date = element.date;
+                    this.availabilityItem = element.availability;
+                    this.mynotes = element.notes;
+                    var monthnow = element.month.month;
+                    var yeartoday = element.month.yearly;
+                    var year = parseInt(yeartoday);
+                    var month = parseInt(monthnow);
+                    var currentMonthly = new Date(year, month)
+                    var months = currentMonthly.getMonth();
+                    var years = currentMonthly.getFullYear();
+                    var dayToday = currentMonthly.getDay();
+                    var daynow = this._selectDays(dayToday);
+                    var mon = this._selectMonth(months);
+                    this.mot = months;
+                    this.yer = years;
+                    this.month = mon + " " + years;
+                    element.availability.forEach(el => {
+                        availability.push(el);
+                    })
+                });
+                var mon = this._selectMonth(this.mot);
+                var date = new Date(this.yer, this.mot + 1, 0).getDate();
+                this._nextDates(date, mon, this.yer, this.mot, availability);
+                this.availabilities = availability;
             },
             _preMonth() {
                 if (this.mot < 1) {
@@ -505,9 +603,8 @@
                     this.month = m + " " + y;
                     var date = new Date(y, x + 1, 0).getDate();
                     this._nextDates(date, m, y, x)
-                    // console.log(date);
-
                 } else {
+                    var y = this.yer;
                     var x = this.mot - 1;
                     var m = this._selectMonth(x);
                     this.mot = x;
@@ -515,6 +612,21 @@
                     var date = new Date(this.yer, x + 1, 0).getDate();
                     this._nextDates(date, m, this.yer, x)
                 }
+                this.prevmonth = this.mot;
+                this.prevyear = y;
+                this.mynotes = "";
+                // if (this.availabilities.length > 0) {
+                //     this._saveToDB(false);
+                // }
+                this.method = 'GET';
+                this.$.ajax.url = '/availability/filter/' + this.hotel + "~" + this.mot + "~" + this.yer;
+                this.$.ajax.handleAs = "json";
+                this.$.ajax.generateRequest();
+
+                // next = Polymer.dom(this.root).querySelector("#next").disabled = false;
+                var close = Polymer.dom(this.root).querySelector("#close").checked = false;
+                var limited = Polymer.dom(this.root).querySelector("#limited").checked = false;
+                var available = Polymer.dom(this.root).querySelector("#available").checked = false;
             },
             _nextMonth() {
                 if (this.mot > 10) {
@@ -535,65 +647,68 @@
                     var date = new Date(this.yer, x + 1, 0).getDate();
                     this._nextDates(date, m, this.yer, x)
                 }
+                // if (this.availabilities.length > 0) {
+                //     this._saveToDB(false);
+                // }
+                this.prevmonth = this.mot;
+                this.prevyear = y;
+                this.mynotes = "";
+
+                this.method = 'GET';
+                this.$.ajax.url = '/availability/filter/' + this.hotel + "~" + this.mot + "~" + this.yer;
+                this.$.ajax.handleAs = "json";
+                this.$.ajax.generateRequest();
+
+                // this.$.saveNext.opened = true;
+                var close = Polymer.dom(this.root).querySelector("#close").checked = false;
+                var limited = Polymer.dom(this.root).querySelector("#limited").checked = false;
+                var available = Polymer.dom(this.root).querySelector("#available").checked = false;
+                
             },
-            _nextDates(numDays, months, years, daysWeek) {
-                var headMonths = Polymer.dom(this.root).querySelector('#headDays');
-                var weekdays = Polymer.dom(this.root).querySelector('#Weekdays');
-                var room1 = Polymer.dom(this.root).querySelector("#room1");
-                var room2 = Polymer.dom(this.root).querySelector("#room2");
-                var room3 = Polymer.dom(this.root).querySelector("#room3");
-
-                while (headMonths.hasChildNodes()) {
-                    headMonths.removeChild(headMonths.lastChild);
+            _nextDates(numDays, months, years, daysWeek, data) {
+                // console.log(data);
+                var table = Polymer.dom(this.root).querySelector('#hotels');
+                while (table.hasChildNodes()) {
+                    table.removeChild(table.lastChild);
                 }
-                while (weekdays.hasChildNodes()) {
-                    weekdays.removeChild(weekdays.lastChild);
-                }
-                while (room1.hasChildNodes()) {
-                    room1.removeChild(room1.lastChild);
-                }
-                while (room2.hasChildNodes()) {
-                    room2.removeChild(room2.lastChild);
-                }
-                while (room3.hasChildNodes()) {
-                    room3.removeChild(room3.lastChild);
-                }
+                //for months date
+                this.updateDate = months;
+                var tr1 = document.createElement('tr');
+                var th1 = document.createElement('th');
+                var t1 = document.createTextNode(months + " " + years);
+                th1.append(t1);
+                tr1.append(th1);
+                table.append(tr1);
+                //for weeks name
+                var tr2 = document.createElement('tr');
+                var th2 = document.createElement('td');
+                var t2 = document.createTextNode("Rooms");
+                th2.append(t2);
+                tr2.append(th2);
+                table.append(tr2);
 
-                var th = document.createElement('th');
-                var t = document.createTextNode(months + " " + years);
-                th.append(t);
-                headMonths.append(th);
+                this.roomType.forEach(element => {
+                    var tr3 = document.createElement('tr');
+                    var th3 = document.createElement('td');
+                    var datas = element.split(" ").join("");
+                    var tdTxt = document.createTextNode(datas);
+                    tr3.setAttribute('id', datas);
+                    th3.append(tdTxt);
+                    tr3.append(th3);
+                    table.append(tr3);
 
-                var throoms = document.createElement('td');
-                var t = document.createTextNode("Rooms");
-                throoms.append(t);
-                weekdays.append(throoms);
-
-                var tdroom1 = document.createElement('td');
-                var td = document.createTextNode("Deluxe");
-                tdroom1.append(td);
-                room1.append(tdroom1);
-
-                var tdroom2 = document.createElement('td');
-                var td = document.createTextNode("Superior");
-                tdroom2.append(td);
-                room2.append(tdroom2);
-
-                var tdroom3 = document.createElement('td');
-                var td1 = document.createTextNode("Standard");
-                tdroom3.append(td1);
-                room3.append(tdroom3);
-
+                    for (i = 1; i < numDays + 1; ++i) {
+                        var tdBlank = document.createElement('td');
+                        tdBlank.setAttribute('id', datas + "_" + i);
+                        tr3.append(tdBlank);
+                    }
+                });
                 for (i = 1; i < numDays + 1; ++i) {
-                    var td1 = document.createElement('td');
-                    room1.append(td1);
-
-                    var td2 = document.createElement('td');
-                    room2.append(td2);
-
-                    var td3 = document.createElement('td');
-                    room3.append(td3);
-                    //week
+                    var th = document.createElement('th');
+                    var td = document.createTextNode(i);
+                    th.append(td);
+                    tr1.append(th);
+                    //weeks
                     var thweek = document.createElement('td');
                     var date = new Date(years, daysWeek, i)
                     var x = date.getDay();
@@ -602,19 +717,25 @@
                         var tdays = document.createTextNode(now);
                         thweek.setAttribute("style", "color:red");
                         thweek.append(tdays);
-                        weekdays.append(thweek);
+                        tr2.append(thweek);
                     }
                     else {
                         var tdays = document.createTextNode(now);
-                        // thweek.setAttribute("style", "color:red");
                         thweek.append(tdays);
-                        weekdays.append(thweek);
+                        tr2.append(thweek);
                     }
-                    //num of days in month
-                    var thMonths = document.createElement('th');
-                    var tmonths = document.createTextNode(i);
-                    thMonths.append(tmonths);
-                    headMonths.append(thMonths);
+                }
+                if (!data) {
+
+                }
+                else {
+                    data.forEach(element => {
+                        var roomdata = element.room.split(" ").join("");
+                        var tr = Polymer.dom(this.root).querySelector("#" + roomdata);
+                        var id = roomdata + "_" + element.date;
+                        var cells = Polymer.dom(this.root).querySelector("#" + id);
+                        cells.setAttribute('class', element.classColor);
+                    });
                 }
             },
             _selectMonth(e) {
@@ -642,7 +763,6 @@
                     this.url = '/availability/dummy';
                 }
             },
-            _handleResponse() { },
             _timeStampToDateTime(ts) {
                 return new Date(ts);
             },

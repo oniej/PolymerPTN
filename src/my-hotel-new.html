@@ -11,7 +11,6 @@
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/paper-menu-button/paper-menu-button.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
-<link rel="import" href="../bower_components/polymerfire/firebase-query.html">
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
@@ -119,7 +118,7 @@
 
                     <vaadin-dialog id="successModal" no-close-on-esc no-close-on-outside-click>
                         <template>
-                            <h3 style="text-align: center">Successfully Added.</h3>
+                            <h3 style="text-align: center">Successfully Added {{hotel}}.</h3>
                             <hr>
                             <paper-button on-tap="_ok" style="float: right">Ok</paper-button>
                         </template>
@@ -127,18 +126,14 @@
                 </app-header>
 
                 <div class="docu">
-                    <div class="docu-header">
-                        <div>
-                            <iron-icon id="iconcreated" icon="my-icons:flag" style="color:gray;"></iron-icon>
-                            <span id="created">Created by:</span> Peter Pedro
-                        </div>
+                    <!-- <div class="docu-header"> -->
+                    <div>
+                        <iron-icon id="iconcreated" icon="my-icons:flag" style="color:gray;"></iron-icon>
+                        <span id="created">Created by:</span> Peter Pedro
                     </div>
-                    <div class="details" id="form">
-                        <paper-input value="{{hotel}}" float-label label="Hotel" autofocus></paper-input>
-                        <paper-input value="{{room1}}" float-label label="Room" id="room"></paper-input>
-                        <paper-input value="{{room2}}" float-label label="Room" id="room"></paper-input>
-                        <paper-input value="{{room3}}" float-label label="Room" id="room"></paper-input>
-                        <span id="writeHere"></span>
+                    <!-- </div> -->
+                    <div id="writeHere">
+                        <paper-input value="{{hotel}}" always-float-label label="Hotel" autofocus></paper-input>
                     </div>
                     <div>
                         <span>
@@ -176,25 +171,47 @@
                 updated_by: {
                     type: String,
                     value: 'Ardie Derrayal'
+                },
+                rooms: {
+                    type: Array,
+                    value: [1, 2, 3]
+                },
+                lastRoom: {
+                    type: Number,
+                    value: 3
                 }
             },
             _openField() {
-                var node = Polymer.dom(this.root).querySelector("#writeHere").innerHTML += '<span> <paper-input float-label label="Room" id="room"></paper-input></span>\r\n';
+                var roomNumber = this.lastRoom + 1;
+                this.lastRoom = roomNumber;
+                this.rooms.push(roomNumber);
+                var div = Polymer.dom(this.root).querySelector("#writeHere");
+                var paperInput = document.createElement('paper-input');
+                paperInput.setAttribute('id', "room" + roomNumber);
+                paperInput.setAttribute("label", "Room " + roomNumber);
+                paperInput.setAttribute("always-float-label", true);
+                div.append(paperInput);
             },
             _submit() {
-                // for (var i = 0; i < 5000; i++) {
-                if (!this.hotel || !this.room1) {
-                    this.msg = "All fields required";
-                } else {
+                var rooms = [];
+                this.rooms.forEach(element => {
+                    var data = Polymer.dom(this.root).querySelector("#room" + element).value;
+                    if (data) {
+                        rooms.push(data);
+                    }
+                });
+
+                if (!this.hotel) {
+                    this.msg = "Hotel field required";
+                }
+                else {
                     // for (var i = 0; i < 4; i++) {
                     this.method = 'POST';
                     this.$.ajax.url = '/hotel/add';
                     this.$.ajax.contentType = "application/json";
                     this.$.ajax.body = {
                         hotel: this.hotel,
-                        room1: this.room1,
-                        room2: this.room2,
-                        room3: this.room3,
+                        room: rooms,
                         created_by: this.created_by,
                         updated_by: this.updated_by,
 
@@ -202,8 +219,20 @@
                     this.$.ajax.generateRequest();
                     this.$.successModal.opened = true;
                     this.url = '';
-                    // }
                 }
+
+                function verify(rooms) {
+                    var x = true;
+                    rooms.forEach(element => {
+                        console.log(element);
+                        if (element === '') {
+                            x = false;
+                        }
+                    });
+
+                    return x;
+                }
+
             },
             _ok() {
                 this.$.successModal.opened = false;
@@ -212,9 +241,17 @@
             toggleDrawer() { },
             _cancel() { },
             ready() {
-                this.fullname = "";
-                this.room = "";
+                // this.fullname = "";
+                // this.room = "";
                 this.msg = "";
+                var div = Polymer.dom(this.root).querySelector("#writeHere");
+                this.rooms.forEach(element => {
+                    var paperInput = document.createElement('paper-input');
+                    paperInput.setAttribute('id', "room" + element);
+                    paperInput.setAttribute("label", "Room " + element);
+                    paperInput.setAttribute("always-float-label", true);
+                    div.append(paperInput);
+                });
             },
             _handleResponse() { }
         })

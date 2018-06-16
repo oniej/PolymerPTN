@@ -84,24 +84,7 @@
                 #Notes {
                     display: none;
                 }
-
-                div .allocation {
-
-                    opacity: 0;
-
-                    -webkit-animation: fadeIn ease-in 1;
-                    -moz-animation: fadeIn ease-in 1;
-                    animation: fadeIn ease-in 1;
-
-                    -webkit-animation-fill-mode: forwards;
-                    -moz-animation-fill-mode: forwards;
-                    animation-fill-mode: forwards;
-
-                    -webkit-animation-duration: 0.5s;
-                    -moz-animation-duration: 0.5s;
-                    animation-duration: 0.5s;
-                }
-            }
+            } 
 
             @media (min-width: 768px) {
                 paper-checkbox {
@@ -125,47 +108,12 @@
                 }
 
             }
-
-            div .card {
-
-                opacity: 0;
-
-                -webkit-animation: fadeIn ease-in 1;
-                -moz-animation: fadeIn ease-in 1;
-                animation: fadeIn ease-in 1;
-
-                -webkit-animation-fill-mode: forwards;
-                -moz-animation-fill-mode: forwards;
-                animation-fill-mode: forwards;
-
-                -webkit-animation-duration: 0.5s;
-                -moz-animation-duration: 0.5s;
-                animation-duration: 0.5s;
-            }
-
-            #hotels {
-                font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-                border-collapse: collapse;
-                width: 100%;
-            }
-
-            #hotels td,
-            #hotels th {
-                text-align: center;
-                border: 1px solid #ddd;
-                padding: 2px;
-            }
-
-            #hotels th {
-                padding-top: 12px;
-                padding-bottom: 12px;
-            }
-
             paper-fab.blue {
                 position: fixed;
                 bottom: 32px;
                 right: 32px;
-                background-color: #3F51B5;
+                --paper-fab-background: darkorange;
+                --paper-fab-keyboard-focus-background: darkorange;
             }
 
             app-header {
@@ -215,7 +163,7 @@
                 height: 1px;
             }
 
-            @-webkit-keyframes fadeIn {
+            /* @-webkit-keyframes fadeIn {
                 from {
                     opacity: 0;
                 }
@@ -240,7 +188,7 @@
                 to {
                     opacity: 1;
                 }
-            }
+            } */
         </style>
         <custom-style>
             <style is="custom-style">

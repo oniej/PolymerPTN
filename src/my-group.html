@@ -1,0 +1,249 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../bower_components/iron-scroll-threshold/iron-scroll-threshold.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/vaadin-dialog/vaadin-dialog.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/salte-dialog/salte-dialog.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+
+
+<link rel="import" href="time-element.html">
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="my-icons.html">
+
+<dom-module id="my-group">
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+
+                padding: 10px;
+            }
+
+            @media (max-width: 768px) {
+                div .availability {
+                    margin: 16px;
+                    /* margin-top: 16px; */
+                    display: flex;
+                    /* height: 100vh; */
+                    flex-direction: column;
+                    border-radius: 3px;
+                    /* box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2); */
+                }
+                paper-search-bar {
+                    margin-left: 80px;
+                    width: 50%;
+                    color: black;
+                }
+            }
+
+            @media (min-width: 768px) {
+                div .availability {
+                    width: 765px;
+                    margin: 16px auto;
+                    /* margin-bottom: 1000px; */
+                    /* height: 100vh; */
+                    border-radius: 3px;
+
+                    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+                }
+                paper-search-bar {
+                    margin-left: 50px;
+                    width: 50%;
+                    color: black;
+                }
+            }
+
+            paper-fab.blue {
+                position: fixed;
+                bottom: 32px;
+                right: 32px;
+
+            }
+
+            app-header {
+                color: rgb(255, 255, 255);
+                background-color: darkorange;
+                /* background-color: var(--paper-indigo-500); */
+                /* background-color: #388E3C; */
+            }
+
+            paper-icon-button.delete {
+                color: rgb(233, 79, 164);
+            }
+
+            paper-icon-button.edit {
+                color: rgb(233, 79, 164);
+            }
+
+            paper-icon-button.edit {
+                color: rgb(233, 79, 164);
+            }
+        </style>
+        <custom-style>
+            <style is="custom-style">
+                paper-fab.blue {
+                    /* --paper-fab-background: var(--paper-indigo-500); */
+                    --paper-fab-background: darkorange;
+                    --paper-fab-keyboard-focus-background: var(--paper-light-blue-900);
+                }
+            </style>
+        </custom-style>
+        <!-- <iron-ajax auto url="{{urlInqury}}" params='{}' handle-as="json" on-response="_inquiryLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax> -->
+        <iron-pages selected="[[route.path]]" attr-for-selected="name" fallback-selection="view404" role="main">
+            <div name="">
+                <app-header-layout fullbleed has-scrolling-region>
+                    <app-header fixed slot="header">
+                        <app-toolbar>
+                            <paper-icon-button class="menu" icon="my-icons:menu" drawer-toggle on-tap="toggleDrawer"></paper-icon-button>
+                            <div main-title>Group</div>
+                        </app-toolbar>
+                    </app-header>
+                    <iron-scroll-document id="threshold">
+                        <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_groupsLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
+                        <template is="dom-repeat" items="[[groups]]" as="item">
+                            <div class="item" id="{{item._id}}" on-tap="_editGroup">
+                                <iron-image class="avatar" sizing="contain" src="../images/user.png"></iron-image>
+                                <div class="pad" id="{{item._id}}">
+                                    <div id="{{item._id}}" class="primary">[[item.group]]</div>
+                                </div>
+                                <paper-icon-button id="{{item._id}}" noink on-tap="_editUsers" data-args="{{item._id}}" icon="my-icons:edit" alt="{{item._id}}"
+                                    style="float: right; margin-top:-10px; margin-right:-10px;color: black;"></paper-icon-button>
+                            </div>
+                        </template>
+                    </iron-scroll-document>
+                </app-header-layout>
+                <paper-fab noink on-tap="_addNew" icon="my-icons:person-add" class="blue"></paper-fab>
+        </iron-pages>
+        <salte-dialog id="addGroup">
+            <h2 id="add">Add Group</h2>
+            <h2 id="edit" style="display: none">Edit Group</h2>
+            <h2>
+                <paper-icon-button id="delete" style="display: none" class="menu" icon="my-icons:delete-forever" on-tap="_openDelete"></paper-icon-button>
+            </h2>
+            <span>
+                <paper-input always-float-label label="Group" value="{{group}}" auto-focus></paper-input>
+            </span>
+            <div class="buttons">
+                <paper-button dialog-dismiss>Cancel</paper-button>
+                <paper-button dialog-confirm on-tap="_saveGroup" id="submit">Submit</paper-button>
+            </div>
+        </salte-dialog>
+        <vaadin-dialog id="successAdd" no-close-on-esc no-close-on-outside-click>
+            <template>
+                <h3 id="addSuccess" style="text-align: center">Success</h3>
+                <hr>
+                <paper-button on-tap="_closeModal" style="float: right">Ok</paper-button>
+            </template>
+        </vaadin-dialog>
+        <vaadin-dialog id="groupDelete" no-close-on-esc no-close-on-outside-click>
+            <template>
+                <h3 style="text-align: center">Confirm to delete "{{group}}"?
+                    <hr>
+                    <span style="float: right">
+                        <paper-button on-tap="_delete" style="color: red">Yes</paper-button>
+                        <paper-button on-tap="_closeModal">No</paper-button>
+                    </span>
+            </template>
+        </vaadin-dialog>
+        <iron-ajax verbose id="ajax" method="[[method]]" on-response="_handleResponse"></iron-ajax>
+
+    </template>
+
+    <script>
+        Polymer({
+            is: 'my-group',
+            properties: {
+                editKey: String
+            },
+            ready() {
+                this.url = '/group/read';
+            },
+            // _openDelete() {
+            //     this.$.groupDelete.opened = true;
+            // },
+            _closeModal() {
+                this.$.successAdd.opened = false;
+                window.location.assign('/group');
+            },
+            _addNew() {
+                this.$.addGroup.opened = true;
+            },
+            // _delete() {
+            //     this.method = 'DELETE';
+            //     this.$.ajax.url = '/group/delete/' + this.editKey;
+            //     this.$.ajax.generateRequest();
+            //     this.$.groupDelete.opened = false;
+            //     this.$.successAdd.opened = true;
+
+            // },
+            _editGroup(e) {
+                var add = Polymer.dom(this.root).querySelector("#add").setAttribute("style", "display:none");
+                var edit = Polymer.dom(this.root).querySelector("#edit").setAttribute("style", "display:inline-block");
+                // var pasagdi = Polymer.dom(this.root).querySelector("#delete").setAttribute("style", "display:float-right");
+
+                var data_args = Polymer.dom(e).rootTarget.getAttribute("id");
+                this.$.addGroup.opened = true;
+                this.editKey = data_args;
+                this.method = 'GET';
+                this.$.ajax.url = '/group/readMe/' + this.editKey;
+                this.$.ajax.contentType = "application/json";
+                this.$.ajax.generateRequest();
+            },
+
+            _groupsLoaded(data) {
+                this.groups = data.detail.response.data;
+            },
+            _handleResponse(data) {
+                this.group = data.detail.response.data.group;
+            },
+            _saveGroup() {
+                if (this.editKey) {
+                    this.method = 'PUT';
+                    this.$.ajax.url = '/group/update/' + this.editKey;
+                    this.$.ajax.contentType = "application/json";
+                    this.$.ajax.body = {
+                        group: this.group
+                    };
+                    this.$.ajax.generateRequest();
+                    this.$.successAdd.opened = true;
+                    this.url = '';
+                } else {
+                    this.method = 'POST';
+                    this.$.ajax.url = '/group/add';
+                    this.$.ajax.contentType = "application/json";
+                    this.$.ajax.body = {
+                        group: this.group
+                    };
+                    this.$.ajax.generateRequest();
+                    this.$.successAdd.opened = true;
+                    this.url = '';
+                }
+            },
+            toggleDrawer() {
+                this.dispatchEvent(new CustomEvent('toggleDrawer', {
+                    bubbles: true, composed: true, detail: {
+                        narrow: this.$.narrow
+                    }
+                }));
+                this.$.narrow = !this.$.narrow;
+            },
+        });
+    </script>
+</dom-module>

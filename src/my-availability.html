@@ -7,40 +7,20 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
-<link rel="import" href="../bower_components/polymerfire/firebase-document.html">
-<link rel="import" href="../bower_components/polymerfire/firebase-messaging.html">
-<link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
-<link rel="import" href="../bower_components/polymerfire/firebase-query.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
-<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
-<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
-<link rel="import" href="../bower_components/paper-button-group/paper-button-group.html">
-<link rel="import" href="../bower_components/paper-buttons-group/paper-buttons-group.html">
-<link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/neon-animation/web-animations.html">
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
-<link rel="import" href="../bower_components/paper-item/paper-icon-item.html">
 <link rel="import" href="../bower_components/paper-item/paper-item-body.html">
-<link rel="import" href="../bower_components/paper-menu-button/paper-menu-button.html">
-<link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="../bower_components/iron-list/iron-list.html">
 <link rel="import" href="../bower_components/iron-scroll-threshold/iron-scroll-threshold.html">
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
-<link rel="import" href="../bower_components/datetime-picker/date-picker.html">
-<link rel="import" href="../bower_components/pf-calendar/pf-calendar.html">
-<link rel="import" href="../bower_components/pf-calendar-events/pf-calendar-events.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
-
-<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
-<link rel="import" href="../bower_components/paper-radio-button/paper-radio-button.html">
-<link rel="import" href="../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 
 <link rel="import" href="time-element.html">
@@ -52,7 +32,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/neon-animation/neon-animations.html">
 <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
 <link rel="import" href="search-bar.html">
-<dom-module id="my-availability">
+<dom-module id="my-availability">s
     <template>
         <style include="shared-styles">
             :host {
@@ -60,33 +40,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 margin: 0;
                 display: flex;
                 flex-direction: column;
-            }
-
-            @-webkit-keyframes fadeIn {
-                from {
-                    opacity: 0;
-                }
-                to {
-                    opacity: 1;
-                }
-            }
-
-            @-moz-keyframes fadeIn {
-                from {
-                    opacity: 0;
-                }
-                to {
-                    opacity: 1;
-                }
-            }
-
-            @keyframes fadeIn {
-                from {
-                    opacity: 0;
-                }
-                to {
-                    opacity: 1;
-                }
             }
 
             @media (max-width: 768px) {
@@ -97,18 +50,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     /* height: 100vh; */
                     flex-direction: column;
                     border-radius: 3px;
-                    /* box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2); */
-                    /* -webkit-animation: fadeIn ease-in 1;
-                    -moz-animation: fadeIn ease-in 1;
-                    animation: fadeIn ease-in 1;
-
-                    -webkit-animation-fill-mode: forwards;
-                    -moz-animation-fill-mode: forwards;
-                    animation-fill-mode: forwards;
-
-                    -webkit-animation-duration: 0.5s;
-                    -moz-animation-duration: 0.5s;
-                    animation-duration: 0.5s; */
                 }
                 paper-search-bar {
                     margin-left: 80px;
@@ -126,18 +67,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     border-radius: 3px;
 
                     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-
-                    /* -webkit-animation: fadeIn ease-in 1;
-                    -moz-animation: fadeIn ease-in 1;
-                    animation: fadeIn ease-in 1;
-
-                    -webkit-animation-fill-mode: forwards;
-                    -moz-animation-fill-mode: forwards;
-                    animation-fill-mode: forwards;
-
-                    -webkit-animation-duration: 0.5s;
-                    -moz-animation-duration: 0.5s;
-                    animation-duration: 0.5s; */
                 }
                 paper-search-bar {
                     margin-left: 50px;
@@ -156,8 +85,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             app-header {
                 color: rgb(255, 255, 255);
                 background-color: darkorange;
-                /* background-color: var(--paper-indigo-500); */
-                /* background-color: #388E3C; */
             }
 
             #tool1 {
@@ -277,7 +204,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_availabilityLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
                         <template is="dom-repeat" items="[[availabilities]]" as="item">
                             <div class="availability">
-                                <div id="header" class="header" style="background-color:cornflowerblue; padding: 16px; padding-bottom: 5px; font-size: 14px;">
+                                <div id="{{item._id}}" class="header" style="background-color:cornflowerblue; padding: 16px; padding-bottom: 5px; font-size: 11px;">
                                     <a href="/availability/edit/{{item._id}}">
                                         <paper-icon-button id="{{item._id}}" noink on-tap="_editAvailavility" data-args="{{item._id}}" icon="my-icons:edit" alt="{{item._id}}"
                                             style="float: right; margin-top:-10px; margin-right:-10px;color: white;"></paper-icon-button>
@@ -298,20 +225,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                     </div>
                                 </div>
                                 <div style="padding: 16px; background-color: white;">
-                                    <div style="margin-top: 5px;">
+                                    <div id="{{item._id}}" style="margin-top: 5px;">
                                         <iron-icon icon="my-icons:location-city" id="date" style="color: gray; margin-top: -10px"></iron-icon>
                                         <span id="type" style="font-size: 24px;">
                                             [[item.hotel]]
                                         </span>
                                     </div>
-                                    <!-- [[item.room1]] -->
                                     <div style="margin-top: 12px; font-size: 14px;">
                                         <iron-icon icon="my-icons:speaker-notes" id="date" style="color: gray"></iron-icon>
-                                        <span id="type" style="color:gray;font-size: 14px; ">
+                                        <span id="type" style="color:gray;font-size: 11px; ">
                                             [[item.notes]]
                                         </span>
                                     </div>
-
                                 </div>
                             </div>
                         </template>
@@ -331,7 +256,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <div hidden$="{{!editActive}}">
             <div id="availedit"></div>
+            <!-- <template is="dom-if" if="{{editActive}}" restamp> -->
             <my-availability-edit id="d24" edit-key='{{editData._id}}' prev-route="{{route.prefix}}"></my-availability-edit>
+            <!-- </template> -->
         </div>
 
         <iron-ajax verbose id="ajax" method="[[method]]" on-response="_handleResponse"></iron-ajax>
@@ -347,6 +274,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 data: Object,
                 year: Number,
                 monthly: String,
+                sameHotel: String,
                 openSearch: {
                     type: Boolean,
                     value: false,
@@ -362,12 +290,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 },
                 observers: [
                     '_searchChanged(filterBy, search)',]
-                // isMousedown: { type: Boolean, value: false, }
             },
-
             toggleSearch() {
                 this.openSearch = true;
-
             },
             toggleReturn() {
                 this.openSearch = false;
@@ -381,15 +306,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     if (g == 0) {
                         if (e) {
                             // this.url = '/availability/search';
+                            // console.log(this.url);
                         }
                     }
                 }
             },
+            ready() {
+                this.url = '/availability/read';
+            },
             _availabilityLoaded(data) {
                 if (this.url === '/availability/read') {
-                    this.availabilities = data.detail.response.data;
-                    // console.log(this.hotels);
+                    var datas = data.detail.response.data;
+                    function printUniqueResults(arrayOfdatas, hotel) {
+                        return arrayOfdatas.filter((item, index, array) => {
+                            return array.map((mapItem) => mapItem[hotel]).indexOf(item[hotel]) === index
+                        })
+                    }
+                    var result = printUniqueResults(datas, 'hotel')
+                    this.availabilities = result;
                 }
+            },
+            _closeDialog() {
+                this.$.availabilitySave.opened = false;
             },
             _availnew() {
                 var node = Polymer.dom(this.root).querySelector("#availnew");
@@ -397,13 +335,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     var oldDiv = Polymer.dom(node.parentNode).querySelector("#d23");
                     if (oldDiv) {
                         Polymer.dom(node.parentNode).removeChild(oldDiv);
-
                     }
                     var newDiv = document.createElement("my-availability-new");
                     newDiv.setAttribute("id", "d23");
                     newDiv.setAttribute("prev-route", this.route.prefix);
-                    // newDiv.setAttribute("block ", "3 ")
-                    //if open existing
                     var currentDiv = document.getElementById("availnew");
                     Polymer.dom(node.parentNode).insertBefore(newDiv, currentDiv);
                 }
@@ -420,9 +355,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     newDiv.setAttribute("id", "d24");
                     newDiv.setAttribute("edit-key", data_args);
                     newDiv.setAttribute("prev-route", this.route.prefix);
-                    // newDiv.setAttribute("block ", "3 ")
-                    //if open existing
-                    // console.log(newDiv);
                     var currentDiv = document.getElementById("availedit");
                     Polymer.dom(node.parentNode).insertBefore(newDiv, currentDiv);
                 }
@@ -434,13 +366,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     }
                 }));
                 this.$.narrow = !this.$.narrow;
-            },
-            ready() {
-                this.url = '/availability/read';
-                var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
-                var now = new Date();
-                var date = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-                // console.log(date);
             },
             _timeStampToDateTime(ts) {
                 return new Date(ts);

@@ -20,6 +20,13 @@ router.get('/readMe/:editkey', (req, res) => {
         return res.json({ success: true, data: hotels });
     });
 });
+router.get('/filter/:hotel', (req, res) => {
+    const hotel = req.params.hotel;
+    Hotels.findOne({ hotel: hotel }, (error, hotels) => {
+        if (error) return res.json({ success: false, error });
+        return res.json({ success: true, data: hotels });
+    });
+});
 
 router.get('/read', (req, res) => {
     Hotels.find((err, hotels) => {
@@ -31,8 +38,8 @@ router.get('/read', (req, res) => {
 router.post('/add', (req, res) => {
     const hotelAdd = new Hotels();
     // body parser lets us use the req.body
-    const { hotel, room1, room2, room3, created_by, updated_by } = req.body;
-    if (!hotel || !room1) {
+    const { hotel, room, created_by, updated_by } = req.body;
+    if (!hotel || !room) {
         // we should throw an error. we can do this check on the front end
         return res.json({
             success: false,
@@ -40,9 +47,7 @@ router.post('/add', (req, res) => {
         });
     }
     hotelAdd.hotel = hotel;
-    hotelAdd.room1 = room1;
-    hotelAdd.room2 = room2;
-    hotelAdd.room3 = room3;
+    hotelAdd.room = room;
     hotelAdd.created_by = created_by;
     hotelAdd.updated_by = updated_by;
     hotelAdd.save(err => {
@@ -57,11 +62,9 @@ router.put('/update/:editKey', (req, res) => {
     }
     Hotels.findById(editKey, (error, hotelinfo) => {
         if (error) return res.json({ success: false, error });
-        const { hotel, room1, room2, room3 } = req.body;
-        if (hotel) hotelinfo.hotel = hotel;
-        if (room1) hotelinfo.room1 = room1;
-        if (room2) hotelinfo.room2 = room2;
-        if (room3) hotelinfo.room3 = room3;
+        const { hotel, room, } = req.body;
+        hotelinfo.hotel = hotel;
+        hotelinfo.room = room;
         hotelinfo.save(error => {
             if (error) return res.json({ success: false, error });
             return res.json({ success: true });

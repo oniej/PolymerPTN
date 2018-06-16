@@ -18,7 +18,7 @@ const CommentController = require('./controllers/hotel');
 const UserController = require('./controllers/users');
 const AvailabilityController = require('./controllers/availability');
 const AllocationController = require('./controllers/allocation');
-
+const GroupController = require('./controllers/group');
 // set our port to either a predetermined port number if you have set it up, or 3001
 const API_PORT = process.env.PORT || 8080;
 
@@ -42,13 +42,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //   resave: false,
 //   saveUninitialized: false
 // }));
-app.use(expressSession({
-  secret: 'Die Hard',
-  resave: true,
-  saveUninitialized: false
-}));
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(expressSession({
+//   secret: 'Die Hard',
+//   resave: true,
+//   saveUninitialized: false
+// }));
+// app.use(passport.initialize());
+// app.use(passport.session());
 // passport.use(new localStrategy(User.authenticate()));
 // passport.serializeUser(User.serializeUser());
 // passport.deserializeUser(User.deserializeUser());
@@ -56,6 +56,7 @@ app.use('/availability', AvailabilityController);
 app.use('/allocation', AllocationController);
 app.use('/hotel', CommentController);
 app.use('/users', UserController);
+app.use('/group', GroupController);
 app.get('/api/launch', (req, res, next) => res.send('boom'));
 
 app.get('*', prpl.makeHandler('.', {

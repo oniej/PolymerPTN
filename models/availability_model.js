@@ -7,14 +7,16 @@ const AvailabilitySchema = new Schema({
     created_by: String,
     updated_by: String,
     notes: String,
-    room1: String,
-    // color: String,
-    room2: String,
-    room3: String,
-    date: String
-    // room4: String,
-    // room5: String,
-    // created_date: String,
+    numOfdays: String,
+    type: Array,
+    availability: Object,
+    date: String,
+    month: {
+        month: String,
+        yearly: String,
+        monthDay: String,
+    },
+    nameweeks: String,
 }, { timestamps: true });
 // export our module to use in server.js
 module.exports = mongoose.model('availability', AvailabilitySchema);

@@ -34,6 +34,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/pf-calendar-events/pf-calendar-events.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 
+<link rel="import" href="../bower_components/paper-dropdown-input/paper-dropdown-input.html">
 <link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../bower_components/paper-radio-button/paper-radio-button.html">
 <link rel="import" href="../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
@@ -63,34 +64,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 flex-direction: column;
             }
 
-
-            @-webkit-keyframes fadeIn {
-                from {
-                    opacity: 0;
-                }
-                to {
-                    opacity: 1;
-                }
-            }
-
-            @-moz-keyframes fadeIn {
-                from {
-                    opacity: 0;
-                }
-                to {
-                    opacity: 1;
-                }
-            }
-
-            @keyframes fadeIn {
-                from {
-                    opacity: 0;
-                }
-                to {
-                    opacity: 1;
-                }
-            }
-
             @media (max-width: 768px) {
                 div .availability {
                     margin: 16px;
@@ -99,18 +72,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     /* height: 100vh; */
                     flex-direction: column;
                     border-radius: 3px;
-                    /* box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2); */
-                    /* -webkit-animation: fadeIn ease-in 1;
-                    -moz-animation: fadeIn ease-in 1;
-                    animation: fadeIn ease-in 1;
-
-                    -webkit-animation-fill-mode: forwards;
-                    -moz-animation-fill-mode: forwards;
-                    animation-fill-mode: forwards;
-
-                    -webkit-animation-duration: 0.5s;
-                    -moz-animation-duration: 0.5s;
-                    animation-duration: 0.5s; */
                 }
                 paper-search-bar {
                     margin-left: 80px;
@@ -128,18 +89,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     border-radius: 3px;
 
                     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-
-                    /* -webkit-animation: fadeIn ease-in 1;
-           -moz-animation: fadeIn ease-in 1;
-          animation: fadeIn ease-in 1;
-
-          -webkit-animation-fill-mode: forwards;
-          -moz-animation-fill-mode: forwards;
-          animation-fill-mode: forwards;
-
-          -webkit-animation-duration: 0.5s;
-          -moz-animation-duration: 0.5s;
-          animation-duration: 0.5s; */
                 }
                 paper-search-bar {
                     margin-left: 50px;
@@ -262,30 +211,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <div name="">
                 <app-header-layout fullbleed has-scrolling-region>
                     <app-header fixed slot="header">
-                        <template is="dom-if" if="{{openSearch}}">
-                            <app-toolbar primary id="tool2">
-                                <paper-icon-button id="btn-arrow" icon="my-icons:arrow-back" drawer-toggle on-tap="toggleReturn"></paper-icon-button>
-                                <paper-search-bar id="search" query="{{search}}" disable-filter-button></paper-search-bar>
-                                <template is="dom-if" if="{{search}}">
-                                    <paper-icon-button id="btn-clear" icon="my-icons:close" drawer-toggle on-tap="toggleClear"></paper-icon-button>
-                                </template>
-                                <paper-menu-button id="btn-menu" horizontal-align="right">
-                                    <paper-icon-button slot="dropdown-trigger" icon="my-icons:tune"></paper-icon-button>
-                                    <paper-listbox style="cursor:pointer" slot="dropdown-content" selected="{{filterBy}}">
-                                        <paper-item style="display:none;">Filter By</paper-item>
-                                        <paper-item>Hotels</paper-item>
-                                        <paper-item>Rooms</paper-item>
-                                    </paper-listbox>
-                                </paper-menu-button>
-                            </app-toolbar>
-                        </template>
-                        <template is="dom-if" if="{{!openSearch}}">
-                            <app-toolbar primary id="tool1">
-                                <paper-icon-button class="menu" icon="my-icons:menu" drawer-toggle on-tap="toggleDrawer"></paper-icon-button>
-                                <div main-title>Hotels</div>
-                                <paper-icon-button class="menu" icon="my-icons:search" drawer-toggle on-tap="toggleSearch"></paper-icon-button>
-                            </app-toolbar>
-                        </template>
+                        <app-toolbar>
+                            <paper-icon-button class="menu" icon="my-icons:menu" drawer-toggle on-tap="toggleDrawer"></paper-icon-button>
+                            <div main-title>Hotels</div>
+                            <template is="dom-if" if="{{openSearch}}">
+                                <paper-dropdown-input label="Filter Hotel" items='[[hotelItems]]' filter-property="hotel" value="{{hotelId}}">
+                                    <template>
+                                        <template is="dom-repeat" items="[[items]]" as="item">
+                                            <paper-item>[[item.hotel]]</paper-item>
+                                        </template>
+                                    </template>
+                                </paper-dropdown-input>
+                                <paper-icon-button id="clear" class="menu" icon="my-icons:close" drawer-toggle on-tap="toggleReturn"></paper-icon-button>
+                            </template>
+                            <paper-icon-button id="search" class="menu" icon="my-icons:search" drawer-toggle on-tap="toggleSearch"></paper-icon-button>
+                        </app-toolbar>
                     </app-header>
 
                     <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_hotelsLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
@@ -294,37 +234,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             <div class="availability">
                                 <div id="header" class="header" style="background-color:cornflowerblue; padding: 16px; padding-bottom: 5px; font-size: 14px;">
                                     <div style="color: white;">
-                                        <a href="/hotels/edit/{{item._id}}">
-                                            <paper-icon-button style="float: right; margin-top:-10px; margin-right:-10px;color: white;" on-tap="_edithotel" icon="my-icons:edit"
-                                                alt="{{item._id}}"></paper-icon-button>
+                                        <a id="href" href="/hotels/edit/{{item._id}}">
+                                            <paper-icon-button id="{{item._id}}" noink on-tap="_editHotel" style="float: right; margin-top:-10px; margin-right:-10px;color: white;"
+                                                icon="my-icons:edit" alt="{{item._id}}"></paper-icon-button>
                                         </a>
                                         <iron-icon icon="my-icons:location-city" id="date" style="margin-top: -10px"></iron-icon>
-                                        <span id="type" style="font-size: 30px;">
+                                        <span id="type" style="font-size: 24px;">
                                             [[item.hotel]]
                                         </span>
                                     </div>
                                 </div>
                                 <div style="padding: 16px; background-color: white; font-size: 14px;">
                                     <div style="margin-top: 2px;">
-                                        <span style="color: gray; size: 12px;">
+                                        <span style="color: gray; size: 11px;">
                                             <iron-icon icon="my-icons:hotel" style="color: gray"></iron-icon> Rooms:</span>
                                     </div>
-                                    <div style="font-size: 16px;">
-                                        <span id="type" style="color:black; margin-left: 30px; ">
-                                            [[item.room1]]
-                                        </span>
-                                        <br>
-                                        <span id="type" style="color:black; margin-left: 30px; ">
-                                            [[item.room2]]
-                                        </span>
-                                        <br>
-                                        <span id="type" style="color:black; margin-left: 30px; ">
-                                            [[item.room3]]
-                                        </span>
-
+                                    <div>
+                                        <template is="dom-repeat" items="[[item.room]]" as="room">
+                                            <div id="type" style="color:black; margin-left: 30px; ">
+                                                [[room]]
+                                            </div>
+                                        </template>
                                     </div>
                                 </div>
-                                <div style="padding: 2px; background-color: white; font-size: 11px;">
+                                <div id="{{item._id}}" style="padding: 2px; background-color: white; font-size: 11px;">
                                     <hr>
                                     <div style="margin-top: 2px; margin-left: 5px;">
                                         <span style="color: gray">Created: &nbsp;
@@ -333,7 +266,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
                                         </span>
                                     </div>
-                                    <div style="margin-top: 2px; margin-left: 5px;">
+                                    <div id="{{item._id}}" style="margin-top: 2px; margin-left: 5px;">
                                         <span style="color: gray">Updated: &nbsp;
                                             <time-ago datetime$="{{_timeStampToDateTime(item.updatedAt)}}">{{_timeStampToDateTime(item.updatedAt)}}</time-ago>
                                             &nbsp;by&nbsp;[[item.updated_by]]
@@ -343,16 +276,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                 </div>
                             </div>
                         </template>
-
                     </iron-scroll-document>
-
-                    <paper-dialog id="openAdd">
-                        <h2>Confirm to Delete?</h2>
-                        <div class="buttons">
-                            <paper-button dialog-confirm on-tap="_delete">Yes</paper-button>
-                            <paper-button dialog-dismiss autofocus>No</paper-button>
-                        </div>
-                    </paper-dialog>
 
                 </app-header-layout>
                 <a href="/hotels/new" style="text-decoration: none; ">
@@ -363,26 +287,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <div id="hotelnew"></div>
                 <my-hotel-new id="d23" path=" " prev-route="{{route.prefix}}"></my-hotel-new>
             </div>
-
-            <!-- <div name="/edit">
-                <div id="hoteledit"></div>
-                <my-hotel-edit id="d24" edit-key='{{editData._id}}' prev-route="{{route.prefix}}"></my-hotel-edit>
-            </div> -->
-
             <div name="view404 ">Not found.</div>
         </iron-pages>
-        <!-- <template is="dom-if" if="{{notActive}}"> -->
-        <div hidden$="{{!editActive}}">
-            <div id="hoteledit"></div>
+
+        <!-- <div hidden$="{{!editActive}}"> -->
+        <template is="dom-if" if="{{editActive}}" restamp>
             <my-hotel-edit id="d24" edit-key='{{editData._id}}' prev-route="{{route.prefix}}"></my-hotel-edit>
-        </div>
+        </template>
+        <!-- </div> -->
 
         <div hidden$="{{!viewActive}}">
             <div id="hotelview"></div>
             <my-hotel-view id="d25" edit-key='{{viewData._id}}' prev-route="{{route.prefix}}"></my-hotel-view>
         </div>
-        <!-- </template> -->
-        <!-- <iron-ajax verbose id="ajax" method="[[method]]" on-response="_handleResponse"></iron-ajax> -->
     </template>
 
     <script>
@@ -391,6 +308,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             properties: {
                 route: Object,
                 routeData: Object,
+                hotelId: String,
                 data: Object,
                 openSearch: {
                     type: Boolean,
@@ -410,107 +328,59 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     value: 2
                 },
                 observers: [
-                    '_searchChanged(filterBy, search)',]
+                    '_hotelIdChanged(hotelId)',]
             },
             ready() {
-                //  super.ready();
                 this.url = '/hotel/read';
-                // console.log(this.url);
-            },
-            _handleResponse(e) {
-                this.url = '/hotel/read';
-                this.id = '';
-                this.hotel = '';
-                this.room = '';
-                this.method = '';
-                // console.log(this.hotel);
-
             },
             _hotelsLoaded(data) {
-                // console.log(data);
                 if (this.url === '/hotel/read') {
                     this.hotels = data.detail.response.data;
-                    // console.log(this.hotels);
+                    this.hotelItems = data.detail.response.data;
                 }
             },
             toggleSearch() {
                 this.openSearch = true;
+                var search = Polymer.dom(this.root).querySelector("#search").setAttribute("style", "display:none");
             },
             toggleReturn() {
                 this.openSearch = false;
-                this.search = '';
+                var search = Polymer.dom(this.root).querySelector("#search").setAttribute("style", "display:inline-block");
             },
-            toggleClear() {
-                this.search = '';
-            },
-            _searchChanged(p, r) {
-                // if (p) {
-                //     console.log(p);
-                //     if (p == 1) {
-                //         if (r) {
-                //             this.loadingData = 'hotel';
-                //         }
-
-                //         }
-                //     }
-
-            },
-            getClassForItem(item, selected) {
-                return selected ? 'item expanded' : 'item';
-            },
-            _getEditAppLink(e) {
-                return '/hotels/edit/' + e.toString();
+            _hotelIdChanged(e) {
+                console.log(this.hotelId);
             },
             _hotelnew() {
-                this.$.openAdd.open();
-                // var node = Polymer.dom(this.root).querySelector("#hotelnew");
-                // if (node) {
-                //     var oldDiv = Polymer.dom(node.parentNode).querySelector("#d23");
-                //     if (oldDiv) {
-                //         Polymer.dom(node.parentNode).removeChild(oldDiv);
-
-                //     }
-                //     var newDiv = document.createElement("my-hotel-new");
-                //     newDiv.setAttribute("id", "d23");
-                //     newDiv.setAttribute("prev-route", this.route.prefix);
-                //     // newDiv.setAttribute("block ", "3 ")
-                //     //if open existing
-                //     var currentDiv = document.getElementById("hotelnew");
-                //     Polymer.dom(node.parentNode).insertBefore(newDiv, currentDiv);
-                // }
+                var node = Polymer.dom(this.root).querySelector("#hotelnew");
+                if (node) {
+                    var oldDiv = Polymer.dom(node.parentNode).querySelector("#d23");
+                    if (oldDiv) {
+                        Polymer.dom(node.parentNode).removeChild(oldDiv);
+                    }
+                    var newDiv = document.createElement("my-hotel-new");
+                    newDiv.setAttribute("id", "d23");
+                    newDiv.setAttribute("prev-route", this.route.prefix);
+                    var currentDiv = document.getElementById("hotelnew");
+                    Polymer.dom(node.parentNode).insertBefore(newDiv, currentDiv);
+                }
             },
-            _edithotel(e) {
+            _editHotel(e) {
                 var data_args = Polymer.dom(e).rootTarget.getAttribute("alt");
-                var node = Polymer.dom(this.root).querySelector("#hoteledit");
+                var node = Polymer.dom(this.root).querySelector("#availedit");
                 if (node) {
                     var oldDiv = Polymer.dom(node.parentNode).querySelector("#d24");
                     if (oldDiv) {
                         Polymer.dom(node.parentNode).removeChild(oldDiv);
                     }
-                    var newDiv = document.createElement("my-hotel-edit");
-                    newDiv.setAttribute("id", "d24")
-                    newDiv.setAttribute("edit-key", data_args);
-                    newDiv.setAttribute("prev-route", this.route.prefix);
-                    var currentDiv = document.getElementById("hoteledit");
-                    Polymer.dom(node.parentNode).insertBefore(newDiv, currentDiv);
-                    // console.log(newDiv);
-                }
-            },
-            _viewHotel(e) {
-                var editKey = Polymer.dom(e).rootTarget.getAttribute("alt");
-                var node = Polymer.dom(this.root).querySelector("#hotelview");
-                if (node) {
-                    var oldDiv = Polymer.dom(node.parentNode).querySelector("#d25");
-                    if (oldDiv) {
-                        Polymer.dom(node.parentNode).removeChild(oldDiv);
-                    }
-                    var newDiv = document.createElement("my-hotel-view");
-                    newDiv.setAttribute("id", "d25")
-                    newDiv.setAttribute("edit-key", editKey);
-                    newDiv.setAttribute("prev-route", this.route.prefix);
-                    var currentDiv = document.getElementById("hotelview");
-                    Polymer.dom(node.parentNode).insertBefore(newDiv, currentDiv);
-
+                var newDiv = document.createElement("my-hotel-edit");
+                newDiv.setAttribute("id", "d24");
+                newDiv.setAttribute("edit-key", data_args);
+                newDiv.setAttribute("prev-route", this.route.prefix);
+                // newDiv.setAttribute("block ", "3 ")
+                //if open existing
+                // console.log(newDiv);s
+                var currentDiv = document.getElementById("availedit");
+                Polymer.dom(node.parentNode).insertBefore(newDiv, currentDiv);
                 }
             },
             toggleDrawer() {
@@ -520,9 +390,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     }
                 }));
                 this.$.narrow = !this.$.narrow;
-            },
-            _save() {
-
             },
             _timeStampToDateTime(ts) {
                 return new Date(ts);

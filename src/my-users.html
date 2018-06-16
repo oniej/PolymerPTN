@@ -57,33 +57,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 padding: 10px;
             }
 
-            @-webkit-keyframes fadeIn {
-                from {
-                    opacity: 0;
-                }
-                to {
-                    opacity: 1;
-                }
-            }
-
-            @-moz-keyframes fadeIn {
-                from {
-                    opacity: 0;
-                }
-                to {
-                    opacity: 1;
-                }
-            }
-
-            @keyframes fadeIn {
-                from {
-                    opacity: 0;
-                }
-                to {
-                    opacity: 1;
-                }
-            }
-
             @media (max-width: 768px) {
                 div .availability {
                     margin: 16px;
@@ -143,21 +116,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             paper-icon-button.edit {
                 color: rgb(233, 79, 164);
             }
-
-            /* .users{
-                -webkit-animation: fadeIn ease-in 1;
-           -moz-animation: fadeIn ease-in 1;
-          animation: fadeIn ease-in 1;
-
-          -webkit-animation-fill-mode: forwards;
-          -moz-animation-fill-mode: forwards;
-          animation-fill-mode: forwards;
-
-          -webkit-animation-duration: 0.5s;
-          -moz-animation-duration: 0.5s;
-          animation-duration: 0.5s;
-
-             } */
         </style>
         <custom-style>
             <style is="custom-style">
@@ -176,23 +134,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <app-header fixed slot="header">
                             <app-toolbar primary id="tool1">
                                 <paper-icon-button class="menu" icon="my-icons:menu" drawer-toggle on-tap="toggleDrawer"></paper-icon-button>
-                                <div main-title>Hotel & Rooms</div>
+                                <div main-title>Users</div>
                             </app-toolbar>
                         </app-header>
 
                         <iron-scroll-document id="threshold">
                             <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_usersLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
                             <template is="dom-repeat" items="[[user_datas]]" as="item">
-                                <!-- <div class="availability"> -->
-                                <div class="item">
+                                <div class="item" on-tap="_editUsers">
                                     <iron-image class="avatar" sizing="contain" src="../images/user.png"></iron-image>
-                                    <div class="pad">
+                                    <div class="pad" id="{{item._id}}">
                                         <div class="primary">[[item.fullname]]</div>
                                         <div class="secondary">[[item.email]]</div>
-                                        <!-- <div class="secondary dim">Secondary dim</div> -->
                                     </div>
-                                    <a href="/users/edit/{{item._id}}">
-                                        <paper-icon-button id="{{item._id}}" noink on-tap="_editAvailavility" data-args="{{item._id}}" icon="my-icons:edit" alt="{{item._id}}"
+                                    <a id="href" href="/users/edit/{{item._id}}">
+                                        <paper-icon-button id="{{item._id}}" noink on-tap="_editUsers" data-args="{{item._id}}" icon="my-icons:edit" alt="{{item._id}}"
                                             style="float: right; margin-top:-10px; margin-right:-10px;color: black;"></paper-icon-button>
                                     </a>
                                 </div>
@@ -207,20 +163,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <div id="usernew"></div>
                     <my-user-new id="d23" path=" " prev-route="{{route.prefix}}"></my-user-new>
                 </div>
-
-                <!-- <div name="/edit">
-                <div id="hoteledit"></div>
-                <my-hotel-edit id="d24" edit-key='{{editData._id}}' prev-route="{{route.prefix}}"></my-hotel-edit>
-            </div> -->
-
                 <div name="view404 ">Not found.</div>
             </iron-pages>
         </div>
         <template is="dom-if" if="{{editActive}}" restamp>
-            <!-- <div hidden$="{{!editActive}}"> -->
-            <div id="useredit"></div>
             <my-edit-user id="d25" edit-key='{{editData._id}}' prev-route="{{route.prefix}}"></my-edit-user>
-            <!-- </div> -->
         </template>
 
         <vaadin-dialog id="deactivate" no-close-on-esc no-close-on-outside-click>
@@ -264,30 +211,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 },
                 selectedItem: {
                     type: String,
-                    observer: '_selectedItemChanged'
+                    // observer: '_selectedItemChanged'
                 },
                 activate: String
             },
-            // _selectedItemChanged() {
-            //     if (this.selectedItem.length > 0) {
-            //         if (this.selectedItem.length > 1) {
-            //             this.selectedItems = this.selectedItem;
-            //             // console.log(this.selectedItems);
-            //         } else {
-            //             this._id = this.selectedItem[0]._id;
-            //             this.fullname = this.selectedItem[0].fullname;
-            //             this.email = this.selectedItem[0].email;
-            //             this.account_type = this.selectedItem[0].account_type;
-            //             this.active = this.selectedItem[0].activate;
-            //             if (this.selectedItem[0].active == false) {
-            //                 this.block = false;
-            //             } else {
-            //                 this.block = true;
-            //             }
-            //             // console.log(this.active);
-            //         }
-            //     }
-            // },
             _deactivateSelected() {
                 this.$.deactivate.opened = true;
             },
@@ -361,21 +288,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     Polymer.dom(node.parentNode).insertBefore(newDiv, currentDiv);
                 }
             },
-            editDetails(e) {
+            _editUsers(e) {
                 var data_args = Polymer.dom(e).rootTarget.getAttribute("alt");
-                var node = Polymer.dom(this.root).querySelector("#useredit");
+                var node = Polymer.dom(this.root).querySelector("#availedit");
                 if (node) {
                     var oldDiv = Polymer.dom(node.parentNode).querySelector("#d25");
                     if (oldDiv) {
                         Polymer.dom(node.parentNode).removeChild(oldDiv);
                     }
                     var newDiv = document.createElement("my-edit-user");
-                    newDiv.setAttribute("id", "d25")
-                    newDiv.setAttribute("edit-key", data_args)
+                    newDiv.setAttribute("id", "d25");
+                    newDiv.setAttribute("edit-key", data_args);
                     newDiv.setAttribute("prev-route", this.route.prefix);
-                    // console.log(newDiv);
+                    // newDiv.setAttribute("block ", "3 ")
                     //if open existing
-                    var currentDiv = document.getElementById("useredit");
+                    // console.log(newDiv);
+                    var currentDiv = document.getElementById("availedit");
                     Polymer.dom(node.parentNode).insertBefore(newDiv, currentDiv);
                 }
             },
