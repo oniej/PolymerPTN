@@ -1,6 +1,6 @@
 // first we import our dependencies…
 const express = require('express');
-const Allocation = require('../models/allocation');
+const Blocking = require('../models/blocking');
 
 // and create our instances
 const router = express.Router();
@@ -9,7 +9,7 @@ router.get('/dummy', (req, res) => {
     return res.json({ success: true, data: [] });
 });
 router.post('/add', (req, res) => { 
-    const allocation = new Allocation();
+    const blocking = new Blocking();
     // body parser lets us use the req.body
     const {active, workspace,hotel,dateFrom,dateTo,rooms,note,seasondate } = req.body;
     if (!workspace || !hotel || !dateFrom || !dateTo || !note) {
@@ -19,35 +19,35 @@ router.post('/add', (req, res) => {
             error: 'Not Found'
         });
     }
-    allocation.active = active;
-    allocation.workspace = workspace;
-    allocation.hotel = hotel;
-    allocation.dateFrom = dateFrom;
-    allocation.dateTo = dateTo;
-    allocation.rooms = rooms;
-    // allocation.room1 = room1;
-    // allocation.peak = peak;
-    // allocation.pdays = pdays;
-    // allocation.nonpeak = nonpeak;
-    // allocation.nonpdays = nonpdays;
-    allocation.note = note;
-    allocation.seasondate = seasondate;
-    // allocation.startValue = startValue;
-    // allocation.endValue = endValue;
-    allocation.save(err => {
+    blocking.active = active;
+    blocking.workspace = workspace;
+    blocking.hotel = hotel;
+    blocking.dateFrom = dateFrom;
+    blocking.dateTo = dateTo;
+    blocking.rooms = rooms;
+    // blocking.room1 = room1;
+    // blocking.peak = peak;
+    // blocking.pdays = pdays;
+    // blocking.nonpeak = nonpeak;
+    // blocking.nonpdays = nonpdays;
+    blocking.note = note;
+    blocking.seasondate = seasondate;
+    // blocking.startValue = startValue;
+    // blocking.endValue = endValue;
+    blocking.save(err => {
         if (err) return res.json({ success: false, error: err });
         return res.json({ success: true });
     });
 });
 router.get('/read', (req, res) => {
-    Allocation.find((err, allocation) => {
+    Blocking.find((err, blocking) => {
         if (err) return res.json({ success: false, error: err });
-        return res.json({ success: true, data: allocation });
+        return res.json({ success: true, data: blocking });
     }).limit(20);
 });
 router.get('/readEdit/:editKey', (req, res) => {
     const editKey = req.params.editKey;
-    Allocation.findById({ _id: editKey }, (error, hotels) => {
+    Blocking.findById({ _id: editKey }, (error, hotels) => {
         if (error) return res.json({ success: false, error });
         // console.log(hotels);
         return res.json({ success: true, data: hotels });
@@ -60,20 +60,20 @@ router.put('/update/:editKey', (req, res) => {
     if (!editKey) {
         return res.json({ success: false, error: 'not match found' });
     }
-    Allocation.findById(editKey, (error, allocation) => {
+    Blocking.findById(editKey, (error, blocking) => {
         if (error) return res.json({ success: false, error });
-        const {active,workspace, hotel,dateFrom,dateTo,rooms,note,seasondate } = req.body;
-        allocation.active = active;
-        if (workspace) allocation.workspace = workspace;
-        if (hotel) allocation.hotel = hotel;
-        if (dateFrom) allocation.dateFrom = dateFrom;
-        if (dateTo) allocation.dateTo = dateTo;
-        if (rooms) allocation.rooms = rooms;
+        const {active, workspace, hotel,dateFrom,dateTo,rooms,note,seasondate } = req.body;
+        blocking.active = active;
+        if (workspace) blocking.workspace = workspace;
+        if (hotel) blocking.hotel = hotel;
+        if (dateFrom) blocking.dateFrom = dateFrom;
+        if (dateTo) blocking.dateTo = dateTo;
+        if (rooms) blocking.rooms = rooms;
        
-        if (note) allocation.note = note;
-        if (seasondate) allocation.seasondate = seasondate;
+        if (note) blocking.note = note;
+        if (seasondate) blocking.seasondate = seasondate;
  
-        allocation.save(error => {
+        blocking.save(error => {
             if (error) return res.json({ success: false, error });
             return res.json({ success: true });
         });
@@ -85,7 +85,7 @@ router.delete('/delete/:editKey', (req, res) => {
     if (!editKey) {
         return res.json({ success: false, error: 'No comment id provided' });
     }
-    Allocation.remove({ _id: editKey }, (error, hotel) => {
+    Blocking.remove({ _id: editKey }, (error, hotel) => {
         if (error) return res.json({ success: false, error });
         return res.json({ success: true });
     });

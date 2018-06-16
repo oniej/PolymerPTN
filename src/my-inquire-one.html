@@ -1,0 +1,370 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-button-group/paper-button-group.html">
+<link rel="import" href="../bower_components/paper-buttons-group/paper-buttons-group.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../bower_components/paper-item/paper-item-body.html">
+<link rel="import" href="../bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
+<link rel="import" href="../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../bower_components/iron-scroll-threshold/iron-scroll-threshold.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/datetime-picker/date-picker.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-radio-button/paper-radio-button.html">
+<link rel="import" href="../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+
+<link rel="import" href="time-element.html">
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="my-allocation-add.html">
+<link rel="import" href="my-allocation-edit.html">
+
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animations.html">
+<script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+
+
+<link rel="import" href="search-bar.html">
+<dom-module id="my-inquire-one">
+    <template>
+        <style include="shared-styles">
+        :host {
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        @-webkit-keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @-moz-keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+        app-header {
+            color: rgb(255, 255, 255);
+            background-color: darkorange;
+        }
+        
+        /* .cardquire {
+        height: 180px;
+        margin: 0 200px 0 200px;
+        padding: 35px;
+       } */
+       .flex-center-justified {
+      @apply --layout-horizontal;
+      @apply --layout-center-justified;
+      padding: 20px;
+
+        }
+       .left{
+            padding: 2px;
+            border-radius: 5px;
+            width: 367px;
+            float: left;
+            /* border-style: groove; */
+            background-color: #fff;
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+       }
+       .leftcontent{
+        margin: 16px;
+
+       }
+       /* .left table{
+           margin: 16px;
+       }     */
+       .right{
+           padding: 2px;
+        @apply --layout-self-center;
+           height: 150px;
+            border-radius: 0 5px 5px 0;
+            position: relative;
+            /* top: 6px; */
+            width: 269px;
+            float: right;
+            /* border-style: groove; */
+            background-color: #fff;
+            /* box-shadow: 1px 3px 2px #888888; */
+       }
+       .right .hotelcontent{
+           margin: 16px;
+       }
+       div .allocation {
+           overflow: scroll;
+           padding: 18px;
+         width: 90%;
+         margin-bottom: 20px;
+         margin: 0 auto;
+         background-color: #fff;
+         border-radius: 3px;
+        /* text-align-last: center; */
+         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+         
+         opacity: 0;
+        
+          -webkit-animation: fadeIn ease-in 1;
+           -moz-animation: fadeIn ease-in 1;
+          animation: fadeIn ease-in 1;
+
+          -webkit-animation-fill-mode: forwards;
+          -moz-animation-fill-mode: forwards;
+          animation-fill-mode: forwards;
+
+          -webkit-animation-duration: 0.5s;
+          -moz-animation-duration: 0.5s;
+          animation-duration: 0.5s;
+                    
+                }
+                
+                  .tb th, td{    
+                border-bottom: 1px solid #ddd;
+                padding: 5px;
+                }
+                tr:hover {background-color: #f5f5f5;}
+                th{
+                    height: 50px;
+                }
+
+    .loader {
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 9999;
+	background: url('http://www.downgraf.com/wp-content/uploads/2014/09/01-progress.gif?e44397') 50% 50% no-repeat rgb(249,249,249);
+}
+        </style>
+        <custom-style>
+            <style is="custom-style">
+                paper-fab.blue {
+                    /* --paper-fab-background: var(--paper-indigo-500); */
+                    --paper-fab-background: darkorange;
+                    /* --paper-fab-background: var(--paper-light-blue-900); */
+                    /* --paper-fab-keyboard-focus-background: var(--paper-light-blue-900); */
+                }
+
+                paper-radio-button {
+                    --paper-radio-button-label-spacing: 5px;
+                    --paper-radio-button-size: 24px;
+                }
+
+                paper-radio-button.close {
+                    --paper-radio-button-label-color: red;
+                }
+
+                paper-radio-button.limited {
+                    --paper-radio-button-label-color: yellow;
+                }
+
+                /* paper-radio-button.available {
+                    --paper-radio-button-label-color: red;
+                } */
+            </style>
+        </custom-style>
+
+        <iron-pages selected="[[route.path]]" attr-for-selected="name" fallback-selection="view404" role="main">
+            <div name="">
+        <app-drawer-layout fullbleed narrow="{{narrow}}" id="drawerLayout">
+            <app-header-layout id="appheader" has-scrolling-region>
+                <app-header fixed slot="header">
+                    <app-toolbar>
+                        <paper-icon-button class="menu" icon="my-icons:menu" drawer-toggle on-tap="toggleDrawer"></paper-icon-button>
+                                <div main-title>Inquire One</div>
+                    </app-toolbar>
+                </app-header>
+
+                <div class="container flex-center-justified">
+                    <div class="left">
+                        <div class="leftcontent">
+                            <center>
+                        <iron-icon icon="my-icons:hotel" style="color: gray"></iron-icon>&nbsp;<vaadin-text-field placeholder="ROOM" style="width: 300px" id="room" value="{{room}}"></vaadin-text-field><br>
+                        <iron-icon icon="my-icons:date-range" style="color: grey"></iron-icon>&nbsp;<vaadin-date-picker  placeholder="DATE FROM" style="width: 300px" id="startdate" value="{{startValue}}" max="{{endValue}}" date-format="DD-MMMM-YYYY"></vaadin-date-picker><br>
+                        <iron-icon icon="my-icons:date-range" style="color: grey"></iron-icon>&nbsp;<vaadin-date-picker  placeholder="DATE TO" style="width: 300px" id="enddate" value="{{endValue}}" min="{{startValue}}" date-format="DD-MMMM-YYYY"></vaadin-date-picker>
+                    </center>  
+                    </div>
+                    </div>
+                    <div class="right">
+                        <center>
+                            <div class="hotelcontent">
+                                    <iron-icon icon="my-icons:domain" style="color: gray"></iron-icon>&nbsp; <vaadin-text-field placeholder="HOTEL" id="hotel" value="{{hotel}}"></vaadin-text-field>
+                            </div>
+                        </center>
+                        <br>
+                    </div>
+                </div>
+
+                 <!-- <template is="dom-if" if="{{loader}}">
+                            <div class="loader"></div>
+                        </template>
+                        <template is="dom-if" if="{{!loader}}"> -->
+                <iron-scroll-document id="threshold">
+                
+                        <div class="container flex-center-justified">
+                        <div class="allocation">
+                        <table width="100%">
+                            <tr>
+                                <th>Date</th>
+                                <th>Hotel</th>
+                                <th>Room</th>
+                                <th>Content:</th>
+                                <th>Allocation</th>
+                                <th>Blocking</th>
+                                <th>Status</th>
+                            </tr>
+                            <tr>
+                                <td rowspan="2">06/01</td>
+                                <td rowspan="2">Anemone</td>
+                                <td>Standard</td>
+                                <td>-</td>
+                                <td>2</td>
+                                <td>2</td>
+                                <td>Open</td>
+                            </tr>
+                            <tr>
+                                <td>Superior</td>
+                                <td>-</td>
+                                <td>Cut-OFF</td>
+                                <td>Cancel</td>
+                                <td>Close</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="2">06/02</td>
+                                <td>Anemone</td>
+                                <td>Standard</td>
+                                <td>-</td>
+                                <td>2</td>
+                                <td>2</td>
+                                <td>Open</td>
+                            </tr>    
+                            <tr>
+                               <td>The Bellavista</td>
+                               <td>Deluxe</td>
+                               <td>-</td>
+                               <td>2</td>
+                               <td>2</td>
+                               <td>Open</td>
+                            </tr>  
+                            <tr>
+                                <td rowspan="3">06/03</td>
+                                <td rowspan="2">Costabella</td>
+                                <td>Superior</td>
+                                <td>-</td>
+                                <td>2</td>
+                                <td>2</td>
+                                <td>Open</td>
+                            </tr>  
+                            <tr>
+                                <td>Deluxe Poolside</td>
+                                <td>-</td>
+                                <td>2</td>
+                                <td>2</td>
+                                <td>Open</td>
+                            </tr>  
+                            <tr>
+                                <td>Water Front Cebu</td>
+                                <td>Standard</td>
+                                <td>-</td>
+                                <td>2</td>
+                                <td>2</td>
+                                <td>Open</td>
+                            </tr>  
+                            <tr>
+                                <td>06/04</td>
+                                <td>Water Front Cebu</td>
+                                <td>Standard</td>
+                                <td>-</td>
+                                <td>2</td>
+                                <td>2</td>
+                                <td>Open</td>
+                           </tr>  
+                        </table>
+                        </div>
+                        </div>  
+                    </iron-scroll-document>
+                    <!-- </template> -->
+            </app-header-layout>
+        </app-drawer-layout>
+        </div>
+        </iron-pages>
+        
+    </template>
+
+    <script>
+        Polymer({
+            is: 'my-inquire-one',
+            properties: {
+                // loader: {
+                //     type: Boolean,
+                //     value: true,
+                //     notify: false
+                // },
+            },
+            
+            toggleDrawer() {
+                this.dispatchEvent(new CustomEvent('toggleDrawer', {
+                    bubbles: true, composed: true, detail: {
+                        narrow: this.$.narrow
+                    }
+                }));
+                this.$.narrow = !this.$.narrow;
+            },
+            ready() {
+                this.url = '/allocation/read';
+            },
+            _allocationLoaded(data) {
+                if (this.url === '/allocation/read') {
+                    this.allocations = data.detail.response.data;
+                    // console.log(this.allocations);
+                }
+            },
+            _timeStampToDateTime(ts) {
+                return new Date(ts);
+            },
+        });
+    </script>
+</dom-module>

@@ -11,7 +11,6 @@
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/paper-menu-button/paper-menu-button.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
-<link rel="import" href="../bower_components/polymerfire/firebase-query.html">
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
@@ -103,8 +102,6 @@
                 height: 1px;
             }
         </style>
-        <!-- <firebase-document id="idd" path="{{getpath()}}" data="{{newdata}}"></firebase-document> -->
-        <!-- <firebase-query id="query" path="{{getpath()}}" data="{{account}}"></firebase-query> -->
         <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_commentsLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
 
         <app-drawer-layout fullbleed narrow="{{narrow}}" id="drawerLayout">

@@ -1,12 +1,4 @@
-<!--
-@license
-Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
+
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
@@ -44,6 +36,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="time-element.html">
 <link rel="import" href="shared-styles.html">
+<link rel="import" href="my-blocking-add.html">
+<link rel="import" href="my-blocking-edit.html">
 
 <link rel="import" href="../bower_components/neon-animation/web-animations.html">
 <link rel="import" href="../bower_components/neon-animation/neon-animations.html">
@@ -89,7 +83,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
             @media (max-width: 768px) {
-                div .allocation {
+                div .blocking {
                     margin: 16px;
                     /* margin-top: 16px; */
                     display: flex;
@@ -119,7 +113,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
             @media (min-width: 768px) {
-                div .allocation {
+                div .blocking {
                     width: 765px;
                     margin: 16px auto;
                     /* margin-bottom: 1000px; */
@@ -245,6 +239,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 } */
             </style>
         </custom-style>
+        <app-route route="{{route}}" pattern="/edit/:_id" data="{{editData}}" active="{{editActive}}"></app-route>
+ 
         <iron-pages selected="[[route.path]]" attr-for-selected="name" fallback-selection="view404" role="main">
             <div name="">
                 <app-header-layout fullbleed has-scrolling-region>
@@ -275,35 +271,64 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         </template>
                     </app-header>
                     <iron-scroll-document id="threshold">
-                        <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_allocationLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
-                        <template is="dom-repeat" items="[[allocations]]" as="item">
-                            <div class="allocation">
-
+                        <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_blockingLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
+                        <template is="dom-repeat" items="[[blockings]]" as="item">
+                            <div class="blocking">
+                                <div id="header" class="header" style="background-color: #4CAF50; padding: 16px; padding-bottom: 5px; font-size: 14px;">
+                                    <a href="/blocking/edit/{{item._id}}">
+                                        <paper-icon-button id="{{item._id}}" noink on-tap="_editBlocking" data-args="{{item._id}}" icon="my-icons:edit" alt="{{item._id}}"
+                                            style="float: right; margin-top:-10px; margin-right:-10px;color: white;"></paper-icon-button>
+                                    </a>
+                                    <div style="color: white">
+                                        <iron-icon icon="my-icons:flag" id="date" style="color: white"></iron-icon>
+                                        Created
+                                        <span>
+                                            <time-ago datetime$="{{_timeStampToDateTime(item.createdAt)}}">{{_timeStampToDateTime(item.createdAt)}}</time-ago>
+                                            &nbsp;by&nbsp;<!--[[item.created_by]]-->Jeino</span>
+                                    </div>
+                                    <div style="color: white">
+                                        <iron-icon icon="my-icons:update" id="date" style="color: white"></iron-icon>
+                                        Last Modified
+                                        <span>
+                                            <time-ago datetime$="{{_timeStampToDateTime(item.updatedAt)}}">{{_timeStampToDateTime(item.updatedAt)}}</time-ago>
+                                            &nbsp;by&nbsp;<!--[[item.updated_by]]-->Jeino</span>
+                                    </div>
+                                </div>
                                 <div style="padding: 16px; background-color: white;">
                                     <div style="margin-top: 5px;">
                                         <iron-icon icon="my-icons:location-city" id="date" style="color: gray; margin-top: -10px"></iron-icon>
                                         <span id="type" style="font-size: 24px;">
-                                            <template is="dom-repeat" items="[[item.room]]" as="room">
-                                            <span>Room:</span>         {{room.room}}
-                                            </template>
-                                            <br>
-                                            <template is="dom-repeat" items="[[item.peak]]" as="peak">
-                                            <span>Peak:</span>         {{peak.peak}}
-                                            </template>
-                                            <br>
-
+                                            [[item.hotel]]
                                         </span>
                                     </div>
+                                    <div style="margin-top: 12px; font-size: 14px;">
+                                        <iron-icon icon="my-icons:speaker-notes" id="date" style="color: gray"></iron-icon>
+                                        <span id="type" style="color:gray;font-size: 14px; ">
+                                            [[item.note]]
+                                        </span>
+                                    </div>
+
                                 </div>
                             </div>
                         </template>
                     </iron-scroll-document>
-
                 </app-header-layout>
-
+                <a href="/blocking/add" style="text-decoration: none; ">
+                    <paper-fab noink on-tap="_availnew" icon="my-icons:add" class="blue"></paper-fab>
+                </a>
             </div>
+
+            <div name="/add">
+                <div id="availnew"></div>
+                <my-blocking-add id="d23" path=" " prev-route="{{route.prefix}}"></my-blocking-add>
+            </div>
+            <div name="view404 ">Not found.</div>
         </iron-pages>
 
+        <div hidden$="{{!editActive}}">
+            <div id="availedit"></div>
+            <my-blocking-edit id="d24" edit-key='{{editData._id}}' prev-route="{{route.prefix}}"></my-blocking-edit>
+        </div>
     </template>
 
     <script>
@@ -313,6 +338,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 route: Object,
                 routeData: Object,
                 data: Object,
+                year: Number,
+                monthly: String,
                 openSearch: {
                     type: Boolean,
                     value: false,
@@ -328,10 +355,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 },
                 observers: [
                     '_searchChanged(filterBy, search)',]
+                // isMousedown: { type: Boolean, value: false, }
             },
 
             toggleSearch() {
                 this.openSearch = true;
+                
             },
             toggleReturn() {
                 this.openSearch = false;
@@ -343,14 +372,47 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             _searchChanged(g, e) {
 
             },
-            ready() {
-                this.url = '/allocation/read';
-            },
-            _allocationLoaded(data) {
-                if (this.url === '/allocation/read') {
-                    this.allocations = data.detail.response.data;
+            _blockingLoaded(data) {
+                if (this.url === '/blocking/read') {
+                    this.blockings = data.detail.response.data;
                     // console.log(this.hotels);
-                    // console.log(this.allocations);
+                }
+            },
+            _availnew() {
+                var node = Polymer.dom(this.root).querySelector("#availnew");
+                if (node) {
+                    var oldDiv = Polymer.dom(node.parentNode).querySelector("#d23");
+                    if (oldDiv) {
+                        Polymer.dom(node.parentNode).removeChild(oldDiv);
+
+                    }
+                    var newDiv = document.createElement("my-blocking-add");
+                    newDiv.setAttribute("id", "d23");
+                    newDiv.setAttribute("prev-route", this.route.prefix);
+                    // newDiv.setAttribute("block ", "3 ")
+                    //if open existing
+                    var currentDiv = document.getElementById("availnew");
+                    Polymer.dom(node.parentNode).insertBefore(newDiv, currentDiv);
+                }
+
+            },
+            _editBlocking(e) {
+                var data_args = Polymer.dom(e).rootTarget.getAttribute("alt");
+                var node = Polymer.dom(this.root).querySelector("#availedit");
+                if (node) {
+                    var oldDiv = Polymer.dom(node.parentNode).querySelector("#d24");
+                    if (oldDiv) {
+                        Polymer.dom(node.parentNode).removeChild(oldDiv);
+                    }
+                    var newDiv = document.createElement("my-blocking-edit");
+                    newDiv.setAttribute("id", "d24");
+                    newDiv.setAttribute("edit-key", data_args);
+                    newDiv.setAttribute("prev-route", this.route.prefix);
+                    // newDiv.setAttribute("block ", "3 ")
+                    //if open existing
+                    // console.log(newDiv);
+                    var currentDiv = document.getElementById("availedit");
+                    Polymer.dom(node.parentNode).insertBefore(newDiv, currentDiv);
                 }
             },
             toggleDrawer() {
@@ -360,6 +422,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     }
                 }));
                 this.$.narrow = !this.$.narrow;
+            },
+            ready() {
+                this.url = '/blocking/read';
+
+            },
+            _timeStampToDateTime(ts) {
+                return new Date(ts);
             },
         });
     </script>
