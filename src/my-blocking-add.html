@@ -1,4 +1,8 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/paper-dropdown-input/paper-dropdown-input.html">
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
@@ -6,11 +10,6 @@
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
-
-<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
-<link rel="import" href="../bower_components/paper-menu-button/paper-menu-button.html">
-<link rel="import" href="../bower_components/app-route/app-route.html">
-
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
@@ -40,12 +39,13 @@
 <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
 
 
-<dom-module id="my-allocation-add">
+<dom-module id="my-blocking-add">
     <template>
         <style include="shared-styles">
             :host {
                 display: block;
             }
+
             app-header {
                 color: rgb(255, 255, 255);
                 background-color: darkorange;
@@ -64,13 +64,78 @@
                     background-color: #F4F5F6;
                 }
             }
+
             paper-fab.fab {
                 position: fixed;
                 bottom: 30px;
                 right: 30px;
-                background-color: darkorange;
+                background-color: #3F51B5;
             }
+
+            @-webkit-keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
+            }
+
+            @-moz-keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
+            }
+
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
+            }
+
+            .griddiv {
+                border-style: solid;
+                border-color: gray;
+                border-radius: 5px;
+                padding: 5px;
+                border-width: 2px;
+                height: 200px;
+                overflow: scroll;
+
+            }
+
             @media (max-width: 768px) {
+                .docu {
+                    margin-left: 16px;
+                    margin-right: 16px;
+                    padding: 16px;
+
+
+                    background-color: #fff;
+                    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+
+                    opacity: 0;
+                    /* make things invisible upon start */
+                    -webkit-animation: fadeIn ease-in 1;
+                    /* call our keyframe named fadeIn, use animattion ease-in and repeat it only 1 time */
+                    -moz-animation: fadeIn ease-in 1;
+                    animation: fadeIn ease-in 1;
+
+                    -webkit-animation-fill-mode: forwards;
+                    /* this makes sure that after animation is done we remain at the last keyframe value (opacity: 1)*/
+                    -moz-animation-fill-mode: forwards;
+                    animation-fill-mode: forwards;
+
+                    -webkit-animation-duration: 0.5s;
+                    -moz-animation-duration: 0.5s;
+                    animation-duration: 0.5s;
+                }
                 #buttonform {
                     display: none;
 
@@ -96,6 +161,20 @@
                     display: none;
                 }
             }
+
+            paper-toast {
+                width: 20%;
+                position: fixed;
+                bottom: 1opx;
+                left: 10px;
+                margin-left: 20%;
+            }
+
+            paper-checkbox {
+                font-size: 14px;
+                margin-right: 5px;
+            }
+
             hr {
                 background-color: #eee;
                 border: 0 none;
@@ -103,17 +182,18 @@
                 height: 1px;
             }
         </style>
-        <iron-ajax auto url="/hotel/read" handle-as="json" on-response="_hotelLoaded" debounce-duration="300"></iron-ajax>
-        <iron-ajax id="ajaxRoom" handle-as="json" on-response="_roomsLoaded"></iron-ajax>
- 
+      <!-- <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_commentsLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax> -->
+      <iron-ajax auto url="/hotel/read" handle-as="json" on-response="_hotelLoaded" debounce-duration="300"></iron-ajax>
+      <iron-ajax id="ajaxRoom" handle-as="json" on-response="_roomsLoaded"></iron-ajax>
+
         <app-drawer-layout fullbleed narrow="{{narrow}}" id="drawerLayout">
             <app-header-layout id="appheader" has-scrolling-region>
                 <app-header fixed slot="header">
                     <app-toolbar>
-                        <a href="/allocation">
+                        <a href="/blocking">
                             <paper-icon-button noink class="menu" style="color: white;" icon="my-icons:arrow-back"></paper-icon-button>
                         </a>
-                        <div main-title>New Allocation</div>
+                        <div main-title>New Blocking</div>
                     </app-toolbar>
 
                     <vaadin-dialog id="successModal" no-close-on-esc no-close-on-outside-click>
@@ -150,8 +230,6 @@
                     </div>
 
                     <div class="details" id="form">
-                        <!-- <paper-input always-float-label value={{hotel}} label="HOTEL"></paper-input> -->
-
                         <paper-dropdown-input always-float-label style="width: 100%" label="Hotel" items='[[hotelItems]]' filter-property="hotel" value="{{hotel}}">
                             <template>
                                 <template is="dom-repeat" items="[[items]]" as="item">
@@ -170,19 +248,19 @@
 
                             </template>
                         </range-datepicker-input>
-                        <br>
 
+                        <br>
+                      
                         <vaadin-combo-box id="room"  style="width: 160px;" always-float-label  label="ROOM" items='[[roomItems]]' filter-property="hotel" value="{{room}}">
                             
-                              <template is="dom-repeat" items="[[items]]" as="item">
-                                  <paper-item>[[item]]</paper-item>
-                              </template>
-                        </vaadin-combo-box>
-                        <!-- <vaadin-combo-box id="room"  style="width: 160px;" always-float-label  label="ROOM"></vaadin-combo-box> -->
+                            <template is="dom-repeat" items="[[items]]" as="item">
+                                <paper-item>[[item]]</paper-item>
+                            </template>
+                      </vaadin-combo-box>
 
                         <!-- <vaadin-text-field style="width: 130px;" id="room" value="{{room}}" label="ROOM"></vaadin-text-field> -->
                         <vaadin-text-field style="width: 130px;" id="peak" value="{{peak}}" label="PEAK"></vaadin-text-field>
-                        <vaadin-text-field style="width: 130px;" id="pdays" value="{{pdays}}" label="CUT-OFF"></vaadin-text-field>
+                        <vaadin-text-field style="width: 130px;" id="cancell" value="{{cancel}}" label="CANCELLATION"></vaadin-text-field>
                         <vaadin-text-field style="width: 130px;" id="nonpeak" value="{{nonpeak}}" label="NON-PEAK"></vaadin-text-field>
                         <vaadin-text-field style="width: 130px;" id="nonpdays" value="{{nonpdays}}" label="NONPEAKDAYS"></vaadin-text-field>
 
@@ -196,7 +274,7 @@
 
                                 <vaadin-text-field style="width: 130px;" value="Room" readonly></vaadin-text-field>
                                 <vaadin-text-field style="width: 130px;" value="Peak" readonly></vaadin-text-field>
-                                <vaadin-text-field style="width: 130px;" value="Cut-Off" readonly></vaadin-text-field>
+                                <vaadin-text-field style="width: 130px;" value="Cancellation" readonly></vaadin-text-field>
                                 <vaadin-text-field style="width: 130px;" value="Non-Peak" readonly></vaadin-text-field>
                                 <vaadin-text-field style="width: 130px;" value="Non-Peak Days" readonly></vaadin-text-field>
 
@@ -244,7 +322,7 @@
 
     <script>
         Polymer({
-            is: 'my-allocation-add',
+            is: 'my-blocking-add',
             properties: {
 
                 selectActive: {
@@ -291,7 +369,7 @@
                var d = Polymer.dom(this.root).querySelector("#writeHeredate").innerHTML = null;
                 this.room = null;
                 this.peak = null;
-                this.pdays = null;
+                this.cancel = null;
                 this.nonpeak = null;
                 this.nonpdays = null;
                 this.startValue = null;
@@ -306,7 +384,6 @@
                 // this.selectActive = true;
                 // console.log(this.selectActive);
                 this.$.active.checked;
-                console.log(this.$.active.checked);
             },
             _console(e) {
                 console.log(e);
@@ -316,25 +393,17 @@
 
                 if (this.room !== '' && this.peak !== '' && this.pdays !== '' && this.nonpeak !== '' && this.nonpdays !== '') {
 
-                this.addAllocation = true;
-                var allocationval = [];
-                var room1 = Polymer.dom(this.root).querySelector("#room");
-                var peaksn = Polymer.dom(this.root).querySelector("#peak");
-                var cutoff = Polymer.dom(this.root).querySelector("#pdays");
-                var nonpeakssn = Polymer.dom(this.root).querySelector("#nonpeak");
-                var nonpeakday = Polymer.dom(this.root).querySelector("#nonpdays");
- 
-
+                    var blockingval = [];
                     var room1 = Polymer.dom(this.root).querySelector("#room");
                     var peaksn = Polymer.dom(this.root).querySelector("#peak");
-                    var cutoff = Polymer.dom(this.root).querySelector("#pdays");
+                    var cancel = Polymer.dom(this.root).querySelector("#cancell");
                     var nonpeakssn = Polymer.dom(this.root).querySelector("#nonpeak");
                     var nonpeakday = Polymer.dom(this.root).querySelector("#nonpdays");
 
                      var rooms = {
                         room: this.room,
                         peak: this.peak,
-                        pdays: this.pdays,
+                        cancel: this.cancel,
                         nonpeak: this.nonpeak,
                         nonpdays: this.nonpdays
                     }
@@ -342,11 +411,11 @@
                     this.rooms.push(rooms);
 
                     // console.log(room1.value,peaksn.value,cutoff.value,nonpeakssn.value,nonpeakday.value);
-                    var fieldbody = '<span><td><vaadin-text-field style="width: 130px;" id="room' + this.idnum + '" value="' + room1.value + '" ></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="peak' + this.idnum + '" value="' + peaksn.value + '" ></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="pdays' + this.idnum + '" value="' + cutoff.value + '" ></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="nonpeak' + this.idnum + '" value="' + nonpeakssn.value + '" ></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="nonpdays' + this.idnum + '" value="' + nonpeakday.value + '"></vaadin-text-field></td> <paper-icon-button icon="my-icons:close" style="color:red;"></paper-icon-button></span><br>'
+                    var fieldbody = '<span><td><vaadin-text-field style="width: 130px;" id="room' + this.idnum + '" value="' + room1.value + '" ></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="peak' + this.idnum + '" value="' + peaksn.value + '" ></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="cancell' + this.idnum + '" value="' + cancel.value + '" ></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="nonpeak' + this.idnum + '" value="' + nonpeakssn.value + '" ></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="nonpdays' + this.idnum + '" value="' + nonpeakday.value + '"></vaadin-text-field></td> <paper-icon-button icon="my-icons:close" style="color:red;"></paper-icon-button></span><br>'
                     var node = Polymer.dom(this.root).querySelector("#writeHere").innerHTML += fieldbody;
                     this.room = '';
                     this.peak = '';
-                    this.pdays = '';
+                    this.cancel = '';
                     this.nonpeak = '';
                     this.nonpdays = '';
                     this.nonpdays = '';
@@ -392,7 +461,7 @@
                     var active = this.$.active.checked;
 
                     this.method = 'POST';
-                    this.$.ajax.url = '/allocation/add';
+                    this.$.ajax.url = '/blocking/add';
                     this.$.ajax.contentType = "application/json";
 
 
@@ -414,7 +483,7 @@
             },
             _ok() {
                 this.$.successModal.opened = false;
-                window.location.assign('/allocation');
+                window.location.assign('/blocking');
             },
             toggleDrawer() { },
             _cancel() { },
@@ -423,8 +492,8 @@
                 this.room = "";
                 this.msg = "";
                 this.url = '/hotel/read';
-            },
-          
+            },          
+       
             _hotelLoaded(data){
                 this.hotelItems = data.detail.response.data;
             },
