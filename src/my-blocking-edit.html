@@ -35,7 +35,7 @@
 <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
 
 
-<dom-module id="my-allocation-edit">
+<dom-module id="my-blocking-edit">
     <template>
         <style include="shared-styles">
             :host {
@@ -68,7 +68,7 @@
                     display: none;
                 }
 
-                div .allocation {
+                div .blocking {
 
                     opacity: 0;
 
@@ -161,12 +161,12 @@
                 background-color: #f1f8e9;
             }
 
-            paper-dialog#allocationSave {
+            paper-dialog#blockingSave {
                 border-color: #4caf50;
                 background-color: #f1f8e9;
             }
 
-            paper-dialog#allocationDelete {
+            paper-dialog#blockingDelete {
                 border-color: #4caf50;
                 background-color: #f1f8e9;
             }
@@ -267,18 +267,17 @@
                 }
             </style>
         </custom-style>
-        <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_allocationLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
-
+        <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_blockingLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
         <iron-ajax id="ajaxRoom" handle-as="json" on-response="_roomsLoaded"></iron-ajax>
 
         <app-drawer-layout fullbleed narrow="{{narrow}}" id="drawerLayout">
             <app-header-layout id="appheader" has-scrolling-region>
                 <app-header fixed slot="header">
                     <app-toolbar>
-                        <a href="/allocation">
+                        <a href="/blocking">
                             <paper-icon-button noink class="menu" style="color: white;" icon="my-icons:arrow-back"></paper-icon-button>
                         </a>
-                        <div main-title>Edit Allocation</div>
+                        <div main-title>Edit Blocking</div>
                         <paper-icon-button class="menu" icon="my-icons:delete-forever" on-tap="_openDelete"></paper-icon-button>
                     </app-toolbar>
                 </app-header>
@@ -296,29 +295,21 @@
                         <!--{{updated_by}}-->Jeino &nbsp;
                         <time-ago datetime$="{{_timeStampToDateTime(updatedAt)}}">{{_timeStampToDateTime(updatedAt)}}</time-ago>
                     </div>
-               
                     <div style="position: absolute; top: 20px; right: 40px;">
-                        <paper-dropdown-menu id="workspace" always-float-label style="cursor:pointer;width:150px;" label="Workspace" value="{{workspace}}">
-                            <paper-listbox attr-for-selected="name" slot="dropdown-content" class="dropdown-content" value="{{workspace}}">
+                        <paper-dropdown-menu always-float-label style="cursor:pointer;width:150px;" label="Workspace">
+                            <paper-listbox attr-for-selected="name" slot="dropdown-content" class="dropdown-content" selected="{{workspace}}">
                                 <paper-item name="PTN">PTN</paper-item>
                                 <paper-item name="Tabikupo">Tabikupo</paper-item>
+
                             </paper-listbox>
                         </paper-dropdown-menu>
                     </div>
-                    <!-- <paper-toggle-button id="activetoggle" style="float: right;" value="{{active}}" on-tap="{{_active}}">{{active}}</paper-toggle-button> -->
+                    <!-- <paper-toggle-button style="float: right;" value="{{active}}" on-tap="{{_active}}">ACTIVE</paper-toggle-button> -->
                     <div>
                         <paper-toggle-button style="float: right;" value="{{active}}" id="active" on-tap="_active">ACTIVE</paper-toggle-button>
                     </div>
-                    <!-- <paper-dropdown-input always-float-label style="width: 100%" label="Hotel" items='[[hotelItems]]' filter-property="hotel" value="{{hotel}}">
-                        <template>
-                            <template is="dom-repeat" items="[[items]]" as="item">
-                                <paper-item>[[item.hotel]]</paper-item>
-                            </template>
-                        </template>
-                    </paper-dropdown-input> -->
-                    
                     <paper-input always-float-label value={{hotel}} label="HOTEL"></paper-input>
-                    
+                  
                     <paper-textarea always-float-label value="{{note}}" label="REMARKS" style="width: 49%; float: right;"></paper-textarea>
                     <range-datepicker-input class="" date-format="DD-MMMM-YYYY" style="width: 49%; ">
                         <template>
@@ -328,40 +319,48 @@
                             </div>
 
                         </template>
-                    </range-datepicker-input>            
-                    <vaadin-combo-box id="room"  style="width: 160px;" always-float-label  label="ROOM" items='[[roomItems]]' filter-property="hotel" value="{{room}}">
+                    </range-datepicker-input>
+                    <!-- <iron-ajax auto url="{{urlh}}" params='{}' handle-as="json" on-response="_blockingLoadedHotel" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
+                    <vaadin-combo-box  style="width: 160px;" always-float-label  label="ROOM" items="[[hotels]]" filter-property="hotel" value="{{hotels.room}}">
+                        <template is="dom-repeat" items="[[items]]" as="item">
+                                <paper-item  style="width: 100%;">
+                                    <p ip="demo"></p>  
+                                    
+                                    [[item.room]]
+                                </paper-item>
+                              
+                            </template>
+                      </vaadin-combo-box> -->
+                      <vaadin-combo-box id="room"  style="width: 160px;" always-float-label  label="ROOM" items='[[roomItems]]' filter-property="hotel" value="{{room}}">
                             
                         <template is="dom-repeat" items="[[items]]" as="item">
                             <paper-item>[[item]]</paper-item>
                         </template>
                   </vaadin-combo-box>
-                    <!-- <vaadin-text-field style="width: 180px;" id="room" value="{{room}}" label="ROOM"></vaadin-text-field> -->
-                    <vaadin-text-field style="width: 180px;" id="peak" value="{{peak}}" label="PEAK"></vaadin-text-field>
-                    <vaadin-text-field style="width: 180px;" id="pdays" value="{{pdays}}" label="CUT-OFF"></vaadin-text-field>
+                      <!-- <vaadin-text-field style="width: 180px;" id="room" value="{{room}}" label="ROOM"></vaadin-text-field> -->
+                 
+                      <vaadin-text-field style="width: 180px;" id="peak" value="{{peak}}" label="PEAK"></vaadin-text-field>
+                    <vaadin-text-field style="width: 180px;" id="cancell" value="{{cancel}}" label="CANCELLATION"></vaadin-text-field>
                     <vaadin-text-field style="width: 180px;" id="nonpeak" value="{{nonpeak}}" label="NON-PEAK"></vaadin-text-field>
                     <vaadin-text-field style="width: 180px;" id="nonpdays" value="{{nonpdays}}" label="NONPEAKDAYS"></vaadin-text-field>
-                    <vaadin-button on-click="_add">Add</vaadin-button>
+                     <vaadin-button on-click="_add">Add</vaadin-button>
                     <br>
                     <div class="griddiv">
                         <span>
-                                <!-- <vaadin-text-field style="width: 160px;" value="ID" readonly></vaadin-text-field>&nbsp; -->
+
                             <vaadin-text-field style="width: 160px;" value="Room" readonly></vaadin-text-field>&nbsp;
                             <vaadin-text-field style="width: 160px;" value="Peak" readonly></vaadin-text-field>&nbsp;
-                            <vaadin-text-field style="width: 160px;" value="Cut-Off" readonly></vaadin-text-field>&nbsp;
+                            <vaadin-text-field style="width: 160px;" value="Cancellation" readonly></vaadin-text-field>&nbsp;
                             <vaadin-text-field style="width: 160px;" value="Non-Peak" readonly></vaadin-text-field>&nbsp;
                             <vaadin-text-field style="width: 160px;" value="Non-Peak Days" readonly></vaadin-text-field>
                       
                         </span>
                         <br>
-                      
+                       
                         <span>
                                 <table>
-                                        <template is="dom-repeat" items="{{allocations.rooms}}" as="room">
+                                        <template is="dom-repeat" items="{{blockings.rooms}}" as="room">
                                         <tr>
-                                                <!-- <td>   
-                                                        <vaadin-text-field data-index={{index}} style="width: 160px;" id="roomval" value="{{room.id}}"></vaadin-text-field>
-                                                        <br>
-                                                </td> -->
                                             <td>   
                                                     <vaadin-text-field data-index={{index}} style="width: 160px;" id="roomval" value="{{room.room}}"></vaadin-text-field>
                                                     <br>
@@ -371,7 +370,7 @@
                                                     <br>
                                              </td>
                                             <td>
-                                                    <vaadin-text-field style="width: 160px;" id="pdaysval" value="{{room.pdays}}"></vaadin-text-field>
+                                                    <vaadin-text-field style="width: 160px;" id="pdaysval" value="{{room.cancel}}"></vaadin-text-field>
                                                     <br>
                                                 </td>
                                             <td>
@@ -392,6 +391,8 @@
                         </span>
                         <span id="writeHere"></span>
                     </div>
+
+
                     <div>
                         <h3>PEAK SEASONS</h3>
                     </div>
@@ -401,6 +402,7 @@
 
                         <vaadin-button on-click="_adddate">Add</vaadin-button>
                     </div>
+
                     <div class="griddiv">
                         <span>
                             <vaadin-text-field style="width: 192px;" value="Peak Start" readonly></vaadin-text-field>&nbsp;
@@ -412,7 +414,7 @@
 
                         <span>
                             <table>
-                                    <template is="dom-repeat" items="{{allocations.seasondate}}" as="season">
+                                    <template is="dom-repeat" items="{{blockings.seasondate}}" as="season">
                                 <tr>
                                     <td>
                                             <vaadin-date-picker style="width: 192px;" id="startValue" value="{{season.startValue}}"  max="{{season.endValue}}" date-format="DD-MMMM-YYYY"></vaadin-date-picker>
@@ -435,12 +437,13 @@
                         <span id="writeHeredate"></span>
 
                     </div>
+
                 </div>
             </app-header-layout>
             <!-- save -->
             <paper-fab noink on-tap="_openSave" icon="my-icons:check" class="blue"></paper-fab>
 
-            <vaadin-dialog id="allocationSave" no-close-on-esc no-close-on-outside-click>
+            <vaadin-dialog id="blockingSave" no-close-on-esc no-close-on-outside-click>
                 <template>
 
                     <h3 style="text-align: center">Save Changes?</h3>
@@ -449,7 +452,7 @@
                     <paper-button on-tap="_closeDialog">No</paper-button>
                 </template>
             </vaadin-dialog>
-            <vaadin-dialog id="allocationDelete" no-close-on-esc no-close-on-outside-click>
+            <vaadin-dialog id="blockingDelete" no-close-on-esc no-close-on-outside-click>
                 <template>
                     <h3 style="text-align: center">Confirm to Delete?</h3>
                     <hr>
@@ -486,7 +489,7 @@
 
     <script>
         Polymer({
-            is: 'my-allocation-edit',
+            is: 'my-blocking-edit',
 
             properties: {
                 editKey: { type: String, notify: true, observer: '_onkeyChanged' },
@@ -542,26 +545,19 @@
          
                 this.$.ajaxRoom.generateRequest();
             },
-            // _hotelChanged() {
-            //     if (this.selectedHotels == 0) {
-            //         this.hotelResult = 'Pacific';
-            //     } else if (this.selectedHotels == 1) {
-            //         this.hotelResult = 'Resorts World';
-            //     } else if (this.selectedHotels == 2) {
-            //         this.hotelResult = 'Cebu Shangrila';
+            // _blockingLoadedHotel(data) {
+            //     if (this.urlh === '/hotel/read') {
+            //         this.hotels = data.detail.response.data;
+            //         console.log(data.detail.response.data);
             //     }
-            //     // } else if (this.selectedHotels == 3) {
-            //     //     this.hotelResult = 'Cebu Shangrila';
-            //     // }
             // },
-           
             displayLabels: function (e) {
                 return e.base.join(', ');
             },
-            _allocationLoaded(data) {
+            _blockingLoaded(data) {
                 if (this.editKey) {
-                    if (this.url === '/allocation/readEdit/' + this.editKey) {
-                        this.allocations = data.detail.response.data;
+                    if (this.url === '/blocking/readEdit/' + this.editKey) {
+                        this.blockings = data.detail.response.data;
                         this.workspace = data.detail.response.data.workspace;
                         this.active = data.detail.response.data.active;
                         this.hotel = data.detail.response.data.hotel;
@@ -574,15 +570,14 @@
                         this.updatedAt = data.detail.response.data.updatedAt;
                         this.created_by = data.detail.response.data.created_by;
                         this.updated_by = data.detail.response.data.updated_by;
-
                         
-                    }
-
-                     if(this.active == true){
-                        var actoggle = Polymer.dom(this.root).querySelector("#active").checked = this.active;
-                    }
-                    else{
-                        var actoggle = Polymer.dom(this.root).querySelector("#active");
+                        
+                        if(this.active == true){
+                var actoggle = Polymer.dom(this.root).querySelector("#active").checked = this.active;
+                }
+                else{
+                    var actoggle = Polymer.dom(this.root).querySelector("#active");
+                }
                     }
                 }
 
@@ -600,10 +595,8 @@
                     nonpeak: this.nonpeak,
                     nonpdays: this.nonpdays
                 }
-                // console.log(this.rooms);
+                console.log(this.rooms);
                 this.rooms.pop(rooms);
-                // this.rooms.splice(rooms);
-                // console.log(this.rooms);
             },
             _dateclose(){
                 var seasondate =
@@ -613,20 +606,28 @@
                     }
                     this.seasondate.pop(seasondate);
             },
+            _active() {
+                // console.log(this.selectActive);
+                // this.selectActive = true;
+                // console.log(this.selectActive);
+                this.$.active.checked;
+                // console.log(this.$.active.checked);
+            },
             _add() {
 
             if (this.room !== '' && this.peak !== '' && this.pdays !== '' && this.nonpeak !== '' && this.nonpdays !== '') {
             
+              
                 var room1 = Polymer.dom(this.root).querySelector("#room");
                 var peaksn = Polymer.dom(this.root).querySelector("#peak");
-                var cutoff = Polymer.dom(this.root).querySelector("#pdays");
+                var cancel = Polymer.dom(this.root).querySelector("#cancell");
                 var nonpeakssn = Polymer.dom(this.root).querySelector("#nonpeak");
                 var nonpeakday = Polymer.dom(this.root).querySelector("#nonpdays");
             
                  var rooms = {
                     room: this.room,
                     peak: this.peak,
-                    pdays: this.pdays,
+                    cancel: this.cancel,
                     nonpeak: this.nonpeak,
                     nonpdays: this.nonpdays
                 }
@@ -634,11 +635,11 @@
                 this.rooms.push(rooms);
             
                 // console.log(room1.value,peaksn.value,cutoff.value,nonpeakssn.value,nonpeakday.value);
-                var fieldbody = '<span><td><vaadin-text-field style="width: 160px;" id="room' + this.idnum + '" value="' + room1.value + '" ></vaadin-text-field></td> &nbsp;<td><vaadin-text-field style="width: 160px;" id="peak' + this.idnum + '" value="' + peaksn.value + '" ></vaadin-text-field></td> &nbsp;<td> <vaadin-text-field style="width: 160px;" id="pdays' + this.idnum + '" value="' + cutoff.value + '"></vaadin-text-field></td>&nbsp;<td><vaadin-text-field style="width: 160px;" id="nonpeak' + this.idnum + '" value="' + nonpeakssn.value + '" ></vaadin-text-field></td>&nbsp;<td> <vaadin-text-field style="width: 160px;" id="nonpdays' + this.idnum + '" value="' + nonpeakday.value + '"></vaadin-text-field></td> </span><br>'
+                var fieldbody = '<span><td><vaadin-text-field style="width: 160px;" id="room' + this.idnum + '" value="' + room1.value + '" ></vaadin-text-field></td> &nbsp;<td><vaadin-text-field style="width: 160px;" id="peak' + this.idnum + '" value="' + peaksn.value + '" ></vaadin-text-field></td> &nbsp;<td> <vaadin-text-field style="width: 160px;" id="pdays' + this.idnum + '" value="' + cancel.value + '"></vaadin-text-field></td>&nbsp;<td><vaadin-text-field style="width: 160px;" id="nonpeak' + this.idnum + '" value="' + nonpeakssn.value + '" ></vaadin-text-field></td>&nbsp;<td> <vaadin-text-field style="width: 160px;" id="nonpdays' + this.idnum + '" value="' + nonpeakday.value + '"></vaadin-text-field></td> </span><br>'
                 var node = Polymer.dom(this.root).querySelector("#writeHere").innerHTML += fieldbody;
                 this.room = '';
                 this.peak = '';
-                this.pdays = '';
+                this.cancel = '';
                 this.nonpeak = '';
                 this.nonpdays = '';
                 this.nonpdays = '';
@@ -647,13 +648,7 @@
                 alert('Please Input All');
             }
             },
-            _active() {
-                // console.log(this.selectActive);
-                // this.selectActive = true;
-                // console.log(this.selectActive);
-                this.$.active.checked;
-                // console.log(this.$.active.checked);
-            },
+          
             _adddate() {
                 if (this.startValue !== '' && this.endValue !== '') {
 
@@ -678,29 +673,28 @@
                 }
             },
             _openSave() {
-                this.$.allocationSave.opened = true;
+                this.$.blockingSave.opened = true;
             },
             _openDelete() {
-                this.$.allocationDelete.opened = true;
+                this.$.blockingDelete.opened = true;
             },
             _closeDialog() {
-                this.$.allocationSave.opened = false;
-                this.$.allocationDelete.opened = false;
+                this.$.blockingSave.opened = false;
+                this.$.blockingDelete.opened = false;
             },
             _closeModal() {
                 this.$.successModal.opened = false;
                 this.$.successUpdate.opened = false;
-                window.location.assign('/allocation');
+                window.location.assign('/blocking');
             },
             _update() {
+
+                // console.log(this.rooms)
                 if (this.hotel) {
                     if (this.editKey) {
-
-                   this.active = this.$.active.checked;                        
-                    
-                    //    console.log(this.active);
+                        this.active = this.$.active.checked;
                         this.method = 'PUT';
-                        this.$.ajax.url = '/allocation/update/' + this.editKey;
+                        this.$.ajax.url = '/blocking/update/' + this.editKey;
                         this.$.ajax.contentType = "application/json";
                         this.$.ajax.body = {
                             active: this.active,
@@ -719,9 +713,9 @@
                             updated_by: this.updated_by,
                         };
                         this.$.ajax.generateRequest();
-                        this.$.allocationSave.opened = false;
+                        this.$.blockingSave.opened = false;
                         this.$.successUpdate.opened = true;
-                        this.url = '/allocation/dummy';
+                        this.url = '/blocking/dummy';
                     }
                     else {
                         this.msg = "All fields required";
@@ -731,11 +725,11 @@
             _delete() {
                 if (this.editKey) {
                     this.method = 'DELETE';
-                    this.$.ajax.url = '/allocation/delete/' + this.editKey;
+                    this.$.ajax.url = '/blocking/delete/' + this.editKey;
                     this.$.ajax.generateRequest();
                     // this.$.successModalDelete.open();
-                    this.url = '/allocation/dummy';
-                    this.$.allocationDelete.opened = false;
+                    this.url = '/blocking/dummy';
+                    this.$.blockingDelete.opened = false;
                     this.$.successModal.opened = true;
                 }
             },
@@ -749,9 +743,13 @@
                 // var table = Polymer.dom(this.root).querySelector("#hotels");
             },
             ready() {
-               
                 // console.log(this.editKey);
-               },
+                var monthNames = ["January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December"
+                ];
+                var currentMonths = new Date()
+                this.month = monthNames[currentMonths.getMonth()] + " " + currentMonths.getDate() + " " + currentMonths.getFullYear();
+            },
             _limited() {
                 var cells = Polymer.dom(this.root).querySelectorAll("td");
                 for (var i = 0; i < cells.length; i++) {
@@ -770,16 +768,15 @@
             },
             _onkeyChanged() {
                 if (this.editKey) {
-                    this.url = '/allocation/readEdit/' + this.editKey;
+                    this.url = '/blocking/readEdit/' + this.editKey;
                 } else {
-                    this.url = '/allocation/dummy';
+                    this.url = '/blocking/dummy';
                 }
             },
             _handleResponse() { },
             _timeStampToDateTime(ts) {
                 return new Date(ts);
             },
-          
             _roomsLoaded(data) {
                     this.roomItems = data.detail.response.data.room;
                     // console.log(this.roomItems);

@@ -11,10 +11,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
-<link rel="import" href="../bower_components/polymerfire/firebase-document.html">
-<link rel="import" href="../bower_components/polymerfire/firebase-messaging.html">
-<link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
-<link rel="import" href="../bower_components/polymerfire/firebase-query.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
@@ -251,7 +247,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </custom-style>
 
         <app-route route="{{route}}" pattern="/edit/:_id" data="{{editData}}" active="{{editActive}}"></app-route>
-
+ 
         <iron-pages selected="[[route.path]]" attr-for-selected="name" fallback-selection="view404" role="main">
             <div name="">
                 <app-header-layout fullbleed has-scrolling-region>
@@ -285,7 +281,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_allocationLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
                         <template is="dom-repeat" items="[[allocations]]" as="item">
                             <div class="allocation">
-                                <div id="header" class="header" style="background-color: #3F51B5; padding: 16px; padding-bottom: 5px; font-size: 14px;">
+                                <div id="header" class="header" style="background-color: #673AB7; padding: 16px; padding-bottom: 5px; font-size: 14px;">
                                     <a href="/allocation/edit/{{item._id}}">
                                         <paper-icon-button id="{{item._id}}" noink on-tap="_editAllocation" data-args="{{item._id}}" icon="my-icons:edit" alt="{{item._id}}"
                                             style="float: right; margin-top:-10px; margin-right:-10px;color: white;"></paper-icon-button>

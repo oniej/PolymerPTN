@@ -31,7 +31,6 @@
     "neon-animation": "PolymerElements/neon-animation#^2.0.2",
     "web-animations-js": "web-animations/web-animations-js#^2.3.1",
     "google-map": "GoogleWebComponents/google-map#^2.0.2",
-    "polymerfire": "firebase/polymerfire#^2.2.1",
     "paper-radio-group": "PolymerElements/paper-radio-group#^2.0.0",
     "bwt-datatable": "bluewatertracks/bwt-datatable#^2.0.4",
     "paper-search": "Collaborne/paper-search#^2.0.9",
@@ -76,7 +75,12 @@
     "vaadin-dialog": "vaadin/vaadin-dialog#^2.0.2",
     "vaadin-grid": "vaadin/vaadin-grid#^5.0.4",
     "vaadin-date-picker": "vaadin/vaadin-date-picker#^3.1.0",
-    "vaadin-notification": "vaadin/vaadin-notification#^1.0.0"
+    "vaadin-notification": "vaadin/vaadin-notification#^1.0.0",
+    "vaadin-dropdown-menu": "vaadin/vaadin-dropdown-menu#^1.0.0",
+    "paper-dropdown-input": "Juravenator/paper-dropdown-input#^2.5.2",
+    "vaadin-item": "vaadin/vaadin-item#^2.0.0",
+    "vaadin-list-box": "vaadin/vaadin-list-box#^1.0.2",
+    "vaadin-combo-box": "vaadin/vaadin-combo-box#^4.0.1"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^6.0.0"

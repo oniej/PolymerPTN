@@ -31,6 +31,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="my-icons.html">
 
+<link rel="lazy-import" href="my-inquire-one.html">
 <link rel="lazy-import" href="my-availability.html">
 <link rel="lazy-import" href="my-blocking.html">
 <link rel="lazy-import" href="my-hotels.html">
@@ -286,6 +287,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </app-header>
 
           <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
+            <a name="inquire-one" href="[[rootPath]]inquire-one">
+              <paper-icon-item toggles="true" class="menuSelected">
+                <iron-icon icon="my-icons:dashboard" slot="item-icon"></iron-icon>
+                <span>Inquire One</span>
+              </paper-icon-item>
+            </a>
             <a name="availability" href="[[rootPath]]availability">
               <paper-icon-item toggles="true" class="menuSelected">
                 <iron-icon icon="my-icons:dashboard" slot="item-icon"></iron-icon>
@@ -294,7 +301,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </a>
             <a name="blocking" href="[[rootPath]]blocking">
               <paper-icon-item toggles="true" class="menuSelected">
-                <iron-icon icon="my-icons:block" slot="item-icon"></iron-icon>
+                <iron-icon icon="my-icons:dashboard" slot="item-icon"></iron-icon>
                 <span>Blocking</span>
               </paper-icon-item>
             </a>
@@ -333,6 +340,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </app-drawer>
       <!-- Main content -->
       <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
+        <my-inquire-one name="inquire-one" route="{{subroute}}"></my-inquire-one>
         <my-availability name="availability" route="{{subroute}}"></my-availability>
         <my-blocking name="blocking" route="{{subroute}}"></my-blocking>
         <my-allocation name="allocation" route="{{subroute}}"></my-allocation>
