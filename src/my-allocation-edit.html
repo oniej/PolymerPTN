@@ -11,6 +11,9 @@
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/vaadin-dialog/vaadin-dialog.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/vaadin-date-picker/vaadin-date-picker.html">
+<script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
 <link rel="import" href="../bower_components/vaadin-button/vaadin-button.html">
 <link rel="import" href="../bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
@@ -100,6 +103,9 @@
                 overflow: auto;
             }
             }
+
+            } 
+
             @media (min-width: 768px) {
                 paper-checkbox {
                     display: inline-block;
@@ -150,11 +156,13 @@
                 padding-top: 12px;
                 padding-bottom: 12px;
             }
+
             paper-fab.blue {
                 position: fixed;
                 bottom: 32px;
                 right: 32px;
-                background-color: #3F51B5;
+                --paper-fab-background: darkorange;
+                --paper-fab-keyboard-focus-background: darkorange;
             }
             app-header {
                 color: rgb(255, 255, 255);
@@ -194,7 +202,12 @@
                 color: #eee;
                 height: 1px;
             }
+
             @-webkit-keyframes fadeIn {
+
+
+            /* @-webkit-keyframes fadeIn {
+
                 from {
                     opacity: 0;
                 }
@@ -217,6 +230,7 @@
                 to {
                     opacity: 1;
                 }
+
             }
             .griddiv {
                 border-style: solid;
@@ -228,6 +242,7 @@
                 overflow: auto;
 
             }
+
         </style>
         <custom-style>
             <style is="custom-style">

@@ -6,6 +6,11 @@
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
@@ -113,6 +118,10 @@
                     -moz-animation-duration: 0.5s;
                     animation-duration: 0.5s;
                 }
+
+                background-color: darkorange;
+            }
+            @media (max-width: 768px) {
                 #buttonform {
                     display: none;
                 }
@@ -196,6 +205,7 @@
                 overflow: auto;
             }
             }
+
             paper-toast {
                 width: 20%;
                 position: fixed;
@@ -207,6 +217,7 @@
                 font-size: 14px;
                 margin-right: 5px;
             }
+
             hr {
                 background-color: #eee;
                 border: 0 none;
@@ -435,6 +446,15 @@
             _add() {
 
                 if (this.room !== '' && this.peak !== '' && this.pdays !== '' && this.nonpeak !== '' && this.nonpdays !== '') {
+
+                this.addAllocation = true;
+                var allocationval = [];
+                var room1 = Polymer.dom(this.root).querySelector("#room");
+                var peaksn = Polymer.dom(this.root).querySelector("#peak");
+                var cutoff = Polymer.dom(this.root).querySelector("#pdays");
+                var nonpeakssn = Polymer.dom(this.root).querySelector("#nonpeak");
+                var nonpeakday = Polymer.dom(this.root).querySelector("#nonpdays");
+ 
 
                     var room1 = Polymer.dom(this.root).querySelector("#room");
                     var peaksn = Polymer.dom(this.root).querySelector("#peak");

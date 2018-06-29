@@ -1,0 +1,329 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../bower_components/iron-scroll-threshold/iron-scroll-threshold.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/vaadin-dialog/vaadin-dialog.html">
+<link rel="import" href="../bower_components/salte-dialog/salte-dialog.html">
+<link rel="import" href="../bower_components/paper-dropdown-input/paper-dropdown-input.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+
+
+<link rel="import" href="time-element.html">
+<link rel="import" href="shared-styles.html">
+<dom-module id="my-inquiry2">
+    <template>
+        <style include="shared-styles">
+            :host {
+                height: 100vh;
+                margin: 0;
+                display: flex;
+                flex-direction: column;
+            }
+
+            #table {
+                opacity: 1;
+                animation-name: fadeInOpacity;
+                animation-iteration-count: 1;
+                animation-timing-function: ease-in;
+                animation-duration: 0.5s;
+            }
+
+            @keyframes fadeInOpacity {
+                0% {
+                    opacity: 0;
+                }
+                100% {
+                    opacity: 1;
+                }
+            }
+
+            @media (max-width: 768px) {
+                div .availability {
+                    margin: 16px;
+                    display: flex;
+                    flex-direction: column;
+                    border-radius: 3px;
+                }
+                #dateandRoom {
+                    display: flex;
+                }
+            }
+
+            @media (min-width: 768px) {
+                div .availability {
+                    width: 765px;
+                    margin: 16px auto;
+                    border-radius: 3px;
+
+                    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+                }
+            }
+
+            #hotels {
+                font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+                border-collapse: collapse;
+                width: 100%;
+            }
+
+            #hotels td,
+            #hotels th {
+                text-align: center;
+                border: 1px solid #ddd;
+                padding: 2px;
+
+            }
+
+            #hotels th {
+                padding-top: 12px;
+                padding-bottom: 12px;
+            }
+
+            .avatar-container-profile {
+                position: relative;
+                border: 2px solid darkorange;
+                border-radius: 50%;
+                height: 90px;
+                padding: 2px;
+                width: 90px;
+                margin: 20px auto;
+            }
+
+            app-header {
+                color: rgb(255, 255, 255);
+                background-color: darkorange;
+            }
+
+            hr {
+                background-color: #eee;
+                border: 0 none;
+                color: #eee;
+                height: 1px;
+            }
+        </style>
+        <iron-ajax auto url="{{urlGroup}}" params='{}' handle-as="json" on-response="_groupLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
+        <iron-ajax auto url="{{urlInqury}}" params='{}' handle-as="json" on-response="_inquiryLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
+        <iron-pages selected="[[route.path]]" attr-for-selected="name" fallback-selection="view404" role="main">
+            <div name="">
+                <app-header-layout fullbleed has-scrolling-region>
+                    <app-header fixed slot="header">
+                        <app-toolbar>
+                            <paper-icon-button class="menu" icon="my-icons:menu" drawer-toggle on-tap="toggleDrawer"></paper-icon-button>
+                            <div main-title>Agent Inquiry</div>
+                        </app-toolbar>
+                    </app-header>
+                    <div class="card">
+                        <div style="display: inline;" id="dateandRoom">
+                            <div style="display: flex">
+                                <div style="display: flex">
+                                    <paper-dropdown-input label="Select Group" items='[[groupItems]]' filter-property="group" value="{{hotelId}}">
+                                        <template>
+                                            <template is="dom-repeat" items="[[items]]" as="item">
+                                                <paper-item>[[item.group]]</paper-item>
+                                            </template>
+                                        </template>
+                                    </paper-dropdown-input>
+                                    <div style="display: flex; margin-left: 20px;">
+                                        <paper-input label="Check in" type="date" value="{{checkin}}">
+                                            <iron-icon icon="my-icons:date-range" slot="prefix"></iron-icon>
+                                        </paper-input>
+                                    </div>
+                                    <div style="display: flex; margin-left: 20px;">
+                                        <paper-input label="Check out" type="date" value="{{checkout}}">
+                                            <iron-icon icon="my-icons:date-range" slot="prefix"></iron-icon>
+                                        </paper-input>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div id="peak">
+                            <span style="color: red">Peak Season</span>
+                            <span style="color: green;margin-left: 14px;">Open</span>
+                            <!-- <span style="color:yellow;margin-left: 14px;">limited</span> -->
+                        </div>
+                        <div id="table">
+                            <span style="float: right">{{start}} - {{end}}</span>
+                            <table id="hotels">
+                                <tr>
+                                    <td>Hotel</td>
+                                    <td>Room</td>
+                                    <td></td>
+                                    <td>27-June</td>
+                                    <td>28-June</td>
+                                    <td>29-June</td>
+                                    <td>30-June</td>
+                                    <td>1-July</td>
+                                    <td>2-July</td>
+                                    <td>3-July</td>
+                                    <td>4-July</td>
+                                    <td>5-July</td>
+                                    <td>6-July</td>
+                                    <td>7-July</td>
+                                    <td>8-July</td>
+                                    <td>9-July</td>
+                                    <td>10-July</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td>Cut-off</td>
+                                    <td style="background-color: red;color: white">19-Apr</td>
+                                    <td style="background-color: red;color: white">20-Apr</td>
+                                    <td style="background-color: red;color: white">21-Apr</td>
+                                    <td>10-June</td>
+                                    <td>11-June</td>
+                                    <td>12-June</td>
+                                    <td>13-June</td>
+                                    <td>14-June</td>
+                                    <td>15-June</td>
+                                    <td>16-June</td>
+                                    <td>17-June</td>
+                                    <td>18-June</td>
+                                    <td>19-June</td>
+                                    <td>20-June</td>
+                                </tr>
+                                <tr>
+                                    <td>Shangrila</td>
+                                    <td>Standard</td>
+                                    <td></td>
+                                    <td style="background-color: green;color: white">3</td>
+                                    <td style="background-color:green;color: white">1</td>
+                                    <td style="background-color: green;color: white">1</td>
+                                    <td style="background-color: green;color: white">1</td>
+                                    <td>closed</td>
+                                    <td>closed</td>
+                                    <td>closed</td>
+                                    <td>5</td>
+                                    <td style="background-color: green;color: white">4</td>
+                                    <td style="background-color: green;color: white">1</td>
+                                    <td>1</td>
+                                    <td style="background-color: green;color: white">1</td>
+                                    <td>1</td>
+                                    <td>1</td>
+                                </tr>
+                                <tr>
+                                    <td>Shangrila</td>
+                                    <td>Deluxe</td>
+                                    <td></td>
+                                    <td>closed</td>
+                                    <td style="background-color: green;color: white">2</td>
+                                    <td style="background-color: green;color: white">5</td>
+                                    <td style="background-color: green;color: white">1</td>
+                                    <td>closed</td>
+                                    <td>closed</td>
+                                    <td>closed</td>
+                                    <td>closed</td>
+                                    <td>closed</td>
+                                    <td>closed</td>
+                                    <td>closed</td>
+                                    <td>closed</td>
+                                    <td>closed</td>
+                                    <td>closed</td>
+                                </tr>
+                                <tr>
+                                    <td>Shangrila</td>
+                                    <td>Superior</td>
+                                    <td></td>
+                                    <td>1</td>
+                                    <td style="background-color: green;color: white">1</td>
+                                    <td>1</td>
+                                    <td style="background-color: green;color: white">4</td>
+                                    <td>2</td>
+                                    <td>3</td>
+                                    <td>closed</td>
+                                    <td>closed</td>
+                                    <td>closed</td>
+                                    <td>closed</td>
+                                    <td>closed</td>
+                                    <td>closed</td>
+                                    <td style="background-color: green;color: white">1</td>
+                                    <td style="background-color: green;color: white">1</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </app-header-layout>
+        </iron-pages>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'my-inquiry2',
+            properties: {
+                checkin: String,
+                checkout: String,
+                stardate: String,
+                enddate: String
+            },
+            observers: ['_dateChanged(checkin,checkout)'],
+            ready() {
+
+                this.urlGroup = '/group/read';
+                var hideTable = Polymer.dom(this.root).querySelector("#table").setAttribute("style", "display:none");
+                var hidePeak = Polymer.dom(this.root).querySelector("#peak").setAttribute("style", "display:none");
+            },
+            _dateChanged(a, b) {
+                if (a && b != "") {
+                    var hideTable = Polymer.dom(this.root).querySelector("#table").setAttribute("style", "width:100%;overflow-x:auto;");
+                    var hidePeak = Polymer.dom(this.root).querySelector("#peak").setAttribute("style", "display:inline-block");
+                } else {
+                    var hideTable = Polymer.dom(this.root).querySelector("#table").setAttribute("style", "display:none;");
+                    var hidePeak = Polymer.dom(this.root).querySelector("#peak").setAttribute("style", "display:none");
+                }
+                this.stardate = new Date(a)
+                this.enddate = new Date(b)
+
+                var date = new Date(a)
+                var date1 = new Date(b)
+                var xx = date.getMonth();
+                var x = date1.getMonth();
+                this.end = this._selectMonth(x) + " " + date1.getDate();
+                this.start = this._selectMonth(xx) + " " + date.getDate();
+                //for remaining days
+                var remainingstart = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate() - date.getDate();
+                var remainingend = new Date(date1.getFullYear(), date1.getMonth() + 1, 0).getDate() - date1.getDate();
+
+                // console.log(remainingstart);
+                // console.log(remainingend);
+            },
+            _dateRanged() {
+
+            },
+            _selectMonth(m) {
+                var nextmonthNames = ["January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December"
+                ];
+                return nextmonthNames[m];
+            },
+            _groupLoaded(data) {
+                this.groupItems = data.detail.response.data;
+            },
+            _inquiryLoaded() {
+
+            },
+            toggleDrawer() {
+                this.dispatchEvent(new CustomEvent('toggleDrawer', {
+                    bubbles: true, composed: true, detail: {
+                        narrow: this.$.narrow
+                    }
+                }));
+                this.$.narrow = !this.$.narrow;
+            },
+        });
+    </script>
+</dom-module>

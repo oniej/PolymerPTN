@@ -16,10 +16,8 @@
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../bower_components/paper-dropdown/paper-dropdown.html">
-<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../bower_components/vaadin-dialog/vaadin-dialog.html">
-<link rel="import" href="../bower_components/vaadin-button/vaadin-button.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 
 <link rel="import" href="shared-styles.html">
@@ -114,21 +112,6 @@
                 background-color: darkorange;
             }
 
-            paper-dialog#openNewNotes {
-                border-color: #4caf50;
-                background-color: #f1f8e9;
-            }
-
-            paper-dialog#availabilitySave {
-                border-color: #4caf50;
-                background-color: #f1f8e9;
-            }
-
-            paper-dialog#availabilityDelete {
-                border-color: #4caf50;
-                background-color: #f1f8e9;
-            }
-
             #action {
                 margin-top: 10px;
                 float: right;
@@ -150,7 +133,7 @@
             }
 
             hr {
-                background-color: #eee;
+                background-color: rgb(238, 238, 238);
                 border: 0 none;
                 color: #eee;
                 height: 1px;
@@ -188,7 +171,6 @@
             </style>
         </custom-style>
         <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_availabilityLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
-
         <app-drawer-layout fullbleed narrow="{{narrow}}" id="drawerLayout">
             <app-header-layout id="appheader" has-scrolling-region>
                 <app-header fixed slot="header">
@@ -216,217 +198,32 @@
                         <div class="hotelSearch">
                             <div style="float:left;">
                                 <div style="display:flex;">
-                                    <paper-dropdown-menu style="cursor:pointer;width:150px" value="{{hotel}}" label="Hotel" searchable>
-                                        <paper-listbox slot="dropdown-content" class="dropdown-content" selected="{{selectedHotels}}">
-                                            <paper-item>Pacific</paper-item>
-                                            <paper-item>Resorts World</paper-item>
-                                            <paper-item>Cebu Shangrila</paper-item>
-                                        </paper-listbox>
-                                    </paper-dropdown-menu>
+                                    <paper-input always-float-label label="Hotel" value="{{hotel}}" readonly style="width: 160px;">
+                                        <iron-icon icon="my-icons:location-city" slot="prefix"></iron-icon>
+                                    </paper-input>
                                 </div>
                             </div>
                         </div>
                         <div class="addNotes">
-                            <paper-input label="Notes" value="{{notes}}">
+                            <paper-input always-float-label label="Notes" value="{{mynotes}}">
                                 <iron-icon icon="my-icons:speaker-notes" slot="prefix"></iron-icon>
                             </paper-input>
                         </div>
                     </div>
                     <br>
-                    <div class=" option">
+                    <div class="option">
                         <hr>
-                        <paper-checkbox class="close" on-tap="_close">Close</paper-checkbox>
-                        <paper-checkbox class="limited" on-tap="_limited">Limited</paper-checkbox>
-                        <paper-checkbox class="available" on-tap="_available">Open</paper-checkbox>
-                    </div>
-                    <div style="margin-top: 10px; float: right">
-                        <paper-icon-button noink on-tap="_preMonth" style="color: black;" icon="my-icons:keyboard-arrow-left"></paper-icon-button>
-                        <span id="monthToday">{{month}}</span>
-                        <paper-icon-button noink on-tap="_nextMonth" style="color: black;" icon="my-icons:keyboard-arrow-right"></paper-icon-button>
+                        <paper-checkbox class="close" on-tap="_close" id="close">Close</paper-checkbox>
+                        <paper-checkbox class="limited" on-tap="_limited" id="limited">Limited</paper-checkbox>
+                        <paper-checkbox class="available" on-tap="_available" id="available">Open</paper-checkbox>
+                        <span style="margin-top: 10px; float: right">
+                            <paper-icon-button id="previous" noink on-tap="_preMonth" style="color: black;" icon="my-icons:keyboard-arrow-left"></paper-icon-button>
+                            {{month}}
+                            <paper-icon-button id="next" noink on-tap="_nextMonth" style="color: black;" icon="my-icons:keyboard-arrow-right"></paper-icon-button>
+                        </span>
                     </div>
                     <div id="table" style="width:100%;overflow-x:auto;">
                         <table id="hotels">
-                            <tr id="headDays">
-                                <!-- <th>May 2018</th> -->
-                                <!-- <th>{{monthToday}}</th> -->
-                            </tr>
-                            <tr style=" background-color: #f2f2f2;">
-                                <!-- <td>Hotel</td> -->
-                                <td>Rooms</td>
-                                <td style="color: black;">Fri</td>
-                                <td style="color: black;">Sat</td>
-                                <td style="color: red;">Sun</td>
-                                <td style="color: black;">Mon</td>
-                                <td style="color: black;">Tue</td>
-                                <td style="color: black;">Wed</td>
-                                <td style="color: black;">Thu</td>
-                                <td style="color: black;">Fri</td>
-                                <td style="color: black;">Sat</td>
-                                <td style="color: red;">Sun</td>
-                                <td style="color: black;">Mon</td>
-                                <td style="color: black;">Tue</td>
-                                <td style="color: black;">Wed</td>
-                                <td style="color: black;">Thu</td>
-                                <td style="color: black;">Fri</td>
-                                <td style="color: black;">Sat</td>
-                                <td style="color: red;">Sun</td>
-                                <td style="color: black;">Mon</td>
-                                <td style="color: black;">Tue</td>
-                                <td style="color: black;">Wed</td>
-                                <td style="color: black;">Thu</td>
-                                <td style="color: black;">Fri</td>
-                                <td style="color: black;">Sat</td>
-                                <td style="color: red;">Sun</td>
-                                <td style="color: black;">Mon</td>
-                                <td style="color: black;">Tue</td>
-                                <td style="color: black;">Wed</td>
-                                <td style="color: black;">Thu</td>
-                                <td style="color: black;">Fri</td>
-                                <td style="color: black;">Sat</td>
-                                <!-- <td style="color: black;">Tue</td> -->
-                            </tr>
-                            <tr>
-                                <!-- <td style="color: black;">{{hotelResult}}</td> -->
-                                <td class="white">DELUXE</td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <!-- <td class="white"></td> -->
-                            </tr>
-                            <tr style="text-align: center">
-                                <!-- <td style="color: black;"> ANEMONE</td> -->
-                                <td class="white">STANDARD</td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <!-- <td class="white"></td> -->
-                            </tr>
-                            <tr style="text-align: center">
-                                <!-- <td style="color: black;"> CEBU MARINE</td> -->
-                                <td class="white">SUPERIOR</td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <!-- <td class="white"></td> -->
-                            </tr>
-                            <tr style="text-align: center">
-                                <!-- <td style="color: black;">CEBU MARINE</td> -->
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <td class="white"></td>
-                                <!-- <td class="white"></td> -->
-                            </tr>
-                            <tr>
-                            </tr>
                         </table>
                     </div>
                     <div>
@@ -436,25 +233,31 @@
 
             <vaadin-dialog id="availabilitySave" no-close-on-esc no-close-on-outside-click>
                 <template>
-                    <h3 style="text-align: center">Save Changes?</h3>
+                    <h3 style="text-align: center">Save changes for month of {{updateDate}}?</h3>
                     <hr>
-                    <paper-button on-tap="_update">Yes</paper-button>
-                    <paper-button on-tap="_closeDialog">No</paper-button>
+                    <span style="float: right">
+                        <paper-button on-tap="_update">Yes</paper-button>
+                        <paper-button on-tap="_closeDialog">No</paper-button>
+                    </span>
                 </template>
             </vaadin-dialog>
             <vaadin-dialog id="availabilityDelete" no-close-on-esc no-close-on-outside-click>
                 <template>
-                    <h3 style="text-align: center">Confirm to Delete?</h3>
+                    <h3 style="text-align: center">Are you sure to delete "{{hotel}}"
+                        <br> availability records permanently?
+                        <br>there will be no undo</h3>
                     <hr>
-                    <paper-button on-tap="_delete" style="color: red">Yes</paper-button>
-                    <paper-button on-tap="_closeDialog">No</paper-button>
+                    <span style="float: right">
+                        <paper-button on-tap="_delete" style="color: red">Yes</paper-button>
+                        <paper-button on-tap="_closeDialog">No</paper-button>
+                    </span>
                 </template>
             </vaadin-dialog>
             <vaadin-dialog id="successModal" no-close-on-esc no-close-on-outside-click>
                 <template>
                     <h3 style="text-align: center">Deleted Successfully</h3>
                     <hr>
-                    <paper-button on-tap="_closeModal" style="float: right">Ok</paper-button>
+                    <paper-button on-tap="_back" style="float: right">Ok</paper-button>
                 </template>
             </vaadin-dialog>
             <vaadin-dialog id="successUpdate" no-close-on-esc no-close-on-outside-click>
@@ -464,49 +267,55 @@
                     <paper-button on-tap="_closeModal" style="float: right">Ok</paper-button>
                 </template>
             </vaadin-dialog>
+            <paper-dialog id="saveNext">
+                <h3 style="text-align: center">Save changes for month of {{updateDate}}?</h3>
+                <hr>
+                <span style="float: right">
+                    <paper-button on-tap="_saveToDB" auto-focus>Yes</paper-button>
+                    <paper-button on-tap="_closeDialog">No</paper-button>
+            </paper-dialog>
             </div>
         </app-drawer-layout>
         <iron-ajax verbose id="ajax" method="[[method]]" on-response="_handleResponse"></iron-ajax>
-
     </template>
-
     <script>
         Polymer({
             is: 'my-availability-edit',
-
             properties: {
                 editKey: { type: String, notify: true, observer: '_onkeyChanged' },
                 route: Object,
-                mynotes: {
-                    type: String,
-                    value: '',
-                },
-                selectedHotels: {
-                    type: Number,
-                    value: '',
-                    observer: '_hotelChanged',
-                },
-                hotelResult: {
-                    type: String,
-                    value: '',
-                },
-                me: String,
+                mynotes: String,
                 mot: Number,
-                yer: Number
-
-                // isMousedown: { type: Boolean, value: false, }
-            },
-            _hotelChanged() {
-                if (this.selectedHotels == 0) {
-                    this.hotelResult = 'Pacific';
-                } else if (this.selectedHotels == 1) {
-                    this.hotelResult = 'Resorts World';
-                } else if (this.selectedHotels == 2) {
-                    this.hotelResult = 'Cebu Shangrila';
-                }
-                // } else if (this.selectedHotels == 3) {
-                //     this.hotelResult = 'Cebu Shangrila';
-                // }
+                yer: Number,
+                yearly: String,
+                monthly: String,
+                editId: String,
+                date: String,
+                prevmonth: String,
+                prevyear: String,
+                updateDate: String,
+                availabilityItem: {
+                    type: Array,
+                    value: [],
+                },
+                availabilities: {
+                    type: Array,
+                    notify: true,
+                    value: []
+                },
+                roomType: {
+                    type: Array,
+                    notify: true,
+                    value: [],
+                },
+                type: {
+                    type: Array,
+                    value: [],
+                },
+                roomData: {
+                    type: Array,
+                    value: [],
+                },
             },
             _openSave() {
                 this.$.availabilitySave.opened = true;
@@ -521,99 +330,267 @@
             _closeModal() {
                 this.$.successModal.opened = false;
                 this.$.successUpdate.opened = false;
+                // window.location.assign('/availability/edit/' + this.editId);
+            },
+            _back() {
+                this.$.successModal.opened = false;
+                this.$.successUpdate.opened = false;
                 window.location.assign('/availability');
             },
-            _update() {
-                if (this.hotel) {
-                    if (this.editKey) {
-                        this.method = 'PUT';
-                        this.$.ajax.url = '/availability/update/' + this.editKey;
-                        this.$.ajax.contentType = "application/json";
-                        this.$.ajax.body = {
-                            hotel: this.hotel,
-                            notes: this.notes,
-                            created_by: this.created_by,
-                            updated_by: this.updated_by,
-                        };
-                        this.$.ajax.generateRequest();
-                        this.$.availabilitySave.opened = false;
-                        this.$.successUpdate.opened = true;
-                        this.url = '/availability/dummy';
-                    }
-                    else {
-                        this.msg = "All fields required";
-                    }
-                }
-            },
             _delete() {
-                if (this.editKey) {
+                if (this.hotel) {
                     this.method = 'DELETE';
-                    this.$.ajax.url = '/availability/delete/' + this.editKey;
+                    this.$.ajax.url = '/availability/delete/' + this.hotel;
                     this.$.ajax.generateRequest();
-                    // this.$.successModalDelete.open();
                     this.url = '/availability/dummy';
                     this.$.availabilityDelete.opened = false;
                     this.$.successModal.opened = true;
                 }
             },
-            _close() {
-                var cells = Polymer.dom(this.root).querySelectorAll("td");
-                for (var i = 0; i < cells.length; i++) {
-                    cells[i].addEventListener("click", function () {
-                        this.className = this.className == "white" ? "red" : "white";
-                    });
-                }
-                // var table = Polymer.dom(this.root).querySelector("#hotels");
-            },
-            ready() {
-                var monthNames = ["January", "February", "March", "April", "May", "June",
-                    "July", "August", "September", "October", "November", "December"
-                ];
-                var currentMonths = new Date()
-                this.month = monthNames[currentMonths.getMonth()] + " " + currentMonths.getDate() + " " + currentMonths.getFullYear();
-
-                //for days in month//
-                var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-                var nowdays = new Date();
-                var date = new Date(nowdays.getFullYear(), nowdays.getMonth() + 1, 0).getDate() + " " + days[nowdays.getDay()];
-                // console.log(date);
-
-                //for days in month
-                // var daysToday = new Date();
-                var todadys = days[nowdays.getDay()];
-                // console.log(todadys);
-                //for dates in month//
-                var trHead = Polymer.dom(this.root).querySelector('#headDays');
-                var now = new Date();
-                var date = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-
-                var currentMonthly = new Date()
-                var months = currentMonthly.getMonth();
-                var years = currentMonthly.getFullYear();
-                this._nextDates(date, monthNames[currentMonths.getMonth()], currentMonths.getFullYear());
-
-                var mon = this._selectMonth(months);
-                this.mot = months;
-                this.yer = years;
-                // this.month = mon + " " + years;
-                var date = new Date(years, months + 1, 0).getDate();
-            },
             _limited() {
+                var close = Polymer.dom(this.root).querySelector("#close").checked = false;
+                var available = Polymer.dom(this.root).querySelector("#available").checked = false;
                 var cells = Polymer.dom(this.root).querySelectorAll("td");
+                var _this = this;
                 for (var i = 0; i < cells.length; i++) {
-                    cells[i].addEventListener("click", function () {
-                        this.className = this.className == "white" ? "yellow" : "white";
-                    });
+                    cells[i].onclick = function (event) {
+                        if (event.target.id != "") {
+                            this.className = this.className === '' || this.className === "white" ? "yellow" : "white";
+                            if (this.className == 'yellow') {
+                                var [room, date] = event.target.id.split("_");
+                                var classColor = event.target.getAttribute("class");
+                                var data = {
+                                    date: date,
+                                    room: room,
+                                    classColor: classColor,
+                                    status: 'limited'
+                                }
+                                _this.availabilities.push(data);
+                                _this.notifySplices('availabilities');
+                            }
+                            else {
+                                var [room, date] = event.target.id.split("_");
+                                var classColor = "white";
+                                var data = {
+                                    date: date,
+                                    room: room,
+                                    classColor: classColor,
+                                    status: ''
+                                }
+                                _this.availabilities.push(data);
+                                _this.notifySplices('availabilities');
+                            }
+                        }
+                    }
+                    // var next = Polymer.dom(this.root).querySelector("#next").disabled = true;
                 }
             },
             _available() {
+                var limited = Polymer.dom(this.root).querySelector("#limited").checked = false;
+                var close = Polymer.dom(this.root).querySelector("#close").checked = false;
                 var cells = Polymer.dom(this.root).querySelectorAll("td");
-
+                var _this = this;
                 for (var i = 0; i < cells.length; i++) {
-                    cells[i].addEventListener("click", function () {
-                        this.className = this.className == "white" ? "green" : "white";
-                    });
+                    cells[i].onclick = function (event) {
+                        if (event.target.id != "") {
+                            this.className = this.className === '' || this.className === "white" ? "green" : "white";
+                            if (this.className == 'green') {
+                                var [room, date] = event.target.id.split("_");
+                                var classColor = event.target.getAttribute("class");
+                                var data = {
+                                    date: date,
+                                    room: room,
+                                    classColor: classColor,
+                                    status: 'open'
+                                }
+                                _this.availabilities.push(data);
+                                _this.notifySplices('availabilities');
+                            }
+                            else {
+                                var [room, date] = event.target.id.split("_");
+                                var classColor = "white";
+                                var data = {
+                                    date: date,
+                                    room: room,
+                                    classColor: classColor,
+                                    status: ''
+                                }
+                                _this.availabilities.push(data);
+                                _this.notifySplices('availabilities');
+                            }
+                        }
+                    }
+                    // var next = Polymer.dom(this.root).querySelector("#next").disabled = true;
                 }
+            },
+            _close() {
+                var limited = Polymer.dom(this.root).querySelector("#limited").checked = false;
+                var available = Polymer.dom(this.root).querySelector("#available").checked = false;
+                var cells = Polymer.dom(this.root).querySelectorAll("td");
+                var _this = this;
+                for (var i = 0; i < cells.length; i++) {
+                    cells[i].onclick = function (event) {
+                        if (event.target.id != "") {
+                            this.className = this.className === '' || this.className === "white" ? "red" : "white";
+                            if (this.className == 'red') {
+                                var [room, date] = event.target.id.split("_");
+                                var classColor = event.target.getAttribute("class");
+                                var data = {
+                                    date: date,
+                                    room: room,
+                                    classColor: classColor,
+                                    status: 'closed'
+                                }
+                                _this.availabilities.push(data);
+                                _this.notifySplices('availabilities');
+                            }
+                            else {
+                                var [room, date] = event.target.id.split("_");
+                                var classColor = "white";
+                                var data = {
+                                    date: date,
+                                    room: room,
+                                    classColor: classColor,
+                                    status: ''
+                                }
+                                _this.availabilities.push(data);
+                                _this.notifySplices('availabilities');
+                            }
+                        }
+                    }
+                    // var next = Polymer.dom(this.root).querySelector("#next").disabled = true;
+                }
+            },
+            _saveToDB(e) {
+                if (this.hotel) {
+                    var dateSave = this.mot + "," + this.yer;
+                    if (this.editId && this.date == dateSave) {
+                        var types = [];
+                        this.roomType.forEach(element => {
+                            types.push(element);
+                        });
+                        var year = this.yer;
+                        var monthly = this.mot;
+                        this.method = 'PUT';
+                        this.$.ajax.url = '/availability/update/' + this.editId;
+                        this.$.ajax.contentType = "application/json";
+                        this.$.ajax.body = {
+                            hotel: this.hotel,
+                            notes: this.mynotes,
+                            availabilities: this.availabilities,
+                            date: monthly + "," + year,
+                            type: types,
+                            month: {
+                                month: monthly,
+                                yearly: year,
+                            },
+                            created_by: this.created_by,
+                            updated_by: this.updated_by,
+                        };
+                        this.$.ajax.generateRequest();
+                        this.$.availabilitySave.opened = false;
+                        this.$.successUpdate.opened = e;
+                        this.availabilities = [];
+                    } else {
+                        var types = [];
+                        this.roomType.forEach(element => {
+                            types.push(element);
+                        });
+                        var year = this.yer;
+                        var monthly = this.mot;
+                        this.method = 'POST';
+                        this.$.ajax.url = '/availability/add';
+                        this.$.ajax.contentType = "application/json";
+                        this.$.ajax.body = {
+                            hotel: this.hotel,
+                            notes: this.mynotes,
+                            availabilities: this.availabilities,
+                            date: monthly + "," + year,
+                            type: types,
+                            month: {
+                                month: monthly,
+                                yearly: year,
+                            },
+                            created_by: this.created_by,
+                            updated_by: this.updated_by,
+                        };
+                        this.$.ajax.generateRequest();
+                        this.$.availabilitySave.opened = false;
+                        this.$.successUpdate.opened = e;
+                        this.availabilities = [];
+                    }
+
+                }
+            },
+            _update() {
+                this._saveToDB(true);
+            },
+            _availabilityLoaded(data) {
+                if (this.editKey) {
+                    if (this.url === '/availability/readEdit/' + this.editKey) {
+                        this.hotel = data.detail.response.data.hotel;
+                        this.date = data.detail.response.data.date;
+                        this.mynotes = data.detail.response.data.notes;
+                        this.monthly = data.detail.response.data.month.month;
+                        this.yearly = data.detail.response.data.month.yearly;
+                        this.createdAt = data.detail.response.data.createdAt;
+                        this.updatedAt = data.detail.response.data.updatedAt;
+                        this.created_by = data.detail.response.data.created_by;
+                        this.updated_by = data.detail.response.data.updated_by;
+                        var data1 = data.detail.response.data.availability;
+                        this.roomType = data.detail.response.data.type;
+
+                        var year = parseInt(this.yearly);
+                        var month = parseInt(this.monthly);
+                        var currentMonthly = new Date(year, month)
+                        var months = currentMonthly.getMonth();
+                        var years = currentMonthly.getFullYear();
+                        var dayToday = currentMonthly.getDay();
+                        var daynow = this._selectDays(dayToday);
+                        var mon = this._selectMonth(months);
+                        this.mot = months;
+                        this.yer = years;
+                        this.month = mon + " " + years;
+                        var date = new Date(years, months + 1, 0).getDate();
+                        this._nextDates(date, mon, years, months, data1);
+                        this.availabilities = data1;
+                    }
+                    this.method = 'GET';
+                    this.$.ajax.url = '/availability/filter/' + this.hotel + "~" + this.mot + "~" + this.yer;
+                    this.$.ajax.handleAs = "json";
+                    this.$.ajax.generateRequest();
+                }
+
+            },
+            _handleResponse(data) {
+                var availability = [];
+                var data = data.detail.response.data;
+                data.forEach(element => {
+                    this.editId = element._id;
+                    this.date = element.date;
+                    this.availabilityItem = element.availability;
+                    this.mynotes = element.notes;
+                    var monthnow = element.month.month;
+                    var yeartoday = element.month.yearly;
+                    var year = parseInt(yeartoday);
+                    var month = parseInt(monthnow);
+                    var currentMonthly = new Date(year, month)
+                    var months = currentMonthly.getMonth();
+                    var years = currentMonthly.getFullYear();
+                    var dayToday = currentMonthly.getDay();
+                    var daynow = this._selectDays(dayToday);
+                    var mon = this._selectMonth(months);
+                    this.mot = months;
+                    this.yer = years;
+                    this.month = mon + " " + years;
+                    element.availability.forEach(el => {
+                        availability.push(el);
+                    })
+                });
+                var mon = this._selectMonth(this.mot);
+                var date = new Date(this.yer, this.mot + 1, 0).getDate();
+                this._nextDates(date, mon, this.yer, this.mot, availability);
+                this.availabilities = availability;
             },
             _preMonth() {
                 if (this.mot < 1) {
@@ -624,19 +601,32 @@
                     this.yer = y;
                     this.month = m + " " + y;
                     var date = new Date(y, x + 1, 0).getDate();
-                    this._nextDates(date, m, y)
-                    // console.log(date);
-
+                    this._nextDates(date, m, y, x)
                 } else {
+                    var y = this.yer;
                     var x = this.mot - 1;
                     var m = this._selectMonth(x);
                     this.mot = x;
                     this.month = m + " " + this.yer;
                     var date = new Date(this.yer, x + 1, 0).getDate();
-                    this._nextDates(date, m, this.yer)
+                    this._nextDates(date, m, this.yer, x)
                 }
-            },
+                this.prevmonth = this.mot;
+                this.prevyear = y;
+                this.mynotes = "";
+                // if (this.availabilities.length > 0) {
+                //     this._saveToDB(false);
+                // }
+                this.method = 'GET';
+                this.$.ajax.url = '/availability/filter/' + this.hotel + "~" + this.mot + "~" + this.yer;
+                this.$.ajax.handleAs = "json";
+                this.$.ajax.generateRequest();
 
+                // next = Polymer.dom(this.root).querySelector("#next").disabled = false;
+                var close = Polymer.dom(this.root).querySelector("#close").checked = false;
+                var limited = Polymer.dom(this.root).querySelector("#limited").checked = false;
+                var available = Polymer.dom(this.root).querySelector("#available").checked = false;
+            },
             _nextMonth() {
                 if (this.mot > 10) {
                     var x = 0;
@@ -646,7 +636,7 @@
                     this.yer = y;
                     this.month = m + " " + y;
                     var date = new Date(y, x + 1, 0).getDate();
-                    this._nextDates(date, m, y)
+                    this._nextDates(date, m, y, x)
 
                 } else {
                     var x = this.mot + 1;
@@ -654,26 +644,98 @@
                     this.mot = x;
                     this.month = m + " " + this.yer;
                     var date = new Date(this.yer, x + 1, 0).getDate();
-                    this._nextDates(date, m, this.yer)
+                    this._nextDates(date, m, this.yer, x)
                 }
+                // if (this.availabilities.length > 0) {
+                //     this._saveToDB(false);
+                // }
+                this.prevmonth = this.mot;
+                this.prevyear = y;
+                this.mynotes = "";
+
+                this.method = 'GET';
+                this.$.ajax.url = '/availability/filter/' + this.hotel + "~" + this.mot + "~" + this.yer;
+                this.$.ajax.handleAs = "json";
+                this.$.ajax.generateRequest();
+
+                // this.$.saveNext.opened = true;
+                var close = Polymer.dom(this.root).querySelector("#close").checked = false;
+                var limited = Polymer.dom(this.root).querySelector("#limited").checked = false;
+                var available = Polymer.dom(this.root).querySelector("#available").checked = false;
+                
             },
-            _nextDates(f, g, h) {
-                var oldtrHead = Polymer.dom(this.root).querySelector('#headDays');
-                while (oldtrHead.hasChildNodes()) {
-                    oldtrHead.removeChild(oldtrHead.lastChild);
+            _nextDates(numDays, months, years, daysWeek, data) {
+                // console.log(data);
+                var table = Polymer.dom(this.root).querySelector('#hotels');
+                while (table.hasChildNodes()) {
+                    table.removeChild(table.lastChild);
                 }
+                //for months date
+                this.updateDate = months;
+                var tr1 = document.createElement('tr');
+                var th1 = document.createElement('th');
+                var t1 = document.createTextNode(months + " " + years);
+                th1.append(t1);
+                tr1.append(th1);
+                table.append(tr1);
+                //for weeks name
+                var tr2 = document.createElement('tr');
+                var th2 = document.createElement('td');
+                var t2 = document.createTextNode("Rooms");
+                th2.append(t2);
+                tr2.append(th2);
+                table.append(tr2);
 
-                var th = document.createElement('th');
-                var t = document.createTextNode(g + " " + h);
-                th.append(t);
-                oldtrHead.append(th);
+                this.roomType.forEach(element => {
+                    var tr3 = document.createElement('tr');
+                    var th3 = document.createElement('td');
+                    var datas = element.split(" ").join("");
+                    var tdTxt = document.createTextNode(datas);
+                    tr3.setAttribute('id', datas);
+                    th3.append(tdTxt);
+                    tr3.append(th3);
+                    table.append(tr3);
 
-                for (i = 1; i < f + 1; ++i) {
+                    for (i = 1; i < numDays + 1; ++i) {
+                        var tdBlank = document.createElement('td');
+                        tdBlank.setAttribute('id', datas + "_" + i);
+                        tr3.append(tdBlank);
+                    }
+                });
+                for (i = 1; i < numDays + 1; ++i) {
                     var th = document.createElement('th');
-                    var t = document.createTextNode(i);
-                    th.append(t);
-                    oldtrHead.append(th);
-                };
+                    var td = document.createTextNode(i);
+                    th.append(td);
+                    tr1.append(th);
+                    //weeks
+                    var thweek = document.createElement('td');
+                    var date = new Date(years, daysWeek, i)
+                    var x = date.getDay();
+                    var now = this._selectDays(x);
+                    if (now == "Sun") {
+                        var tdays = document.createTextNode(now);
+                        thweek.setAttribute("style", "color:red");
+                        thweek.append(tdays);
+                        tr2.append(thweek);
+                    }
+                    else {
+                        var tdays = document.createTextNode(now);
+                        thweek.append(tdays);
+                        tr2.append(thweek);
+                    }
+                }
+                if (!data) {
+
+                }
+                else {
+                    data.forEach(element => {
+                        var roomdata = element.room.split(" ").join("");
+                        var tr = Polymer.dom(this.root).querySelector("#" + roomdata);
+                        var id = roomdata + "_" + element.date;
+                        var cells = Polymer.dom(this.root).querySelector("#" + id);
+                        cells.setAttribute('class', element.classColor);
+                    });
+                }
             },
             _selectMonth(e) {
                 var nextmonthNames = ["January", "February", "March", "April", "May", "June",
@@ -681,7 +743,10 @@
                 ];
                 return nextmonthNames[e];
             },
-
+            _selectDays(g) {
+                var weekOfdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+                return weekOfdays[g];
+            },
             toggleDrawer() {
                 this.dispatchEvent(new CustomEvent('toggleDrawer', {
                     bubbles: true, composed: true, detail: {
@@ -697,22 +762,9 @@
                     this.url = '/availability/dummy';
                 }
             },
-            _availabilityLoaded(data) {
-                if (this.editKey) {
-                    if (this.url === '/availability/readEdit/' + this.editKey) {
-                        this.hotel = data.detail.response.data.hotel;
-                        this.notes = data.detail.response.data.notes;
-                        this.createdAt = data.detail.response.data.createdAt;
-                        this.updatedAt = data.detail.response.data.updatedAt;
-                        this.created_by = data.detail.response.data.created_by;
-                        this.updated_by = data.detail.response.data.updated_by;
-                    }
-                }
-            },
-            _handleResponse() { },
             _timeStampToDateTime(ts) {
                 return new Date(ts);
             },
-        })
+        })  
     </script>
 </dom-module>
