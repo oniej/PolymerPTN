@@ -297,6 +297,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 var hidePeak = Polymer.dom(this.root).querySelector("#peak").setAttribute("style", "display:none");
                 var errormsg = Polymer.dom(this.root).querySelector("#errorMsgDiv").setAttribute("style", "display:none");
                 this.errorMsg = "";
+                var table = Polymer.dom(this.root).querySelector('#hotels');
+                while (table.hasChildNodes()) {
+                    table.removeChild(table.lastChild);
+                }
+                this.start = "";
+                this.end = "";
             },
             _tappedChanged(e) {
                 var [rooms, stat, nonpeak, peak, seasondates, blocking, cancel, pdays, nonpdays] = e.split("~");
