@@ -138,4 +138,12 @@ router.get('/filterenddate/:newdate1', (req, res) => {
         return res.json({ success: true, data: allocfilter });
     });
 });
+router.get('/filterh/:hotel', (req, res) => {
+    const hotel = req.params.hotel;
+    Availability.find({ hotel: hotel }, (error, hotels) => {
+        if (error) return res.json({ success: false, error });
+        return res.json({ success: true, data: hotels });
+    });
+});
+
 module.exports = router;

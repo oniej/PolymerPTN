@@ -18,6 +18,19 @@ router.get('/readMe/:editkey', (req, res) => {
     Hotels.findById({ _id: editkey }, (error, hotels) => {
         if (error) return res.json({ success: false, error });
         return res.json({ success: true, data: hotels });
+
+        // router.get('/filter/:hotel', (req, res) => {
+        //     const hotel = req.params.hotel;
+        //     Hotels.findOne({ hotel: hotel }, (error, hotels) => {
+        //         if (error) return res.json({ success: false, error });
+        //         return res.json({ success: true, data: hotels });
+    });
+});
+router.get('/filterR/:room', (req, res) => {
+    const room = req.params.room;
+    Hotels.findOne({ room: room }, (error, rooms) => {
+        if (error) return res.json({ success: false, error });
+        return res.json({ success: true, data: rooms });
     });
 });
 router.get('/filter/:hotel', (req, res) => {

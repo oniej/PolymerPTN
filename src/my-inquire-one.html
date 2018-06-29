@@ -1,13 +1,3 @@
-<!--
-@license
-Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
@@ -36,12 +26,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-radio-button/paper-radio-button.html">
 <link rel="import" href="../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/vaadin-button/vaadin-button.html">
 
 <link rel="import" href="time-element.html">
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="my-allocation-add.html">
 <link rel="import" href="my-allocation-edit.html">
 
+<link rel="import" href="../bower_components/vaadin-text-field/vaadin-text-field.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../bower_components/neon-animation/web-animations.html">
@@ -53,130 +45,372 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <dom-module id="my-inquire-one">
     <template>
         <style include="shared-styles">
-        :host {
-            height: 100vh;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-        }
-        @-webkit-keyframes fadeIn {
-        from {
-          opacity: 0;
-        }
-        to {
-          opacity: 1;
-        }
-      }
+            :host {
+                height: 100vh;
+                margin: 0;
+                display: flex;
+                flex-direction: column;
+            }
 
-      @-moz-keyframes fadeIn {
-        from {
-          opacity: 0;
-        }
-        to {
-          opacity: 1;
-        }
-      }
-
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-        }
-        to {
-          opacity: 1;
-        }
-      }
-        app-header {
-            color: rgb(255, 255, 255);
-            background-color: darkorange;
-        }
-        
-        /* .cardquire {
-        height: 180px;
-        margin: 0 200px 0 200px;
-        padding: 35px;
-       } */
-       .flex-center-justified {
-      @apply --layout-horizontal;
-      @apply --layout-center-justified;
-      padding: 20px;
-
-        }
-       .left{
-            padding: 2px;
-            border-radius: 5px;
-            width: 367px;
-            float: left;
-            /* border-style: groove; */
-            background-color: #fff;
-            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-       }
-       .leftcontent{
-        margin: 16px;
-
-       }
-       /* .left table{
-           margin: 16px;
-       }     */
-       .right{
-           padding: 2px;
-        @apply --layout-self-center;
-           height: 150px;
-            border-radius: 0 5px 5px 0;
-            position: relative;
-            /* top: 6px; */
-            width: 269px;
-            float: right;
-            /* border-style: groove; */
-            background-color: #fff;
-            /* box-shadow: 1px 3px 2px #888888; */
-       }
-       .right .hotelcontent{
-           margin: 16px;
-       }
-       div .allocation {
-           overflow: scroll;
-           padding: 18px;
-         width: 90%;
-         margin-bottom: 20px;
-         margin: 0 auto;
-         background-color: #fff;
-         border-radius: 3px;
-        /* text-align-last: center; */
-         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-         
-         opacity: 0;
-        
-          -webkit-animation: fadeIn ease-in 1;
-           -moz-animation: fadeIn ease-in 1;
-          animation: fadeIn ease-in 1;
-
-          -webkit-animation-fill-mode: forwards;
-          -moz-animation-fill-mode: forwards;
-          animation-fill-mode: forwards;
-
-          -webkit-animation-duration: 0.5s;
-          -moz-animation-duration: 0.5s;
-          animation-duration: 0.5s;
-                    
+            @-webkit-keyframes fadeIn {
+                from {
+                    opacity: 0;
                 }
-                
-                  .tb th, td{    
-                border-bottom: 1px solid #ddd;
-                padding: 5px;
+                to {
+                    opacity: 1;
                 }
-                tr:hover {background-color: #f5f5f5;}
-                th{
+            }
+
+            @-moz-keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
+            }
+
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
+            }
+
+            app-header {
+                color: rgb(255, 255, 255);
+                background-color: darkorange;
+            }
+
+            .flex-center-justified {
+                @apply --layout-horizontal;
+                @apply --layout-center-justified;
+                padding: 16px;
+            }
+
+            @media (max-width: 420px) {
+                .left {
+                    margin: 3px;
+                    padding: 5px;
+                    border-radius: 5px;
+                    height: 210px;
+                    width: 300px;
+                    /* border-style: groove; */
+                    background-color: #fff;
+                    box-shadow: 0 5px 0 #888888;
+                    /* box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2); */
+                }
+                .leftcontent {
+                    margin: 5px;
+                    padding: 2px
+                }
+                .leftcontent vaadin-combo-box {
+                    width: 250px;
+                }
+                .leftcontent paper-dropdown-input {
+                    margin-bottom: 2px;
+                    --paper-input-container-underline: {
+                        display: none;
+                        height: 0;
+                    }
+                    ;
+                    width: 250px;
+                    background-color: rgb(230, 230, 230);
+                    color: black;
                     height: 50px;
+                    border-radius: 4px;
+                    --paper-input-container-underline: {
+                        display: none;
+                        height: 0;
+                    }
+                    ;
+                    --paper-input-container-underline-focus: {
+                        display: none;
+                    }
+                    ;
+                    --paper-input-container-input: {
+                        box-sizing: border-box;
+                        /* font-size: inherit; */
+                        padding: 4px;
+                        /* margin-bottom:5px; */
+                    }
+                    --paper-input-container-label: {
+                        top: -8px;
+                        left: 4px;
+                        /* background: white; */
+                        padding: 5px;
+                        /* font-weight: bold; */
+                        border-radius: 10px;
+                    }
+                    ;
+                    --paper-input-container-label-floating: {
+                        width: auto;
+                    }
+                }
+                .leftcontent vaadin-date-picker {
+                    width: 250px;
+                }
+            }
+
+            @media (min-width: 768px) {
+                .left {
+                    margin: 5px;
+                    padding: 5px;
+                    border-radius: 5px;
+                    height: 210px;
+                    width: 500px;
+                    /* border-style: groove; */
+                    background-color: #fff;
+                    box-shadow: 0 7px 0 #888888;
+                    /* box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2); */
+                }
+                .leftcontent {
+                    margin: 5px;
+                    padding: 3px;
+                }
+                .leftcontent vaadin-combo-box {
+                    width: 400px;
+                }
+                .leftcontent vaadin-date-picker {
+                    width: 400px;
+                }
+                .leftcontent paper-dropdown-input {
+                    margin-bottom: 5px;
+                    --paper-input-container-underline: {
+                        display: none;
+                        height: 0;
+                    }
+                    ;
+                    width: 400px;
+                    background-color: rgb(230, 230, 230);
+                    color: black;
+                    height: 50px;
+                    border-radius: 4px;
+                    --paper-input-container-underline: {
+                        display: none;
+                        height: 5px;
+                    }
+                    ;
+                    --paper-input-container-underline-focus: {
+                        display: none;
+                    }
+                    ;
+
+                    --paper-input-container-label: {
+                        top: -8px;
+                        left: 4px;
+                        /* background: white; */
+                        padding: 5px;
+                        /* font-weight: bold; */
+                        border-radius: 10px;
+                    }
+                    ;
+                    --paper-input-container-label-floating: {
+                        width: auto;
+                    }
                 }
 
-    .loader {
-	position: fixed;
-	left: 0px;
-	top: 0px;
-	width: 100%;
-	height: 100%;
-	z-index: 9999;
-	background: url('http://www.downgraf.com/wp-content/uploads/2014/09/01-progress.gif?e44397') 50% 50% no-repeat rgb(249,249,249);
+                vaadin-text-field{
+                    width: 130px;
+                }
+            
+            }
+
+            /* @media (min-width:1200px){
+                vaadin-text-field{
+                    width: 160px;
+                }
+            } */
+            div .allocation {
+                overflow: auto;
+                padding: 18px;
+                width: 90%;
+                margin-bottom: 20px;
+                margin: 0 auto;
+                background-color: #fff;
+                border-radius: 3px;
+                /* text-align-last: center; */
+                box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+
+                opacity: 0;
+
+                -webkit-animation: fadeIn ease-in 1;
+                -moz-animation: fadeIn ease-in 1;
+                animation: fadeIn ease-in 1;
+
+                -webkit-animation-fill-mode: forwards;
+                -moz-animation-fill-mode: forwards;
+                animation-fill-mode: forwards;
+
+                -webkit-animation-duration: 0.5s;
+                -moz-animation-duration: 0.5s;
+                animation-duration: 0.5s;
+
+            }
+
+           
+    .a{
+    display: grid;
+    grid-column: 1;
+        /* grid-row: 1; */
+    }
+    .b {
+        position: relative;
+        grid-column: 2;
+        /* grid-row: 1; */
+        /* grid-column-start: 2;
+        grid-column-end: 2;
+        grid-row-start: 1;
+        grid-row-end: 4; */
+    }
+    .c {
+        position: relative;
+        grid-column: 3;
+        /* grid-row: 1; */
+        /* grid-column-start: 3;
+        grid-column-end: 3;
+        grid-row-start: 1;
+        grid-row-end: 4; */
+    }
+    .d {
+        grid-column: 4;
+        
+        position: relative;
+
+        /* grid-row: 1; */
+        /* grid-column-start: 4;
+        grid-column-end: 4;
+        grid-row-start: 1;
+        grid-row-end: 4; */
+    }
+     .e {
+        position: relative;
+        /* grid-column-start: 5;
+        grid-column-end: 5;
+        grid-row-start: 1;
+        grid-row-end: 4; */
+        grid-column: 5;
+        /* grid-row: 1; */
+    }
+    .f {
+        grid-column: 6;
+        /* grid-row: 1; */
+        /* grid-column-start: 6;
+        grid-column-end: 6;
+        grid-row-start: 1;
+        grid-row-end: 4; */
+    }
+    .b .tooltiptext {
+    visibility: hidden;
+    width: 150px;
+    height: auto;
+    background-color: rgb(185, 185, 185);
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -80px;
+}
+.b .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 10px;
+    border-style: solid;
+    border-color: black transparent transparent transparent;
+}
+ .b:hover .tooltiptext {
+    visibility: visible;
+}
+.c .tooltiptext {
+    visibility: hidden;
+    width: 250px;
+    height: auto;
+    background-color: rgb(185, 185, 185);
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -150px;
+}
+
+.c .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 10px;
+    border-style: solid;
+    border-color: black transparent transparent transparent;
+}
+
+ .c:hover .tooltiptext {
+    visibility: visible;
+}
+.d .tooltiptext {
+    visibility: hidden;
+    width: 100px;
+    height: auto;
+    background-color: rgb(185, 185, 185);
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -60px;
+}
+.d .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 10px;
+    border-style: solid;
+    border-color: black transparent transparent transparent;
+}
+ .d:hover .tooltiptext {
+    visibility: visible;
+}
+.e .tooltiptext {
+    visibility: hidden;
+    width: 200px;
+    height: auto;
+    background-color: rgb(185, 185, 185);
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -100px;
+}
+.e .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 10px;
+    border-style: solid;
+    border-color: black transparent transparent transparent;
+}
+ .e:hover .tooltiptext {
+    visibility: visible;
 }
         </style>
         <custom-style>
@@ -206,146 +440,530 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 } */
             </style>
         </custom-style>
+        <iron-ajax auto url="/hotel/read" handle-as="json" on-response="_hotelLoaded" debounce-duration="300"></iron-ajax>
+
+        <!-- Hotel Search -->
+        <iron-ajax id="ajaxHotel" handle-as="json" on-response="_hotelsearched"></iron-ajax>
+        <iron-ajax id="ajaxHotelAllocation" handle-as="json" on-response="_hotelsearchedallocation"></iron-ajax>
+        <iron-ajax id="ajaxHotelBlocking" handle-as="json" on-response="_hotelsearchedblock"></iron-ajax>
+        <!-- Room Search -->
+        <iron-ajax id="ajaxRoom" handle-as="json" on-response="_roomsearched"></iron-ajax>
+        <iron-ajax id="ajaxRoomAllocation" handle-as="json" on-response="_roomsearchedallocation"></iron-ajax>
+        <iron-ajax id="ajaxRoomBlock" handle-as="json" on-response="_roomsearchedblock"></iron-ajax>
+
+        <!-- Availability -->
+        <iron-ajax id="avail" url="{{avail}}" handle-as="json" method="GET" on-response="_availloaded"></iron-ajax>
+        <iron-ajax id="availin" url="{{availin}}" handle-as="json" method="GET" on-response="_inloaded"></iron-ajax>
+        <iron-ajax id="availout" url="{{availout}}" handle-as="json" method="GET" on-response="_outloaded"></iron-ajax>
+        <!-- Date Search -->
+        <!-- allocation -->
+        <iron-ajax id="startalloc" url="{{startalloc}}" handle-as="json" method="GET" on-response="_startallocloaded"></iron-ajax>
+        <iron-ajax id="endalloc" url="{{urlFilterend}}" handle-as="json" method="GET" on-response="_endallocloaded"></iron-ajax>
+        <!-- blockings -->
+        <iron-ajax id="startblock" url="{{Startblockings}}" handle-as="json" method="GET" on-response="_startblockloaded"></iron-ajax>
+        <iron-ajax id="endblock" url="{{Endblockings}}" handle-as="json" method="GET" on-response="_endblockloaded"></iron-ajax>
 
         <iron-pages selected="[[route.path]]" attr-for-selected="name" fallback-selection="view404" role="main">
             <div name="">
-        <app-drawer-layout fullbleed narrow="{{narrow}}" id="drawerLayout">
-            <app-header-layout id="appheader" has-scrolling-region>
-                <app-header fixed slot="header">
-                    <app-toolbar>
-                        <paper-icon-button class="menu" icon="my-icons:menu" drawer-toggle on-tap="toggleDrawer"></paper-icon-button>
-                                <div main-title>Inquiry 1</div>
-                    </app-toolbar>
-                </app-header>
-
-                <div class="container flex-center-justified">
-                    <div class="left">
-                        <div class="leftcontent">
-                            <center>
-                        <iron-icon icon="my-icons:hotel" style="color: gray"></iron-icon>&nbsp;<vaadin-text-field placeholder="ROOM" style="width: 300px" id="room" value="{{room}}"></vaadin-text-field><br>
-                        <iron-icon icon="my-icons:date-range" style="color: grey"></iron-icon>&nbsp;<vaadin-date-picker  placeholder="DATE FROM" style="width: 300px" id="startdate" value="{{startValue}}" max="{{endValue}}" date-format="DD-MMMM-YYYY"></vaadin-date-picker><br>
-                        <iron-icon icon="my-icons:date-range" style="color: grey"></iron-icon>&nbsp;<vaadin-date-picker  placeholder="DATE TO" style="width: 300px" id="enddate" value="{{endValue}}" min="{{startValue}}" date-format="DD-MMMM-YYYY"></vaadin-date-picker>
-                    </center>  
-                    </div>
-                    </div>
-                    <div class="right">
-                        <center>
-                            <div class="hotelcontent">
-                                    <iron-icon icon="my-icons:domain" style="color: gray"></iron-icon>&nbsp; <vaadin-text-field placeholder="HOTEL" id="hotel" value="{{hotel}}"></vaadin-text-field>
-                            </div>
-                        </center>
-                        <br>
-                    </div>
-                </div>
-
-                 <!-- <template is="dom-if" if="{{loader}}">
-                            <div class="loader"></div>
-                        </template>
-                        <template is="dom-if" if="{{!loader}}"> -->
-                <iron-scroll-document id="threshold">
-                
+                <app-drawer-layout fullbleed narrow="{{narrow}}" id="drawerLayout">
+                    <app-header-layout id="appheader" has-scrolling-region>
+                        <app-header fixed slot="header">
+                            <app-toolbar>
+                                <paper-icon-button class="menu" icon="my-icons:menu" drawer-toggle on-tap="toggleDrawer"></paper-icon-button>
+                                <div main-title>Inquiry One</div>
+                            </app-toolbar>
+                        </app-header>
                         <div class="container flex-center-justified">
-                        <div class="allocation">
-                        <table width="100%">
-                            <tr>
-                                <th>Date</th>
-                                <th>Hotel</th>
-                                <th>Room</th>
-                                <th>Content:</th>
-                                <th>Allocation</th>
-                                <th>Blocking</th>
-                                <th>Status</th>
-                            </tr>
-                            <tr>
-                                <td rowspan="2">06/01</td>
-                                <td rowspan="2">Anemone</td>
-                                <td>Standard</td>
-                                <td>-</td>
-                                <td>2</td>
-                                <td>2</td>
-                                <td>Open</td>
-                            </tr>
-                            <tr>
-                                <td>Superior</td>
-                                <td>-</td>
-                                <td>Cut-OFF</td>
-                                <td>Cancel</td>
-                                <td>Close</td>
-                            </tr>
-                            <tr>
-                                <td rowspan="2">06/02</td>
-                                <td>Anemone</td>
-                                <td>Standard</td>
-                                <td>-</td>
-                                <td>2</td>
-                                <td>2</td>
-                                <td>Open</td>
-                            </tr>    
-                            <tr>
-                               <td>The Bellavista</td>
-                               <td>Deluxe</td>
-                               <td>-</td>
-                               <td>2</td>
-                               <td>2</td>
-                               <td>Open</td>
-                            </tr>  
-                            <tr>
-                                <td rowspan="3">06/03</td>
-                                <td rowspan="2">Costabella</td>
-                                <td>Superior</td>
-                                <td>-</td>
-                                <td>2</td>
-                                <td>2</td>
-                                <td>Open</td>
-                            </tr>  
-                            <tr>
-                                <td>Deluxe Poolside</td>
-                                <td>-</td>
-                                <td>2</td>
-                                <td>2</td>
-                                <td>Open</td>
-                            </tr>  
-                            <tr>
-                                <td>Water Front Cebu</td>
-                                <td>Standard</td>
-                                <td>-</td>
-                                <td>2</td>
-                                <td>2</td>
-                                <td>Open</td>
-                            </tr>  
-                            <tr>
-                                <td>06/04</td>
-                                <td>Water Front Cebu</td>
-                                <td>Standard</td>
-                                <td>-</td>
-                                <td>2</td>
-                                <td>2</td>
-                                <td>Open</td>
-                           </tr>  
-                        </table>
-                        </div>
-                        </div>  
-                    </iron-scroll-document>
-                    <!-- </template> -->
-            </app-header-layout>
-        </app-drawer-layout>
-        </div>
-        </iron-pages>
-        
-    </template>
+                            <div class="left">
+                                <div class="leftcontent">
+                                    <center>
+                                        <iron-icon icon="my-icons:domain" style="color: grey"></iron-icon>&nbsp;
+                                        <paper-dropdown-input id="hotel" label="HOTEL" items='[[hotelItems]]' filter-property="hotel" value="{{hotel}}">
+                                            <template>
+                                                <template is="dom-repeat" items="[[items]]" as="item">
+                                                    <paper-item id="hotel" value="[[item.hotel]]">[[item.hotel]]</paper-item>
+                                                </template>
+                                            </template>
+                                        </paper-dropdown-input>
+                                        <!-- <vaadin-combo-box allow-custom-value placeholder="HOTEL" items='[[hotelItems]]' filter-property="hotel" value="{{hotel}}">                            
+                                            <template is="dom-repeat" items="[[items]]" as="item">
+                                                <paper-item>[[item.hotel]]</paper-item>
+                                            </template>
+                                      </vaadin-combo-box> -->
+                                        <br>
+                                        <iron-icon icon="my-icons:hotel" style="color: grey"></iron-icon>&nbsp;
+                                        <paper-dropdown-input id="room" label="ROOM" items='[[roomele]]' filter-property="hotel" value="{{room}}">
+                                            <template>
+                                                <template is="dom-repeat" items="[[items]]" as="item">
+                                                    <paper-item>[[item]]</paper-item>
+                                                </template>
+                                            </template>
+                                        </paper-dropdown-input>
+                                        <br>
+                                        <!-- <vaadin-combo-box id="room" always-float-label  placeholder="ROOM" items='[[roomfixed]]' filter-property="hotel" value="{{room}}">                            
+                                        <template is="dom-repeat" items="[[items]]" as="item">
+                                            <paper-item>[[item]]</paper-item>
+                                        </template>
+                                  </vaadin-combo-box> <br> -->
+                                        <iron-icon icon="my-icons:date-range" style="color: grey"></iron-icon>&nbsp;
+                                        <vaadin-date-picker placeholder="DATE FROM" id="startdate" value="{{checkin}}" max="{{checkout}}" date-format="DD-MMMM-YYYY"></vaadin-date-picker>
+                                        <br>
+                                        <iron-icon icon="my-icons:date-range" style="color: grey"></iron-icon>&nbsp;
+                                        <vaadin-date-picker placeholder="DATE TO" id="enddate" value="{{checkout}}" min="{{checkin}}" date-format="DD-MMMM-YYYY"></vaadin-date-picker>
 
+                                    </center>
+                                </div>
+                                <br>
+                            </div>
+                        </div>
+
+                        <iron-scroll-document id="threshold">
+
+                            <div class="container flex-center-justified">
+                                <div class="allocation" style="background-color: #fff;">
+                                    <div>
+                                        <vaadin-text-field value="Date" readonly></vaadin-text-field> &nbsp;
+                                        <vaadin-text-field value="Hotel" readonly></vaadin-text-field> &nbsp;
+                                        <vaadin-text-field value="Room" readonly></vaadin-text-field> &nbsp;
+                                        <vaadin-text-field value="Allocation" readonly></vaadin-text-field> &nbsp;
+                                        <vaadin-text-field value="Blocking" readonly></vaadin-text-field> &nbsp;
+                                        <vaadin-text-field value="Status" readonly></vaadin-text-field>
+                                    </div>
+
+                                    <div class="wrapper">
+                                         <div class="box a">
+                                                <template is="dom-repeat" items="{{datef}}" as="dt">
+                                                        <vaadin-text-field style="font-size: 15px;" value="{{dt}}" readonly></vaadin-text-field>
+                                                     
+                                                        <div class="box b">
+                                                            &nbsp;
+                                                    <template is="dom-repeat" items="{{hotelf}}">
+                                                            <vaadin-text-field value="{{hotelf}}" readonly></vaadin-text-field>
+                                                            <br>
+                                                            <template is="dom-repeat" items="{{roompeak}}" as="room">
+                                                                    <span class="tooltiptext"> 
+                                                                        Non Peak: {{room.nonpeak}} 
+                                                                        <br>
+                                                                        Non-peak Days: {{room.nonpdays}} 
+                                                                    </span>
+                                                            </template>
+                                                        </template>
+                                            </div>
+                                            <div class="box c">
+                                                    <template is="dom-repeat" items="{{roomf}}" as="room">
+                                                        &nbsp;   
+                                                        <vaadin-text-field value="{{room}}" readonly></vaadin-text-field>
+                                                            <br>
+                                                            <template is="dom-repeat" items="{{peakseason}}" as="season">
+                                                                    <span class="tooltiptext"> 
+                                                                        Peak Season Start: {{season.startValue}}
+                                                                        <br>
+                                                                        Peak Season End: {{season.endValue}} 
+                                                                    </span>
+                                                            </template>
+                                                        </template>
+                                            </div>
+                                            <div class="box d">
+
+                                                    <template is="dom-repeat" items="{{roompeak}}" as="room">
+                                                        &nbsp; 
+                                                        <vaadin-text-field value="{{room.peak}}" readonly></vaadin-text-field>
+
+                                                            <br>
+                                                            <span class="tooltiptext"> Cut-off: {{room.pdays}} </span>
+                                                        </template>
+                                            </div>
+                                            
+                                            <div class="box e">
+                                                    
+                                                    <template is="dom-repeat" items="{{roomblock}}" as="room">
+                                                            &nbsp;
+                                                            <vaadin-text-field value="{{room.block}}" readonly></vaadin-text-field>
+                                                            <br>
+                                                            <span class="tooltiptext"> Cancellation: {{room.cancel}} </span>
+                                                        </template>
+                                            </div>
+                                            <div class="box f">
+                                                    
+                                                    <template is="dom-repeat" items="{{roomstatus}}" as="status">
+                                                            <vaadin-text-field value="{{status}}" readonly></vaadin-text-field>
+                                                            <br>
+                                                        </template>
+                                            </div>
+                                        </template>
+                                        </div>
+                                      </div>
+
+                                    <!-- <table>
+                                        <tr>
+                                            <td>
+                                                <template is="dom-repeat" items="{{datef}}" as="dt">
+                                                    <vaadin-text-field style="width: 130px;" value="{{dt}}" readonly></vaadin-text-field>
+                                                    <br>
+                                                    </template>
+                                            </td>
+                                            <td>
+                                                <template is="dom-repeat" items="{{hotelf}}">
+                                                    <vaadin-text-field style="width: 130px;" value="{{hotelf}}" readonly></vaadin-text-field>
+                                                    <br>
+                                                </template>
+                                            </td>
+                                            <td>
+                                                <template is="dom-repeat" items="{{roomf}}" as="room">
+                                                    <vaadin-text-field style="width: 130px;" value="{{room}}" readonly></vaadin-text-field>
+                                                    <br>
+                                                </template>
+                                            </td>
+                                            <td>
+                                                <template is="dom-repeat" items="{{roompeak}}" as="room">
+                                                    <vaadin-text-field style="width: 130px;" value="{{room.peak}}" readonly></vaadin-text-field>
+                                                    <br>
+                                                </template>
+                                            </td>
+                                            <td>
+                                                <template is="dom-repeat" items="{{roomblock}}" as="room">
+                                                    <vaadin-text-field style="width: 130px;" value="{{room.block}}" readonly></vaadin-text-field>
+                                                    <br>
+                                                </template>
+                                            </td>
+                                            <td>
+                                                <template is="dom-repeat" items="{{roomstatus}}" as="status">
+                                                    <vaadin-text-field style="width: 130px;" value="{{status.status}}" readonly></vaadin-text-field>
+                                                    <br>
+                                                </template>
+                                            </td>
+                                        </tr>
+                                    </table> -->
+                                     
+                                    </div>
+                                </div>
+                            </div>
+                        </iron-scroll-document>
+                    </app-header-layout>
+                </app-drawer-layout>
+            </div>
+        </iron-pages>
+        <iron-ajax verbose id="ajax" method="[[method]]" on-response="_handleResponse"></iron-ajax>
+    </template>
     <script>
+
         Polymer({
             is: 'my-inquire-one',
             properties: {
-                // loader: {
-                //     type: Boolean,
-                //     value: true,
-                //     notify: false
-                // },
+                hotelItems: Object,
+                roomele: Object,
+                array: Object,
+                roomItems: Object,
+                roomsItem: Object,
+                roomsblockItem: Object,
+                hotelsearch: Object,
+                startalloc: Object,
+                startblock: Object,
+                endblock: Object,
+                newBlock: String,
+                newAlloc: String,
+                joinedblock: String,
+                joinedalloc: String,
+                joinedavail: String,
+                checkout: String,
+                checkin: String,
+                startload: String,
+                endload: String,
+                avail: String,
+                availin: Object,
+                availout: Object,
+
+                // status: String
+            },
+            observers: [
+                '_Searchh(hotel)',
+                '_Searchr(room)',
+                '_startCheckin(checkin)',
+                '_endCheckout(checkout)',
+                '_joinDate(inload,outload)',
+                '_joinedAlloc(hotelItems,startload,endload)',
+                '_joinedBlock(hotelItems,startblock,endblock)',
+                '_joinedAvail(inload,outload)',
+                '_searchDate(checkin,checkout)',
+                '_unionAll(hotel,joinedalloc,joinedblock)',
+            ],
+          
+            _Searchh(e) {
+                this.$.ajaxHotel.method = 'GET';
+                this.$.ajaxHotel.url = '/hotel/filter/' + e;
+                this.$.ajaxHotel.generateRequest();
+
+                this.$.ajaxHotelAllocation.method = 'GET';
+                this.$.ajaxHotelAllocation.url = '/allocation/filter/' + e;
+                this.$.ajaxHotelAllocation.generateRequest();
+
+                this.$.ajaxHotelBlocking.method = 'GET';
+                this.$.ajaxHotelBlocking.url = '/blocking/filter/' + e;
+                this.$.ajaxHotelBlocking.generateRequest();
+
+                this.avail = '/availability/filterh/' + e;
+                this.$.avail.generateRequest();
+
+                this.checkin = null;
+                this.checkout = null;
+            },
+  
+            _Searchr(d) {
+                // console.log(e);
+                this.$.ajaxRoom.method = 'GET';
+                this.$.ajaxRoom.url = '/hotel/filterR/' + d;
+                this.$.ajaxRoom.generateRequest();
+
+                this.$.ajaxRoomAllocation.method = 'GET';
+                this.$.ajaxRoomAllocation.url = '/allocation/filterR/' + d;
+                this.$.ajaxRoomAllocation.generateRequest();
+
+                this.$.ajaxRoomBlock.method = 'GET';
+                this.$.ajaxRoomBlock.url = '/blocking/filterR/' + d;
+                this.$.ajaxRoomBlock.generateRequest();
+
+
             },
             
-            toggleDrawer() {
+            _availloaded(data) {
+                if (data.detail.response) {
+                    this.avail = data.detail.response.data;
+                    var statusarray = [];
+                    this.avail.forEach(element => {
+                        element.availability.forEach(availability => {
+                            statusarray.push(availability.status);
+                        });
+                    });
+                    this.statusf = statusarray;
+
+                    var datearray = [];
+                    this.avail.forEach(element => {
+                        element.availability.forEach(availability => {
+                            datearray.push(availability.date);
+                        });
+                    });
+                    this.datesf = datearray;
+
+                    var roomarray = [];
+                    this.avail.forEach(element => {
+                        element.availability.forEach(availability => {
+                            roomarray.push(availability.room);
+                        });
+                    });
+                    this.roomsf = roomarray;
+                }
+            },
+            _joinedAvail(f, g) {
+                if (this.inload && this.outload) {
+                    this.joinedavail = this.inload.concat(this.outload);
+                }
+            },
+            // Date
+            _startCheckin(e) {
+                this.from = e;
+                this.startalloc =  '/allocation/filterstartdate/' + e + "_" + this.to;
+                this.Startblockings = '/blocking/filterstartdate/' + e + "_" + this.to;
+                this.availin = '/availability/filterstartdate/' + e + "_" + this.to;
+                this.$.startalloc.generateRequest();
+                this.$.startblock.generateRequest();
+                this.$.availin.generateRequest();
+            },
+            _endCheckout(f) {
+                this.to = f;
+                this.urlFilterend = '/allocation/filterenddate/' + f + "_" + this.from;
+                this.Endblockings = '/blocking/filterenddate/' + f + "_" + this.from;
+                this.availout = '/availability/filterenddate/' + f + "_" + this.from;
+                this.$.endalloc.generateRequest();
+                this.$.endblock.generateRequest();
+                this.$.availout.generateRequest();
+            },
+            _inloaded(data){
+                if (data.detail.response) {
+                    this.inload = data.detail.response.data;
+                    }
+            },
+            _outloaded(data){
+                if (data.detail.response) {
+                    this.outload = data.detail.response.data;
+                    }
+            },
+            _joinDate(t,y){
+                    var getDates = function (startDate, endDate) {
+                        var dates = [],
+                            currentDate = startDate,
+                            addDays = function (days) {
+                                var date = new Date(this.valueOf());
+                                date.setDate(date.getDate() + days);
+                                return date;
+                            };
+                        while (currentDate <= endDate) {
+                            dates.push(currentDate);
+                            currentDate = addDays.call(currentDate, 1);
+                        }
+                        return dates;
+                    };
+                    var dates = getDates(new Date(this.inload), new Date(this.outload));
+                    dates.forEach(function (date) {
+                        // console.log(date);
+                    });
+                    this.datefn = dates;
+                    // console.log(this.datefn);
+            },
+            _startallocloaded(data) {
+                if (data.detail.response) {
+                    this.startload = data.detail.response.data;
+                    // console.log(this.startload);
+                    // this.df = data.detail.response.data.dateFrom;
+                    // console.log(this.df);
+                    }
+            },
+            _startblockloaded(data) {
+                if (data.detail.response) {
+                    this.startblock = data.detail.response.data;
+                    // console.log(this.startblock);
+                }
+            },
+            _endallocloaded(data) {
+                if (data.detail.response) {
+                    this.endload = data.detail.response.data;
+                    // console.log(this.endload);
+                }
+            },
+            _endblockloaded(data) {
+                if (data.detail.response) {
+                    this.endblock = data.detail.response.data;
+                    // console.log(this.endblock);
+                }
+            },
+            _joinedAlloc(a, b, c) {
+                if (this.hotelItems && this.startload && this.endload) {
+                    this.joinedalloc = this.startload.concat(this.endload);
+                    // console.log(this.joinedalloc);
+                    this.newAlloc = this.joinedalloc.filter((allocarray) => {
+                        return this.hotelItems.some((hotelarray) => {
+                            return hotelarray.hotel === allocarray.hotel;
+                        });
+                    });
+                    var sameId = this.newAlloc;
+                    function printUniqueResults(arrayOfdatas, id) {
+                        return arrayOfdatas.filter((item, index, array) => {
+                            return array.map((mapItem) => mapItem[id]).indexOf(item[id]) === index
+                        })
+                    }
+                    var result = printUniqueResults(sameId, '_id')
+                    this.filterAlloc = result;
+                }
+            },
+            _joinedBlock(x, y, z) {
+                if (this.hotelItems && this.startblock && this.endblock) {
+                    this.joinedblock = this.startblock.concat(this.endblock);
+                    // console.log(this.joinedblock);
+                    this.newBlock = this.joinedblock.filter((allocarray) => {
+                        return this.hotelItems.some((hotelarray) => {
+                            return hotelarray.group === allocarray.group;
+                        });
+                    });
+                    var sameId = this.newBlock;
+                    function printUniqueResults(arrayOfdatas, id) {
+                        return arrayOfdatas.filter((item, index, array) => {
+                            return array.map((mapItem) => mapItem[id]).indexOf(item[id]) === index
+                        })
+                    }
+                    var filterresult = printUniqueResults(sameId, '_id')
+                    this.filterBlock = filterresult;
+                }
+            },
+           
+            _searchDate(x,y){   
+                var sdt = Polymer.dom(this.root).querySelector("#startdate");
+                var edt = Polymer.dom(this.root).querySelector("#enddate");
+                
+                this.datesearch = this.datesf;
+
+                    var getDates = function (startDate, endDate) {
+                        var dates = [],
+                            currentDate = startDate,
+                            addDays = function (days) {
+                                var date = new Date(this.valueOf());
+                                date.setDate(date.getDate() + days);
+                                return date;
+                            };
+                        while (currentDate <= endDate) {
+                            dates.push(currentDate);
+                            currentDate = addDays.call(currentDate, 1);
+                        }
+                        return dates;
+                    };
+                    var dates = getDates(new Date(sdt.value), new Date(edt.value));
+                    dates.forEach(function (date) {
+                    });
+                    this.datefn = dates;
+                    this.datefinal = (this.datesearch = this.datefn);
+                    // console.log(this.datefinal);
+            },
+
+            _unionAll(k, l, m) {
+                // if (this.checkin == "" || this.checkout == "") {
+                  
+                // }
+                // else {
+                    if (this.filterAlloc && this.filterBlock) {
+
+                            var initialArray = [];
+                            this.filterAlloc.forEach(elAllo => {
+                                this.joinedavail.forEach(elAvail => {
+                                    if (elAllo.hotel === elAvail.hotel) {
+                                        elAllo.avail = elAvail;
+                                    }
+                                    this.filterBlock.forEach(elBlock => {
+                                        if (elAllo.hotel === elBlock.hotel) {
+                                            elAllo.blocking = elBlock;
+                                            initialArray.push(elAllo);
+                                        }
+                                    });
+                                });
+                            });
+                            console.log(this.filterAlloc);
+                            function printUniqueResults(arrayOfdatas, hotel) {
+                                return arrayOfdatas.filter((item, index, array) => {
+                                    return array.map((mapItem) => mapItem[hotel]).indexOf(item[hotel]) === index
+                                })
+                            }
+                              var finalArray = printUniqueResults(initialArray, 'hotel');
+                        if (finalArray.length > 0) {
+                            var array = [];
+                            var array1 = [];
+                            var array2 = [];
+                            var array3 = [];
+                            finalArray.forEach(elements => {
+                                if (elements) {
+                                    array.push(elements.hotel);
+                                    array1.push(elements.rooms);
+                                    array2.push(elements.seasondate);
+                                    if (elements.avail) {
+                                    }
+                                }
+                            });
+                        }
+                        // console.log(finalArray);
+                        }
+
+                if (this.array && this.joinedalloc && this.joinedblock) {
+                    this.hotelf = this.array;
+                    this.allocation = this.joinedalloc;
+                    this.blocking = this.joinedblock;
+                    this.roomf = this.roomItems;
+                    this.roompeak = this.roomsItem;
+                    this.peakseason = this.season;
+                    this.roomblock = this.roomsblockItem;
+                    this.roomstatus = this.statusf;
+                    // this.datef = this.datesf;
+                    // this.datef = this.datefinal;
+                    this.datef = (this.datesf = this.datefinal); 
+                }
+            // }
+            },
+           toggleDrawer() {
                 this.dispatchEvent(new CustomEvent('toggleDrawer', {
                     bubbles: true, composed: true, detail: {
                         narrow: this.$.narrow
@@ -354,13 +972,49 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.$.narrow = !this.$.narrow;
             },
             ready() {
-                this.url = '/allocation/read';
+                this.url = '/hotel/read';
             },
-            _allocationLoaded(data) {
-                if (this.url === '/allocation/read') {
-                    this.allocations = data.detail.response.data;
-                    // console.log(this.allocations);
-                }
+            _hotelLoaded(data) {
+                this.hotelItems = data.detail.response.data;
+
+                var rooms = [];
+                this.hotelItems.forEach(element => {
+                    element.room.forEach(room => {
+                        rooms.push(room);
+                    });
+                });
+                // console.log(rooms);
+                this.roomele = rooms;
+            },
+            _hotelsearched(data) {
+                this.hotelsearch = data.detail.response.data.hotel;
+                this.array = [this.hotelsearch];
+                this.roomItems = data.detail.response.data.room;
+            },
+            _hotelsearchedallocation(data) {
+                this.roomsItem = data.detail.response.data.rooms;
+                this.season = data.detail.response.data.seasondate;
+            },
+            _hotelsearchedblock(data) {
+                this.roomsblockItem = data.detail.response.data.rooms;
+            },
+            _roomsearched(data) {
+                this.hotelsearch = data.detail.response.data.hotel;
+                this.array = [this.hotelsearch];
+                this.roomItems = data.detail.response.data.room;
+                this.roomsItem = data.detail.response.data.rooms;
+            },
+            _roomsearchedallocation(data) {
+                this.hotelsearch = data.detail.response.data.hotel;
+                this.array = [this.hotelsearch];
+                this.roomItems = data.detail.response.data.rooms;
+                this.roomsItem = data.detail.response.data.rooms;
+            },
+            _roomsearchedblock(data) {
+                this.hotelsearch = data.detail.response.data.hotel;
+                this.array = [this.hotelsearch];
+                this.roomItems = data.detail.response.data.rooms;  
+                this.roomsblockItem = data.detail.response.data.rooms;
             },
             _timeStampToDateTime(ts) {
                 return new Date(ts);

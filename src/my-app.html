@@ -32,6 +32,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="my-icons.html">
 
 <link rel="lazy-import" href="my-inquire-one.html">
+<link rel="lazy-import" href="my-inquiry-one.html">
 <link rel="lazy-import" href="my-availability.html">
 <link rel="lazy-import" href="my-blocking.html">
 <link rel="lazy-import" href="my-hotels.html">
@@ -354,10 +355,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </app-drawer>
       <!-- Main content -->
       <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
+        <my-inquire-one name="inquire-one" route="{{subroute}}"></my-inquire-one>
+        <my-inquiry-one name="inquiry-one" route="{{subroute}}"></my-inquiry-one>
         <my-availability name="availability" route="{{subroute}}"></my-availability>
         <my-allocation name="allocation" route="{{subroute}}"></my-allocation>
         <my-blocking name="blocking" route="{{subroute}}"></my-blocking>
-        <my-inquire-one name="inquire-one" route="{{subroute}}"></my-inquire-one>
+        <!-- <my-inquire-one name="inquire-one" route="{{subroute}}"></my-inquire-one> -->
         <my-inquiry2 name="inquiry2" route="{{subroute}}"></my-inquiry2>
         <my-hotels name="hotels" route="{{subroute}}"></my-hotels>
         <my-users name="users" route="{{subroute}}"></my-users>

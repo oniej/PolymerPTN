@@ -11,8 +11,8 @@ router.get('/dummy', (req, res) => {
 router.post('/add', (req, res) => {
     const blocking = new Blocking();
     // body parser lets us use the req.body
-    const { active, workspace, hotel, dateFrom, dateTo, rooms, note, seasondate } = req.body;
-    if (!workspace || !hotel || !dateFrom || !dateTo || !note) {
+    const { active, group, hotel, rooms, note } = req.body;
+    if (!group || !hotel || !note) {
         // we should throw an error. we can do this check on the front end
         return res.json({
             success: false,
@@ -20,20 +20,12 @@ router.post('/add', (req, res) => {
         });
     }
     blocking.active = active;
-    blocking.workspace = workspace;
+    blocking.group = group;
     blocking.hotel = hotel;
-    blocking.dateFrom = dateFrom;
-    blocking.dateTo = dateTo;
+    // blocking.dateFrom = dateFrom;
+    // blocking.dateTo = dateTo;
     blocking.rooms = rooms;
-    // blocking.room1 = room1;
-    // blocking.peak = peak;
-    // blocking.pdays = pdays;
-    // blocking.nonpeak = nonpeak;
-    // blocking.nonpdays = nonpdays;
     blocking.note = note;
-    blocking.seasondate = seasondate;
-    // blocking.startValue = startValue;
-    // blocking.endValue = endValue;
     blocking.save(err => {
         if (err) return res.json({ success: false, error: err });
         return res.json({ success: true });
@@ -62,17 +54,12 @@ router.put('/update/:editKey', (req, res) => {
     }
     Blocking.findById(editKey, (error, blocking) => {
         if (error) return res.json({ success: false, error });
-        const { active, workspace, hotel, dateFrom, dateTo, rooms, note, seasondate } = req.body;
+        const { active, group, hotel, rooms, note } = req.body;
         blocking.active = active;
-        if (workspace) blocking.workspace = workspace;
+        if (group) blocking.group = group;
         if (hotel) blocking.hotel = hotel;
-        if (dateFrom) blocking.dateFrom = dateFrom;
-        if (dateTo) blocking.dateTo = dateTo;
         if (rooms) blocking.rooms = rooms;
-
         if (note) blocking.note = note;
-        if (seasondate) blocking.seasondate = seasondate;
-
         blocking.save(error => {
             if (error) return res.json({ success: false, error });
             return res.json({ success: true });
@@ -90,25 +77,47 @@ router.delete('/delete/:editKey', (req, res) => {
         return res.json({ success: true });
     });
 });
+router.get('/filter/:hotel', (req, res) => {
+    const hotel = req.params.hotel;
+    Blocking.findOne({ hotel: hotel }, (error, hotels) => {
+        if (error) return res.json({ success: false, error });
+        return res.json({ success: true, data: hotels });
+    });
+});
+router.get('/filterR/:room', (req, res) => {
+    const room = req.params.room;
+    Blocking.findOne({ room: room }, (error, rooms) => {
+        if (error) return res.json({ success: false, error });
+        return res.json({ success: true, data: rooms });
+    });
+});
+
+router.get('/filterstartdate/:newdate', (req, res) => {
+    const newdate = req.params.newdate;
+    Blocking.find({ 'rooms.dateFrom': { $gte: newdate } }, (error, avilafilter) => {
+        if (error) return res.json({ success: false, error });
+        return res.json({ success: true, data: avilafilter });
+    });
+});
+router.get('/filterenddate/:newdate1', (req, res) => {
+    const newdate1 = req.params.newdate1;
+    Blocking.find({ 'rooms.dateFrom': { $lte: newdate1 } }, (error, allocfilter) => {
+        if (error) return res.json({ success: false, error });
+        return res.json({ success: true, data: allocfilter });
+    });
+});
 router.get('/filterstartdate/:newdate', (req, res) => {
     const [newdate, newdate1] = req.params.newdate.split("_");
-    Blocking.find({ 'rooms.dateFrom': { $gte: newdate,$lte: newdate1 } }, (error, blcokfilter) => {
+    Blocking.find({ dateFrom: { $gte: newdate, $lte: newdate1 } }, (error, allocfilter) => {
         if (error) return res.json({ success: false, error });
-        return res.json({ success: true, data: blcokfilter });
+        return res.json({ success: true, data: allocfilter });
     });
 });
 router.get('/filterenddate/:newdate1', (req, res) => {
     const [newdate1, newdate] = req.params.newdate1.split("_");
-    Blocking.find({ 'rooms.dateTo': { $lte: newdate1, $gte: newdate } }, (error, blcokfilter) => {
+    Blocking.find({ dateTo: { $lte: newdate1, $gte: newdate } }, (error, allocfilter) => {
         if (error) return res.json({ success: false, error });
-        return res.json({ success: true, data: blcokfilter });
-    });
-});
-router.get('/filter/:group', (req, res) => {
-    const group = req.params.group;
-    Blocking.find({ group: group }, (error, group) => {
-        if (error) return res.json({ success: false, error });
-        return res.json({ success: true, data: group });
+        return res.json({ success: true, data: allocfilter });
     });
 });
 module.exports = router;
