@@ -60,6 +60,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 flex-direction: column;
             }
 
+            @-webkit-keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+            }
+            @-moz-keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+            }
+            @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+            }
+
             @media (max-width: 768px) {
                 div .allocation {
                     margin: 16px;
@@ -68,6 +93,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     /* height: 100vh; */
                     flex-direction: column;
                     border-radius: 3px;
+
+                    /* box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2); */
+              
+                      opacity: 0;
+        
+                -webkit-animation: fadeIn ease-in 1;
+                 -moz-animation: fadeIn ease-in 1;
+                animation: fadeIn ease-in 1;
+                    
+                -webkit-animation-fill-mode: forwards;
+                -moz-animation-fill-mode: forwards;
+                animation-fill-mode: forwards;
+                    
+                -webkit-animation-duration: 0.5s;
+                -moz-animation-duration: 0.5s;
+                animation-duration: 0.5s;
+
                 }
                 paper-search-bar {
                     margin-left: 80px;
@@ -75,9 +117,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     color: black;
                 }
             }
-
             @media (min-width: 768px) {
                 div .allocation {
+
+          width: 765px;
+          margin: 16px auto;
+          /* margin-bottom: 1000px; */
+          /* height: 100vh; */
+          border-radius: 3px;
+
+          box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+          
+          opacity: 0;
+          -webkit-animation: fadeIn ease-in 1;
+           -moz-animation: fadeIn ease-in 1;
+          animation: fadeIn ease-in 1;
+
+          -webkit-animation-fill-mode: forwards;
+          -moz-animation-fill-mode: forwards;
+          animation-fill-mode: forwards;
+
+          -webkit-animation-duration: 0.5s;
+          -moz-animation-duration: 0.5s;
+          animation-duration: 0.5s;         
+
                     width: 765px;
                     margin: 16px auto;
                     /* margin-bottom: 1000px; */
@@ -85,6 +148,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     border-radius: 3px;
 
                     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+
                 }
                 paper-search-bar {
                     margin-left: 50px;
@@ -92,30 +156,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     color: black;
                 }
             }
-
-            paper-fab.blue {
+            paper-fab.orange {
                 position: fixed;
                 bottom: 32px;
                 right: 32px;
 
             }
-
             app-header {
                 color: rgb(255, 255, 255);
                 background-color: darkorange;
                 /* background-color: var(--paper-indigo-500); */
                 /* background-color: #388E3C; */
             }
-
             #tool1 {
                 color: rgb(255, 255, 255);
                 background-color: darkorange;
             }
-
             #tool2 {
                 background-color: white;
             }
-
             .item {
                 @apply --layout-horizontal;
                 /* padding: 20px; */
@@ -125,36 +184,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 margin-bottom: 10px;
                 box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
             }
-
             .pad {
                 padding: 0 16px;
                 @apply --layout-flex;
                 @apply --layout-vertical;
             }
-
             #action {
                 /* display: inline-block; */
                 margin-top: 10px;
                 float: right;
             }
-
             div .option {
                 position: absolute;
                 left: 300px;
                 top: 200px;
             }
-
             #btn-clear {
                 position: fixed;
                 right: 80px;
                 color: gray;
             }
-
             #btn-arrow {
                 position: absolute;
                 color: black;
             }
-
             #btn-menu {
                 color: gray;
                 position: fixed;
@@ -163,34 +216,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </style>
         <custom-style>
             <style is="custom-style">
-                paper-fab.blue {
-                    /* --paper-fab-background: var(--paper-indigo-500); */
+                paper-fab.orange {
                     --paper-fab-background: darkorange;
-                    /* --paper-fab-background: var(--paper-light-blue-900); */
-                    /* --paper-fab-keyboard-focus-background: var(--paper-light-blue-900); */
+                
                 }
-
-                paper-radio-button {
-                    --paper-radio-button-label-spacing: 5px;
-                    --paper-radio-button-size: 24px;
-                }
-
-                paper-radio-button.close {
-                    --paper-radio-button-label-color: red;
-                }
-
-                paper-radio-button.limited {
-                    --paper-radio-button-label-color: yellow;
-                }
-
-                /* paper-radio-button.available {
-                    --paper-radio-button-label-color: red;
-                } */
             </style>
         </custom-style>
-
         <app-route route="{{route}}" pattern="/edit/:_id" data="{{editData}}" active="{{editActive}}"></app-route>
- 
         <iron-pages selected="[[route.path]]" attr-for-selected="name" fallback-selection="view404" role="main">
             <div name="">
                 <app-header-layout fullbleed has-scrolling-region>
@@ -198,6 +230,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <template is="dom-if" if="{{openSearch}}">
                             <app-toolbar primary id="tool2">
                                 <paper-icon-button id="btn-arrow" icon="my-icons:arrow-back" drawer-toggle on-tap="toggleReturn"></paper-icon-button>
+                                
+                                <!-- Start of Search -->
                                 <paper-search-bar id="search" query="{{search}}" disable-filter-button></paper-search-bar>
                                 <template is="dom-if" if="{{search}}">
                                     <paper-icon-button id="btn-clear" icon="my-icons:close" drawer-toggle on-tap="toggleClear"></paper-icon-button>
@@ -210,6 +244,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                         <paper-item>Hotel</paper-item>
                                     </paper-listbox>
                                 </paper-menu-button>
+                                <!-- End of Search -->
                             </app-toolbar>
                         </template>
                         <template is="dom-if" if="{{!openSearch}}">
@@ -260,30 +295,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                             [[item.note]]
                                         </span>
                                     </div>
-
                                 </div>
                             </div>
                         </template>
                     </iron-scroll-document>
                 </app-header-layout>
                 <a href="/allocation/add" style="text-decoration: none; ">
-                    <paper-fab noink on-tap="_availnew" icon="my-icons:add" class="blue"></paper-fab>
+                    <paper-fab noink on-tap="_availnew" icon="my-icons:add" class="orange"></paper-fab>
                 </a>
             </div>
-
             <div name="/add">
                 <div id="availnew"></div>
                 <my-allocation-add id="d23" path=" " prev-route="{{route.prefix}}"></my-allocation-add>
             </div>
             <div name="view404 ">Not found.</div>
         </iron-pages>
-
         <div hidden$="{{!editActive}}">
             <div id="availedit"></div>
             <my-allocation-edit id="d24" edit-key='{{editData._id}}' prev-route="{{route.prefix}}"></my-allocation-edit>
         </div>
     </template>
-
     <script>
         Polymer({
             is: 'my-allocation',
@@ -310,7 +341,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     '_searchChanged(filterBy, search)',]
                 // isMousedown: { type: Boolean, value: false, }
             },
-
             toggleSearch() {
                 this.openSearch = true;
 

@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 // object that shows the shape of your database entries.
 const AllocationSchema = new Schema({
     active: Boolean,
-    workspace: String,
+    group: String,
     hotel: String,
     dateFrom: String,
     dateTo: String,
