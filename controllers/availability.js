@@ -1,5 +1,6 @@
 // first we import our dependencies…
 const express = require('express');
+// const Availability = require('../models/availability_model');
 const Availability = require('../models/availability_model');
 
 // and create our instances
@@ -25,18 +26,32 @@ router.post('/add', (req, res) => {
         availabilityAdd.type = type,
         availabilityAdd.created_by = created_by,
         availabilityAdd.updated_by = updated_by,
-    availabilityAdd.save(err => {
-        if (err) return res.json({ success: false, error: err });
-        return res.json({ success: true });
-    });
+        availabilityAdd.save(err => {
+            if (err) return res.json({ success: false, error: err });
+            return res.json({ success: true });
+        });
 
 });
 router.get('/read', (req, res) => {
     Availability.find((err, availability) => {
         if (err) return res.json({ success: false, error: err });
         return res.json({ success: true, data: availability });
-    }).sort({ _id: 1 }).limit(20);
+    }).sort({ _id: -1 }).limit(20);
 });
+// router.get('/join', (req, res) => {
+//     Availability.aggregate([{
+//         $lookup:
+//         {
+//             from: 'allocation',
+//             localField: 'date',
+//             foreignField: '',
+//             as: 'avail_alloc'
+//         }
+//     }]), (error, availability) => {
+//         if (error) return res.json({ success: false, error });
+//         return res.json({ success: true, data: availability });
+//     }
+// });
 router.get('/readEdit/:editKey', (req, res) => {
     const editKey = req.params.editKey;
     Availability.findById({ _id: editKey }, (error, availability) => {
@@ -52,6 +67,7 @@ router.get('/filter/:hotel', (req, res) => {
         return res.json({ success: true, data: availability });
     });
 });
+
 router.put('/edit/:editId', (req, res) => {
     const { editId } = req.params;
     if (!editId) {
@@ -106,6 +122,20 @@ router.delete('/delete/:hotel', (req, res) => {
     Availability.remove({ hotel: hotel }, (error, hotel) => {
         if (error) return res.json({ success: false, error });
         return res.json({ success: true });
+    });
+});
+router.get('/filterstartdate/:newdate', (req, res) => {
+    const [newdate, newdate1] = req.params.newdate.split("_");
+    Availability.find({ 'availability.date': { $gte: newdate, $lte: newdate1 } }, (error, avilafilter) => {
+        if (error) return res.json({ success: false, error });
+        return res.json({ success: true, data: avilafilter });
+    });
+});
+router.get('/filterenddate/:newdate1', (req, res) => {
+    const [newdate1, newdate] = req.params.newdate1.split("_");
+    Availability.find({ 'availability.date': { $lte: newdate1, $gte: newdate } }, (error, allocfilter) => {
+        if (error) return res.json({ success: false, error });
+        return res.json({ success: true, data: allocfilter });
     });
 });
 module.exports = router;

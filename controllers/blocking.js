@@ -8,10 +8,10 @@ const router = express.Router();
 router.get('/dummy', (req, res) => {
     return res.json({ success: true, data: [] });
 });
-router.post('/add', (req, res) => { 
+router.post('/add', (req, res) => {
     const blocking = new Blocking();
     // body parser lets us use the req.body
-    const {active, workspace,hotel,dateFrom,dateTo,rooms,note,seasondate } = req.body;
+    const { active, workspace, hotel, dateFrom, dateTo, rooms, note, seasondate } = req.body;
     if (!workspace || !hotel || !dateFrom || !dateTo || !note) {
         // we should throw an error. we can do this check on the front end
         return res.json({
@@ -62,17 +62,17 @@ router.put('/update/:editKey', (req, res) => {
     }
     Blocking.findById(editKey, (error, blocking) => {
         if (error) return res.json({ success: false, error });
-        const {active, workspace, hotel,dateFrom,dateTo,rooms,note,seasondate } = req.body;
+        const { active, workspace, hotel, dateFrom, dateTo, rooms, note, seasondate } = req.body;
         blocking.active = active;
         if (workspace) blocking.workspace = workspace;
         if (hotel) blocking.hotel = hotel;
         if (dateFrom) blocking.dateFrom = dateFrom;
         if (dateTo) blocking.dateTo = dateTo;
         if (rooms) blocking.rooms = rooms;
-       
+
         if (note) blocking.note = note;
         if (seasondate) blocking.seasondate = seasondate;
- 
+
         blocking.save(error => {
             if (error) return res.json({ success: false, error });
             return res.json({ success: true });
@@ -90,5 +90,25 @@ router.delete('/delete/:editKey', (req, res) => {
         return res.json({ success: true });
     });
 });
-
+router.get('/filterstartdate/:newdate', (req, res) => {
+    const [newdate, newdate1] = req.params.newdate.split("_");
+    Blocking.find({ 'rooms.dateFrom': { $gte: newdate,$lte: newdate1 } }, (error, blcokfilter) => {
+        if (error) return res.json({ success: false, error });
+        return res.json({ success: true, data: blcokfilter });
+    });
+});
+router.get('/filterenddate/:newdate1', (req, res) => {
+    const [newdate1, newdate] = req.params.newdate1.split("_");
+    Blocking.find({ 'rooms.dateTo': { $lte: newdate1, $gte: newdate } }, (error, blcokfilter) => {
+        if (error) return res.json({ success: false, error });
+        return res.json({ success: true, data: blcokfilter });
+    });
+});
+router.get('/filter/:group', (req, res) => {
+    const group = req.params.group;
+    Blocking.find({ group: group }, (error, group) => {
+        if (error) return res.json({ success: false, error });
+        return res.json({ success: true, data: group });
+    });
+});
 module.exports = router;

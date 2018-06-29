@@ -368,18 +368,18 @@
                                 _this.availabilities.push(data);
                                 _this.notifySplices('availabilities');
                             }
-                            else {
-                                var [room, date] = event.target.id.split("_");
-                                var classColor = "white";
-                                var data = {
-                                    date: date,
-                                    room: room,
-                                    classColor: classColor,
-                                    status: ''
-                                }
-                                _this.availabilities.push(data);
-                                _this.notifySplices('availabilities');
-                            }
+                            // else {
+                            //     var [room, date] = event.target.id.split("_");
+                            //     var classColor = "white";
+                            //     var data = {
+                            //         date: date,
+                            //         room: room,
+                            //         classColor: classColor,
+                            //         status: ''
+                            //     }
+                            //     _this.availabilities.push(data);
+                            //     _this.notifySplices('availabilities');
+                            // }
                         }
                     }
                     // var next = Polymer.dom(this.root).querySelector("#next").disabled = true;
@@ -406,18 +406,18 @@
                                 _this.availabilities.push(data);
                                 _this.notifySplices('availabilities');
                             }
-                            else {
-                                var [room, date] = event.target.id.split("_");
-                                var classColor = "white";
-                                var data = {
-                                    date: date,
-                                    room: room,
-                                    classColor: classColor,
-                                    status: ''
-                                }
-                                _this.availabilities.push(data);
-                                _this.notifySplices('availabilities');
-                            }
+                            // else {
+                            //     var [room, date] = event.target.id.split("_");
+                            //     var classColor = "white";
+                            //     var data = {
+                            //         date: date,
+                            //         room: room,
+                            //         classColor: classColor,
+                            //         status: ''
+                            //     }
+                            //     _this.availabilities.push(data);
+                            //     _this.notifySplices('availabilities');
+                            // }
                         }
                     }
                     // var next = Polymer.dom(this.root).querySelector("#next").disabled = true;
@@ -443,19 +443,21 @@
                                 }
                                 _this.availabilities.push(data);
                                 _this.notifySplices('availabilities');
+                                console.log(event.target.id);
+
                             }
-                            else {
-                                var [room, date] = event.target.id.split("_");
-                                var classColor = "white";
-                                var data = {
-                                    date: date,
-                                    room: room,
-                                    classColor: classColor,
-                                    status: ''
-                                }
-                                _this.availabilities.push(data);
-                                _this.notifySplices('availabilities');
-                            }
+                            // else {
+                            //     var [room, date] = event.target.id.split("_");
+                            //     var classColor = "white";
+                            //     var data = {
+                            //         date: date,
+                            //         room: room,
+                            //         classColor: classColor,
+                            //         status: ''
+                            //     }
+                            //     _this.availabilities.push(data);
+                            //     _this.notifySplices('availabilities');
+                            // }
                         }
                     }
                     // var next = Polymer.dom(this.root).querySelector("#next").disabled = true;
@@ -552,8 +554,8 @@
                         this.yer = years;
                         this.month = mon + " " + years;
                         var date = new Date(years, months + 1, 0).getDate();
-                        this._nextDates(date, mon, years, months, data1);
                         this.availabilities = data1;
+                        this._nextDates(date, mon, years, months, data1);
                     }
                     this.method = 'GET';
                     this.$.ajax.url = '/availability/filter/' + this.hotel + "~" + this.mot + "~" + this.yer;
@@ -586,11 +588,12 @@
                     element.availability.forEach(el => {
                         availability.push(el);
                     })
+                    this.availabilities = availability;
                 });
                 var mon = this._selectMonth(this.mot);
                 var date = new Date(this.yer, this.mot + 1, 0).getDate();
                 this._nextDates(date, mon, this.yer, this.mot, availability);
-                this.availabilities = availability;
+                // this.availabilities = availability;
             },
             _preMonth() {
                 if (this.mot < 1) {
@@ -598,18 +601,20 @@
                     var y = this.yer - 1;
                     var m = this._selectMonth(x);
                     this.mot = x;
+                    // var m = this._selectMonth(this.mot);
                     this.yer = y;
                     this.month = m + " " + y;
                     var date = new Date(y, x + 1, 0).getDate();
-                    this._nextDates(date, m, y, x)
+                    this._nextDates(date, this.mot, y, x)
                 } else {
                     var y = this.yer;
                     var x = this.mot - 1;
+                    // var m = this._selectMonth(this.mot);
                     var m = this._selectMonth(x);
                     this.mot = x;
                     this.month = m + " " + this.yer;
                     var date = new Date(this.yer, x + 1, 0).getDate();
-                    this._nextDates(date, m, this.yer, x)
+                    this._nextDates(date, this.mot, this.yer, x)
                 }
                 this.prevmonth = this.mot;
                 this.prevyear = y;
@@ -633,18 +638,20 @@
                     var y = this.yer + 1;
                     var m = this._selectMonth(x);
                     this.mot = x;
+                    // var m = this._selectMonth(this.mot);
                     this.yer = y;
                     this.month = m + " " + y;
                     var date = new Date(y, x + 1, 0).getDate();
-                    this._nextDates(date, m, y, x)
-
+                    this._nextDates(date, this.mot, y, x)
                 } else {
+                    var y = this.yer;
                     var x = this.mot + 1;
                     var m = this._selectMonth(x);
                     this.mot = x;
+                    // var m = this._selectMonth(this.mot);
                     this.month = m + " " + this.yer;
                     var date = new Date(this.yer, x + 1, 0).getDate();
-                    this._nextDates(date, m, this.yer, x)
+                    this._nextDates(date, this.mot, this.yer, x)
                 }
                 // if (this.availabilities.length > 0) {
                 //     this._saveToDB(false);
@@ -662,7 +669,7 @@
                 var close = Polymer.dom(this.root).querySelector("#close").checked = false;
                 var limited = Polymer.dom(this.root).querySelector("#limited").checked = false;
                 var available = Polymer.dom(this.root).querySelector("#available").checked = false;
-                
+
             },
             _nextDates(numDays, months, years, daysWeek, data) {
                 // console.log(data);
@@ -672,9 +679,10 @@
                 }
                 //for months date
                 this.updateDate = months;
+                var dailyMonth = this._selectMonth(this.mot);
                 var tr1 = document.createElement('tr');
                 var th1 = document.createElement('th');
-                var t1 = document.createTextNode(months + " " + years);
+                var t1 = document.createTextNode(dailyMonth + " " + years);
                 th1.append(t1);
                 tr1.append(th1);
                 table.append(tr1);
@@ -698,8 +706,15 @@
 
                     for (i = 1; i < numDays + 1; ++i) {
                         var tdBlank = document.createElement('td');
-                        tdBlank.setAttribute('id', datas + "_" + i);
-                        tr3.append(tdBlank);
+                        this.mot += 1;
+                        if (i < 10 && this.mot < 10) {
+                            var add1 = this.mot + 1;
+                            tdBlank.setAttribute('id', datas + "_" + years + "-" + "0" + this.mot + "-" + "0" + i);
+                            tr3.append(tdBlank);
+                        } else {
+                            tdBlank.setAttribute('id', datas + "_" + years + "-" + this.mot + "-" + i);
+                            tr3.append(tdBlank);
+                        }
                     }
                 });
                 for (i = 1; i < numDays + 1; ++i) {
@@ -729,11 +744,13 @@
                 }
                 else {
                     data.forEach(element => {
+                        // console.log(element);
                         var roomdata = element.room.split(" ").join("");
                         var tr = Polymer.dom(this.root).querySelector("#" + roomdata);
                         var id = roomdata + "_" + element.date;
                         var cells = Polymer.dom(this.root).querySelector("#" + id);
                         cells.setAttribute('class', element.classColor);
+                        // console.log(id);
                     });
                 }
             },

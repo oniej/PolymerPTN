@@ -324,13 +324,7 @@
             observers: ['_hotelIdChanged(hotelId)',
                 '_resultLoaded(forAvailability,forHotel)'],
 
-            _resultLoaded(a, b) {
-                var availabilitydata = this.forAvailability;
-                var hoteldata = this.forHotel;
-                ids = new Set(availabilitydata.map(({ hotel }) => hotel));
-                hoteldata = hoteldata.filter(({ hotel }) => !ids.has(hotel));
-                this.hotelItems = hoteldata;
-            },
+
             ready() {
                 this.url = '/hotel/read';
                 this.availabilityurl = '/availability/read';
@@ -340,10 +334,14 @@
                 var hidesave = Polymer.dom(this.root).querySelector("#save").setAttribute("style", "display:none");
             },
             _hotelLoaded(data) {
-                this.forHotel = data.detail.response.data;
+                if (data.detail.response) {
+                    this.forHotel = data.detail.response.data;
+                }
             },
             _availabilityLoaded(data) {
-                this.forAvailability = data.detail.response.data;
+                if (data.detail.response) {
+                    this.forAvailability = data.detail.response.data;
+                }
             },
             _handleResponse(data) {
                 this.hotelData = data.detail.response.data.room;
@@ -357,7 +355,8 @@
                 var currentMonths = new Date()
                 this.month = monthNames[currentMonths.getMonth()] + " " + currentMonths.getDate() + " " + currentMonths.getFullYear();
                 var date = new Date(currentMonths.getFullYear(), currentMonths.getMonth() + 1, 0).getDate();
-                this._nextDates(date, monthNames[currentMonths.getMonth()], currentMonths.getFullYear(), currentMonths.getMonth());
+                this._nextDates(date, currentMonths.getMonth(), currentMonths.getFullYear(), currentMonths.getMonth());
+                // this._nextDates(date, monthNames[currentMonths.getMonth()], currentMonths.getFullYear(), currentMonths.getMonth());
                 var months = currentMonths.getMonth();
                 var years = currentMonths.getFullYear();
                 this.mot = months;
@@ -365,13 +364,21 @@
                 this.premonth = months;
                 this.prevyear = years;
             },
-
             _hotelIdChanged(e) {
                 this.hotelRooms = e;
                 this.method = 'GET';
                 this.$.ajax.url = '/hotel/filter/' + e;
                 this.$.ajax.handleAs = "json";
                 this.$.ajax.generateRequest();
+            },
+            _resultLoaded(a, b) {
+                if (this.forAvailability && this.forHotel) {
+                    var availabilitydata = this.forAvailability;
+                    var hoteldata = this.forHotel;
+                    ids = new Set(availabilitydata.map(({ hotel }) => hotel));
+                    hoteldata = hoteldata.filter(({ hotel }) => !ids.has(hotel));
+                    this.hotelItems = hoteldata;
+                }
             },
             _closeDialog() {
                 window.location.assign('/availability');
@@ -475,6 +482,7 @@
                                 }
                                 _this.availabilities.push(data);
                                 _this.notifySplices('availabilities');
+                                console.log(event.target.id);
                             }
                             else {
                                 var [room, date] = event.target.id.split("_");
@@ -498,22 +506,23 @@
                 if (this.mot < 1) {
                     var x = 11;
                     var y = this.yer - 1;
-                    var m = this._selectMonth(x);
+                    // var m = this._selectMonth(x);
                     this.mot = x;
+                    var m = this._selectMonth(this.mot);
                     this.yer = y;
                     this.month = m + " " + y;
                     var date = new Date(y, x + 1, 0).getDate();
-                    this._nextDates(date, m, y, x)
+                    this._nextDates(date, this.mot, y, x)
                 } else {
                     var y = this.yer;
                     var x = this.mot - 1;
-                    var m = this._selectMonth(x);
+                    var m = this._selectMonth(this.mot);
                     this.mot = x;
                     this.month = m + " " + this.yer;
                     var date = new Date(this.yer, x + 1, 0).getDate();
-                    this._nextDates(date, m, this.yer, x)
+                    this._nextDates(date, this.mot, this.yer, x)
                 }
-                this.premonth = this.mot + 1;
+                this.premonth = x;
                 this.prevyear = y;
                 // this._saveToDB(true);
                 next = Polymer.dom(this.root).querySelector("#next").disabled = false;
@@ -525,28 +534,30 @@
                 if (this.mot > 10) {
                     var x = 0;
                     var y = this.yer + 1;
-                    var m = this._selectMonth(x);
+                    // var m = this._selectMonth(x);
                     this.mot = x;
+                    var m = this._selectMonth(this.mot);
                     this.yer = y;
                     this.month = m + " " + y;
                     var date = new Date(y, x + 1, 0).getDate();
-                    this._nextDates(date, m, y, x)
+                    this._nextDates(date, this.mot, y, x)
                 } else {
                     var y = this.yer;
                     var x = this.mot + 1;
-                    var m = this._selectMonth(x);
+                    // var m = this._selectMonth(x);
                     this.mot = x;
+                    var m = this._selectMonth(this.mot);
                     this.month = m + " " + this.yer;
                     var date = new Date(this.yer, x + 1, 0).getDate();
-                    this._nextDates(date, m, this.yer, x)
+                    this._nextDates(date, this.mot, this.yer, x)
                 }
                 // var date = new Date().getFullYear();
                 this.prevyear = y;
-                this.premonth = this.mot - 1;
+                this.premonth = x;
+                // console.log(this.premonth + " " + this.prevyear);
                 // if (this.prevyear != date) {
                 //     this.premonth = 0;
                 // }
-                console.log(this.premonth + "" + this.prevyear);
                 // this._saveToDB(true);
                 var close = Polymer.dom(this.root).querySelector("#close").checked = false;
                 var limited = Polymer.dom(this.root).querySelector("#limited").checked = false;
@@ -558,9 +569,10 @@
                     table.removeChild(table.lastChild);
                 }
                 //for months date
+                var monthname = this._selectMonth(months);
                 var tr1 = document.createElement('tr');
                 var th1 = document.createElement('th');
-                var t1 = document.createTextNode(months + " " + years);
+                var t1 = document.createTextNode(monthname + " " + years);
                 th1.append(t1);
                 tr1.append(th1);
                 table.append(tr1);
@@ -584,8 +596,14 @@
 
                     for (i = 1; i < numDays + 1; ++i) {
                         var tdBlank = document.createElement('td');
-                        tdBlank.setAttribute('id', datas + "_" + i);
-                        tr3.append(tdBlank);
+                        months += 1;
+                        if (i < 10 && months < 10) {
+                            tdBlank.setAttribute('id', datas + "_" + years + "-" + "0" + months + "-" + "0" + i);
+                            tr3.append(tdBlank);
+                        } else {
+                            tdBlank.setAttribute('id', datas + "_" + years + "-" + months + "-" + i);
+                            tr3.append(tdBlank);
+                        }
                     }
                 });
 

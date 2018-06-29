@@ -8,10 +8,10 @@ const router = express.Router();
 router.get('/dummy', (req, res) => {
     return res.json({ success: true, data: [] });
 });
-router.post('/add', (req, res) => { 
+router.post('/add', (req, res) => {
     const allocation = new Allocation();
     // body parser lets us use the req.body
-    const {active, workspace,hotel,dateFrom,dateTo,rooms,note,seasondate } = req.body;
+    const { active, workspace, hotel, dateFrom, dateTo, rooms, note, seasondate } = req.body;
     if (!workspace || !hotel || !dateFrom || !dateTo || !note) {
         // we should throw an error. we can do this check on the front end
         return res.json({
@@ -62,17 +62,17 @@ router.put('/update/:editKey', (req, res) => {
     }
     Allocation.findById(editKey, (error, allocation) => {
         if (error) return res.json({ success: false, error });
-        const {active,workspace, hotel,dateFrom,dateTo,rooms,note,seasondate } = req.body;
+        const { active, workspace, hotel, dateFrom, dateTo, rooms, note, seasondate } = req.body;
         allocation.active = active;
         if (workspace) allocation.workspace = workspace;
         if (hotel) allocation.hotel = hotel;
         if (dateFrom) allocation.dateFrom = dateFrom;
         if (dateTo) allocation.dateTo = dateTo;
         if (rooms) allocation.rooms = rooms;
-       
+
         if (note) allocation.note = note;
         if (seasondate) allocation.seasondate = seasondate;
- 
+
         allocation.save(error => {
             if (error) return res.json({ success: false, error });
             return res.json({ success: true });
@@ -90,5 +90,25 @@ router.delete('/delete/:editKey', (req, res) => {
         return res.json({ success: true });
     });
 });
-
+router.get('/filter/:group', (req, res) => {
+    const group = req.params.group;
+    Allocation.find({ group: group }, (error, group) => {
+        if (error) return res.json({ success: false, error });
+        return res.json({ success: true, data: group });
+    });
+});
+router.get('/filterstartdate/:newdate', (req, res) => {
+    const [newdate, newdate1] = req.params.newdate.split("_");
+    Allocation.find({ dateFrom: { $gte: newdate, $lte: newdate1 } }, (error, allocfilter) => {
+        if (error) return res.json({ success: false, error });
+        return res.json({ success: true, data: allocfilter });
+    });
+});
+router.get('/filterenddate/:newdate1', (req, res) => {
+    const [newdate1, newdate] = req.params.newdate1.split("_");
+    Allocation.find({ dateTo: { $lte: newdate1, $gte: newdate } }, (error, allocfilter) => {
+        if (error) return res.json({ success: false, error });
+        return res.json({ success: true, data: allocfilter });
+    });
+});
 module.exports = router;

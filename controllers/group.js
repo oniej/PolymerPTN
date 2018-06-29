@@ -5,7 +5,6 @@ const router = express.Router();
 
 // and create our instances
 
-
 router.get('/readMe/:editKey', (req, res) => {
     const editKey = req.params.editKey
     Group.findById({ _id: editKey }, (error, group) => {
@@ -44,21 +43,12 @@ router.put('/update/:editKey', (req, res) => {
 });
 router.delete('/delete/:editKey', (req, res) => {
     const { editKey } = req.params;
-    console.log(editKey);
-    // if (!editKey) {
-    //     return res.json({ success: false, error: 'No comment id provided' });
-    // }
-    // Group.remove({ _id: editKey }, (error, hotel) => {
-    //     if (error) return res.json({ success: false, error });
-    //     return res.json({ success: true });
-    // });
 });
-// router.delete('/delete/:editKey', (req, res) => {
-//     const { editKey } = req.params;
-//     Group.remove({ _id: editKey }, (error, group) => {
-//         if (error) return res.json({ success: false, error });
-//         return res.json({ success: true });
-//     });
-// });
-
+router.get('/filter/:group', (req, res) => {
+    const group = req.params.group;
+    Group.find({ group: group }, (error, group) => {
+        if (error) return res.json({ success: false, error });
+        return res.json({ success: true, data: group });
+    });
+});
 module.exports = router;

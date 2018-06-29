@@ -20,6 +20,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/vaadin-dialog/vaadin-dialog.html">
 <link rel="import" href="../bower_components/salte-dialog/salte-dialog.html">
 <link rel="import" href="../bower_components/paper-dropdown-input/paper-dropdown-input.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 
 
@@ -115,8 +116,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 height: 1px;
             }
         </style>
-        <iron-ajax auto url="{{urlGroup}}" params='{}' handle-as="json" on-response="_groupLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
-        <iron-ajax auto url="{{urlInqury}}" params='{}' handle-as="json" on-response="_inquiryLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
+        <!-- group -->
+        <iron-ajax auto url="{{urlGroup}}" handle-as="json" method="GET" on-response="_groupLoaded"></iron-ajax>
+        <!-- <iron-ajax auto url="{{urlJoin}}" params='{}' handle-as="json" method="GET" on-response="_joinLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax> -->
+        <!-- allocation -->
+        <iron-ajax id="workspace" url="{{urlFilterworkspace}}" handle-as="json" method="GET" on-response="_urlFilterworkspaceloaded"></iron-ajax>
+        <iron-ajax id="startalloc" url="{{urlFilterStart}}" handle-as="json" method="GET" on-response="_urlFilterStartloaded"></iron-ajax>
+        <iron-ajax id="endalloc" url="{{urlFilterend}}" handle-as="json" method="GET" on-response="_urlFilterend"></iron-ajax>
+        <!-- availability -->
+        <iron-ajax id="startavail" url="{{Startavail}}" handle-as="json" method="GET" on-response="_startavailloaded"></iron-ajax>
+        <iron-ajax id="endavail" url="{{Endavail}}" handle-as="json" method="GET" on-response="_endavailloaded"></iron-ajax>
+        <!-- blockings -->
+        <iron-ajax id="startblock" url="{{Startblockings}}" handle-as="json" method="GET" on-response="_startblockloaded"></iron-ajax>
+        <iron-ajax id="endblock" url="{{Endblockings}}" handle-as="json" method="GET" on-response="_endblockloaded"></iron-ajax>
         <iron-pages selected="[[route.path]]" attr-for-selected="name" fallback-selection="view404" role="main">
             <div name="">
                 <app-header-layout fullbleed has-scrolling-region>
@@ -157,108 +169,37 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             <!-- <span style="color:yellow;margin-left: 14px;">limited</span> -->
                         </div>
                         <div id="table">
-                            <span style="float: right">{{start}} - {{end}}</span>
+                            <span style="float: right">{{start}} {{end}}</span>
+                            <div id="errorMsgDiv" style="display: none;">
+                                <iron-icon icon="my-icons:error-outline"></iron-icon>&nbsp;{{errorMsg}}</div>
                             <table id="hotels">
-                                <tr>
-                                    <td>Hotel</td>
-                                    <td>Room</td>
-                                    <td></td>
-                                    <td>27-June</td>
-                                    <td>28-June</td>
-                                    <td>29-June</td>
-                                    <td>30-June</td>
-                                    <td>1-July</td>
-                                    <td>2-July</td>
-                                    <td>3-July</td>
-                                    <td>4-July</td>
-                                    <td>5-July</td>
-                                    <td>6-July</td>
-                                    <td>7-July</td>
-                                    <td>8-July</td>
-                                    <td>9-July</td>
-                                    <td>10-July</td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td>Cut-off</td>
-                                    <td style="background-color: red;color: white">19-Apr</td>
-                                    <td style="background-color: red;color: white">20-Apr</td>
-                                    <td style="background-color: red;color: white">21-Apr</td>
-                                    <td>10-June</td>
-                                    <td>11-June</td>
-                                    <td>12-June</td>
-                                    <td>13-June</td>
-                                    <td>14-June</td>
-                                    <td>15-June</td>
-                                    <td>16-June</td>
-                                    <td>17-June</td>
-                                    <td>18-June</td>
-                                    <td>19-June</td>
-                                    <td>20-June</td>
-                                </tr>
-                                <tr>
-                                    <td>Shangrila</td>
-                                    <td>Standard</td>
-                                    <td></td>
-                                    <td style="background-color: green;color: white">3</td>
-                                    <td style="background-color:green;color: white">1</td>
-                                    <td style="background-color: green;color: white">1</td>
-                                    <td style="background-color: green;color: white">1</td>
-                                    <td>closed</td>
-                                    <td>closed</td>
-                                    <td>closed</td>
-                                    <td>5</td>
-                                    <td style="background-color: green;color: white">4</td>
-                                    <td style="background-color: green;color: white">1</td>
-                                    <td>1</td>
-                                    <td style="background-color: green;color: white">1</td>
-                                    <td>1</td>
-                                    <td>1</td>
-                                </tr>
-                                <tr>
-                                    <td>Shangrila</td>
-                                    <td>Deluxe</td>
-                                    <td></td>
-                                    <td>closed</td>
-                                    <td style="background-color: green;color: white">2</td>
-                                    <td style="background-color: green;color: white">5</td>
-                                    <td style="background-color: green;color: white">1</td>
-                                    <td>closed</td>
-                                    <td>closed</td>
-                                    <td>closed</td>
-                                    <td>closed</td>
-                                    <td>closed</td>
-                                    <td>closed</td>
-                                    <td>closed</td>
-                                    <td>closed</td>
-                                    <td>closed</td>
-                                    <td>closed</td>
-                                </tr>
-                                <tr>
-                                    <td>Shangrila</td>
-                                    <td>Superior</td>
-                                    <td></td>
-                                    <td>1</td>
-                                    <td style="background-color: green;color: white">1</td>
-                                    <td>1</td>
-                                    <td style="background-color: green;color: white">4</td>
-                                    <td>2</td>
-                                    <td>3</td>
-                                    <td>closed</td>
-                                    <td>closed</td>
-                                    <td>closed</td>
-                                    <td>closed</td>
-                                    <td>closed</td>
-                                    <td>closed</td>
-                                    <td style="background-color: green;color: white">1</td>
-                                    <td style="background-color: green;color: white">1</td>
-                                </tr>
                             </table>
                         </div>
                     </div>
                 </app-header-layout>
         </iron-pages>
+        <paper-dialog id="moreDetails">
+            <h2>Details</h2>
+            <div>Rooms:{{rooms}}</div>
+            <div>Status: {{status}}</div>
+            <div>Allocation
+                <div>Non-peak: {{nonpeak}}</div>
+                <div>Peak: {{peak}}</div>
+                <div>Cut-off peak: {{pdays}} days</div>
+                <div>Cut-off non-peak: {{nonpdays}} days</div>
+                <div>Peak Seasons :
+                    <template is="dom-repeat" items="[[seasondates]]">
+                        <div>{{item.startValue}}</div>
+                        <div>{{item.endValue}}</div>
+                    </template>
+                </div>
+            </div>
+            <div>Blocking: {{blocking}}</div>
+            <div>Cancellation: {{cancel}}</div>
+            <div class="buttons">
+                <paper-button dialog-dismiss>Ok</paper-button>
+            </div>
+        </paper-dialog>
     </template>
 
     <script>
@@ -268,41 +209,472 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 checkin: String,
                 checkout: String,
                 stardate: String,
-                enddate: String
+                enddate: String,
+                hotelId: String,
+                groupworkspace: Object,
+                startload: Object,
+                endload: Object,
+                startavail: Object,
+                endavail: Object,
+                endblock: Object,
+                startblock: Object,
+                newBlock: {
+                    type: Array,
+                    notify: true
+                },
+                newAlloc: {
+                    type: Array,
+                    notify: true
+                },
+                joinedblock: {
+                    type: Array,
+                    notify: true
+                },
+                joinedalloc: {
+                    type: Array,
+                    notify: true
+                },
+                joinedavail: {
+                    type: Array,
+                    notify: true
+                },
+                filterBlock: {
+                    type: Array,
+                    notify: true
+                },
+                filterAlloc: {
+                    type: Array,
+                    notify: true,
+                },
+                from: String,
+                to: String,
+                concatAll: String,
+
+                tr3: String,
+                eleAvail: String,
+                eleHotel: {
+                    type: Array,
+                    value: [],
+                    notify: true,
+                },
+                eleRoom: {
+                    type: Array,
+                    value: [],
+                    notify: true,
+                },
+                pushHotel: {
+                    type: Array,
+                    value: [],
+                },
+                pushRooms: {
+                    type: Array,
+                    value: [],
+                    notify: true
+                },
+                newArray: {
+                    type: Array,
+                    value: [],
+                    notify: true
+                },
+                newHotel: {
+                    type: Array,
+                    value: [],
+                    notify: true
+                },
+                status: String
             },
-            observers: ['_dateChanged(checkin,checkout)'],
+            observers: ['_startCheckin(checkin)',
+                '_endCheckout(checkout)',
+                '_hotelIdChanged(hotelId)',
+                '_joinedAvail(startavail,endavail)',
+                '_joinedAlloc(groupworkspace,startload,endload)',
+                '_joinedBlock(groupworkspace,startblock,endblock)',
+                '_unionAll(joinedavail,filterAlloc,filterBlock)',
+                '_tappedChanged(tapped)'
+            ],
             ready() {
-
                 this.urlGroup = '/group/read';
-                var hideTable = Polymer.dom(this.root).querySelector("#table").setAttribute("style", "display:none");
                 var hidePeak = Polymer.dom(this.root).querySelector("#peak").setAttribute("style", "display:none");
+                var errormsg = Polymer.dom(this.root).querySelector("#errorMsgDiv").setAttribute("style", "display:none");
+                this.errorMsg = "";
             },
-            _dateChanged(a, b) {
-                if (a && b != "") {
-                    var hideTable = Polymer.dom(this.root).querySelector("#table").setAttribute("style", "width:100%;overflow-x:auto;");
-                    var hidePeak = Polymer.dom(this.root).querySelector("#peak").setAttribute("style", "display:inline-block");
-                } else {
-                    var hideTable = Polymer.dom(this.root).querySelector("#table").setAttribute("style", "display:none;");
-                    var hidePeak = Polymer.dom(this.root).querySelector("#peak").setAttribute("style", "display:none");
+            _tappedChanged(e) {
+                var [rooms, stat, nonpeak, peak, seasondates, blocking, cancel, pdays, nonpdays] = e.split("~");
+                this.rooms = rooms;
+                this.status = stat;
+                this.nonpeak = nonpeak;
+                this.peak = peak;
+                this.seasondates = JSON.parse(seasondates);
+                this.blocking = blocking;
+                this.cancel = cancel;
+                this.pdays = pdays;
+                this.nonpdays = nonpdays;
+                this.$.moreDetails.opened = true;
+            },
+            _hotelIdChanged(j) {
+                this.stardate = this.checkin;
+                this.urlFilterworkspace = '/group/filter/' + j;
+                this.$.workspace.handleAs = "json";
+                this.$.workspace.generateRequest();
+            },
+            _urlFilterworkspaceloaded(data) {
+                this.groupworkspace = data.detail.response.data;
+            },
+
+            _startCheckin(e) {
+                this.from = e;
+                this.urlFilterStart = '/allocation/filterstartdate/' + e + "_" + this.to;
+                this.Startavail = '/availability/filterstartdate/' + e + "_" + this.to;
+                this.Startblockings = '/blocking/filterstartdate/' + e + "_" + this.to;
+                this.$.startalloc.generateRequest();
+                this.$.startavail.generateRequest();
+                this.$.startblock.generateRequest();
+            },
+            _urlFilterStartloaded(data) {
+                if (this.endload) {
+                    this.startload = data.detail.response.data;
                 }
-                this.stardate = new Date(a)
-                this.enddate = new Date(b)
-
-                var date = new Date(a)
-                var date1 = new Date(b)
-                var xx = date.getMonth();
-                var x = date1.getMonth();
-                this.end = this._selectMonth(x) + " " + date1.getDate();
-                this.start = this._selectMonth(xx) + " " + date.getDate();
-                //for remaining days
-                var remainingstart = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate() - date.getDate();
-                var remainingend = new Date(date1.getFullYear(), date1.getMonth() + 1, 0).getDate() - date1.getDate();
-
-                // console.log(remainingstart);
-                // console.log(remainingend);
             },
-            _dateRanged() {
+            _startavailloaded(data) {
+                if (this.endavail) {
+                    this.startavail = data.detail.response.data;
+                }
+            },
+            _startblockloaded(data) {
+                if (this.endblock) {
+                    this.startblock = data.detail.response.data;
+                }
+            },
+            _endCheckout(f) {
+                this.to = f;
+                this.urlFilterend = '/allocation/filterenddate/' + f + "_" + this.from;
+                this.Endavail = '/availability/filterenddate/' + f + "_" + this.from;
+                this.Endblockings = '/blocking/filterenddate/' + f + "_" + this.from;
+                this.$.endalloc.generateRequest();
+                this.$.endavail.generateRequest();
+                this.$.endblock.generateRequest();
+            },
+            _endavailloaded(data) {
+                if (data.detail.response) {
+                    // console.log(data.detail.response.data);
+                    this.endavail = data.detail.response.data;
+                }
+            },
+            _urlFilterend(data) {
+                if (data.detail.response) {
+                    this.endload = data.detail.response.data;
+                }
+            },
+            _endblockloaded(data) {
+                if (data.detail.response) {
+                    this.endblock = data.detail.response.data;
+                }
+            },
+            _joinedAlloc(x, a, b) {
+                if (this.groupworkspace && this.startload && this.endload) {
+                    this.joinedalloc = this.startload.concat(this.endload);
+                    this.newAlloc = this.joinedalloc.filter((allocarray) => {
+                        return this.groupworkspace.some((grouparray) => {
+                            return grouparray.group === allocarray.group;
+                        });
+                    });
+                    var sameId = this.newAlloc;
+                    function printUniqueResults(arrayOfdatas, id) {
+                        return arrayOfdatas.filter((item, index, array) => {
+                            return array.map((mapItem) => mapItem[id]).indexOf(item[id]) === index
+                        })
+                    }
+                    var result = printUniqueResults(sameId, '_id');
+                    this.filterAlloc = result;
+                }
+            },
+            _joinedAvail(f, g) {
+                if (this.startavail && this.endavail) {
+                    this.joinedavail = this.startavail.concat(this.endavail);
+                    // console.log( this.startavail);
+                    // console.log( this.endavail);
+                }
+            },
+            _joinedBlock(x, y, z) {
+                if (this.groupworkspace && this.startblock && this.endblock) {
+                    this.joinedblock = this.startblock.concat(this.endblock);
+                    this.newBlock = this.joinedblock.filter((allocarray) => {
+                        return this.groupworkspace.some((grouparray) => {
+                            return grouparray.group === allocarray.group;
+                        });
+                    });
+                    var sameId = this.newBlock;
+                    function printUniqueResults(arrayOfdatas, id) {
+                        return arrayOfdatas.filter((item, index, array) => {
+                            return array.map((mapItem) => mapItem[id]).indexOf(item[id]) === index
+                        })
+                    }
+                    var filterresult = printUniqueResults(sameId, '_id')
+                    this.filterBlock = filterresult;
+                }
+            },
+            _unionAll(k, l, m) {
+                if (this.checkin == "" || this.checkout == "") {
+                    var table = Polymer.dom(this.root).querySelector('#hotels');
+                    while (table.hasChildNodes()) {
+                        table.removeChild(table.lastChild);
+                    }
+                    this.start = "";
+                    this.end = "";
+                    var errormsg = Polymer.dom(this.root).querySelector("#errorMsgDiv");
+                    errormsg.setAttribute("style", "font-size:12px; display: block; background-color:red; color:white; text-align:center; border-radius: 5px; opacity:0.5; padding:5px");
+                    this.errorMsg = "Select Chekin or Checkout";
+                }
+                else {
+                    var errormsg = Polymer.dom(this.root).querySelector("#errorMsgDiv").setAttribute("style", "display:none");
+                    this.errorMsg = "";
 
+                    if (this.filterAlloc && this.filterBlock) {
+                        var initialArray = [];
+                        this.filterAlloc.forEach(elAllo => {
+                            this.joinedavail.forEach(elAvail => {
+                                if (elAllo.hotel === elAvail.hotel) {
+                                    elAvail.availability.forEach(minElAvail => {
+                                        elAllo.rooms.forEach(roomele => {
+                                            if (minElAvail.room === roomele.room.split(" ").join("")) {
+                                                roomele.availability = {
+                                                    status: minElAvail.status,
+                                                    data: minElAvail.date
+                                                };
+                                                roomele.status = minElAvail.status;
+                                            }
+                                        });
+                                    });
+                                    elAllo.avail = elAvail;
+                                }
+                                this.filterBlock.forEach(elBlock => {
+                                    if (elAllo.hotel === elBlock.hotel) {
+                                        elBlock.rooms.forEach(minElBlock => {
+                                            elAllo.rooms.forEach(roomeleB => {
+                                                if (minElBlock.room === roomeleB.room.split(" ").join("")) {
+                                                    roomeleB.blocking = {
+                                                        start: minElBlock.dateFrom,
+                                                        end: minElBlock.dateTo,
+                                                        cancel: minElBlock.cancel,
+                                                        block: parseInt(minElBlock.block),
+                                                        total: parseInt(minElBlock.block) + parseInt(roomeleB.peak) + parseInt(roomeleB.nonpeak)
+                                                    };
+                                                }
+                                            });
+                                        });
+                                        elAllo.blocking = elBlock;
+                                    }
+                                });
+                            });
+                            initialArray.push(elAllo);
+                        });
+                        function printUniqueResults(arrayOfdatas, hotel) {
+                            return arrayOfdatas.filter((item, index, array) => {
+                                return array.map((mapItem) => mapItem[hotel]).indexOf(item[hotel]) === index
+                            })
+                        }
+                        var finalArray = printUniqueResults(initialArray, 'hotel');
+                        // if (finalArray.length > 0) {
+                        var array = [];
+                        var array1 = [];
+                        var array2 = [];
+                        var array3 = [];
+                        finalArray.forEach(elements => {
+                            if (elements) {
+                                array.push(elements.hotel);
+                                array1.push(elements.rooms);
+                                array2.push(elements.seasondate);
+                                if (elements.avail) {
+                                }
+                            }
+                        });
+                        var start = new Date(this.from);
+                        var stardate = start.getDate();
+                        var startmonth = start.getMonth();
+                        var startMonth = new Date(start.getFullYear(), start.getMonth() + 1, 0).getDate();
+                        var end = new Date(this.to);
+                        var enddate = end.getDate();
+                        var endmonth = end.getMonth();
+                        var endMonth = new Date(end.getFullYear(), end.getMonth() + 1, 0).getDate();
+                        this._createTable(finalArray, stardate, startMonth, enddate);
+                        this.start = this._selectMonth(startmonth) + " " + stardate + " - ";
+                        this.end = this._selectMonth(endmonth) + " " + enddate;
+                        if (finalArray.length > 0) {
+                            if (stardate && enddate) {
+                                this.start = this._selectMonth(startmonth) + " " + stardate + " - ";
+                                this.end = this._selectMonth(endmonth) + " " + enddate;
+                            }
+                            var errormsg = Polymer.dom(this.root).querySelector("#errorMsgDiv").setAttribute("style", "display:none");
+                            this.errorMsg = "";
+                            this._createTable(finalArray, stardate, startMonth, enddate);
+
+                        } else {
+                            var errormsg = Polymer.dom(this.root).querySelector("#errorMsgDiv");
+                            errormsg.setAttribute("style", "font-size:12px; display: block; background-color:red; color:white; text-align:center; border-radius: 5px; opacity:0.5; padding:5px");
+                            this.errorMsg = "No data Available";
+
+                            var table = Polymer.dom(this.root).querySelector('#hotels');
+                            while (table.hasChildNodes()) {
+                                table.removeChild(table.lastChild);
+                            }
+                            this.start = "";
+                            this.end = "";
+                        }
+                    }
+                    // }
+
+                }
+            },
+            _createTable(data, datestart, startmonth, dateEnd) {
+                // console.log(data);
+                var table = Polymer.dom(this.root).querySelector('#hotels');
+                while (table.hasChildNodes()) {
+                    table.removeChild(table.lastChild);
+                }
+                var tr1 = document.createElement('tr');
+                var th2 = document.createElement('td');
+                var t1 = document.createTextNode("Hotel");
+                var th1 = document.createElement('td');
+                var t2 = document.createTextNode("Rooms");
+                th1.append(t1);
+                th2.append(t2);
+                tr1.append(th1);
+                tr1.append(th2);
+                table.append(tr1);
+
+                var [year, month, date] = this.from.split("-");
+                var [yearend, monthend, dateend] = this.to.split("-");
+
+                data.forEach(newData => {
+                    newData.rooms.forEach(eles => {
+                        var tr3 = document.createElement('tr');
+                        var th3 = document.createElement('td');
+                        var th4 = document.createElement('td');
+                        var tdTxt = document.createTextNode(newData.hotel);
+                        var tdTxt1 = document.createTextNode(eles.room);
+                        // tr3.setAttribute('id', newData.hotel);
+                        // tr3.setAttribute('id', eles.room);
+                        th3.append(tdTxt);
+                        tr3.append(th3);
+                        th4.append(tdTxt1);
+                        tr3.append(th4);
+                        table.append(tr3);
+                        // if (newData.avail) {
+                        //     newData.avail.forEach(same => {
+                        //         this.status = same.status;
+                        //     });
+                        // }
+
+                        if (monthend == month) {
+                            for (i = datestart; i < dateEnd + 1; ++i) {
+                                var tdblanks2 = document.createElement('td');
+                                var cal = parseInt(eles.nonpeak) + parseInt(eles.peak);
+                                var seasondates = JSON.stringify(newData.seasondate);
+                                // console.log(tdblanks2);
+                                if (newData.avail) {
+                                    if (eles.availability) {
+                                        if (eles.availability.status === "closed") {
+                                            var [y, m, d] = eles.availability.data.split("-");
+                                            if (parseInt(d) === i) {
+                                                var dTxt = document.createTextNode(eles.availability.status);
+                                                tdblanks2.append(dTxt);
+                                            } else {
+                                                var dTxt = document.createTextNode(cal);
+                                                tdblanks2.append(dTxt);
+                                                tdblanks2.setAttribute('id', eles.room + "~" + "open" + "~" + eles.nonpeak + "~" + eles.peak + "~" + seasondates + "~" + "0" + "~" + "none" + "~" + eles.pdays + "~" + eles.nonpdays);
+                                                var self = this;
+                                                tdblanks2.addEventListener('click', function (e) {
+                                                    self.tapped = e.target.id;
+
+                                                });
+                                            }
+                                        }
+                                        else {
+                                            if (newData.blocking) {
+                                                if (eles.blocking) {
+                                                    var [ybs, mbs, dbs] = eles.blocking.start.split("-");
+                                                    var [ybe, mbe, dbe] = eles.blocking.end.split("-");
+                                                    if (i >= parseInt(dbs) && i <= parseInt(dbe)) {
+                                                        var dTxt = document.createTextNode(eles.blocking.total);
+                                                        tdblanks2.append(dTxt);
+                                                        tdblanks2.setAttribute('id', eles.room + "~" + "open" + "~" + eles.nonpeak + "~" + eles.peak + "~" + seasondates + "~" + eles.blocking.block + "~" + eles.blocking.cancel + "~" + eles.pdays + "~" + eles.nonpdays);
+                                                    }
+                                                    else {
+                                                        var dTxt = document.createTextNode(cal);
+                                                        tdblanks2.append(dTxt);
+                                                        tdblanks2.setAttribute('id', eles.room + "~" + "open" + "~" + eles.nonpeak + "~" + eles.peak + "~" + seasondates + "~" + "0" + "~" + "none" + "~" + eles.pdays + "~" + eles.nonpdays);
+                                                    }
+                                                }
+                                                else {
+                                                    var dTxt = document.createTextNode(cal);
+                                                    tdblanks2.append(dTxt);
+                                                    tdblanks2.setAttribute('id', eles.room + "~" + "open" + "~" + eles.nonpeak + "~" + eles.peak + "~" + seasondates + "~" + "0" + "~" + "none" + "~" + eles.pdays + "~" + eles.nonpdays);
+
+                                                }
+                                            }
+                                            else {
+                                                var dTxt = document.createTextNode(cal);
+                                                tdblanks2.append(dTxt);
+                                                tdblanks2.setAttribute('id', eles.room + "~" + "open" + "~" + eles.nonpeak + "~" + eles.peak + "~" + seasondates + "~" + "0" + "~" + "none" + "~" + eles.pdays + "~" + eles.nonpdays);
+
+                                            }
+                                            var self = this;
+                                            tdblanks2.addEventListener('click', function (e) {
+                                                self.tapped = e.target.id;
+
+
+                                            });
+                                        }
+                                    }
+                                }
+                                else {
+                                    var dTxt = document.createTextNode(cal);
+                                    tdblanks2.append(dTxt);
+                                    tdblanks2.setAttribute('id', eles.room + "~" + "open" + "~" + eles.nonpeak + "~" + eles.peak + "~" + seasondates + "~" + "0" + "~" + "none" + "~" + eles.pdays + "~" + eles.nonpdays);
+                                    var self = this;
+                                    tdblanks2.addEventListener('click', function (e) {
+                                        self.tapped = e.target.id;
+
+                                    });
+                                }
+                                tr3.append(tdblanks2);
+                            }
+                        } else {
+                            for (i = datestart; i < startmonth + 1; ++i) {
+                                var tdblanks2 = document.createElement('td');
+                                tdblanks2.setAttribute('id', eles.availability.status + "~" + eles.nonpeak + "~" + eles.peak + "~" + seasondates + "~" + eles.blocking.block + "~" + eles.blocking.cancel + "~" + eles.pdays + "~" + eles.nonpdays);
+                                tr3.append(tdblanks2);
+                            }
+                            for (i = 1; i < dateEnd + 1; ++i) {
+                                var tdblanks2 = document.createElement('td');
+                                tdblanks2.setAttribute('id', eles.availability.status + "~" + eles.nonpeak + "~" + eles.peak + "~" + seasondates + "~" + eles.blocking.block + "~" + eles.blocking.cancel + "~" + eles.pdays + "~" + eles.nonpdays);
+                                tr3.append(tdblanks2);
+                            }
+                        }
+                    });
+                });
+                if (monthend == month) {
+                    for (i = datestart; i < dateEnd + 1; ++i) {
+                        var th = document.createElement('td');
+                        var td = document.createTextNode(i);
+                        th.append(td);
+                        tr1.append(th);
+                    }
+                } else {
+                    for (i = datestart; i < startmonth + 1; ++i) {
+                        var th = document.createElement('td');
+                        var td = document.createTextNode(i);
+                        th.append(td);
+                        tr1.append(th);
+                    }
+
+                    for (i = 1; i < dateEnd + 1; ++i) {
+                        var th = document.createElement('td');
+                        var td = document.createTextNode(i);
+                        th.append(td);
+                        tr1.append(th);
+                    }
+                }
             },
             _selectMonth(m) {
                 var nextmonthNames = ["January", "February", "March", "April", "May", "June",
@@ -312,8 +684,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
             _groupLoaded(data) {
                 this.groupItems = data.detail.response.data;
-            },
-            _inquiryLoaded() {
 
             },
             toggleDrawer() {

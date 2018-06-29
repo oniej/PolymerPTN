@@ -1,16 +1,10 @@
 const prpl = require('prpl-server');
 const express = require('express');
-const expressSession = require('express-session');
 const bodyParser = require('body-parser');
-const passport = require('passport');
-const localStrategy = require('passport-local').Strategy;
-const passportlocalMongoose = require('passport-local-mongoose');
 const logger = require('morgan');
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
 const cors = require('cors');
 
-const User = ('./models/user')
 
 // and create our instances
 const app = express();
