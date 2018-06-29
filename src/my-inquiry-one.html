@@ -1,0 +1,352 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-button-group/paper-button-group.html">
+<link rel="import" href="../bower_components/paper-buttons-group/paper-buttons-group.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../bower_components/paper-item/paper-item-body.html">
+<link rel="import" href="../bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
+<link rel="import" href="../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../bower_components/iron-scroll-threshold/iron-scroll-threshold.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/datetime-picker/date-picker.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+
+<link rel="import" href="../bower_components/range-datepicker/range-datepicker-input.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-radio-button/paper-radio-button.html">
+<link rel="import" href="../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+
+<link rel="import" href="time-element.html">
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="my-allocation-add.html">
+<link rel="import" href="my-allocation-edit.html">
+
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animations.html">
+<script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+
+
+<link rel="import" href="search-bar.html">
+<dom-module id="my-inquiry-one">
+    <template>
+        <style include="shared-styles">
+        :host {
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        @-webkit-keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @-moz-keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+        app-header {
+            color: rgb(255, 255, 255);
+            background-color: darkorange;
+        }
+        .flex-center-justified {
+      @apply --layout-horizontal;
+      @apply --layout-center-justified;
+      padding: 16px;
+    }
+       @media (max-width: 420px) {
+        range-datepicker-input{
+            color: rgb(0, 0, 0);
+            width: 15%;
+        }
+        paper-input{
+            width: 100px;
+            background-color: white;
+            /* margin-bottom: 14px; */
+      --primary-text-color: #01579B;
+      --paper-input-container-color: black;
+      --paper-input-container-focus-color: black;
+      --paper-input-container-invalid-color: black;
+      border: 1px solid #BDBDBD;
+      border-radius: 5px;
+
+      /* Reset some defaults */
+      --paper-input-container: { padding: 0;};
+      --paper-input-container-underline: { display: none; height: 0;};
+      --paper-input-container-underline-focus: { display: none; };
+
+      /* New custom styles */
+      --paper-input-container-input: {
+        box-sizing: border-box;
+        /* font-size: inherit; */
+        padding: 4px;
+      };
+      --paper-input-container-input-focus: {
+        background: rgba(0, 0, 0, 0.1);
+      };
+      --paper-input-container-input-invalid: {
+        background: rgba(255, 0, 0, 0.3);
+      };
+      --paper-input-container-label: {
+        top: -8px;
+        left: 4px;
+        background: white;
+        padding: 2px;
+        font-weight: bold;
+        border-radius: 10px;
+      };
+      --paper-input-container-label-floating: {
+        width: auto;
+      };
+        }
+           }
+       @media (min-width: 768px) {
+        range-datepicker-input{
+            color: rgb(0, 0, 0);
+            width: 35%;
+        }
+        paper-input{
+            width: 200px;
+            background-color: white;
+            /* margin-bottom: 14px; */
+      --primary-text-color: #01579B;
+      --paper-input-container-color: black;
+      --paper-input-container-focus-color: black;
+      --paper-input-container-invalid-color: black;
+      border: 1px solid #BDBDBD;
+      border-radius: 5px;
+
+      /* Reset some defaults */
+      --paper-input-container: { padding: 0;};
+      --paper-input-container-underline: { display: none; height: 0;};
+      --paper-input-container-underline-focus: { display: none; };
+
+      /* New custom styles */
+      --paper-input-container-input: {
+        box-sizing: border-box;
+        /* font-size: inherit; */
+        padding: 4px;
+      };
+      --paper-input-container-input-focus: {
+        background: rgba(0, 0, 0, 0.1);
+      };
+      --paper-input-container-input-invalid: {
+        background: rgba(255, 0, 0, 0.3);
+      };
+      --paper-input-container-label: {
+        top: -8px;
+        left: 4px;
+        background: white;
+        padding: 2px;
+        font-weight: bold;
+        border-radius: 10px;
+      };
+      --paper-input-container-label-floating: {
+        width: auto;
+      };
+        }
+
+             
+           }
+       
+        
+       div .allocation {
+           overflow: auto;
+           padding: 18px;
+         width: 90%;
+         margin-bottom: 20px;
+         margin: 0 auto;
+         background-color: #fff;
+         border-radius: 3px;
+        /* text-align-last: center; */
+         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+         
+         opacity: 0;
+        
+          -webkit-animation: fadeIn ease-in 1;
+           -moz-animation: fadeIn ease-in 1;
+          animation: fadeIn ease-in 1;
+
+          -webkit-animation-fill-mode: forwards;
+          -moz-animation-fill-mode: forwards;
+          animation-fill-mode: forwards;
+
+          -webkit-animation-duration: 0.5s;
+          -moz-animation-duration: 0.5s;
+          animation-duration: 0.5s;
+                    
+                }
+                
+        .tb th, td{    
+                border-bottom: 1px solid #ddd;
+                padding: 5px;
+                }
+        tr:hover {background-color: #f5f5f5;}
+                th{
+                    height: 50px;
+                }
+        </style>
+        <custom-style>
+            <style is="custom-style">
+                paper-fab.blue {
+                    /* --paper-fab-background: var(--paper-indigo-500); */
+                    --paper-fab-background: darkorange;
+                    /* --paper-fab-background: var(--paper-light-blue-900); */
+                    /* --paper-fab-keyboard-focus-background: var(--paper-light-blue-900); */
+                }
+
+             
+            </style>
+        </custom-style>
+
+        <iron-pages selected="[[route.path]]" attr-for-selected="name" fallback-selection="view404" role="main">
+            <div name="">
+        <app-drawer-layout fullbleed narrow="{{narrow}}" id="drawerLayout">
+            <app-header-layout id="appheader" has-scrolling-region>
+                <app-header fixed slot="header">
+                    <app-toolbar>
+                        <paper-icon-button class="menu" icon="my-icons:menu" drawer-toggle on-tap="toggleDrawer"></paper-icon-button>
+                                <div main-title>Inquire One</div>
+                        
+                                <paper-input  always-float-label label="HOTEL"><iron-icon icon="my-icons:domain" style="color: gray"  slot="prefix"></iron-icon></paper-input> &nbsp;&nbsp;
+                                <paper-input  always-float-label label="ROOM"><iron-icon icon="my-icons:hotel" style="color: gray"  slot="prefix"></iron-icon></paper-input> &nbsp;&nbsp;                        
+                                <range-datepicker-input always-float-label date-format="DD/MM/YYYY">
+                                    <template>
+                                        <div id="daterange">
+                                            <paper-input always-float-label label="DATE FROM - TO" value="{{dateFrom}} - {{dateTo}}"><iron-icon  slot="prefix" icon="my-icons:date-range" style="color: grey"></iron-icon></paper-input>
+                                            <paper-input label="Date To" value="{{dateTo}}" hidden></paper-input>
+                                        </div>
+                                    </template>
+                                </range-datepicker-input>
+                       
+                    </app-toolbar>
+                </app-header>
+
+
+                 <!-- <template is="dom-if" if="{{loader}}">
+                            <div class="loader"></div>
+                        </template>
+                        <template is="dom-if" if="{{!loader}}"> -->
+                    <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_inquireLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
+                        <iron-scroll-document id="threshold">
+                
+                        <div class="container flex-center-justified">
+                        <div class="allocation">
+                      <center>
+                        <table width="100%">
+                            <tr>
+                                <td><b>Date      </b></td>
+                                <td><b>Hotel     </b></td>
+                                <td><b>Room      </b></td>
+                                <td><b>Content:  </b></td>
+                                <td><b>Allocation</b></td>
+                                <td><b>Blocking  </b></td>
+                                <td><b>Status    </b></td>
+                            </tr>
+                        
+                            <tr>
+                                <td>06/01</td>
+                                <td>Anemone</td>
+                                <td>Standard</td>
+                                <td>-</td>
+                                <td>2</td>
+                                <td>2</td>
+                                <td>Open</td>
+                            </tr>
+                            <tr>
+                                    <td>06/02</td>
+                                    <td>Anemone</td>
+                                    <td>Standard</td>
+                                    <td>-</td>
+                                    <td>2</td>
+                                    <td>2</td>
+                                    <td>Open</td>
+                                </tr>
+                        </table>
+                    </center>
+                        </div>
+                        </div>  
+                    </iron-scroll-document>
+                    <!-- </template> -->
+            </app-header-layout>
+        </app-drawer-layout>
+        </div>
+        </iron-pages>
+        
+    </template>
+
+    <script>
+        Polymer({
+            is: 'my-inquiry-one',
+            properties: {
+                // loader: {
+                //     type: Boolean,
+                //     value: true,
+                //     notify: false
+                // },
+            },
+            
+            toggleDrawer() {
+                this.dispatchEvent(new CustomEvent('toggleDrawer', {
+                    bubbles: true, composed: true, detail: {
+                        narrow: this.$.narrow
+                    }
+                }));
+                this.$.narrow = !this.$.narrow;
+            },
+            ready() {
+                this.url = '/allocation/read';
+            },
+            _inquireLoaded(data) {
+                if (this.url === '/allocation/read') {
+                    this.inquire = data.detail.response.data;
+                    // console.log(this.allocations);
+                }
+            },
+            _timeStampToDateTime(ts) {
+                return new Date(ts);
+            },
+        });
+    </script>
+</dom-module>

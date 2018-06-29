@@ -10,14 +10,19 @@ router.get('/count', (req, res) => {
         return res.json({ success: true, data: hotels });
     });
 });
-router.get('/read/:editKey', (req, res) => {
-    const { editKey } = req.params;
-    Hotels.findById(editKey, (error, hotelinfo) => {
+
+router.get('/filter/:hotel', (req, res) => {
+    const hotel = req.params.hotel;
+    Hotels.findOne({ hotel: hotel }, (error, hotels) => {
         if (error) return res.json({ success: false, error });
-        // const { hotel, room } = req.body;
-        // if (hotel) hotelinfo.hotel = hotel;
-        // if (room) hotelinfo.room = room;
-        return res.json({ success: true, data: hotelinfo })
+        return res.json({ success: true, data: hotels });
+    });
+});
+router.get('/filterR/:room', (req, res) => {
+    const room = req.params.room;
+    Hotels.findOne({ room: room }, (error, rooms) => {
+        if (error) return res.json({ success: false, error });
+        return res.json({ success: true, data: rooms });
     });
 });
 router.get('/read', (req, res) => {
@@ -30,13 +35,7 @@ router.get('/read', (req, res) => {
     // });
 });
 
-router.get('/filter/:hotel', (req, res) => {
-    const hotel = req.params.hotel;
-    Hotels.findOne({ hotel: hotel }, (error, hotels) => {
-        if (error) return res.json({ success: false, error });
-        return res.json({ success: true, data: hotels });
-    });
-});
+// db.messages.find({$text: {$search: "dogs"}}, {score: {$meta: "toextScore"}}).sort({score:{$meta:"textScore"}})
 
 router.post('/add', (req, res) => {
     const hotelAdd = new Hotels();

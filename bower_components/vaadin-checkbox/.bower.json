@@ -38,12 +38,12 @@
     "vaadin-demo-helpers": "^1.0.0",
     "iron-form": "^2.0.1"
   },
-  "version": "2.1.0",
-  "_release": "2.1.0",
+  "version": "2.1.1",
+  "_release": "2.1.1",
   "_resolution": {
     "type": "version",
-    "tag": "v2.1.0",
-    "commit": "cad3aadbd633cd58419fdffc2b4e6e0bee2d71a7"
+    "tag": "v2.1.1",
+    "commit": "04273c6853e56b7d58389189d0df96122be1686f"
   },
   "_source": "https://github.com/vaadin/vaadin-checkbox.git",
   "_target": "^2.0.0",

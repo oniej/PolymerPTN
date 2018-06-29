@@ -19,7 +19,7 @@ const UserController = require('./controllers/users');
 const AvailabilityController = require('./controllers/availability');
 const AllocationController = require('./controllers/allocation');
 const BlockingController = require('./controllers/blocking');
-
+const GroupController = require('./controllers/group');
 // set our port to either a predetermined port number if you have set it up, or 3001
 const API_PORT = process.env.PORT || 8080;
 
@@ -55,6 +55,7 @@ app.use(passport.session());
 // passport.deserializeUser(User.deserializeUser());
 app.use('/availability', AvailabilityController);
 app.use('/allocation', AllocationController);
+app.use('/group', GroupController);
 app.use('/blocking', BlockingController);
 app.use('/hotel', CommentController);
 app.use('/users', UserController);
