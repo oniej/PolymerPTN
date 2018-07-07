@@ -42,6 +42,7 @@
 
                 padding: 10px;
             }
+
             @media (max-width: 420px) {
                 #action {
                     margin-top: 10px;
@@ -75,27 +76,28 @@
                     -moz-animation-duration: 0.5s;
                     animation-duration: 0.5s;
                 }
-                .groupdiv{
+                .groupdiv {
                     position: absolute;
                     top: 20px;
                     right: -70px;
                 }
-                .group{
+                .group {
                     width: 45%;
                 }
                 .griddiv {
-                border-style: solid;
-                border-color: gray;
-                border-radius: 5px;
-                padding: 5px;
-                border-width: 2px;
-                height: 200px;
-                overflow: auto;
+                    border-style: solid;
+                    border-color: gray;
+                    border-radius: 5px;
+                    padding: 5px;
+                    border-width: 2px;
+                    height: 200px;
+                    overflow: auto;
+                }
+                .griddiv span {
+                    overflow: auto;
+                }
             }
-            .griddiv span{
-                overflow: auto;
-            }
-            }
+
             @media (min-width: 768px) {
                 #icon_notes {
                     display: block;
@@ -109,11 +111,12 @@
                 .hotelSearch {
                     margin-left: -5px;
                 }
-                .griddiv span{
-                overflow: auto;
-            }
+                .griddiv span {
+                    overflow: auto;
+                }
 
             }
+
             div .card {
 
                 opacity: 0;
@@ -130,53 +133,64 @@
                 -moz-animation-duration: 0.5s;
                 animation-duration: 0.5s;
             }
+
             #hotels {
                 font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
                 border-collapse: collapse;
                 width: 100%;
             }
+
             #hotels td,
             #hotels th {
                 text-align: center;
                 border: 1px solid #ddd;
                 padding: 2px;
             }
+
             #hotels th {
                 padding-top: 12px;
                 padding-bottom: 12px;
             }
+
             paper-fab.blue {
                 position: fixed;
                 bottom: 32px;
                 right: 32px;
                 background-color: darkorange;
             }
+
             app-header {
                 color: rgb(255, 255, 255);
                 background-color: darkorange;
             }
+
             paper-dialog#openNewNotes {
                 border-color: #4caf50;
                 background-color: #f1f8e9;
             }
+
             paper-dialog#blockingSave {
                 border-color: #4caf50;
                 background-color: #f1f8e9;
             }
+
             paper-dialog#blockingDelete {
                 border-color: #4caf50;
                 background-color: #f1f8e9;
             }
+
             #action {
                 margin-top: 10px;
                 float: right;
             }
+
             hr {
                 background-color: #eee;
                 border: 0 none;
                 color: #eee;
                 height: 1px;
             }
+
             @-webkit-keyframes fadeIn {
                 from {
                     opacity: 0;
@@ -185,6 +199,7 @@
                     opacity: 1;
                 }
             }
+
             @-moz-keyframes fadeIn {
                 from {
                     opacity: 0;
@@ -193,6 +208,7 @@
                     opacity: 1;
                 }
             }
+
             @keyframes fadeIn {
                 from {
                     opacity: 0;
@@ -201,6 +217,7 @@
                     opacity: 1;
                 }
             }
+
             .griddiv {
                 border-style: solid;
                 border-color: gray;
@@ -261,28 +278,12 @@
                     </div>
                     <paper-input always-float-label value={{hotel}} label="HOTEL" readonly></paper-input>
                     <paper-textarea always-float-label value="{{note}}" label="REMARKS"></paper-textarea>
-                    <!-- <range-datepicker-input class="" date-format="DD-MMMM-YYYY" style="width: 49%; ">
-                        <template>
-                            <div id="daterange">
-                                <paper-input label="DURATION" value="{{dateFrom}} - {{dateTo}}"></paper-input>
-                                <paper-input label="Date To" value="{{dateTo}}" hidden></paper-input>
-                            </div>
-                        </template>
-                    </range-datepicker-input> -->
-                    <!-- <iron-ajax auto url="{{urlh}}" params='{}' handle-as="json" on-response="_blockingLoadedHotel" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
-                    <vaadin-combo-box  style="width: 160px;" always-float-label  label="ROOM" items="[[hotels]]" filter-property="hotel" value="{{hotels.room}}">
-                        <template is="dom-repeat" items="[[items]]" as="item">
-                                <paper-item  style="width: 100%;">
-                                    <p ip="demo"></p>  
-                                    [[item.room]]
-                                </paper-item>                              
-                            </template>
-                      </vaadin-combo-box> -->
-                      <vaadin-combo-box id="room"  style="width: 140px;" always-float-label  label="ROOM" items='[[roomItems]]' filter-property="hotel" value="{{room}}">
+                    <vaadin-combo-box id="room" style="width: 140px;" always-float-label label="ROOM" items='[[roomItems]]' filter-property="hotel"
+                        value="{{room}}">
                         <template is="dom-repeat" items="[[items]]" as="item">
                             <paper-item>[[item]]</paper-item>
                         </template>
-                  </vaadin-combo-box>
+                    </vaadin-combo-box>
                     <!-- <vaadin-text-field style="width: 130px;" id="room" value="{{room}}" label="ROOM"></vaadin-text-field> -->
                     <vaadin-date-picker style="width: 145px;" label="Duration Start" id="datefrom" value="{{dateFrom}}" max="{{dateTo}}"></vaadin-date-picker>
                     <vaadin-date-picker style="width: 145px;" label="Duration End" id="dateto" value="{{dateTo}}" min="{{dateFrom}}"></vaadin-date-picker>
@@ -292,81 +293,77 @@
                     <vaadin-text-field style="width: 65px;" id="nonpeak" value="{{nonpeak}}" label="NONPEAK"></vaadin-text-field>
                     <vaadin-text-field style="width: 100px;" id="nonpdays" value="{{nonpdays}}" label="NONPEAKDAYS"></vaadin-text-field>
                     <vaadin-button id="addr" style="font-size: 15px;" on-click="_add">Add</vaadin-button>
-                    <br>    
+                    <br>
                     <div class="griddiv">
-                        <!-- <span>
-                            <vaadin-text-field style="width: 140px; font-size: 12px;" value="Room" readonly></vaadin-text-field>
-                            <vaadin-text-field style="width: 145px; font-size: 12px;" value="Duration Start" readonly></vaadin-text-field>
-                            <vaadin-text-field style="width: 145px; font-size: 12px;" value="Duration End" readonly></vaadin-text-field>
-                            <vaadin-text-field style="width: 55px; font-size: 12px;" value="Block" readonly></vaadin-text-field>
-                            <vaadin-text-field style="width: 145px; font-size: 12px;" value="Cancellation Until:" readonly></vaadin-text-field>
-                            <vaadin-text-field style="width: 70px; font-size: 12px;" value="Non-Peak" readonly></vaadin-text-field>
-                            <vaadin-text-field style="width: 100px; font-size: 12px;" value="Non-Peak Days" readonly></vaadin-text-field>
-                        </span>
-                        <br> -->
-                       
                         <span>
-                                <table>
+                            <table>
+                                <tr>
+                                    <td>
+                                        <vaadin-text-field style="width: 140px; font-size: 12px;" value="Room" readonly></vaadin-text-field>
+                                        <br>
+                                    </td>
+                                    <td>
+                                        <vaadin-text-field style="width: 145px; font-size: 12px;" value="Duration Start" readonly></vaadin-text-field>
+                                        <br>
+                                    </td>
+                                    <td>
+                                        <vaadin-text-field style="width: 145px; font-size: 12px;" value="Duration End" readonly></vaadin-text-field>
+                                        <br>
+                                    </td>
+                                    <td>
+                                        <vaadin-text-field style="width: 55px; font-size: 12px;" value="Block" readonly></vaadin-text-field>
+                                        <br>
+                                    </td>
+                                    <td>
+                                        <vaadin-text-field style="width: 145px; font-size: 12px;" value="Cancellation Until:" readonly></vaadin-text-field>
+                                        <br>
+                                    </td>
+                                    <td>
+                                        <vaadin-text-field style="width: 70px; font-size: 12px;" value="Non-Peak" readonly></vaadin-text-field>
+                                        <br>
+                                    </td>
+                                    <td>
+                                        <vaadin-text-field style="width: 100px; font-size: 12px;" value="Non-Peak Days" readonly></vaadin-text-field>
+                                        <br>
+                                    </td>
+                                    <td>
+                                        <br>
+                                    </td>
+                                </tr>
+                                <template is="dom-repeat" items="{{blockings.rooms}}" as="room">
                                     <tr>
-                                        <td><vaadin-text-field style="width: 140px; font-size: 12px;" value="Room" readonly></vaadin-text-field>
-                                        <br>
+                                        <td>
+                                            <vaadin-text-field data-index={{index}} style="width: 140px;" id="roomval" value="{{room.room}}"></vaadin-text-field>
+                                            <br>
                                         </td>
-                                        <td><vaadin-text-field style="width: 145px; font-size: 12px;" value="Duration Start" readonly></vaadin-text-field>
-                                        <br>
+                                        <td>
+                                            <vaadin-date-picker style="width: 145px;" id="datefrom" value="{{room.dateFrom}}"></vaadin-date-picker>
+                                            <br>
                                         </td>
-                                        <td><vaadin-text-field style="width: 145px; font-size: 12px;" value="Duration End" readonly></vaadin-text-field>
-                                        <br>
+                                        <td>
+                                            <vaadin-date-picker style="width: 145px;" id="dateto" value="{{room.dateTo}}"></vaadin-date-picker>
+                                            <br>
                                         </td>
-                                        <td><vaadin-text-field style="width: 55px; font-size: 12px;" value="Block" readonly></vaadin-text-field>
-                                        <br>
+                                        <td>
+                                            <vaadin-text-field style="width: 50px;" id="blockval" value="{{room.block}}"></vaadin-text-field>
+                                            <br>
                                         </td>
-                                        <td><vaadin-text-field style="width: 145px; font-size: 12px;" value="Cancellation Until:" readonly></vaadin-text-field>
-                                        <br>
+                                        <td>
+                                            <vaadin-date-picker style="width: 145px;" id="pdaysval" value="{{room.cancel}}"></vaadin-date-picker>
+                                            <br>
                                         </td>
-                                        <td><vaadin-text-field style="width: 70px; font-size: 12px;" value="Non-Peak" readonly></vaadin-text-field>
-                                        <br>
+                                        <td>
+                                            <vaadin-text-field style="width: 65px;" id="nonpeakval" value="{{room.nonpeak}}"></vaadin-text-field>
+                                            <br>
                                         </td>
-                                        <td><vaadin-text-field style="width: 100px; font-size: 12px;" value="Non-Peak Days" readonly></vaadin-text-field>
-                                        <br></td>
-                                        <td><br></td>
+                                        <td>
+                                            <vaadin-text-field style="width: 100px;" id="nonpdaysval" value="{{room.nonpdays}}"></vaadin-text-field>
+                                            <br>
+                                        </td>
+
                                     </tr>
-                                        <template is="dom-repeat" items="{{blockings.rooms}}" as="room">
-                                        <tr>
-                                            <td>   
-                                                    <vaadin-text-field data-index={{index}} style="width: 140px;" id="roomval" value="{{room.room}}"></vaadin-text-field>
-                                                    <br>
-                                            </td>
-                                            <td>
-                                                    <vaadin-date-picker style="width: 145px;" id="datefrom" value="{{room.dateFrom}}"></vaadin-date-picker>
-                                                    <br>
-                                            </td>
-                                            <td>
-                                                    <vaadin-date-picker style="width: 145px;" id="dateto" value="{{room.dateTo}}"></vaadin-date-picker>
-                                                    <br>
-                                            </td>
-                                            <td>
-                                                    <vaadin-text-field style="width: 50px;" id="blockval" value="{{room.block}}"></vaadin-text-field>
-                                                    <br>
-                                             </td>
-                                            <td>
-                                                    <vaadin-date-picker style="width: 145px;" id="pdaysval" value="{{room.cancel}}"></vaadin-date-picker>
-                                                    <br>
-                                                </td>
-                                            <td>
-                                                  <vaadin-text-field style="width: 65px;" id="nonpeakval" value="{{room.nonpeak}}"></vaadin-text-field>
-                                                    <br>
-                                              </td>
-                                            <td>
-                                                    <vaadin-text-field style="width: 100px;" id="nonpdaysval" value="{{room.nonpdays}}"></vaadin-text-field>
-                                                    <br>
-                                             </td>
-                                             <!-- <td>
-                                                 <paper-icon-button icon="my-icons:close" style="color:red;" on-click="_roomclose"></paper-icon-button>
-                                                 <br>
-                                             </td> -->
-                                        </tr>
-                                    </template>
-                                    </table>
+                                </template>
+                            </table>
                         </span>
                         <span id="writeHere"></span>
                     </div>
@@ -410,7 +407,7 @@
                     <hr>
                     <paper-button on-tap="_closeModal" style="float: right">Ok</paper-button>
                 </template>
-            </vaadin-dialog> 
+            </vaadin-dialog>
             </div>
         </app-drawer-layout>
         <iron-ajax verbose id="ajax" method="[[method]]" on-response="_handleResponse"></iron-ajax>
@@ -443,20 +440,14 @@
                 },
                 me: String,
                 rooms: {
-                    type:Array,
-                    value:[]
+                    type: Array,
+                    value: []
                 },
-                // isMousedown: { type: Boolean, value: false, }
             },
             observers: ['_hotelChanged(hotel)'],
-            // _console(e){
-            //     e.setDateFormat("yyyy-MM-dd");
-        
-            //     return e;
-            // },
+
             _hotelChanged(e) {
-             //  var r = Polymer.dom(this.root).querySelector("#writeHere").innerHTML = null;
-             //  var d = Polymer.dom(this.root).querySelector("#writeHeredate").innerHTML = null;
+
                 this.room = null;
                 this.block = null;
                 this.pdays = null;
@@ -466,41 +457,42 @@
                 this.endValue = null;
                 this.$.ajaxRoom.method = 'GET';
                 this.$.ajaxRoom.url = '/hotel/filter/' + e;
-         
+
                 this.$.ajaxRoom.generateRequest();
             },
             displayLabels: function (e) {
                 return e.base.join(', ');
             },
             _blockingLoaded(data) {
-                if (this.editKey) {
-                    if (this.url === '/blocking/readEdit/' + this.editKey) {
-                        this.blockings = data.detail.response.data;
-                        this.group = data.detail.response.data.group;
-                        this.active = data.detail.response.data.active;
-                        this.hotel = data.detail.response.data.hotel;
-                        // this.dateFrom = data.detail.response.data.dateFrom;
-                        // this.dateTo = data.detail.response.data.dateTo;
-                        this.note = data.detail.response.data.note;
-                        this.rooms = data.detail.response.data.rooms;
-                        // this.seasondate = data.detail.response.data.seasondate;
-                        this.createdAt = data.detail.response.data.createdAt;
-                        this.updatedAt = data.detail.response.data.updatedAt;
-                        this.created_by = data.detail.response.data.created_by;
-                        this.updated_by = data.detail.response.data.updated_by;
-                        
-                        
-                        if(this.active == true){
-                var actoggle = Polymer.dom(this.root).querySelector("#active").checked = this.active;
-                }
-                else{
-                    var actoggle = Polymer.dom(this.root).querySelector("#active");
-                }
+                if (data.detail.response.data) {
+                    if (this.editKey) {
+                        if (this.url === '/blocking/readEdit/' + this.editKey) {
+                            this.blockings = data.detail.response.data;
+                            this.group = data.detail.response.data.group;
+                            this.active = data.detail.response.data.active;
+                            this.hotel = data.detail.response.data.hotel;
+                            // this.dateFrom = data.detail.response.data.dateFrom;
+                            // this.dateTo = data.detail.response.data.dateTo;
+                            this.note = data.detail.response.data.note;
+                            this.rooms = data.detail.response.data.rooms;
+                            // this.seasondate = data.detail.response.data.seasondate;
+                            this.createdAt = data.detail.response.data.createdAt;
+                            this.updatedAt = data.detail.response.data.updatedAt;
+                            this.created_by = data.detail.response.data.created_by;
+                            this.updated_by = data.detail.response.data.updated_by;
+
+
+                            if (this.active == true) {
+                                var actoggle = Polymer.dom(this.root).querySelector("#active").checked = this.active;
+                            }
+                            else {
+                                var actoggle = Polymer.dom(this.root).querySelector("#active");
+                            }
+                        }
                     }
                 }
-
             },
-            _roomclose(){
+            _roomclose() {
                 var rooms = {
                     room: this.room,
                     block: this.block,
@@ -508,56 +500,50 @@
                     nonpeak: this.nonpeak,
                     nonpdays: this.nonpdays
                 }
-                console.log(this.rooms);
                 this.rooms.pop(rooms);
             },
             _active() {
-                // console.log(this.selectActive);
-                // this.selectActive = true;
-                // console.log(this.selectActive);
                 this.$.active.checked;
-                // console.log(this.$.active.checked);
             },
             _add() {
 
-            if (this.room !== '' && this.block !== '' && this.pdays !== '' && this.nonpeak !== '' && this.nonpdays !== '') {
-            
-              
-                var room1 = Polymer.dom(this.root).querySelector("#room");
-                var datefrom = Polymer.dom(this.root).querySelector("#datefrom");
-                var dateto = Polymer.dom(this.root).querySelector("#dateto");
-                var blocksn = Polymer.dom(this.root).querySelector("#block");
-                var cancel = Polymer.dom(this.root).querySelector("#cancell");
-                var nonpeakssn = Polymer.dom(this.root).querySelector("#nonpeak");
-                var nonpeakday = Polymer.dom(this.root).querySelector("#nonpdays");
-            
-                 var rooms = {
-                    room: this.room,
-                    dateFrom: this.dateFrom,
-                    dateTo: this.dateTo,
-                    block: this.block,
-                    cancel: this.cancel,
-                    nonpeak: this.nonpeak,
-                    nonpdays: this.nonpdays
+                if (this.room !== '' && this.block !== '' && this.pdays !== '' && this.nonpeak !== '' && this.nonpdays !== '') {
+
+
+                    var room1 = Polymer.dom(this.root).querySelector("#room");
+                    var datefrom = Polymer.dom(this.root).querySelector("#datefrom");
+                    var dateto = Polymer.dom(this.root).querySelector("#dateto");
+                    var blocksn = Polymer.dom(this.root).querySelector("#block");
+                    var cancel = Polymer.dom(this.root).querySelector("#cancell");
+                    var nonpeakssn = Polymer.dom(this.root).querySelector("#nonpeak");
+                    var nonpeakday = Polymer.dom(this.root).querySelector("#nonpdays");
+
+                    var rooms = {
+                        room: this.room,
+                        dateFrom: this.dateFrom,
+                        dateTo: this.dateTo,
+                        block: this.block,
+                        cancel: this.cancel,
+                        nonpeak: this.nonpeak,
+                        nonpdays: this.nonpdays
+                    }
+
+                    this.rooms.push(rooms);
+
+                    var fieldbody = '<span><td><vaadin-text-field style="width: 140px;" id="room' + this.idnum + '" value="' + room1.value + '" ></vaadin-text-field></td><td> <vaadin-date-picker style="width: 145px;" id="datefrom' + this.idnum + '" value="' + datefrom.value + '"></vaadin-date-picker></td><td> <vaadin-date-picker style="width: 145px;" id="dateto' + this.idnum + '" value="' + dateto.value + '"></vaadin-date-picker></td><td> <vaadin-text-field style="width: 50px;" id="block' + this.idnum + '" value="' + blocksn.value + '" ></vaadin-text-field></td><td> <vaadin-date-picker style="width: 145px;" id="cancell' + this.idnum + '" value="' + cancel.value + '"></vaadin-date-picker></td><td> <vaadin-text-field style="width: 65px;" id="nonpeak' + this.idnum + '" value="' + nonpeakssn.value + '" ></vaadin-text-field></td><td> <vaadin-text-field style="width: 100px;" id="nonpdays' + this.idnum + '" value="' + nonpeakday.value + '"></vaadin-text-field></td> <paper-icon-button icon="my-icons:close" style="color:red;"></paper-icon-button></span><br>'
+                    var node = Polymer.dom(this.root).querySelector("#writeHere").innerHTML += fieldbody;
+                    this.room = '';
+                    this.dateFrom = '';
+                    this.dateTo = '';
+                    this.block = '';
+                    this.cancel = '';
+                    this.nonpeak = '';
+                    this.nonpdays = '';
+                    this.nonpdays = '';
+                    this.idnum = this.idnum + 1;
+                } else {
+                    alert('Please Input All');
                 }
-            
-                this.rooms.push(rooms);
-            
-                // console.log(room1.value,peaksn.value,cutoff.value,nonpeakssn.value,nonpeakday.value);
-                var fieldbody = '<span><td><vaadin-text-field style="width: 140px;" id="room' + this.idnum + '" value="' + room1.value + '" ></vaadin-text-field></td><td> <vaadin-date-picker style="width: 145px;" id="datefrom' + this.idnum + '" value="' + datefrom.value + '"></vaadin-date-picker></td><td> <vaadin-date-picker style="width: 145px;" id="dateto' + this.idnum + '" value="' + dateto.value + '"></vaadin-date-picker></td><td> <vaadin-text-field style="width: 50px;" id="block' + this.idnum + '" value="' + blocksn.value + '" ></vaadin-text-field></td><td> <vaadin-date-picker style="width: 145px;" id="cancell' + this.idnum + '" value="' + cancel.value + '"></vaadin-date-picker></td><td> <vaadin-text-field style="width: 65px;" id="nonpeak' + this.idnum + '" value="' + nonpeakssn.value + '" ></vaadin-text-field></td><td> <vaadin-text-field style="width: 100px;" id="nonpdays' + this.idnum + '" value="' + nonpeakday.value + '"></vaadin-text-field></td> <paper-icon-button icon="my-icons:close" style="color:red;"></paper-icon-button></span><br>'
-                var node = Polymer.dom(this.root).querySelector("#writeHere").innerHTML += fieldbody;
-                this.room = '';
-                this.dateFrom = '';
-                this.dateTo = '';
-                this.block = '';
-                this.cancel = '';
-                this.nonpeak = '';
-                this.nonpdays = '';
-                this.nonpdays = '';
-                this.idnum = this.idnum + 1;
-            } else {
-                alert('Please Input All');
-            }
             },
             _openSave() {
                 this.$.blockingSave.opened = true;
@@ -660,9 +646,10 @@
                 return new Date(ts);
             },
             _roomsLoaded(data) {
+                if (data.detail.response) {
                     this.roomItems = data.detail.response.data.room;
-                    // console.log(this.roomItems);
                 }
+            }
         })
     </script>
 </dom-module>

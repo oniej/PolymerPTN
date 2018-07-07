@@ -11,7 +11,7 @@ router.get('/dummy', (req, res) => {
 });
 router.post('/add', (req, res) => {
     const availabilityAdd = new Availability();
-    const { hotel, notes, availabilities, date, type, month, created_by, updated_by, } = req.body;
+    const { hotel, hotelname, notes, availabilities, date, type, month, created_by, updated_by, } = req.body;
     if (!hotel) {
         return res.json({
             success: false,
@@ -19,6 +19,7 @@ router.post('/add', (req, res) => {
         });
     }
     availabilityAdd.hotel = hotel,
+        availabilityAdd.hotelname = hotelname,
         availabilityAdd.notes = notes,
         availabilityAdd.availability = availabilities,
         availabilityAdd.month = month,
@@ -36,22 +37,8 @@ router.get('/read', (req, res) => {
     Availability.find((err, availability) => {
         if (err) return res.json({ success: false, error: err });
         return res.json({ success: true, data: availability });
-    }).sort({ _id: -1 }).limit(20);
+    }).sort({ updatedAt: -1 }).limit(20);
 });
-// router.get('/join', (req, res) => {
-//     Availability.aggregate([{
-//         $lookup:
-//         {
-//             from: 'allocation',
-//             localField: 'date',
-//             foreignField: '',
-//             as: 'avail_alloc'
-//         }
-//     }]), (error, availability) => {
-//         if (error) return res.json({ success: false, error });
-//         return res.json({ success: true, data: availability });
-//     }
-// });
 router.get('/readEdit/:editKey', (req, res) => {
     const editKey = req.params.editKey;
     Availability.findById({ _id: editKey }, (error, availability) => {
@@ -75,8 +62,9 @@ router.put('/edit/:editId', (req, res) => {
     }
     Availability.findById(editId, (error, availability) => {
         if (error) return res.json({ success: false, error });
-        const { hotel, notes, availabilities, type, date, month, updated_by, created_by, } = req.body;
+        const { hotel, hotelname, notes, availabilities, type, date, month, updated_by, created_by, } = req.body;
         availability.hotel = hotel,
+            availability.hotelname = hotelname,
             availability.notes = notes,
             availability.availability = availabilities,
             availability.type = type,
@@ -98,8 +86,9 @@ router.put('/update/:editKey', (req, res) => {
     }
     Availability.findById(editKey, (error, availability) => {
         if (error) return res.json({ success: false, error });
-        const { hotel, notes, availabilities, type, date, month, updated_by, created_by, } = req.body;
+        const { hotel, hotelname, notes, availabilities, type, date, month, updated_by, created_by, } = req.body;
         availability.hotel = hotel,
+            availability.hotelname = hotelname,
             availability.notes = notes,
             availability.availability = availabilities,
             availability.type = type,

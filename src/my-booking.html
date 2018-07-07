@@ -21,19 +21,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-scroll-threshold/iron-scroll-threshold.html">
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../bower_components/iron-collapse/iron-collapse.html">
-
 
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 
 <link rel="import" href="time-element.html">
+<link rel="import" href="my-booking-new.html">
+<link rel="import" href="my-booking-edit.html">
 <link rel="import" href="shared-styles.html">
-<link rel="import" href="my-availability-new.html">
-<link rel="import" href="my-availability-edit.html">
-
 <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
 <link rel="import" href="search-bar.html">
-<dom-module id="my-availability">
+<dom-module id="my-booking">
     <template>
         <style include="shared-styles">
             :host {
@@ -96,7 +95,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             .item {
                 @apply --layout-horizontal;
-                /* padding: 20px; */
                 background-color: white;
                 border-bottom: 1px solid #ddd;
                 cursor: pointer;
@@ -171,58 +169,52 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <template is="dom-if" if="{{!openSearch}}">
                             <app-toolbar primary id="tool1">
                                 <paper-icon-button class="menu" icon="my-icons:menu" drawer-toggle on-tap="toggleDrawer"></paper-icon-button>
-                                <div main-title>Availability</div>
+                                <div main-title>Booking</div>
                                 <paper-icon-button class="menu" icon="my-icons:search" drawer-toggle on-tap="toggleSearch"></paper-icon-button>
                             </app-toolbar>
                         </template>
                     </app-header>
                     <iron-scroll-document id="threshold">
-                        <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_availabilityLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
+                        <iron-ajax id="readall" url="{{urlRead}}" handle-as="json" method="GET" on-response="_blockingLoaded" loading="{{loadingData}}"
+                            debounce-duration="300"></iron-ajax>
                         <div class="availability">
-                            <a href="/availability/new" style="text-decoration: none;">
-                                <paper-card on-tap="_availnew">
+                            <a href="/booking/new" style="text-decoration: none;">
+                                <paper-card on-tap="_bookNew">
                                     <div class="card-content">
                                         <center>
-                                            <paper-icon-button icon="my-icons:add" style="color:cornflowerblue;width: 125px;height: 125px;">
+                                            <paper-icon-button icon="my-icons:add" style="color:darkorange;width: 100px;height: 100px;">
                                             </paper-icon-button>
                                             <br>
-                                            <span style="color:cornflowerblue;">Add Availability</span>
+                                            <span style="color:darkorange;">Add Booking</span>
+                                            <!-- <iron-image src="../images/pluspng.png" sizing="contain" style="width:100px;height:100px;"></iron-image> -->
                                         </center>
                                     </div>
-                                    <!-- <iron-image src="../images/pluspng.png" sizing="contain" style="width:100px;height:100px;"></iron-image> -->
                                 </paper-card>
                             </a>
-                            <template is="dom-repeat" items="[[availabilities]]" as="item">
+                            <template is="dom-repeat" items="[[bookings]]" as="item">
                                 <paper-card id="{{item._id}}">
                                     <div id="{{item._id}}" class="header" style="background-color:white; padding: 16px; padding-bottom: 5px; font-size: 16px;color: black;font-weight: bold">
-                                        <a href="/availability/edit/{{item._id}}">
-                                            <paper-icon-button id="{{item._id}}" noink on-tap="_editAvailavility" data-args="{{item._id}}" icon="my-icons:edit" alt="{{item._id}}"
+                                        <a href="/booking/edit/{{item._id}}">
+                                            <paper-icon-button id="{{item._id}}" noink on-tap="_editBooking" data-args="{{item._id}}" icon="my-icons:edit" alt="{{item._id}}"
                                                 style="float: right; margin-top:-10px; margin-right:-10px;color: black;"></paper-icon-button>
                                         </a>
                                         <div>
-                                            <iron-icon icon="my-icons:location-city" id="date" style="color: gray;width: 20px;height: 20px;"></iron-icon>
-                                            <span id="type">
-                                                [[item.hotel]]
-                                            </span>
+                                            <iron-icon icon="my-icons:bookmark" id="date" style="color: gray;width: 20px;height: 20px;"></iron-icon>
+                                            <!-- <span id="type"> -->
+                                            Reference: [[item.reference]]
+                                            <!-- </span> -->
+                                            <hr>
                                         </div>
                                     </div>
                                     <br>
-                                    <br>
                                     <div style="padding: 16px; background-color: white;">
-                                        <hr>
                                         <div style="color: gray;font-size: 11px;">
-                                            <iron-icon icon="my-icons:flag" id="date" style="color: gray;width: 20px;height: 20px;"></iron-icon>
-                                            Created
-                                            <span>
-                                                <time-ago datetime$="{{_timeStampToDateTime(item.createdAt)}}">{{_timeStampToDateTime(item.createdAt)}}</time-ago>
-                                                &nbsp;by&nbsp;[[item.created_by]]</span>
+                                            <iron-icon icon="my-icons:group" id="date" style="color: gray;width: 20px;height: 20px;"></iron-icon>
+                                            Guest: [[item.guest]]
                                         </div>
                                         <div style="color: gray;font-size: 11px;">
-                                            <iron-icon icon="my-icons:update" id="date" style="color: gray;width: 20px;height: 20px;"></iron-icon>
-                                            Last Modified
-                                            <span>
-                                                <time-ago datetime$="{{_timeStampToDateTime(item.updatedAt)}}">{{_timeStampToDateTime(item.updatedAt)}}</time-ago>
-                                                &nbsp;by&nbsp;[[item.updated_by]]</span>
+                                            <iron-icon icon="my-icons:person" id="date" style="color: gray;width: 20px;height: 20px;"></iron-icon>
+                                            Agent: [[item.agent]]
                                         </div>
                                     </div>
                                 </paper-card>
@@ -232,30 +224,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </app-header-layout>
             </div>
             <div name="/new">
-                <div id="availnew"></div>
-                <my-availability-new id="d23" path=" " account-key='{{accountKey}}' prev-route="{{route.prefix}}"></my-availability-new>
+                <div id="booknew"></div>
+                <my-booking-new id="d23" path=" " prev-route="{{route.prefix}}"></my-booking-new>
             </div>
             <div name="view404 ">Not found.</div>
         </iron-pages>
-
         <div hidden$="{{!editActive}}">
-            <div id="availedit"></div>
-            <my-availability-edit id="d24" edit-key='{{editData._id}}' prev-route="{{route.prefix}}"></my-availability-edit>
+            <div id="bookingedit"></div>
+            <my-booking-edit id="d24" edit-key='{{editData._id}}' prev-route="{{route.prefix}}"></my-booking-edit>
         </div>
         <iron-ajax verbose id="ajax" method="[[method]]" on-response="_handleResponse"></iron-ajax>
     </template>
 
     <script>
         Polymer({
-            is: 'my-availability',
+            is: 'my-booking',
             properties: {
                 route: Object,
                 routeData: Object,
                 data: Object,
-                year: Number,
-                accountKey: String,
-                monthly: String,
-                sameHotel: String,
                 openSearch: {
                     type: Boolean,
                     value: false,
@@ -283,63 +270,42 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             toggleClear() {
                 this.search = '';
             },
-            _searchChanged(g, e) {
-                if (g) {
-                    if (g == 0) {
-                        if (e) {
-                            // this.url = '/availability/search';
-                            // console.log(this.url);
-                        }
-                    }
-                }
-            },
             ready() {
-                this.url = '/availability/read';
+                this.urlRead = '/booking/read';
+                this.$.readall.handleAs = "json";
+                this.$.readall.generateRequest();
             },
-            _availabilityLoaded(data) {
-                if (this.url === '/availability/read') {
-                    var datas = data.detail.response.data;
-                    function printUniqueResults(arrayOfdatas, hotel) {
-                        return arrayOfdatas.filter((item, index, array) => {
-                            return array.map((mapItem) => mapItem[hotel]).indexOf(item[hotel]) === index
-                        })
-                    }
-                    var result = printUniqueResults(datas, 'hotel')
-                    this.availabilities = result;
-                }
+            _blockingLoaded(data) {
+                this.bookings = data.detail.response.data;
             },
-            _closeDialog() {
-                this.$.availabilitySave.opened = false;
-            },
-            _availnew() {
-                var node = Polymer.dom(this.root).querySelector("#availnew");
+            _bookNew() {
+                // this.$.addNew.opened = true;
+                var node = Polymer.dom(this.root).querySelector("#booknew");
                 if (node) {
                     var oldDiv = Polymer.dom(node.parentNode).querySelector("#d23");
                     if (oldDiv) {
                         Polymer.dom(node.parentNode).removeChild(oldDiv);
                     }
-                    var newDiv = document.createElement("my-availability-new");
+                    var newDiv = document.createElement("my-booking-new");
                     newDiv.setAttribute("id", "d23");
-                    newDiv.setAttribute("account-key", this.accountKey);
-
                     newDiv.setAttribute("prev-route", this.route.prefix);
-                    var currentDiv = document.getElementById("availnew");
+                    var currentDiv = document.getElementById("booknew");
                     Polymer.dom(node.parentNode).insertBefore(newDiv, currentDiv);
                 }
             },
-            _editAvailavility(e) {
+            _editBooking(e) {
                 var data_args = Polymer.dom(e).rootTarget.getAttribute("alt");
-                var node = Polymer.dom(this.root).querySelector("#availedit");
+                var node = Polymer.dom(this.root).querySelector("#bookingedit");
                 if (node) {
                     var oldDiv = Polymer.dom(node.parentNode).querySelector("#d24");
                     if (oldDiv) {
                         Polymer.dom(node.parentNode).removeChild(oldDiv);
                     }
-                    var newDiv = document.createElement("my-availability-edit");
+                    var newDiv = document.createElement("my-booking-edit");
                     newDiv.setAttribute("id", "d24");
                     newDiv.setAttribute("edit-key", data_args);
                     newDiv.setAttribute("prev-route", this.route.prefix);
-                    var currentDiv = document.getElementById("availedit");
+                    var currentDiv = document.getElementById("bookingedit");
                     Polymer.dom(node.parentNode).insertBefore(newDiv, currentDiv);
                 }
             },

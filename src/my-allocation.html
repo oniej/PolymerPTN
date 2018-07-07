@@ -40,56 +40,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 flex-direction: column;
             }
 
-            @-webkit-keyframes fadeIn {
-        from {
-          opacity: 0;
-        }
-        to {
-          opacity: 1;
-        }
-            }
-            @-moz-keyframes fadeIn {
-        from {
-          opacity: 0;
-        }
-        to {
-          opacity: 1;
-        }
-            }
-            @keyframes fadeIn {
-        from {
-          opacity: 0;
-        }
-        to {
-          opacity: 1;
-        }
-            }
-
             @media (max-width: 768px) {
-                div .allocation {
-                    margin: 16px;
-                    /* margin-top: 16px; */
-                    display: flex;
-                    /* height: 100vh; */
-                    flex-direction: column;
-                    border-radius: 3px;
-
-                    /* box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2); */
-              
-                      opacity: 0;
-        
-                -webkit-animation: fadeIn ease-in 1;
-                 -moz-animation: fadeIn ease-in 1;
-                animation: fadeIn ease-in 1;
-                    
-                -webkit-animation-fill-mode: forwards;
-                -moz-animation-fill-mode: forwards;
-                animation-fill-mode: forwards;
-                    
-                -webkit-animation-duration: 0.5s;
-                -moz-animation-duration: 0.5s;
-                animation-duration: 0.5s;
-
+                paper-card {
+                    width: 100%;
+                    margin-top: 16px;
                 }
                 paper-search-bar {
                     margin-left: 80px;
@@ -97,38 +51,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     color: black;
                 }
             }
-            @media (min-width: 768px) {
+
+            @media (min-width: 850px) {
                 div .allocation {
-
-          width: 765px;
-          margin: 16px auto;
-          /* margin-bottom: 1000px; */
-          /* height: 100vh; */
-          border-radius: 3px;
-
-          box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-          
-          opacity: 0;
-          -webkit-animation: fadeIn ease-in 1;
-           -moz-animation: fadeIn ease-in 1;
-          animation: fadeIn ease-in 1;
-
-          -webkit-animation-fill-mode: forwards;
-          -moz-animation-fill-mode: forwards;
-          animation-fill-mode: forwards;
-
-          -webkit-animation-duration: 0.5s;
-          -moz-animation-duration: 0.5s;
-          animation-duration: 0.5s;         
-
-                    width: 765px;
-                    margin: 16px auto;
-                    /* margin-bottom: 1000px; */
-                    /* height: 100vh; */
-                    border-radius: 3px;
-
-                    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-
+                    width: 850px;
+                    padding: 16px;
+                    margin: 0 auto;
+                }
+                paper-card {
+                    width: 46%;
+                    margin-right: 10px;
+                    margin-bottom: 10px;
                 }
                 paper-search-bar {
                     margin-left: 50px;
@@ -136,25 +69,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     color: black;
                 }
             }
+
             paper-fab.orange {
                 position: fixed;
                 bottom: 32px;
                 right: 32px;
 
             }
+
             app-header {
                 color: rgb(255, 255, 255);
                 background-color: darkorange;
                 /* background-color: var(--paper-indigo-500); */
                 /* background-color: #388E3C; */
             }
+
             #tool1 {
                 color: rgb(255, 255, 255);
                 background-color: darkorange;
             }
+
             #tool2 {
                 background-color: white;
             }
+
             .item {
                 @apply --layout-horizontal;
                 /* padding: 20px; */
@@ -164,30 +102,36 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 margin-bottom: 10px;
                 box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
             }
+
             .pad {
                 padding: 0 16px;
                 @apply --layout-flex;
                 @apply --layout-vertical;
             }
+
             #action {
                 /* display: inline-block; */
                 margin-top: 10px;
                 float: right;
             }
+
             div .option {
                 position: absolute;
                 left: 300px;
                 top: 200px;
             }
+
             #btn-clear {
                 position: fixed;
                 right: 80px;
                 color: gray;
             }
+
             #btn-arrow {
                 position: absolute;
                 color: black;
             }
+
             #btn-menu {
                 color: gray;
                 position: fixed;
@@ -198,7 +142,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <style is="custom-style">
                 paper-fab.orange {
                     --paper-fab-background: darkorange;
-                
+
                 }
             </style>
         </custom-style>
@@ -210,7 +154,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <template is="dom-if" if="{{openSearch}}">
                             <app-toolbar primary id="tool2">
                                 <paper-icon-button id="btn-arrow" icon="my-icons:arrow-back" drawer-toggle on-tap="toggleReturn"></paper-icon-button>
-                                
                                 <!-- Start of Search -->
                                 <paper-search-bar id="search" query="{{search}}" disable-filter-button></paper-search-bar>
                                 <template is="dom-if" if="{{search}}">
@@ -237,52 +180,63 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     </app-header>
                     <iron-scroll-document id="threshold">
                         <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_allocationLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
-                        <template is="dom-repeat" items="[[allocations]]" as="item">
-                            <div class="allocation">
-                                <div id="header" class="header" style="background-color:#673ab7; padding: 16px; padding-bottom: 5px; font-size: 14px;">
-                                    <a href="/allocation/edit/{{item._id}}">
-                                        <paper-icon-button id="{{item._id}}" noink on-tap="_editAllocation" data-args="{{item._id}}" icon="my-icons:edit" alt="{{item._id}}"
-                                            style="float: right; margin-top:-10px; margin-right:-10px;color: white;"></paper-icon-button>
-                                    </a>
-                                    <div style="color: white">
-                                        <iron-icon icon="my-icons:flag" id="date" style="color: white"></iron-icon>
-                                        Created
-                                        <span>
-                                            <time-ago datetime$="{{_timeStampToDateTime(item.createdAt)}}">{{_timeStampToDateTime(item.createdAt)}}</time-ago>
-                                            &nbsp;by&nbsp;
-                                            <!--[[item.created_by]]-->Jeino</span>
+                        <div class="allocation">
+                            <a href="/allocation/add" style="text-decoration: none;">
+                                <paper-card on-tap="_availnew">
+                                    <div class="card-content">
+                                        <center>
+                                            <paper-icon-button icon="my-icons:add" style="color:#673ab7;width: 100px;height: 100px;">
+                                            </paper-icon-button>
+                                            <br>
+                                            <span style="color:#673ab7;">Add Allocation</span>
+                                            <!-- <iron-image src="../images/pluspng.png" sizing="contain" style="width:100px;height:100px;"></iron-image> -->
+                                        </center>
                                     </div>
-                                    <div style="color: white">
-                                        <iron-icon icon="my-icons:update" id="date" style="color: white"></iron-icon>
-                                        Last Modified
-                                        <span>
-                                            <time-ago datetime$="{{_timeStampToDateTime(item.updatedAt)}}">{{_timeStampToDateTime(item.updatedAt)}}</time-ago>
-                                            &nbsp;by&nbsp;
-                                            <!--[[item.updated_by]]-->Jeino</span>
+                                </paper-card>
+                            </a>
+                            <template is="dom-repeat" items="[[allocations]]" as="item">
+                                <paper-card>
+                                    <div id="header" class="header" style="background-color:#673ab7; padding: 16px; padding-bottom: 5px; font-size: 11px;">
+                                        <a href="/allocation/edit/{{item._id}}">
+                                            <paper-icon-button id="{{item._id}}" noink on-tap="_editAllocation" data-args="{{item._id}}" icon="my-icons:edit" alt="{{item._id}}"
+                                                style="float: right; margin-top:-10px; margin-right:-10px;color: white;"></paper-icon-button>
+                                        </a>
+                                        <div style="color: white">
+                                            <iron-icon icon="my-icons:flag" id="date" style="color: white"></iron-icon>
+                                            Created
+                                            <span>
+                                                <time-ago datetime$="{{_timeStampToDateTime(item.createdAt)}}">{{_timeStampToDateTime(item.createdAt)}}</time-ago>
+                                                &nbsp;by&nbsp; [[item.created_by]]Jeino
+                                            </span>
+                                        </div>
+                                        <div style="color: white">
+                                            <iron-icon icon="my-icons:update" id="date" style="color: white"></iron-icon>
+                                            Last Modified
+                                            <span>
+                                                <time-ago datetime$="{{_timeStampToDateTime(item.updatedAt)}}">{{_timeStampToDateTime(item.updatedAt)}}</time-ago>
+                                                &nbsp;by&nbsp; [[item.updated_by]]Jeino
+                                            </span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div style="padding: 16px; background-color: white;">
-                                    <div style="margin-top: 5px;">
-                                        <iron-icon icon="my-icons:location-city" id="date" style="color: gray; margin-top: -10px"></iron-icon>
-                                        <span id="type" style="font-size: 24px;">
-                                            [[item.hotel]]
-                                        </span>
+                                    <div style="padding: 16px; background-color: white;" id="{{item._id}}">
+                                        <div style="margin-top:2px;">
+                                            <iron-icon icon="my-icons:location-city" id="date" style="color: gray;width: 20px;height: 20px;"></iron-icon>
+                                            <span id="type" style="font-size: 16px;">
+                                                [[item.hotel]]
+                                            </span>
+                                        </div>
+                                        <div style="margin-top:5px;">
+                                            <iron-icon icon="my-icons:speaker-notes" id="date" style="color: gray;width:20px;height: 20px;"></iron-icon>
+                                            <span id="type" style="color:gray;font-size: 11px; ">
+                                                [[item.notes]]
+                                            </span>
+                                        </div>
                                     </div>
-                                    <!-- [[item.room1]] -->
-                                    <div style="margin-top: 12px; font-size: 14px;">
-                                        <iron-icon icon="my-icons:speaker-notes" id="date" style="color: gray"></iron-icon>
-                                        <span id="type" style="color:gray;font-size: 14px; ">
-                                            [[item.note]]
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </template>
+                                </paper-card>
+                            </template>
+                        </div>
                     </iron-scroll-document>
                 </app-header-layout>
-                <a href="/allocation/add" style="text-decoration: none; ">
-                    <paper-fab noink on-tap="_availnew" icon="my-icons:add" class="orange"></paper-fab>
-                </a>
             </div>
             <div name="/add">
                 <div id="availnew"></div>

@@ -125,22 +125,24 @@
 
                 <div class="docu">
                     <!-- <div class="docu-header"> -->
-                    <div>
-                        <iron-icon id="iconcreated" icon="my-icons:flag" style="color:gray;"></iron-icon>
-                        <span id="created">Created by:</span> Peter Pedro
-                    </div>
                     <!-- </div> -->
                     <div id="writeHere">
-                        <paper-input value="{{hotel}}" always-float-label label="Hotel" autofocus></paper-input>
+                        <paper-input value="{{hotel}}" always-float-label label="Hotel Code" autofocus style="display: inline-block; width: 150px;margin-left: 30px"></paper-input>
+                        <paper-input value="{{hotelname}}" always-float-label label="Hotel Name" style="display: inline-block; width: 300px;margin-left: 20px"></paper-input>
                     </div>
                     <div>
                         <span>
                             <paper-button on-tap="_openField" id="buttonform" style="color: cornflowerblue;">
                                 <iron-icon icon="my-icons:add-box" on-tap="_openField" style="color: cornflowerblue;"></iron-icon>
-                                Add more room</paper-button>
+                                Add room</paper-button>
                         </span>
                         <iron-icon id="iconform" icon="my-icons:add-box" on-tap="_openField" style="color: cornflowerblue;"></iron-icon>
                     </div>
+                    <!-- <br>
+                    <div>
+                        <iron-icon id="iconcreated" icon="my-icons:flag" style="color:gray;"></iron-icon>
+                        <span id="created">Created by:</span> Peter Pedro
+                    </div>                     -->
                     <br>
                     <br>
                     <span style="color:red; font-size:13px; float:left; margin-top: -16px;">{{msg}}</span>
@@ -151,6 +153,7 @@
                         <paper-button id="submitButton" class="darkorange" on-click="_submit" raised>Add</paper-button>
                     </span>
                 </div>
+
             </app-header-layout>
         </app-drawer-layout>
         <iron-ajax verbose id="ajax" method="[[method]]" on-response="_handleResponse"></iron-ajax>
@@ -170,13 +173,14 @@
                     type: String,
                     value: 'Ardie Derrayal'
                 },
+                hotels: { type: Array, value: [], notify: true },
                 rooms: {
                     type: Array,
-                    value: [1, 2, 3]
+                    value: []
                 },
                 lastRoom: {
                     type: Number,
-                    value: 3
+                    value: 0
                 }
             },
             _openField() {
@@ -185,17 +189,37 @@
                 this.rooms.push(roomNumber);
                 var div = Polymer.dom(this.root).querySelector("#writeHere");
                 var paperInput = document.createElement('paper-input');
-                paperInput.setAttribute('id', "room" + roomNumber);
-                paperInput.setAttribute("label", "Room " + roomNumber);
+                paperInput.setAttribute('id', "room" + roomNumber + 'code');
+                paperInput.setAttribute("label", "Room " + roomNumber + ' Code');
                 paperInput.setAttribute("always-float-label", true);
+                paperInput.setAttribute("style", "display:inline-block;width:150px;margin-left: 30px");
+                var br = document.createElement('br');
+                div.append(br);
                 div.append(paperInput);
+
+                var paperInput2 = document.createElement('paper-input');
+                paperInput2.setAttribute('id', "room" + roomNumber + 'name');
+                paperInput2.setAttribute("label", "Room " + roomNumber + ' Name');
+                paperInput2.setAttribute("always-float-label", true);
+                paperInput2.setAttribute("style", "display:inline-block;width:300px;margin-left: 15px");
+                div.append(paperInput2);
             },
             _submit() {
-                var rooms = [];
+                var hotelnew = [];
+                var Xrooms = [];
                 this.rooms.forEach(element => {
-                    var data = Polymer.dom(this.root).querySelector("#room" + element).value;
-                    if (data) {
-                        rooms.push(data);
+                    // console.log(element);
+                    var dataRoomCode = Polymer.dom(this.root).querySelector("#room" + element + 'code').value;
+                    var dataRoomName = Polymer.dom(this.root).querySelector("#room" + element + 'name').value;
+                    // console.log(data);
+                    if (dataRoomCode) {
+                        Xrooms.push(
+                            {
+                                id: element,
+                                room: dataRoomCode,
+                                name: dataRoomName
+                            }
+                        );
                     }
                 });
 
@@ -203,13 +227,13 @@
                     this.msg = "Hotel field required";
                 }
                 else {
-                    // for (var i = 0; i < 4; i++) {
                     this.method = 'POST';
                     this.$.ajax.url = '/hotel/add';
                     this.$.ajax.contentType = "application/json";
                     this.$.ajax.body = {
                         hotel: this.hotel,
-                        room: rooms,
+                        hotelname: this.hotelname,
+                        room: Xrooms,
                         created_by: this.created_by,
                         updated_by: this.updated_by,
 
@@ -219,10 +243,9 @@
                     this.url = '';
                 }
 
-                function verify(rooms) {
+                function verify(Xrooms) {
                     var x = true;
-                    rooms.forEach(element => {
-                        console.log(element);
+                    Xrooms.forEach(element => {
                         if (element === '') {
                             x = false;
                         }
@@ -243,12 +266,26 @@
                 // this.room = "";
                 this.msg = "";
                 var div = Polymer.dom(this.root).querySelector("#writeHere");
+
+                // this.rooms.push(1);
                 this.rooms.forEach(element => {
                     var paperInput = document.createElement('paper-input');
-                    paperInput.setAttribute('id', "room" + element);
-                    paperInput.setAttribute("label", "Room " + element);
+                    paperInput.setAttribute('id', "room" + element + 'code');
+                    paperInput.setAttribute("label", "Room " + element + ' Code');
                     paperInput.setAttribute("always-float-label", true);
+                    paperInput.setAttribute("style", "display:inline-block; width:150px;margin-left: 30px");
+                    var br = document.createElement('br');
+                    div.append(br);
                     div.append(paperInput);
+
+                    var paperInput2 = document.createElement('paper-input');
+                    paperInput2.setAttribute('id', "room" + element + 'name');
+                    paperInput2.setAttribute("label", "Room " + element + ' Name');
+                    paperInput2.setAttribute("always-float-label", true);
+                    paperInput2.setAttribute("style", "display:inline-block;width:300px;margin-left: 15px");
+                    div.append(paperInput2);
+
+                    // div.append(divi);
                 });
             },
             _handleResponse() { }

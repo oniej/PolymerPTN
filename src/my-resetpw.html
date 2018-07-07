@@ -1,0 +1,155 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="short-unique-id.html">
+
+<dom-module id="my-resetpw">
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+                --app-primary-color: #4285f4;
+                --app-secondary-color: black;
+            }
+
+            @media (min-width: 767px) {
+                .main-container {
+                    height: 100%;
+                    background-color: white;
+                    max-width: 370px;
+                    margin: 16px auto;
+                    padding: 40px;
+                    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+                }
+                .blue {
+                    text-decoration: none;
+                    color: royalblue;
+                }
+
+            }
+
+            @media (max-width: 767px) {
+                :host {
+                    height: 100%;
+                }
+                .main-container {
+                    height: 100%;
+                    background-color: white;
+                    margin: 0 auto;
+                    padding: 40px;
+                    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+
+                }
+
+            }
+
+            .action-btn {
+                float: right;
+            }
+
+            .blue {
+                text-decoration: none;
+                color: royalblue;
+            }
+
+            .header {
+                font-size: 18px;
+                color: grey;
+                /* font-weight: 400; */
+                text-align: justify;
+            }
+        </style>
+
+        <iron-ajax verbose id="ajax" method="POST" url="/user/forgotPassword" on-response="_forgotResponse"></iron-ajax>
+        <div class="main-container">
+            <center>
+                <iron-image placeholder="images/ptn1.png" data-src="images/ptn1.png" sizing="cover" preload fade style="width:300px; height:150px;"></iron-image>
+            </center>
+            <div class="header">
+                <span>Reset password</span>
+            </div>
+            <div id="errorMsgDiv" style="display: none;">
+                <iron-icon icon="my-icons:error-outline"></iron-icon>&nbsp;{{validationMessage}}</div>
+            <div hidden$="{{isSigninTap}}">
+                <paper-input label="Email" value="{{email}}" auto-focus>
+                    <iron-icon icon="my-icons:email" slot="prefix"></iron-icon>
+                </paper-input>
+                <br>
+                <div class="footer">
+                    <paper-button on-tap="_submit" id="next" toggles raised class="darkorange" style="float: right">submit</paper-button>
+                    <a href="/signin" class="blue">Sign in instead</a>
+                </div>
+                <br>
+            </div>
+
+            <div hidden$="{{!isSigninTap}}">
+                <p>Reset password link was sent to your email address {{email}}</p>
+            </div>
+        </div>
+
+    </template>
+
+    <script>
+        class MyResetpw extends Polymer.Element {
+            static get is() { return 'my-resetpw'; }
+            static get properties() {
+                return {
+                    isSigninTap: {
+                        type: Boolean,
+                        value: false
+                    }
+                }
+            }
+            _ready() {
+                super.ready();
+                var errormsg = Polymer.dom(this.root).querySelector("#errorMsgDiv");
+                errormsg.setAttribute("style", "display:none");
+                var errorLogin = Polymer.dom(this.root).querySelector("#next").disabled = false;
+            }
+            _forgotResponse(e) {
+                if (e.detail.response.success) {
+                    this.isSigninTap = e.detail.response.success;
+                } else {
+                    this.errorMSG = e.detail.response.msg;
+                }
+            }
+
+            _submit() {
+                if (!this.email) {
+                    var errormsg = Polymer.dom(this.root).querySelector("#errorMsgDiv");
+                    errormsg.setAttribute("style", "font-size:12px; display: block; background-color:red; color:white; text-align:center; border-radius: 5px; opacity:0.5; padding:5px");
+                    this.validationMessage = "Please enter emaill address";
+                    var errorLogin = Polymer.dom(this.root).querySelector("#next").disabled = true;
+                } else {
+                    this.$.ajax.contentType = "application/json";
+                    this.$.ajax.body = {
+                        email: this.email,
+                        token: this.guid()
+                    }
+                    this.$.ajax.generateRequest();
+                }
+            }
+
+            guid() {
+                var uid = new ShortUniqueId();
+                return uid.randomUUID(16);
+            }
+        }
+
+        window.customElements.define(MyResetpw.is, MyResetpw);
+    </script>
+</dom-module>

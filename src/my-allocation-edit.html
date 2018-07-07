@@ -47,6 +47,7 @@
 
                 padding: 10px;
             }
+
             @media (max-width: 420px) {
                 paper-checkbox {
                     display: inline-block;
@@ -86,23 +87,23 @@
                     -moz-animation-duration: 0.5s;
                     animation-duration: 0.5s;
                 }
-                .groupdiv{
+                .groupdiv {
                     position: absolute;
                     top: 20px;
                     right: -70px;
                 }
-                .group{
+                .group {
                     width: 45%;
                 }
                 .griddiv {
-                border-style: solid;
-                border-color: gray;
-                border-radius: 5px;
-                padding: 5px;
-                border-width: 2px;
-                height: 200px;
-                overflow: auto;
-            }
+                    border-style: solid;
+                    border-color: gray;
+                    border-radius: 5px;
+                    padding: 5px;
+                    border-width: 2px;
+                    height: 200px;
+                    overflow: auto;
+                }
             }
 
 
@@ -125,6 +126,7 @@
                     margin-left: -5px;
                 }
             }
+
             div .card {
 
                 opacity: 0;
@@ -141,17 +143,20 @@
                 -moz-animation-duration: 0.5s;
                 animation-duration: 0.5s;
             }
+
             #hotels {
                 font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
                 border-collapse: collapse;
                 width: 100%;
             }
+
             #hotels td,
             #hotels th {
                 text-align: center;
                 border: 1px solid #ddd;
                 padding: 2px;
             }
+
             #hotels th {
                 padding-top: 12px;
                 padding-bottom: 12px;
@@ -164,38 +169,47 @@
                 --paper-fab-background: darkorange;
                 --paper-fab-keyboard-focus-background: darkorange;
             }
+
             app-header {
                 color: rgb(255, 255, 255);
                 background-color: darkorange;
             }
+
             paper-dialog#openNewNotes {
                 border-color: #4caf50;
                 background-color: #f1f8e9;
             }
+
             paper-dialog#allocationSave {
                 border-color: #4caf50;
                 background-color: #f1f8e9;
             }
+
             paper-dialog#allocationDelete {
                 border-color: #4caf50;
                 background-color: #f1f8e9;
             }
+
             #action {
                 margin-top: 10px;
                 float: right;
             }
+
             .red {
                 background: red;
                 color: white;
             }
+
             .yellow {
                 background: yellow;
                 color: white;
             }
+
             .green {
                 background: green;
                 color: black;
             }
+
             hr {
                 background-color: #eee;
                 border: 0 none;
@@ -204,7 +218,6 @@
             }
 
             /* @-webkit-keyframes fadeIn { */
-
 
             /* @-webkit-keyframes fadeIn {
 
@@ -276,7 +289,7 @@
             </style>
         </custom-style>
         <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_allocationLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
-        <iron-ajax id="ajaxRoom" handle-as="json" on-response="_roomsLoaded"></iron-ajax>
+        <iron-ajax id="ajaxRoom" url="{{urlRoom}}" method="GET" handle-as="json" on-response="_roomsLoaded"></iron-ajax>
         <iron-ajax auto url="/group/read" handle-as="json" on-response="_groupLoaded" debounce-duration="300"></iron-ajax>
         <app-drawer-layout fullbleed narrow="{{narrow}}" id="drawerLayout">
             <app-header-layout id="appheader" has-scrolling-region>
@@ -305,7 +318,7 @@
                     <div style="position: absolute; top: 20px; right: 40px;">
                         <paper-dropdown-menu always-float-label style="cursor:pointer;width:150px;" label="Group" readonly>
                             <paper-listbox attr-for-selected="name" slot="dropdown-content" class="dropdown-content" selected="{{group}}">
-                                <paper-item name="PTN">PTN</paper-item> 
+                                <paper-item name="PTN">PTN</paper-item>
                                 <paper-item name="Tabikobu">Tabikobu</paper-item>
                             </paper-listbox>
                         </paper-dropdown-menu>
@@ -365,53 +378,58 @@
                         </span>
                         <br>
                         <span> -->
-                                <table>
-                                        <tr>
-                                                <td><vaadin-text-field style="width: 160px;" value="Room" readonly></vaadin-text-field>
-                                                </td>
-                                                <td><vaadin-text-field style="width: 160px;" value="Peak" readonly></vaadin-text-field>
-                                                </td>
-                                                <td><vaadin-text-field style="width: 160px;" value="Cut-Off" readonly></vaadin-text-field>
-                                                </td>
-                                                <td><vaadin-text-field style="width: 160px;" value="Non-Peak" readonly></vaadin-text-field>
-                                                </td>
-                                                <td><vaadin-text-field style="width: 160px;" value="Non-Peak Days" readonly></vaadin-text-field>
-                                                </td>
-                                                <td></td>
-                                            </tr>
-                                        <template is="dom-repeat" items="{{allocations.rooms}}" as="room">
-                                        <tr>
-                                                <!-- <td>   
+                        <table>
+                            <tr>
+                                <td>
+                                    <vaadin-text-field style="width: 160px;" value="Room" readonly></vaadin-text-field>
+                                </td>
+                                <td>
+                                    <vaadin-text-field style="width: 160px;" value="Peak" readonly></vaadin-text-field>
+                                </td>
+                                <td>
+                                    <vaadin-text-field style="width: 160px;" value="Cut-Off" readonly></vaadin-text-field>
+                                </td>
+                                <td>
+                                    <vaadin-text-field style="width: 160px;" value="Non-Peak" readonly></vaadin-text-field>
+                                </td>
+                                <td>
+                                    <vaadin-text-field style="width: 160px;" value="Non-Peak Days" readonly></vaadin-text-field>
+                                </td>
+                                <td></td>
+                            </tr>
+                            <template is="dom-repeat" items="{{allocations.rooms}}" as="room">
+                                <tr>
+                                    <!-- <td>   
                                                         <vaadin-text-field data-index={{index}} style="width: 160px;" id="roomval" value="{{room.id}}"></vaadin-text-field>
                                                         <br>
                                                 </td> -->
-                                            <td>   
-                                                    <vaadin-text-field data-index={{index}} style="width: 160px;" id="roomval" value="{{room.room}}"></vaadin-text-field>
-                                                    <br>
-                                            </td>
-                                            <td>
-                                                    <vaadin-text-field style="width: 160px;" id="peakval" value="{{room.peak}}"></vaadin-text-field>
-                                                    <br>
-                                             </td>
-                                            <td>
-                                                    <vaadin-text-field style="width: 160px;" id="pdaysval" value="{{room.pdays}}"></vaadin-text-field>
-                                                    <br>
-                                                </td>
-                                            <td>
-                                                  <vaadin-text-field style="width: 160px;" id="nonpeakval" value="{{room.nonpeak}}"></vaadin-text-field>
-                                                    <br>
-                                              </td>
-                                            <td>
-                                                    <vaadin-text-field style="width: 160px;" id="nonpdaysval" value="{{room.nonpdays}}"></vaadin-text-field>
-                                                    <br>
-                                             </td>
-                                             <!-- <td>
+                                    <td>
+                                        <vaadin-text-field data-index={{index}} style="width: 160px;" id="roomval" value="{{room.room}}"></vaadin-text-field>
+                                        <br>
+                                    </td>
+                                    <td>
+                                        <vaadin-text-field style="width: 160px;" id="peakval" value="{{room.peak}}"></vaadin-text-field>
+                                        <br>
+                                    </td>
+                                    <td>
+                                        <vaadin-text-field style="width: 160px;" id="pdaysval" value="{{room.pdays}}"></vaadin-text-field>
+                                        <br>
+                                    </td>
+                                    <td>
+                                        <vaadin-text-field style="width: 160px;" id="nonpeakval" value="{{room.nonpeak}}"></vaadin-text-field>
+                                        <br>
+                                    </td>
+                                    <td>
+                                        <vaadin-text-field style="width: 160px;" id="nonpdaysval" value="{{room.nonpdays}}"></vaadin-text-field>
+                                        <br>
+                                    </td>
+                                    <!-- <td>
                                                  <paper-icon-button icon="my-icons:close" style="color:red;" on-click="_roomclose"></paper-icon-button>
                                                  <br>
                                              </td> -->
-                                        </tr>
-                                    </template>
-                                    </table>
+                                </tr>
+                            </template>
+                        </table>
                         </span>
                         <span id="writeHere"></span>
                     </div>
@@ -443,13 +461,13 @@
                                             <vaadin-date-picker style="width: 192px;" id="endValue" value="{{season.endValue}}" min="{{season.startValue}}" date-format="DD-MMMM-YYYY"></vaadin-date-picker>
                                             <!-- <vaadin-text-field style="width: 192px;" id="endValue" value="{{season.endValue}}"></vaadin-text-field> -->
                                             <br>
-                                    </td>
-                                    <!-- <td>
+                                        </td>
+                                        <!-- <td>
                                             <paper-icon-button icon="my-icons:close" style="color:red;"  on-click="_dateclose"></paper-icon-button>
                                             <br>
                                         </td> -->
-                                </tr>
-                            </template>
+                                    </tr>
+                                </template>
                             </table>
                         </span>
                         <span id="writeHeredate"></span>
@@ -553,50 +571,44 @@
                 this.nonpdays = null;
                 this.startValue = null;
                 this.endValue = null;
-                this.$.ajaxRoom.method = 'GET';
-                this.$.ajaxRoom.url = '/hotel/filter/' + e;
-
+                this.urlRoom = '/hotel/filter/' + e;
                 this.$.ajaxRoom.generateRequest();
             },
             displayLabels: function (e) {
                 return e.base.join(', ');
             },
             _allocationLoaded(data) {
-                if (this.editKey) {
-                    if (this.url === '/allocation/readEdit/' + this.editKey) {
-                        this.allocations = data.detail.response.data;
-                        this.group = data.detail.response.data.group;
-                        this.active = data.detail.response.data.active;
-                        this.hotel = data.detail.response.data.hotel;
-                        this.dateFrom = data.detail.response.data.dateFrom;
-                        this.dateTo = data.detail.response.data.dateTo;
-                        this.note = data.detail.response.data.note;
-                        this.rooms = data.detail.response.data.rooms;
-                        this.seasondate = data.detail.response.data.seasondate;
-                        this.createdAt = data.detail.response.data.createdAt;
-                        this.updatedAt = data.detail.response.data.updatedAt;
-                        this.created_by = data.detail.response.data.created_by;
-                        this.updated_by = data.detail.response.data.updated_by;
-
-
-                    }
-
-                    if (this.active == true) {
-                        var actoggle = Polymer.dom(this.root).querySelector("#active").checked = this.active;
-                    }
-                    else {
-                        var actoggle = Polymer.dom(this.root).querySelector("#active");
+                if (data.detail.response.data) {
+                    if (this.editKey) {
+                        if (this.url === '/allocation/readEdit/' + this.editKey) {
+                            this.allocations = data.detail.response.data;
+                            this.group = data.detail.response.data.group;
+                            this.active = data.detail.response.data.active;
+                            this.hotel = data.detail.response.data.hotel;
+                            this.dateFrom = data.detail.response.data.dateFrom;
+                            this.dateTo = data.detail.response.data.dateTo;
+                            this.note = data.detail.response.data.note;
+                            this.rooms = data.detail.response.data.rooms;
+                            this.seasondate = data.detail.response.data.seasondate;
+                            this.createdAt = data.detail.response.data.createdAt;
+                            this.updatedAt = data.detail.response.data.updatedAt;
+                            this.created_by = data.detail.response.data.created_by;
+                            this.updated_by = data.detail.response.data.updated_by;
+                        }
+                        if (this.active == true) {
+                            var actoggle = Polymer.dom(this.root).querySelector("#active").checked = this.active;
+                        }
+                        else {
+                            var actoggle = Polymer.dom(this.root).querySelector("#active");
+                        }
                     }
                 }
-
             },
-            _groupLoaded(data){
-                this.groupItems = data.detail.response.data;
+            _groupLoaded(data) {
+                if (data.detail.response.data) {
+                    this.groupItems = data.detail.response.data;
+                }
             },
-            // _console(e){
-            //     console.log(e);
-            //     return e;
-            // },
             _roomclose() {
                 var rooms = {
                     room: this.room,
@@ -605,10 +617,7 @@
                     nonpeak: this.nonpeak,
                     nonpdays: this.nonpdays
                 }
-                // console.log(this.rooms);
                 this.rooms.pop(rooms);
-                // this.rooms.splice(rooms);
-                // console.log(this.rooms);
             },
             _dateclose() {
                 var seasondate =
@@ -619,15 +628,12 @@
                 this.seasondate.pop(seasondate);
             },
             _add() {
-
                 if (this.room !== '' && this.peak !== '' && this.pdays !== '' && this.nonpeak !== '' && this.nonpdays !== '') {
-
                     var room1 = Polymer.dom(this.root).querySelector("#room");
                     var peaksn = Polymer.dom(this.root).querySelector("#peak");
                     var cutoff = Polymer.dom(this.root).querySelector("#pdays");
                     var nonpeakssn = Polymer.dom(this.root).querySelector("#nonpeak");
                     var nonpeakday = Polymer.dom(this.root).querySelector("#nonpdays");
-
                     var rooms = {
                         room: this.room,
                         peak: this.peak,
@@ -635,10 +641,8 @@
                         nonpeak: this.nonpeak,
                         nonpdays: this.nonpdays
                     }
-
                     this.rooms.push(rooms);
 
-                    // console.log(room1.value,peaksn.value,cutoff.value,nonpeakssn.value,nonpeakday.value);
                     var fieldbody = '<span><td><vaadin-text-field style="width: 160px;" id="room' + this.idnum + '" value="' + room1.value + '" ></vaadin-text-field></td> &nbsp;<td><vaadin-text-field style="width: 160px;" id="peak' + this.idnum + '" value="' + peaksn.value + '" ></vaadin-text-field></td> &nbsp;<td> <vaadin-text-field style="width: 160px;" id="pdays' + this.idnum + '" value="' + cutoff.value + '"></vaadin-text-field></td>&nbsp;<td><vaadin-text-field style="width: 160px;" id="nonpeak' + this.idnum + '" value="' + nonpeakssn.value + '" ></vaadin-text-field></td>&nbsp;<td> <vaadin-text-field style="width: 160px;" id="nonpdays' + this.idnum + '" value="' + nonpeakday.value + '"></vaadin-text-field></td> </span><br>'
                     var node = Polymer.dom(this.root).querySelector("#writeHere").innerHTML += fieldbody;
                     this.room = '';
@@ -653,11 +657,7 @@
                 }
             },
             _active() {
-                // console.log(this.selectActive);
-                // this.selectActive = true;
-                // console.log(this.selectActive);
                 this.$.active.checked;
-                // console.log(this.$.active.checked);
             },
             _adddate() {
                 if (this.startValue !== '' && this.endValue !== '') {
@@ -700,7 +700,7 @@
             _update() {
                 if (this.hotel) {
                     if (this.editKey) {
-                   this.active = this.$.active.checked;                        
+                        this.active = this.$.active.checked;
                         this.method = 'PUT';
                         this.$.ajax.url = '/allocation/update/' + this.editKey;
                         this.$.ajax.contentType = "application/json";
@@ -731,7 +731,6 @@
                     this.method = 'DELETE';
                     this.$.ajax.url = '/allocation/delete/' + this.editKey;
                     this.$.ajax.generateRequest();
-                    // this.$.successModalDelete.open();
                     this.url = '/allocation/dummy';
                     this.$.allocationDelete.opened = false;
                     this.$.successModal.opened = true;
@@ -744,11 +743,8 @@
                         this.className = this.className == "white" ? "red" : "white";
                     });
                 }
-                // var table = Polymer.dom(this.root).querySelector("#hotels");
             },
             ready() {
-
-                // console.log(this.editKey);
             },
             _limited() {
                 var cells = Polymer.dom(this.root).querySelectorAll("td");
@@ -778,8 +774,9 @@
                 return new Date(ts);
             },
             _roomsLoaded(data) {
-                this.roomItems = data.detail.response.data.room;
-                // console.log(this.roomItems);
+                if (data.detail.response) {
+                    this.roomItems = data.detail.response.data.room;
+                }
             }
         })
     </script>

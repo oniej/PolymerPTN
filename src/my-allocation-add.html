@@ -43,27 +43,33 @@
             :host {
                 display: block;
             }
+
             app-header {
                 color: rgb(255, 255, 255);
                 background-color: darkorange;
             }
+
             app-header paper-icon-button {
                 --paper-icon-button-ink-color: #000000;
             }
+
             app-drawer-layout:not([narrow]) [drawer-toggle] {
                 display: none;
             }
+
             app-drawer {
                 --app-drawer-content-container: {
                     background-color: #F4F5F6;
                 }
             }
+
             paper-fab.fab {
                 position: fixed;
                 bottom: 30px;
                 right: 30px;
-                background-color: #3F51B5;
+                background-color: darkorange;
             }
+
             @-webkit-keyframes fadeIn {
                 from {
                     opacity: 0;
@@ -72,6 +78,7 @@
                     opacity: 1;
                 }
             }
+
             @-moz-keyframes fadeIn {
                 from {
                     opacity: 0;
@@ -80,6 +87,7 @@
                     opacity: 1;
                 }
             }
+
             @keyframes fadeIn {
                 from {
                     opacity: 0;
@@ -88,8 +96,8 @@
                     opacity: 1;
                 }
             }
-            
-            @media (max-width: 420px) {
+
+            /* @media (max-width: 420px) {
                 .docu {
                     margin-left: 16px;
                     margin-right: 16px;
@@ -101,23 +109,35 @@
 
                     opacity: 0;
                     /* make things invisible upon start */
-                    -webkit-animation: fadeIn ease-in 1;
-                    /* call our keyframe named fadeIn, use animattion ease-in and repeat it only 1 time */
-                    -moz-animation: fadeIn ease-in 1;
-                    animation: fadeIn ease-in 1;
 
-                    -webkit-animation-fill-mode: forwards;
-                    /* this makes sure that after animation is done we remain at the last keyframe value (opacity: 1)*/
-                    -moz-animation-fill-mode: forwards;
-                    animation-fill-mode: forwards;
+            /* -webkit-animation: fadeIn ease-in 1; */
 
-                    -webkit-animation-duration: 0.5s;
-                    -moz-animation-duration: 0.5s;
-                    animation-duration: 0.5s;
-                }
+            /* call our keyframe named fadeIn, use animattion ease-in and repeat it only 1 time */
 
-                background-color: darkorange;
-            }
+            /* -moz-animation: fadeIn ease-in 1; */
+
+            /* animation: fadeIn ease-in 1; */
+
+            /* -webkit-animation-fill-mode: forwards; */
+
+            /* this makes sure that after animation is done we remain at the last keyframe value (opacity: 1)*/
+
+            /* -moz-animation-fill-mode: forwards; */
+
+            /* animation-fill-mode: forwards; */
+
+            /* -webkit-animation-duration: 0.5s; */
+
+            /* -moz-animation-duration: 0.5s; */
+
+            /* animation-duration: 0.5s; */
+
+            /* } */
+
+            /* background-color: darkorange; */
+
+            /* }  */
+
             @media (max-width: 768px) {
                 #buttonform {
                     display: none;
@@ -131,27 +151,28 @@
                 #created {
                     display: none;
                 }
-                .groupdiv{
+                .groupdiv {
                     position: absolute;
                     top: 20px;
                     right: -70px;
                 }
-                .group{
+                .group {
                     width: 45%;
                 }
                 .griddiv {
-                border-style: solid;
-                border-color: gray;
-                border-radius: 5px;
-                padding: 5px;
-                border-width: 2px;
-                height: 200px;
-                overflow: auto;
+                    border-style: solid;
+                    border-color: gray;
+                    border-radius: 5px;
+                    padding: 5px;
+                    border-width: 2px;
+                    height: 200px;
+                    overflow: auto;
+                }
+                span .here {
+                    overflow: auto;
+                }
             }
-            span .here{
-                overflow: auto;
-            }
-            }
+
             @media (min-width: 768px) {
                 .docu {
                     /* margin-left: 16px;
@@ -181,26 +202,26 @@
                 #iconform {
                     display: none;
                 }
-                .groupdiv{
+                .groupdiv {
                     position: absolute;
                     top: 20px;
                     right: 90px;
                 }
-                .group{
+                .group {
                     width: 100%;
                 }
                 .griddiv {
-                border-style: solid;
-                border-color: gray;
-                border-radius: 5px;
-                padding: 5px;
-                border-width: 2px;
-                height: 200px;
-                overflow: auto;
-            }
-            span .here{
-                overflow: auto;
-            }
+                    border-style: solid;
+                    border-color: gray;
+                    border-radius: 5px;
+                    padding: 5px;
+                    border-width: 2px;
+                    height: 200px;
+                    overflow: auto;
+                }
+                span .here {
+                    overflow: auto;
+                }
             }
 
             paper-toast {
@@ -210,6 +231,7 @@
                 left: 10px;
                 margin-left: 20%;
             }
+
             paper-checkbox {
                 font-size: 14px;
                 margin-right: 5px;
@@ -271,7 +293,8 @@
                     </div>
                     <div class="details" id="form">
                         <!-- <paper-input always-float-label value={{hotel}} label="HOTEL"></paper-input> -->
-                        <paper-dropdown-input always-float-label style="width: 100%" label="Hotel" items='[[hotelItems]]' filter-property="hotel" value="{{hotel}}">
+                        <paper-dropdown-input always-float-label style="width: 100%" label="Hotel" items='[[hotelItems]]' filter-property="hotel"
+                            value="{{hotel}}">
                             <template>
                                 <template is="dom-repeat" items="[[items]]" as="item">
                                     <paper-item>[[item.hotel]]</paper-item>
@@ -288,14 +311,15 @@
                             </template>
                         </range-datepicker-input>
                         <br>
-                        <vaadin-combo-box id="room"  style="width: 160px;" always-float-label  label="ROOM" items='[[roomItems]]' filter-property="hotel" value="{{room}}">                            
-                              <template is="dom-repeat" items="[[items]]" as="item">
-                                  <paper-item>[[item]]</paper-item>
-                              </template>
+                        <vaadin-combo-box id="room" style="width: 160px;" always-float-label label="ROOM" items='[[roomItems.room]]' filter-property="room.name"
+                            value="{{room}}">
+                            <template is="dom-repeat" items="[[items.room]]" as="item">
+                                <paper-item>[[item.name]]</paper-item>
+                            </template>
                         </vaadin-combo-box>
                         <!-- <vaadin-combo-box id="room"  style="width: 160px;" always-float-label  label="ROOM"></vaadin-combo-box> -->
                         <!-- <vaadin-text-field style="width: 130px;" id="room" value="{{room}}" label="ROOM"></vaadin-text-field> -->
-            
+
                         <vaadin-text-field style="width: 130px;" id="peak" value="{{peak}}" label="PEAK"></vaadin-text-field>
                         <vaadin-text-field style="width: 130px;" id="pdays" value="{{pdays}}" label="CUT-OFF"></vaadin-text-field>
                         <vaadin-text-field style="width: 130px;" id="nonpeak" value="{{nonpeak}}" label="NON-PEAK"></vaadin-text-field>
@@ -314,20 +338,25 @@
                             <span id="writeHere"></span> -->
                             <table>
                                 <tr>
-                                    <td><vaadin-text-field style="width: 130px;" value="Room" readonly></vaadin-text-field>
+                                    <td>
+                                        <vaadin-text-field style="width: 130px;" value="Room" readonly></vaadin-text-field>
                                     </td>
-                                    <td><vaadin-text-field style="width: 130px;" value="Peak" readonly></vaadin-text-field>
+                                    <td>
+                                        <vaadin-text-field style="width: 130px;" value="Peak" readonly></vaadin-text-field>
                                     </td>
-                                    <td><vaadin-text-field style="width: 130px;" value="Cut-Off" readonly></vaadin-text-field>
+                                    <td>
+                                        <vaadin-text-field style="width: 130px;" value="Cut-Off" readonly></vaadin-text-field>
                                     </td>
-                                    <td><vaadin-text-field style="width: 130px;" value="Non-Peak" readonly></vaadin-text-field>
+                                    <td>
+                                        <vaadin-text-field style="width: 130px;" value="Non-Peak" readonly></vaadin-text-field>
                                     </td>
-                                    <td><vaadin-text-field style="width: 130px;" value="Non-Peak Days" readonly></vaadin-text-field>
+                                    <td>
+                                        <vaadin-text-field style="width: 130px;" value="Non-Peak Days" readonly></vaadin-text-field>
                                     </td>
                                     <td></td>
                                 </tr>
                                 <tr>
-                                        <span id="writeHere"></span>
+                                    <span id="writeHere"></span>
                                 </tr>
                             </table>
                         </div>
@@ -342,29 +371,29 @@
                             <br>
                             <div class="griddiv">
                                 <!-- <span> -->
-                                    <table>
+                                <table>
 
-                                   <tr>
-                                    <td>
-                                        <vaadin-text-field style="width: 192px;" value="Peak Start" readonly></vaadin-text-field>
-                                    </td>
-                                    <td>
-                                        <vaadin-text-field style="width: 192px;" value="Peak End" readonly></vaadin-text-field>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <span class="here" id="writeHeredate"></span>
-                                </tr>
+                                    <tr>
+                                        <td>
+                                            <vaadin-text-field style="width: 192px;" value="Peak Start" readonly></vaadin-text-field>
+                                        </td>
+                                        <td>
+                                            <vaadin-text-field style="width: 192px;" value="Peak End" readonly></vaadin-text-field>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <span class="here" id="writeHeredate"></span>
+                                    </tr>
                                 </table>
                                 <!-- </span> -->
                                 <!-- <br> -->
-                               
+
                             </div>
                             <br>
                         </div>
                     </div>
                 </div>
-                <paper-fab on-tap="_submit" style=" float: right; " class="fab" icon="my-icons:save">+</paper-fab>
+                <paper-fab on-tap="_submit" style="float: right;" class="fab" icon="my-icons:save"></paper-fab>
             </app-header-layout>
         </app-drawer-layout>
         <iron-ajax verbose id="ajax" method="[[method]]" on-response="_handleResponse"></iron-ajax>
@@ -397,13 +426,14 @@
                     type: String,
                     value: 'Ardie Derrayal'
                 },
+                room: String,
                 rooms: {
-                    type:Array,
-                    value:[]
+                    type: Array,
+                    value: []
                 },
-                seasondate:{
-                    type:Array,
-                    value:[]
+                seasondate: {
+                    type: Array,
+                    value: []
                 },
                 hotelData: {
                     type: Array,
@@ -412,11 +442,11 @@
                 },
                 hotelId: String,
             },
-            observers: ['_hotelChanged(hotel)'],
-            
+            observers: ['_hotelChanged(hotel)', '_roomChanged(room)'],
+
             _hotelChanged(e) {
-               var r = Polymer.dom(this.root).querySelector("#writeHere").innerHTML = null;
-               var d = Polymer.dom(this.root).querySelector("#writeHeredate").innerHTML = null;
+                var r = Polymer.dom(this.root).querySelector("#writeHere").innerHTML = null;
+                var d = Polymer.dom(this.root).querySelector("#writeHeredate").innerHTML = null;
                 this.room = null;
                 this.peak = null;
                 this.pdays = null;
@@ -426,8 +456,12 @@
                 this.endValue = null;
                 this.$.ajaxRoom.method = 'GET';
                 this.$.ajaxRoom.url = '/hotel/filter/' + e;
-         
+
                 this.$.ajaxRoom.generateRequest();
+            },
+            _roomChanged(e) {
+                this.room = e;
+                console.log(e);
             },
             _active() {
                 // console.log(this.selectActive);
@@ -437,21 +471,22 @@
                 console.log(this.$.active.checked);
             },
             _console(e) {
+                this.roomItems
                 console.log(e);
-                return e;
-            },       
+                console.log(this.roomItems);
+            },
             _add() {
 
                 if (this.room !== '' && this.peak !== '' && this.pdays !== '' && this.nonpeak !== '' && this.nonpdays !== '') {
 
-                this.addAllocation = true;
-                var allocationval = [];
-                var room1 = Polymer.dom(this.root).querySelector("#room");
-                var peaksn = Polymer.dom(this.root).querySelector("#peak");
-                var cutoff = Polymer.dom(this.root).querySelector("#pdays");
-                var nonpeakssn = Polymer.dom(this.root).querySelector("#nonpeak");
-                var nonpeakday = Polymer.dom(this.root).querySelector("#nonpdays");
- 
+                    this.addAllocation = true;
+                    var allocationval = [];
+                    var room1 = Polymer.dom(this.root).querySelector("#room");
+                    var peaksn = Polymer.dom(this.root).querySelector("#peak");
+                    var cutoff = Polymer.dom(this.root).querySelector("#pdays");
+                    var nonpeakssn = Polymer.dom(this.root).querySelector("#nonpeak");
+                    var nonpeakday = Polymer.dom(this.root).querySelector("#nonpdays");
+
 
                     var room1 = Polymer.dom(this.root).querySelector("#room");
                     var peaksn = Polymer.dom(this.root).querySelector("#peak");
@@ -459,7 +494,7 @@
                     var nonpeakssn = Polymer.dom(this.root).querySelector("#nonpeak");
                     var nonpeakday = Polymer.dom(this.root).querySelector("#nonpdays");
 
-                     var rooms = {
+                    var rooms = {
                         room: this.room,
                         peak: this.peak,
                         pdays: this.pdays,
@@ -489,15 +524,15 @@
                     var datestart = Polymer.dom(this.root).querySelector("#startdate");
                     var dateend = Polymer.dom(this.root).querySelector("#enddate");
 
-             
-             var seasondate =
+
+                    var seasondate =
                     {
                         startValue: this.startValue,
                         endValue: this.endValue
                     }
 
                     this.seasondate.push(seasondate);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    // <paper-icon-button icon="my-icons:close" style="color:red;"></paper-icon-button>
+                    // <paper-icon-button icon="my-icons:close" style="color:red;"></paper-icon-button>
                     var node = Polymer.dom(this.root).querySelector("#writeHeredate").innerHTML += '<span><td><vaadin-date-picker placeholder="Start" id="startdate' + this.idnumdate + '" value="' + datestart.value + '" max="' + dateend.value + '" date-format="DD-MMMM-YYYY" ></vaadin-date-picker></td> <td> <vaadin-date-picker placeholder="End" id="enddate' + this.idnumdate + '" value="' + dateend.value + '" min="' + datestart.value + '" date-format="DD-MMMM-YYYY" ></vaadin-date-picker></td> </span><br> \r\n';
 
                     this.startValue = '';
@@ -552,17 +587,20 @@
                 this.msg = "";
                 this.url = '/hotel/read';
             },
-            _hotelLoaded(data){
+            _hotelLoaded(data) {
                 this.hotelItems = data.detail.response.data;
             },
-            _groupLoaded(data){
+            _groupLoaded(data) {
                 this.groupItems = data.detail.response.data;
             },
             _roomsLoaded(data) {
-     
-                    this.roomItems = data.detail.response.data.room;
-  
+                if (data.detail.response.data) {
+                    this.roomItems = data.detail.response.data;
+                    this.roomItems.forEach(el => {
+                        console.log(el.room);
+                    });
                 }
+            }
         })
     </script>
 </dom-module>

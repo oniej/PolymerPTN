@@ -180,22 +180,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </iron-pages>
         <paper-dialog id="moreDetails">
             <h2>Details</h2>
-            <div>Rooms:{{rooms}}</div>
-            <div>Status: {{status}}</div>
-            <div>Allocation
+            <div>Rooms:{{rooms}}
+                <div>Status: {{status}}</div>
+            </div>
+            <div>
+                <b>Allocation</b>
                 <div>Non-peak: {{nonpeak}}</div>
                 <div>Peak: {{peak}}</div>
                 <div>Cut-off peak: {{pdays}} days</div>
                 <div>Cut-off non-peak: {{nonpdays}} days</div>
-                <div>Peak Seasons :
+                <div>
+                    <b>Peak Seasons:</b>
                     <template is="dom-repeat" items="[[seasondates]]">
-                        <div>{{item.startValue}}</div>
-                        <div>{{item.endValue}}</div>
+                        <div>
+                            <b>Start: </b> {{item.startValue}}</div>
+                        <div>
+                            <b>End: </b> {{item.endValue}}</div>
                     </template>
                 </div>
+                <div>Blocking: {{blocking}}</div>
+                <div>Cancellation: {{cancel}}</div>
             </div>
-            <div>Blocking: {{blocking}}</div>
-            <div>Cancellation: {{cancel}}</div>
             <div class="buttons">
                 <paper-button dialog-dismiss>Ok</paper-button>
             </div>
@@ -337,18 +342,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.$.startblock.generateRequest();
             },
             _urlFilterStartloaded(data) {
-                if (this.endload) {
-                    this.startload = data.detail.response.data;
+                if (data.detail.response.data) {
+                    if (this.endload) {
+                        this.startload = data.detail.response.data;
+                    }
                 }
             },
             _startavailloaded(data) {
-                if (this.endavail) {
-                    this.startavail = data.detail.response.data;
+                if (data.detail.response.data) {
+                    if (this.endavail) {
+                        this.startavail = data.detail.response.data;
+                    }
                 }
             },
             _startblockloaded(data) {
-                if (this.endblock) {
-                    this.startblock = data.detail.response.data;
+                if (data.detail.response.data) {
+                    if (this.endblock) {
+                        this.startblock = data.detail.response.data;
+                    }
                 }
             },
             _endCheckout(f) {
@@ -361,18 +372,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.$.endblock.generateRequest();
             },
             _endavailloaded(data) {
-                if (data.detail.response) {
-                    // console.log(data.detail.response.data);
+                if (data.detail.response.data) {
                     this.endavail = data.detail.response.data;
                 }
             },
             _urlFilterend(data) {
-                if (data.detail.response) {
+                if (data.detail.response.data) {
                     this.endload = data.detail.response.data;
                 }
             },
             _endblockloaded(data) {
-                if (data.detail.response) {
+                if (data.detail.response.data) {
                     this.endblock = data.detail.response.data;
                 }
             },
@@ -397,8 +407,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             _joinedAvail(f, g) {
                 if (this.startavail && this.endavail) {
                     this.joinedavail = this.startavail.concat(this.endavail);
-                    // console.log( this.startavail);
-                    // console.log( this.endavail);
+
                 }
             },
             _joinedBlock(x, y, z) {
@@ -434,7 +443,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 else {
                     var errormsg = Polymer.dom(this.root).querySelector("#errorMsgDiv").setAttribute("style", "display:none");
                     this.errorMsg = "";
-
                     if (this.filterAlloc && this.filterBlock) {
                         var initialArray = [];
                         this.filterAlloc.forEach(elAllo => {
@@ -587,7 +595,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                             } else {
                                                 var dTxt = document.createTextNode(cal);
                                                 tdblanks2.append(dTxt);
-                                                tdblanks2.setAttribute('id', eles.room + "~" + "open" + "~" + eles.nonpeak + "~" + eles.peak + "~" + seasondates + "~" + "0" + "~" + "none" + "~" + eles.pdays + "~" + eles.nonpdays);
+                                                tdblanks2.setAttribute('id', eles.room + "~" + "no update" + "~" + eles.nonpeak + "~" + eles.peak + "~" + seasondates + "~" + "0" + "~" + "none" + "~" + eles.pdays + "~" + eles.nonpdays);
                                                 var self = this;
                                                 tdblanks2.addEventListener('click', function (e) {
                                                     self.tapped = e.target.id;
@@ -603,25 +611,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                                     if (i >= parseInt(dbs) && i <= parseInt(dbe)) {
                                                         var dTxt = document.createTextNode(eles.blocking.total);
                                                         tdblanks2.append(dTxt);
-                                                        tdblanks2.setAttribute('id', eles.room + "~" + "open" + "~" + eles.nonpeak + "~" + eles.peak + "~" + seasondates + "~" + eles.blocking.block + "~" + eles.blocking.cancel + "~" + eles.pdays + "~" + eles.nonpdays);
+                                                        tdblanks2.setAttribute('id', eles.room + "~" + "no update" + "~" + eles.nonpeak + "~" + eles.peak + "~" + seasondates + "~" + eles.blocking.block + "~" + eles.blocking.cancel + "~" + eles.pdays + "~" + eles.nonpdays);
                                                     }
                                                     else {
                                                         var dTxt = document.createTextNode(cal);
                                                         tdblanks2.append(dTxt);
-                                                        tdblanks2.setAttribute('id', eles.room + "~" + "open" + "~" + eles.nonpeak + "~" + eles.peak + "~" + seasondates + "~" + "0" + "~" + "none" + "~" + eles.pdays + "~" + eles.nonpdays);
+                                                        tdblanks2.setAttribute('id', eles.room + "~" + "no update" + "~" + eles.nonpeak + "~" + eles.peak + "~" + seasondates + "~" + "0" + "~" + "none" + "~" + eles.pdays + "~" + eles.nonpdays);
                                                     }
                                                 }
                                                 else {
                                                     var dTxt = document.createTextNode(cal);
                                                     tdblanks2.append(dTxt);
-                                                    tdblanks2.setAttribute('id', eles.room + "~" + "open" + "~" + eles.nonpeak + "~" + eles.peak + "~" + seasondates + "~" + "0" + "~" + "none" + "~" + eles.pdays + "~" + eles.nonpdays);
-
+                                                    tdblanks2.setAttribute('id', eles.room + "~" + "no update" + "~" + eles.nonpeak + "~" + eles.peak + "~" + seasondates + "~" + "0" + "~" + "none" + "~" + eles.pdays + "~" + eles.nonpdays);
                                                 }
                                             }
                                             else {
                                                 var dTxt = document.createTextNode(cal);
                                                 tdblanks2.append(dTxt);
-                                                tdblanks2.setAttribute('id', eles.room + "~" + "open" + "~" + eles.nonpeak + "~" + eles.peak + "~" + seasondates + "~" + "0" + "~" + "none" + "~" + eles.pdays + "~" + eles.nonpdays);
+                                                tdblanks2.setAttribute('id', eles.room + "~" + "no update" + "~" + eles.nonpeak + "~" + eles.peak + "~" + seasondates + "~" + "0" + "~" + "none" + "~" + eles.pdays + "~" + eles.nonpdays);
 
                                             }
                                             var self = this;
@@ -636,7 +643,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                 else {
                                     var dTxt = document.createTextNode(cal);
                                     tdblanks2.append(dTxt);
-                                    tdblanks2.setAttribute('id', eles.room + "~" + "open" + "~" + eles.nonpeak + "~" + eles.peak + "~" + seasondates + "~" + "0" + "~" + "none" + "~" + eles.pdays + "~" + eles.nonpdays);
+                                    tdblanks2.setAttribute('id', eles.room + "~" + "no update" + "~" + eles.nonpeak + "~" + eles.peak + "~" + seasondates + "~" + "0" + "~" + "none" + "~" + eles.pdays + "~" + eles.nonpdays);
                                     var self = this;
                                     tdblanks2.addEventListener('click', function (e) {
                                         self.tapped = e.target.id;

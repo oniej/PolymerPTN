@@ -129,27 +129,16 @@
                     </app-toolbar>
                 </app-header>
                 <div class="docu">
-                    <div class="docu-header">
-                        <div>
-                            <iron-icon id="iconcreated" icon="my-icons:flag" style="color:gray;"></iron-icon>
-                            <span id="created">Created by:</span> {{createdby}}&nbsp;
-                            <time-ago datetime$="{{_timeStampToDateTime(createdAt)}}">{{_timeStampToDateTime(createdAt)}}</time-ago>
-                        </div>
-                        <div>
-                            <iron-icon id="iconcreated" icon="my-icons:update" style="color:gray;"></iron-icon>
-                            <span id="modified">Last Modified by:</span> {{updatedby}}&nbsp;
-                            <time-ago datetime$="{{_timeStampToDateTime(updatedAt)}}">{{_timeStampToDateTime(updatedAt)}}</time-ago>
-
-                        </div>
-                    </div>
                     <div id="writeHere">
-                        <paper-input value="{{hotel}}" always-float-label label="Hotel" autofocus></paper-input>
+                        <paper-input value="{{hotel}}" always-float-label label="Hotel Code" autofocus style="display: inline-block; width: 150px;margin-left: 30px"
+                            readonly></paper-input>
+                        <paper-input value="{{hotelname}}" always-float-label label="Hotel Name" style="display: inline-block; width: 300px;margin-left: 20px"></paper-input>
                     </div>
                     <div>
                         <span>
                             <paper-button on-tap="addField" id="buttonform" style="color: cornflowerblue;">
                                 <iron-icon icon="my-icons:add-box" on-tap="addField" style="color: cornflowerblue;"></iron-icon>
-                                Add more room</paper-button>
+                                Add room</paper-button>
                         </span>
                         <iron-icon id="iconform" icon="my-icons:add-box" on-tap="addField" style="color: cornflowerblue;"></iron-icon>
                     </div>
@@ -242,28 +231,50 @@
             },
 
             addField() {
-                this._openField(null, this);
+                this._openField(null, null, this);
             },
-            _openField(el, _this) {
+            _openField(el, elname, _this) {
                 var roomNumber = _this.lastRoom + 1;
                 _this.lastRoom = roomNumber;
                 _this.rooms.push(roomNumber);
                 var div = Polymer.dom(_this.root).querySelector("#writeHere");
+                var paperInput2 = document.createElement('paper-input');
+                paperInput2.setAttribute('id', "room" + roomNumber + 'name');
+                paperInput2.setAttribute("label", "Room " + roomNumber + ' Name');
+                paperInput2.setAttribute("always-float-label", true);
+                paperInput2.setAttribute("style", "display:inline-block;width:300px;margin-left: 15px");
+                var br = document.createElement('br');
+                div.append(br);
+                div.append(paperInput2);
+
                 var paperInput = document.createElement('paper-input');
-                paperInput.setAttribute('id', "room" + roomNumber);
-                paperInput.setAttribute("label", "Room " + roomNumber);
-                if (el) {
+                paperInput.setAttribute('id', "room" + roomNumber + 'code');
+                paperInput.setAttribute("label", "Room " + roomNumber + ' Code');
+                paperInput.setAttribute("style", "display:inline-block;width:150px;margin-left: 30px");
+                div.append(paperInput);
+
+                if (el && elname) {
+                    paperInput2.setAttribute("value", elname);
                     paperInput.setAttribute("value", el);
+                    paperInput.readonly = true;
+
                 }
+                paperInput2.setAttribute("always-float-label", true);
                 paperInput.setAttribute("always-float-label", true);
                 div.append(paperInput);
+                div.append(paperInput2);
             },
             _update() {
                 var roomupdate = [];
                 this.rooms.forEach(element => {
-                    var data = Polymer.dom(this.root).querySelector("#room" + element).value;
-                    if (data) {
-                        roomupdate.push(data);
+                    var dataRoomCode = Polymer.dom(this.root).querySelector("#room" + element + 'code').value;
+                    var dataRoomName = Polymer.dom(this.root).querySelector("#room" + element + 'name').value;
+                    if (dataRoomCode) {
+                        roomupdate.push({
+                            id: element,
+                            room: dataRoomCode,
+                            name: dataRoomName
+                        });
                     }
                 });
 
@@ -277,6 +288,7 @@
                         this.$.ajax.contentType = "application/json";
                         this.$.ajax.body = {
                             hotel: this.hotel,
+                            hotelname: this.hotelname,
                             room: roomupdate,
                         };
                         this.$.ajax.generateRequest();
@@ -297,7 +309,6 @@
                     this.$.hotelDelete.opened = false;
                     this.$.successModalDelete.opened = true;
                 }
-
             },
             _ok() {
                 this.$.successModalDelete.opened = false;
@@ -305,19 +316,21 @@
                 window.location.assign("/hotels");
             },
             _hotelsLoaded(data) {
-                if (this.editKey) {
-                    this.hotel = data.detail.response.data.hotel;
-                    var roomdata = data.detail.response.data.room;
-                    var _this = this;
-                    roomdata.forEach(element => {
-                        _this._openField(element, _this);
-                    });
-                    this.createdby = data.detail.response.data.created_by;
-                    this.createdAt = data.detail.response.data.createdAt;
-                    this.updatedby = data.detail.response.data.updated_by;
-                    this.updatedAt = data.detail.response.data.updatedAt;
+                if (data.detail.response.data) {
+                    if (this.editKey) {
+                        this.hotel = data.detail.response.data.hotel;
+                        this.hotelname = data.detail.response.data.hotelname;
+                        var roomdata = data.detail.response.data.room;
+                        var _this = this;
+                        roomdata.forEach(element => {
+                            _this._openField(element.room, element.name, _this);
+                        });
+                        this.createdby = data.detail.response.data.created_by;
+                        this.createdAt = data.detail.response.data.createdAt;
+                        this.updatedby = data.detail.response.data.updated_by;
+                        this.updatedAt = data.detail.response.data.updatedAt;
+                    }
                 }
-
             },
             _timeStampToDateTime(ts) {
                 return new Date(ts);

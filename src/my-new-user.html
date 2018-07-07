@@ -86,7 +86,7 @@
                 height: 1px;
             }
         </style>
-        <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_commentsLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
+        <!-- <iron-ajax auto url="{{url}}"  handle-as="json" on-response="_commentsLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax> -->
         <app-drawer-layout fullbleed narrow="{{narrow}}" id="drawerLayout">
             <app-header-layout id="appheader" has-scrolling-region>
                 <app-header fixed slot="header">
@@ -107,11 +107,12 @@
 
                 <div class="docu">
                     <div class="details">
-                        <paper-input style="display: none;" readonly="true" value="{{account_key}}" always-float-label label="Account No."></paper-input>
+                        <paper-input value="{{account_key}}" always-float-label label="Account No." readonly></paper-input>
                         <paper-input value="{{fullname}}" float-label label="Full Name"></paper-input>
                         <paper-input value="{{email}}" float-label label="Email"></paper-input>
                         <paper-dropdown-menu style="cursor:pointer" label="Account Type">
                             <paper-listbox slot="dropdown-content" class="dropdown-content" selected="{{roleAdd}}">
+                                <!-- <paper-item>Admin Staff</paper-item> -->
                                 <paper-item>Staff</paper-item>
                                 <paper-item>Agent</paper-item>
                             </paper-listbox>
@@ -134,7 +135,6 @@
 
                     </span>
                 </div>
-                </div>
             </app-header-layout>
         </app-drawer-layout>
         <iron-ajax verbose id="ajax" method="[[method]]" on-response="_handleResponse"></iron-ajax>
@@ -147,31 +147,20 @@
                 selectedItem: {
                     observer: '_selectedItemChanged'
                 },
-                selectedItems: {
-                    type: Object,
-                },
+                selectedItems: Object,
                 roleAdd: {
                     type: Number,
-                    value: 0,
+                    value: 1,
                     observer: 'roleAddChanged'
                 },
-                role: {
-                    type: String,
-                    value: ''
-                },
+                role: String,
                 groupAdd: {
                     type: Number,
                     value: '',
                     observer: '_groupAddChanged'
                 },
-                group: {
-                    type: String,
-                    value: ''
-                },
-                account_key: {
-                    type: String,
-                    value: ''
-                }
+                group: String,
+                account_key: String,
             },
             _groupAddChanged() {
                 if (this.groupAdd == 0) {
@@ -181,16 +170,20 @@
                 }
             },
             roleAddChanged() {
+                this.account_key = this.guid();
                 if (this.roleAdd == 0) {
                     this.role = 'Staff';
                 }
                 else if (this.roleAdd == 1) {
                     this.role = 'Agent';
                 }
+                // else if (this.roleAdd == 2) {
+                //     this.role = 'Agent';
+                // }
             },
             _ready() {
                 // this.fullname;
-                // this.account_key = this.guid();
+                this.account_key = this.guid();
                 // console.log(this.guid());
                 // this.groupAdd = "";
                 // this.roleAdd = "";
@@ -200,26 +193,38 @@
                 return uid.randomUUID(6);
             },
             _submit() {
-                if (!this.fullname || !this.email) {
-                    this.msg = 'All fields required.';
+                if (!this.fullname || !this.email || !this.role || !this.group) {
+                    alert('Please fill up all required fields..');
                 } else {
-                    this.method = 'POST';
-                    this.$.ajax.url = '/users/add';
-                    this.$.ajax.contentType = "application/json";
-                    this.$.ajax.body = {
-                        fullname: this.fullname,
-                        email: this.email,
-                        role: this.role,
-                        group: this.group,
-                        active: this.active = true,
-                        account_key: this.account_key = this.guid(),
-                    };
-                    this.$.ajax.generateRequest();
-                    this.$.successModal.opened = true;
-                    // var Successfully = Polymer.dom(this.root).querySelector("#successModal");
-                    // Successfully.open();
-                    this.url = '';
+                    var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                    if (!filter.test(this.email)) {
+                        alert('Please provide a valid email address');
+                        this.email.focus;
+                        return false;
+                    }
+                    else {
+                        this.method = 'POST';
+                        this.$.ajax.url = '/user/register';
+                        this.$.ajax.contentType = "application/json";
+                        this.$.ajax.body = {
+                            name: this.fullname,
+                            email: this.email,
+                            role: this.role,
+                            group: this.group,
+                            // active: this.active = true,
+                            password: this.account_key,
+                            accountkey: this.account_key,
+                        };
+                        this.$.ajax.generateRequest();
+                        this.$.successModal.opened = true;
+                        // var Successfully = Polymer.dom(this.root).querySelector("#successModal");
+                        // Successfully.open();
+                        this.url = '';
+                    }
                 }
+            },
+            _handleResponse(e) {
+                console.log(e.detail.response);
             },
             _ok() {
                 window.location.assign('/users');

@@ -1,0 +1,299 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/vaadin-dialog/vaadin-dialog.html">
+<link rel="import" href="../bower_components/paper-dropdown-input/paper-dropdown-input.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+
+
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="my-icons.html">
+<link rel="import" href="short-unique-id.html">
+
+<dom-module id="my-booking-new">
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+            }
+
+            app-header {
+                color: rgb(255, 255, 255);
+                background-color: darkorange;
+            }
+
+            app-header paper-icon-button {
+                --paper-icon-button-ink-color: #000000;
+            }
+
+            app-drawer-layout:not([narrow]) [drawer-toggle] {
+                display: none;
+            }
+
+            app-drawer {
+                --app-drawer-content-container: {
+                    background-color: #F4F5F6;
+                }
+            }
+
+            @media (max-width: 768px) {
+                .docu {
+                    margin-left: 16px;
+                    margin-right: 16px;
+                    padding: 16px;
+                }
+            }
+
+            @media (min-width: 768px) {
+                .docu {
+                    /* margin-left: 16px;
+                    margin-right: 16px; */
+                    padding: 16px;
+                }
+                #iconform {
+                    display: none;
+                }
+            }
+
+            hr {
+                background-color: #eee;
+                border: 0 none;
+                color: #eee;
+                height: 1px;
+            }
+        </style>
+        <iron-ajax id="agent" url="{{filteragent}}" handle-as="json" method="GET" on-response="_agentoaded"></iron-ajax>
+        <iron-ajax id="hotel" url="{{filterhotel}}" handle-as="json" method="GET" on-response="_hotelloaded"></iron-ajax>
+        <iron-ajax id="rooms" url="{{filterrooms}}" handle-as="json" method="GET" on-response="_roomsloaded"></iron-ajax>
+        <iron-ajax id="allocation" url="{{filterallocation}}" handle-as="json" method="GET" on-response="_allocationloaded"></iron-ajax>
+        <iron-ajax id="blocking" url="{{filterblocking}}" handle-as="json" method="GET" on-response="_blockingloaded"></iron-ajax>
+        <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_bookingLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
+        <app-drawer-layout fullbleed narrow="{{narrow}}" id="drawerLayout">
+            <app-header-layout id="appheader" has-scrolling-region>
+                <app-header fixed slot="header">
+                    <app-toolbar>
+                        <a href="/booking">
+                            <paper-icon-button noink class="menu" style="color: white;" icon="my-icons:arrow-back"></paper-icon-button>
+                        </a>
+                        <div main-title>New Booking</div>
+                    </app-toolbar>
+
+                    <vaadin-dialog id="successModal" no-close-on-esc no-close-on-outside-click>
+                        <template>
+                            <h3 style="text-align: center">New Booking Added</h3>
+                            <hr>
+                            <paper-button on-tap="_ok" style="float: right">Ok</paper-button>
+                        </template>
+                    </vaadin-dialog>
+                </app-header>
+                <div class="docu">
+                    <div>
+                        <paper-input value="{{reference}}" always-float-label label="Reference" autofocus></paper-input>
+                        <paper-input value="{{guest}}" always-float-label label="Guest" autofocus></paper-input>
+                        <paper-dropdown-input label="Agent" items='[[agentItems]]' filter-property="fullname" value="{{agent}}">
+                            <template>
+                                <template is="dom-repeat" items="[[items]]" as="item">
+                                    <paper-item>[[item.fullname]]</paper-item>
+                                </template>
+                            </template>
+                        </paper-dropdown-input>
+                        <paper-dropdown-input label="Hotel" items='[[hotelItems]]' filter-property="hotel" value="{{hotel}}" style="margin-left: 30px;">
+                            <template>
+                                <template is="dom-repeat" items="[[items]]" as="item">
+                                    <paper-item>[[item.hotel]]</paper-item>
+                                </template>
+                            </template>
+                        </paper-dropdown-input>
+                        <paper-dropdown-input label="Room" items='[[roomItems]]' filter-property="room" value="{{room}}" style="margin-left: 30px;">
+                            <template>
+                                <template is="dom-repeat" items="[[items]]" as="item">
+                                    <paper-item>[[item]]</paper-item>
+                                </template>
+                            </template>
+                        </paper-dropdown-input>
+                    </div>
+                    <div style="display: flex">
+                        <div style="display: flex;">
+                            <paper-input label="Check in" type="date" value="{{checkin}}">
+                                <iron-icon icon="my-icons:date-range" slot="prefix"></iron-icon>
+                            </paper-input>
+                        </div>
+                        <div style="display: flex; margin-left: 10px;">
+                            <paper-input label="Check out" type="date" value="{{checkout}}">
+                                <iron-icon icon="my-icons:date-range" slot="prefix"></iron-icon>
+                            </paper-input>
+                        </div>
+                        <div style="display: flex; margin-left: 10px;">
+                            <paper-input label="Number of Rooms" type="number" value="{{numRooms}}">
+                                <!-- <iron-icon icon="my-icons:date-range" slot="prefix"></iron-icon> -->
+                            </paper-input>
+                        </div>
+                        <paper-dropdown-menu label="Booking Source" style="margin-left: 10px;">
+                            <paper-listbox slot="dropdown-content" selected="{{selectedBook}}">
+                                <paper-item>Allocation</paper-item>
+                                <paper-item>Blocking</paper-item>
+                            </paper-listbox>
+                        </paper-dropdown-menu>
+                    </div>
+                    <br>
+                    <br>
+                    <span style="color:red; font-size:13px; float:left; margin-top: -16px;">{{msg}}</span>
+                    <span style="float: right; margin-top: -30px;">
+                        <a href="/booking" style="text-decoration:none">
+                            <paper-button id="cancelButton" class="cancel" on-tap="_cancel">Cancel</paper-button>
+                        </a>
+                        <paper-button id="submitButton" class="darkorange" on-click="_submit" raised>Book</paper-button>
+                    </span>
+                </div>
+            </app-header-layout>
+        </app-drawer-layout>
+
+        <vaadin-dialog id="availabilitySave" no-close-on-esc no-close-on-outside-click>
+            <template>
+                <h3 style="text-align: center">Added Successfully</h3>
+                <hr>
+                <paper-button on-tap="_ok" style="float: right">Ok</paper-button>
+            </template>
+        </vaadin-dialog>
+        <iron-ajax verbose id="ajax" method="[[method]]" on-response="_handleResponse"></iron-ajax>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'my-booking-new',
+            properties: {
+                hotel: String,
+                room: String,
+                agent: String,
+                checkin: String,
+                checkout: String,
+                numRooms: Number,
+                deduction: String,
+                selectedBook: {
+                    type: Number,
+                    value: 0,
+                }
+            },
+            observers: ['_hotelChanged(hotel,room,agent)',
+                '_checkinChanged(checkin)',
+                '_checkoutChanged(hotel,room,agent,checkin,checkout)',
+                '_selectedBookingChanged(selectedBook)'],
+            // '_queryAll(hotel,room,agent,checkin,checkout)'
+            _openField() {
+
+            },
+            _selectedBookingChanged(a) {
+                if (a == 0) {
+                    this.deduction = "Allocation";
+                } else {
+                    this.deduction = "Blocking";
+                }
+            },
+            _submit() {
+                this.method = 'POST';
+                this.$.ajax.url = '/booking/add';
+                this.$.ajax.contentType = "application/json";
+                this.$.ajax.body = {
+                    reference: this.reference,
+                    guest: this.guest,
+                    agent: this.agent,
+                    hotel: this.hotel,
+                    room: this.room,
+                    checkin: this.checkin,
+                    checkout: this.checkout,
+                    numrooms: this.numRooms,
+                    deduction: this.deduction
+                };
+                this.$.ajax.generateRequest();
+                this.$.availabilitySave.opened = true;
+            },
+            _ok() {
+                window.location.assign('/booking');
+                this.$.availabilitySave.opened = false;
+            },
+            toggleDrawer() { },
+            _cancel() { },
+            ready() {
+                this.checkin = "";
+                this.checkout = "";
+                this.agent = "";
+                this.guest = "";
+                this.deduction = "";
+                // this.filterallocation = '/allocation/'
+                this.filteragent = '/users/read';
+                this.filterhotel = '/hotel/read';
+                this.$.agent.handleAs = "json";
+                this.$.hotel.handleAs = "json";
+                this.$.agent.generateRequest();
+                this.$.hotel.generateRequest();
+            },
+            _agentoaded(data) {
+                if (data.detail.response) {
+                    this.agentItems = data.detail.response.data;
+                }
+            },
+            _hotelloaded(data) {
+                if (data.detail.response.data) {
+                    this.hotelItems = data.detail.response.data;
+                }
+            },
+            _hotelChanged(h, r, a) {
+                this.checkin = "";
+                this.checkout = "";
+                this.filterrooms = '/hotel/filter/' + h;
+                this.$.rooms.handleAs = "json";
+                this.$.rooms.generateRequest();
+                if (h && r && a) {
+                    this.hotel = h;
+                    this.room = r;
+                    this.agent = a;
+                }
+            },
+            _checkinChanged(ci) {
+                // this.hotel = "";
+                // this.room = "";
+                if (ci) {
+                }
+            },
+            _checkoutChanged(h, r, a, ci, co) {
+                if (co) {
+                }
+                if (h && r && ci && co) {
+                    // var date1 = new Date(ci);
+                    // var date2 = new Date(co);
+                    // var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+                    // var numberOfNights = Math.ceil(timeDiff / (1000 * 3600 * 24));
+                    // console.log(numberOfNights + " nights");
+
+                    this.filterallocation = '/allocation/filterall/' + h + "_" + r + "_" + ci + "_" + co;
+                    // this.filterblocking = '/hotel/read/';
+                    this.$.allocation.handleAs = "json";
+                    // this.$.blocking.handleAs = "json";
+                    this.$.allocation.generateRequest();
+                    // this.$.blocking.generateRequest();
+                    // console.log(this.filterallocation);
+                }
+            },
+            _allocationloaded(data) {
+                if (data.detail.response.data) {
+                    var datas = data.detail.response.data;
+                    console.log(datas);
+                }
+            },
+            _roomsloaded(data) {
+                if (data.detail.response.data) {
+                    this.roomItems = data.detail.response.data.room;
+                }
+            },
+            _handleResponse(data) {
+
+            },
+        })
+    </script>
+</dom-module>

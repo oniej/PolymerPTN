@@ -1,17 +1,14 @@
-
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/polymer/polymer.html">
-
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
-
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/iron-scroll-threshold/iron-scroll-threshold.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="my-blocking-add.html">
 <link rel="import" href="my-blocking-edit.html">
-
+<link rel="import" href="time-element.html">
 <link rel="import" href="../bower_components/neon-animation/web-animations.html">
 <link rel="import" href="../bower_components/neon-animation/neon-animations.html">
 <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
@@ -29,55 +26,10 @@
                 flex-direction: column;
             }
 
-            @-webkit-keyframes fadeIn {
-                from {
-                    opacity: 0;
-                }
-                to {
-                    opacity: 1;
-                }
-            }
-
-            @-moz-keyframes fadeIn {
-                from {
-                    opacity: 0;
-                }
-                to {
-                    opacity: 1;
-                }
-            }
-
-            @keyframes fadeIn {
-                from {
-                    opacity: 0;
-                }
-                to {
-                    opacity: 1;
-                }
-            }
-
             @media (max-width: 768px) {
-                div .blocking {
-                    margin: 16px;
-                    /* margin-top: 16px; */
-                    display: flex;
-                    /* height: 100vh; */
-                    flex-direction: column;
-                    border-radius: 3px;
-                    /* box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2); */
-                    opacity: 0;
-
-                    -webkit-animation: fadeIn ease-in 1;
-                    -moz-animation: fadeIn ease-in 1;
-                    animation: fadeIn ease-in 1;
-
-                    -webkit-animation-fill-mode: forwards;
-                    -moz-animation-fill-mode: forwards;
-                    animation-fill-mode: forwards;
-
-                    -webkit-animation-duration: 0.5s;
-                    -moz-animation-duration: 0.5s;
-                    animation-duration: 0.5s;
+                paper-card {
+                    width: 100%;
+                    margin-top: 16px;
                 }
                 paper-search-bar {
                     margin-left: 80px;
@@ -86,30 +38,16 @@
                 }
             }
 
-            @media (min-width: 768px) {
+            @media (min-width: 850px) {
                 div .blocking {
-                    width: 765px;
-                    margin: 16px auto;
-                    /* margin-bottom: 1000px; */
-                    /* height: 100vh; */
-                    border-radius: 3px;
-
-                    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-
-                    opacity: 0;
-
-                    -webkit-animation: fadeIn ease-in 1;
-                    -moz-animation: fadeIn ease-in 1;
-                    animation: fadeIn ease-in 1;
-
-                    -webkit-animation-fill-mode: forwards;
-                    -moz-animation-fill-mode: forwards;
-                    animation-fill-mode: forwards;
-
-                    -webkit-animation-duration: 0.5s;
-                    -moz-animation-duration: 0.5s;
-                    animation-duration: 0.5s;
-
+                    width: 850px;
+                    padding: 16px;
+                    margin: 0 auto;
+                }
+                paper-card {
+                    width: 46%;
+                    margin-right: 10px;
+                    margin-bottom: 10px;
                 }
                 paper-search-bar {
                     margin-left: 50px;
@@ -214,7 +152,7 @@
             </style>
         </custom-style>
         <app-route route="{{route}}" pattern="/edit/:_id" data="{{editData}}" active="{{editActive}}"></app-route>
- 
+
         <iron-pages selected="[[route.path]]" attr-for-selected="name" fallback-selection="view404" role="main">
             <div name="">
                 <app-header-layout fullbleed has-scrolling-region>
@@ -246,50 +184,67 @@
                     </app-header>
                     <iron-scroll-document id="threshold">
                         <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_blockingLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
-                        <template is="dom-repeat" items="[[blockings]]" as="item">
-                            <div class="blocking">
-                                <div id="header" class="header" style="background-color: #4CAF50; padding: 16px; padding-bottom: 5px; font-size: 14px;">
-                                    <a href="/blocking/edit/{{item._id}}">
-                                        <paper-icon-button id="{{item._id}}" noink on-tap="_editBlocking" data-args="{{item._id}}" icon="my-icons:edit" alt="{{item._id}}"
-                                            style="float: right; margin-top:-10px; margin-right:-10px;color: white;"></paper-icon-button>
-                                    </a>
-                                    <div style="color: white">
-                                        <iron-icon icon="my-icons:flag" id="date" style="color: white"></iron-icon>
-                                        Created
-                                        <span>
-                                            <time-ago datetime$="{{_timeStampToDateTime(item.createdAt)}}">{{_timeStampToDateTime(item.createdAt)}}</time-ago>
-                                            &nbsp;by&nbsp;<!--[[item.created_by]]-->Jeino</span>
+                        <div class="blocking">
+                            <a href="/blocking/add" style="text-decoration: none;">
+                                <paper-card on-tap="_availnew">
+                                    <div class="card-content">
+                                        <center>
+                                            <paper-icon-button icon="my-icons:add" style="color:#4CAF50;width: 100px;height: 100px;">
+                                            </paper-icon-button>
+                                            <br>
+                                            <span style="color:#4CAF50;">Add Blocking</span>
+                                            <!-- <iron-image src="../images/pluspng.png" sizing="contain" style="width:100px;height:100px;"></iron-image> -->
+                                        </center>
                                     </div>
-                                    <div style="color: white">
-                                        <iron-icon icon="my-icons:update" id="date" style="color: white"></iron-icon>
-                                        Last Modified
-                                        <span>
-                                            <time-ago datetime$="{{_timeStampToDateTime(item.updatedAt)}}">{{_timeStampToDateTime(item.updatedAt)}}</time-ago>
-                                            &nbsp;by&nbsp;<!--[[item.updated_by]]-->Jeino</span>
+                                </paper-card>
+                            </a>
+                            <template is="dom-repeat" items="[[blockings]]" as="item">
+                                <paper-card>
+                                    <div id="header" class="header" style="background-color: #4CAF50;  padding: 16px; padding-bottom: 5px; font-size: 11px;">
+                                        <a href="/blocking/edit/{{item._id}}">
+                                            <paper-icon-button id="{{item._id}}" noink on-tap="_editBlocking" data-args="{{item._id}}" icon="my-icons:edit" alt="{{item._id}}"
+                                                style="float: right; margin-top:-10px; margin-right:-10px;color: white;"></paper-icon-button>
+                                        </a>
+                                        <div style="color: white">
+                                            <iron-icon icon="my-icons:flag" id="date" style="color: white"></iron-icon>
+                                            Created
+                                            <span>
+                                                <time-ago datetime$="{{_timeStampToDateTime(item.createdAt)}}">{{_timeStampToDateTime(item.createdAt)}}</time-ago>
+                                                &nbsp;by&nbsp; [[item.created_by]]Jeino
+                                            </span>
+                                        </div>
+                                        <div style="color: white">
+                                            <iron-icon icon="my-icons:update" id="date" style="color: white"></iron-icon>
+                                            Last Modified
+                                            <span>
+                                                <time-ago datetime$="{{_timeStampToDateTime(item.updatedAt)}}">{{_timeStampToDateTime(item.updatedAt)}}</time-ago>
+                                                &nbsp;by&nbsp; [[item.updated_by]]Jeino
+                                            </span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div style="padding: 16px; background-color: white;">
-                                    <div style="margin-top: 5px;">
-                                        <iron-icon icon="my-icons:location-city" id="date" style="color: gray; margin-top: -10px"></iron-icon>
-                                        <span id="type" style="font-size: 24px;">
-                                            [[item.hotel]]
-                                        </span>
+                                    <div style="padding: 16px; background-color: white;" id="{{item._id}}">
+                                        <div style="margin-top:2px;">
+                                            <iron-icon icon="my-icons:location-city" id="date" style="color: gray;width: 20px;height: 20px;"></iron-icon>
+                                            <span id="type" style="font-size: 16px;">
+                                                [[item.hotel]]
+                                            </span>
+                                        </div>
+                                        <div style="margin-top:5px;">
+                                            <iron-icon icon="my-icons:speaker-notes" id="date" style="color: gray;width:20px;height: 20px;"></iron-icon>
+                                            <span id="type" style="color:gray;font-size: 11px; ">
+                                                [[item.notes]]
+                                            </span>
+                                        </div>
                                     </div>
-                                    <div style="margin-top: 12px; font-size: 14px;">
-                                        <iron-icon icon="my-icons:speaker-notes" id="date" style="color: gray"></iron-icon>
-                                        <span id="type" style="color:gray;font-size: 14px; ">
-                                            [[item.note]]
-                                        </span>
-                                    </div>
+                                </paper-card>
+                            </template>
+                        </div>
 
-                                </div>
-                            </div>
-                        </template>
                     </iron-scroll-document>
                 </app-header-layout>
-                <a href="/blocking/add" style="text-decoration: none; ">
+                <!-- <a href="/blocking/add" style="text-decoration: none; ">
                     <paper-fab noink on-tap="_availnew" icon="my-icons:add" class="blue"></paper-fab>
-                </a>
+                </a> -->
             </div>
 
             <div name="/add">
@@ -334,7 +289,7 @@
 
             toggleSearch() {
                 this.openSearch = true;
-                
+
             },
             toggleReturn() {
                 this.openSearch = false;

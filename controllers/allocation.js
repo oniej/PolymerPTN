@@ -11,7 +11,7 @@ router.get('/dummy', (req, res) => {
 router.post('/add', (req, res) => {
     const allocation = new Allocation();
     // body parser lets us use the req.body
-    const {active, group,hotel,dateFrom,dateTo,rooms,note,seasondate } = req.body;
+    const { active, group, hotel, dateFrom, dateTo, rooms, note, seasondate } = req.body;
     if (!group || !hotel || !dateFrom || !dateTo || !note) {
         return res.json({
             success: false,
@@ -53,7 +53,7 @@ router.put('/update/:editKey', (req, res) => {
     }
     Allocation.findById(editKey, (error, allocation) => {
         if (error) return res.json({ success: false, error });
-        const {active,group, hotel,dateFrom,dateTo,rooms,note,seasondate } = req.body;
+        const { active, group, hotel, dateFrom, dateTo, rooms, note, seasondate } = req.body;
         allocation.active = active;
         if (group) allocation.group = group;
         if (hotel) allocation.hotel = hotel;
@@ -108,7 +108,7 @@ router.get('/filterenddate/:newdate1', (req, res) => {
         if (error) return res.json({ success: false, error });
         return res.json({ success: true, data: allocfilter });
     });
-}); 
+});
 router.get('/filterstartdate/:newdate', (req, res) => {
     const [newdate, newdate1] = req.params.newdate.split("_");
     Allocation.find({ dateFrom: { $gte: newdate, $lte: newdate1 } }, (error, allocfilter) => {
@@ -121,6 +121,46 @@ router.get('/filterenddate/:newdate1', (req, res) => {
     Allocation.find({ dateTo: { $lte: newdate1, $gte: newdate } }, (error, allocfilter) => {
         if (error) return res.json({ success: false, error });
         return res.json({ success: true, data: allocfilter });
+    });
+});
+router.get('/filterall/:hotel', (req, res) => {
+    const [hotel, room, checkin, checkout] = req.params.hotel.split("_");
+    Allocation.find({
+        hotel: hotel,
+        dateFrom: { $lte: checkin },
+        dateTo: { $gte: checkout },
+        'rooms.room': room
+        // rooms: {
+        //     $elemMatch:
+        //     {
+        //         room: room
+        //     }
+        // }
+    }, (error, hotels) => {
+        if (error) return res.json({ success: false, error });
+        return res.json({ success: true, data: hotels });
+    });
+});
+router.put('/updatealloc/:id', (req, res) => {
+    const { id } = req.params;
+    if (!editKey) {
+        return res.json({ success: false, error: 'not match found' });
+    }
+    Allocation.findById(id, (error, allocation) => {
+        if (error) return res.json({ success: false, error });
+        const { active, group, hotel, dateFrom, dateTo, rooms, note, seasondate } = req.body;
+        allocation.active = active;
+        if (group) allocation.group = group;
+        if (hotel) allocation.hotel = hotel;
+        if (dateFrom) allocation.dateFrom = dateFrom;
+        if (dateTo) allocation.dateTo = dateTo;
+        if (rooms) allocation.rooms = rooms;
+        if (note) allocation.note = note;
+        if (seasondate) allocation.seasondate = seasondate;
+        allocation.save(error => {
+            if (error) return res.json({ success: false, error });
+            return res.json({ success: true });
+        });
     });
 });
 module.exports = router;

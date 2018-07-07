@@ -51,7 +51,7 @@ router.get('/read', (req, res) => {
 router.post('/add', (req, res) => {
     const hotelAdd = new Hotels();
     // body parser lets us use the req.body
-    const { hotel, room, created_by, updated_by } = req.body;
+    const { hotel, hotelname, room, created_by, updated_by } = req.body;
     if (!hotel || !room) {
         // we should throw an error. we can do this check on the front end
         return res.json({
@@ -60,6 +60,7 @@ router.post('/add', (req, res) => {
         });
     }
     hotelAdd.hotel = hotel;
+    hotelAdd.hotelname = hotelname;
     hotelAdd.room = room;
     hotelAdd.created_by = created_by;
     hotelAdd.updated_by = updated_by;
@@ -75,8 +76,9 @@ router.put('/update/:editKey', (req, res) => {
     }
     Hotels.findById(editKey, (error, hotelinfo) => {
         if (error) return res.json({ success: false, error });
-        const { hotel, room, } = req.body;
+        const { hotel, hotelname, room, } = req.body;
         hotelinfo.hotel = hotel;
+        hotelinfo.hotelname = hotelname;
         hotelinfo.room = room;
         hotelinfo.save(error => {
             if (error) return res.json({ success: false, error });

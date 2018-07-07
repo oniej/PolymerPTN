@@ -239,8 +239,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                                 icon="my-icons:edit" alt="{{item._id}}"></paper-icon-button>
                                         </a>
                                         <iron-icon icon="my-icons:location-city" id="date" style="margin-top: -10px"></iron-icon>
-                                        <span id="type" style="font-size: 24px;">
-                                            [[item.hotel]]
+                                        <span id="type" style="font-size: 24px;">[[item.hotelname]]
                                         </span>
                                     </div>
                                 </div>
@@ -252,7 +251,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                     <div>
                                         <template is="dom-repeat" items="[[item.room]]" as="room">
                                             <div id="type" style="color:black; margin-left: 30px; ">
-                                                [[room]]
+                                                [[room.name]]
                                             </div>
                                         </template>
                                     </div>
@@ -348,7 +347,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 var search = Polymer.dom(this.root).querySelector("#search").setAttribute("style", "display:inline-block");
             },
             _hotelIdChanged(e) {
-                console.log(this.hotelId);
+                // console.log(this.hotelId);
             },
             _hotelnew() {
                 var node = Polymer.dom(this.root).querySelector("#hotelnew");
@@ -372,15 +371,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     if (oldDiv) {
                         Polymer.dom(node.parentNode).removeChild(oldDiv);
                     }
-                var newDiv = document.createElement("my-hotel-edit");
-                newDiv.setAttribute("id", "d24");
-                newDiv.setAttribute("edit-key", data_args);
-                newDiv.setAttribute("prev-route", this.route.prefix);
-                // newDiv.setAttribute("block ", "3 ")
-                //if open existing
-                // console.log(newDiv);s
-                var currentDiv = document.getElementById("availedit");
-                Polymer.dom(node.parentNode).insertBefore(newDiv, currentDiv);
+                    var newDiv = document.createElement("my-hotel-edit");
+                    newDiv.setAttribute("id", "d24");
+                    newDiv.setAttribute("edit-key", data_args);
+                    newDiv.setAttribute("prev-route", this.route.prefix);
+                    // newDiv.setAttribute("block ", "3 ")
+                    //if open existing
+                    // console.log(newDiv);s
+                    var currentDiv = document.getElementById("availedit");
+                    Polymer.dom(node.parentNode).insertBefore(newDiv, currentDiv);
                 }
             },
             toggleDrawer() {

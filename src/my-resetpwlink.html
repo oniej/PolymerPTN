@@ -1,0 +1,187 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="my-resetpwlink">
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+                --app-primary-color: #4285f4;
+                --app-secondary-color: black;
+            }
+
+            @media (min-width: 767px) {
+                .main-container {
+                    height: 100%;
+                    background-color: white;
+                    max-width: 370px;
+                    margin: 16px auto;
+                    padding: 40px;
+                    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+                }
+                .blue {
+                    text-decoration: none;
+                    color: royalblue;
+                }
+
+            }
+
+            @media (max-width: 767px) {
+                :host {
+                    height: 100%;
+                }
+                .main-container {
+                    height: 100%;
+                    background-color: white;
+                    margin: 0 auto;
+                    padding: 40px;
+                    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+
+                }
+
+            }
+
+            .action-btn {
+                float: right;
+            }
+
+            .blue {
+                text-decoration: none;
+                color: royalblue;
+            }
+
+            .header {
+                font-size: 18px;
+                color: grey;
+                /* font-weight: 400; */
+                text-align: justify;
+            }
+        </style>
+
+        <iron-ajax verbose id="ajax" method="POST" url="/user/resetPassword/{{token}}" on-response="_handleResponse"></iron-ajax>
+        <div class="main-container">
+            <center>
+                <iron-image placeholder="images/ptn1.png" data-src="images/ptn1.png" sizing="cover" preload fade style="width:300px; height:150px;"></iron-image>
+            </center>
+            <div class="header">
+                <span>Reset password</span>
+            </div>
+            <div hidden$="{{isResetpwlinkExpired}}">
+                <div id="errorMsgDiv" style="display: none;">
+                    <iron-icon icon="my-icons:error-outline"></iron-icon>&nbsp;{{validationMessage}}</div>
+                <paper-input label="Password" type="password" value="{{password}}">
+                </paper-input>
+                <paper-input label="Confirm password" type="password" value="{{password2}}">
+                </paper-input>
+                <br>
+                <div class="footer">
+                    <paper-button id="next" raised class="darkorange" on-tap="_reset" style="float: right">Submit</paper-button>
+                    <a href="/signin" class="blue">Sign in instead</a>
+                </div>
+                <br>
+            </div>
+            <!-- <div hidden$="{{isSigninTap}}">
+                <div id="errorMsgDiv" style="display: none;">
+                    <iron-icon icon="my-icons:error-outline"></iron-icon>&nbsp;{{validationMessage}}</div>
+                <paper-input label="Password" type="password" value="{{password}}">
+                </paper-input>
+                <paper-input label="Confirm password" type="password" value="{{password2}}">
+                </paper-input>
+                <br>
+                <div class="footer">
+                    <paper-button id="next" raised class="darkorange" on-tap="_submit" style="float: right">Submit</paper-button>
+                </div>
+                <br>
+            </div> -->
+        </div>
+        <paper-dialog id="modal" modal>
+            <p>Your password has been successfully reset</p>
+            <div class="buttons">
+                <paper-button dialog-confirm autofocus>
+                    <a href="/signin" class="blue">SIGN IN</a>
+                </paper-button>
+            </div>
+        </paper-dialog>
+
+    </template>
+
+    <script>
+        class MyResetpwlink extends Polymer.Element {
+            static get is() { return 'my-resetpwlink'; }
+            static get properties() {
+                return {
+                    // isResetpwlinkExpired: {
+                    //     type: Boolean,
+                    //     value: false
+                    // },
+                    route: Object
+                }
+            }
+
+            ready() {
+                super.ready();
+                var token = this.route.path;
+                this.token = token.replace(/\//g, '');
+            }
+
+            _handleResponse(e) {
+                if (e.detail.response.success) {
+                    this.$.modal.open();
+                    this.reset();
+                } else {
+                    this.errorMSG = e.detail.response.msg;
+                }
+            }
+
+            _reset() {
+                if (!this.password) {
+                    var errormsg = Polymer.dom(this.root).querySelector("#errorMsgDiv");
+                    errormsg.setAttribute("style", "font-size:12px; display: block; background-color:red; color:white; text-align:center; border-radius: 5px; opacity:0.5; padding:5px");
+                    this.validationMessage = "Please enter password";
+                    var errorLogin = Polymer.dom(this.root).querySelector("#next").disabled = true;
+                } else if (!this.password2) {
+                    var errormsg = Polymer.dom(this.root).querySelector("#errorMsgDiv");
+                    errormsg.setAttribute("style", "font-size:12px; display: block; background-color:red; color:white; text-align:center; border-radius: 5px; opacity:0.5; padding:5px");
+                    this.validationMessage = "Please enter confirm password";
+                    var errorLogin = Polymer.dom(this.root).querySelector("#next").disabled = true;
+                } else if (this.password != this.password2) {
+                    var errormsg = Polymer.dom(this.root).querySelector("#errorMsgDiv");
+                    errormsg.setAttribute("style", "font-size:12px; display: block; background-color:red; color:white; text-align:center; border-radius: 5px; opacity:0.5; padding:5px");
+                    this.validationMessage = "Please did not match";
+                    var errorLogin = Polymer.dom(this.root).querySelector("#next").disabled = true;
+                } else {
+                    this.errorMSG = "";
+                    this.$.ajax.contentType = "application/json";
+                    this.$.ajax.body = {
+                        password: this.password
+                    };
+                    this.$.ajax.generateRequest();
+                }
+            }
+
+            reset() {
+                this.password = null;
+                this.password2 = null;
+                this.errorMSG = "";
+            }
+        }
+
+        window.customElements.define(MyResetpwlink.is, MyResetpwlink);
+    </script>
+</dom-module>

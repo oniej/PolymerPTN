@@ -1,0 +1,46 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="shared-styles.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="my-account-deactivated">
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+                --app-primary-color: #4285f4;
+                --app-secondary-color: black;
+            }
+
+            @media (min-width: 767px) {
+                div {
+                    width: 800px;
+                    margin: 16px auto;
+                }
+            }
+
+            div {
+                padding: 4px 12px;
+            }
+
+            .danger {
+                background-color: #ffdddd;
+                border-left: 6px solid #f44336;
+            }
+        </style>
+
+        <div class="danger">
+            <h3>Account Deactivated</h3>
+            <p>
+                Please contact PTN Travel Corporation administrator for the activation of your account.
+            </p>
+        </div>
+
+    </template>
+
+    <script>
+        Polymer({
+            is: 'my-account-deactivated',
+        })
+    </script>
+</dom-module>
