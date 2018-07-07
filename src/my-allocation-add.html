@@ -128,7 +128,7 @@
                     animation-duration: 0.5s;
                 }
 
-                background-color: darkorange;
+                /* background-color: darkorange; */
             }
             @media (max-width: 768px) {
                 #buttonform {
@@ -204,16 +204,6 @@
                 font-size: 14px;
                 margin-right: 5px;
             }
-<<<<<<< HEAD
-=======
-
-            hr {
-                background-color: #eee;
-                border: 0 none;
-                color: #eee;
-                height: 1px;
-            }
->>>>>>> 98796414e378db92b01b78470eddb4f13c562e20
         </style>
         <iron-ajax auto url="/hotel/read" handle-as="json" on-response="_hotelLoaded" debounce-duration="300"></iron-ajax>
         <iron-ajax id="ajaxRoom" handle-as="json" on-response="_roomsLoaded"></iron-ajax>
@@ -454,82 +444,6 @@
             },
             _active() {
                 this.$.active.checked;
-<<<<<<< HEAD
-=======
-                console.log(this.$.active.checked);
-            },
-            _console(e) {
-                console.log(e);
-                return e;
-            },       
-            _add() {
-
-                if (this.room !== '' && this.peak !== '' && this.pdays !== '' && this.nonpeak !== '' && this.nonpdays !== '') {
-
-                this.addAllocation = true;
-                var allocationval = [];
-                var room1 = Polymer.dom(this.root).querySelector("#room");
-                var peaksn = Polymer.dom(this.root).querySelector("#peak");
-                var cutoff = Polymer.dom(this.root).querySelector("#pdays");
-                var nonpeakssn = Polymer.dom(this.root).querySelector("#nonpeak");
-                var nonpeakday = Polymer.dom(this.root).querySelector("#nonpdays");
- 
-
-                    var room1 = Polymer.dom(this.root).querySelector("#room");
-                    var peaksn = Polymer.dom(this.root).querySelector("#peak");
-                    var cutoff = Polymer.dom(this.root).querySelector("#pdays");
-                    var nonpeakssn = Polymer.dom(this.root).querySelector("#nonpeak");
-                    var nonpeakday = Polymer.dom(this.root).querySelector("#nonpdays");
-
-                     var rooms = {
-                        room: this.room,
-                        peak: this.peak,
-                        pdays: this.pdays,
-                        nonpeak: this.nonpeak,
-                        nonpdays: this.nonpdays
-                    }
-
-                    this.rooms.push(rooms);
-
-                    // console.log(room1.value,peaksn.value,cutoff.value,nonpeakssn.value,nonpeakday.value);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <td> <paper-icon-button icon="my-icons:close" style="color:red;"></paper-icon-button></td>
-                    var fieldbody = '<span><td><vaadin-text-field style="width: 130px;" id="room' + this.idnum + '" value="' + room1.value + '" ></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="peak' + this.idnum + '" value="' + peaksn.value + '" ></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="pdays' + this.idnum + '" value="' + cutoff.value + '" ></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="nonpeak' + this.idnum + '" value="' + nonpeakssn.value + '" ></vaadin-text-field></td><td> <vaadin-text-field style="width: 130px;" id="nonpdays' + this.idnum + '" value="' + nonpeakday.value + '"></vaadin-text-field></td></span><br>'
-                    var node = Polymer.dom(this.root).querySelector("#writeHere").innerHTML += fieldbody;
-                    this.room = '';
-                    this.peak = '';
-                    this.pdays = '';
-                    this.nonpeak = '';
-                    this.nonpdays = '';
-                    this.nonpdays = '';
-                    this.idnum = this.idnum + 1;
-                } else {
-                    alert('Please Input All');
-                }
-            },
-            _adddate() {
-                if (this.startValue !== '' && this.endValue !== '') {
-
-                    var datestart = Polymer.dom(this.root).querySelector("#startdate");
-                    var dateend = Polymer.dom(this.root).querySelector("#enddate");
-
-             
-             var seasondate =
-                    {
-                        startValue: this.startValue,
-                        endValue: this.endValue
-                    }
-
-                    this.seasondate.push(seasondate);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    // <paper-icon-button icon="my-icons:close" style="color:red;"></paper-icon-button>
-                    var node = Polymer.dom(this.root).querySelector("#writeHeredate").innerHTML += '<span><td><vaadin-date-picker placeholder="Start" id="startdate' + this.idnumdate + '" value="' + datestart.value + '" max="' + dateend.value + '" date-format="DD-MMMM-YYYY" ></vaadin-date-picker></td> <td> <vaadin-date-picker placeholder="End" id="enddate' + this.idnumdate + '" value="' + dateend.value + '" min="' + datestart.value + '" date-format="DD-MMMM-YYYY" ></vaadin-date-picker></td> </span><br> \r\n';
-
-                    this.startValue = '';
-                    this.endValue = '';
-                    this.idnumdate = this.idnumdate + 1;
-
-                } else {
-                    alert('Please Input All');
-                }
->>>>>>> 98796414e378db92b01b78470eddb4f13c562e20
             },
             _submit() {
                 // console.log(this.hotelname);

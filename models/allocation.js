@@ -11,7 +11,9 @@ const AllocationSchema = new Schema({
     dateTo: String,
     rooms: Object,
     note: String,
-    seasondate: Object
+    seasondate: Object,
+    created_by: String,
+    updated_by:String
 }, { timestamps: true });
 // export our module to use in server.js
 module.exports = mongoose.model('allocation', AllocationSchema);

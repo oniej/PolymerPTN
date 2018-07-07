@@ -69,7 +69,6 @@ router.post('/add', (req, res) => {
 
     const { hotel, room, created_by, updated_by } = req.body;
 
-    const { hotel, room } = req.body;
 
     if (!hotel || !room) {
         // we should throw an error. we can do this check on the front end
@@ -105,7 +104,6 @@ router.put('/update/:editKey', (req, res) => {
         hotelinfo.hotel = hotel;
         hotelinfo.room = room;
 
-        const { hotel, room } = req.body;
         if (hotel) hotelinfo.hotel = hotel;
         if (room) hotelinfo.room = room;
 

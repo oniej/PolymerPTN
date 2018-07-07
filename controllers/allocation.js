@@ -64,6 +64,7 @@ router.put('/update/:editKey', (req, res) => {
         if (rooms) allocation.rooms = rooms;
         if (note) allocation.note = note;
         if (seasondate) allocation.seasondate = seasondate;
+
         allocation.save(error => {
             if (error) return res.json({ success: false, error });
             return res.json({ success: true });

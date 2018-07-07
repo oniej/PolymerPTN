@@ -79,36 +79,9 @@
             }
 
             @media (max-width: 768px) {
-<<<<<<< HEAD
                 paper-card {
                     width: 100%;
                     margin-top: 16px;
-=======
-                div .allocation {
-                    margin: 16px;
-                    /* margin-top: 16px; */
-                    display: flex;
-                    /* height: 100vh; */
-                    flex-direction: column;
-                    border-radius: 3px;
-
-                    /* box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2); */
-              
-                      opacity: 0;
-        
-                -webkit-animation: fadeIn ease-in 1;
-                 -moz-animation: fadeIn ease-in 1;
-                animation: fadeIn ease-in 1;
-                    
-                -webkit-animation-fill-mode: forwards;
-                -moz-animation-fill-mode: forwards;
-                animation-fill-mode: forwards;
-                    
-                -webkit-animation-duration: 0.5s;
-                -moz-animation-duration: 0.5s;
-                animation-duration: 0.5s;
-
->>>>>>> 98796414e378db92b01b78470eddb4f13c562e20
                 }
                 paper-search-bar {
                     margin-left: 80px;
@@ -119,7 +92,6 @@
 
             @media (min-width: 850px) {
                 div .allocation {
-<<<<<<< HEAD
                     width: 850px;
                     padding: 20px;
                     margin: 0 auto;
@@ -128,38 +100,6 @@
                     width: 46%;
                     margin-right: 10px;
                     margin-bottom: 10px;
-=======
-
-          width: 765px;
-          margin: 16px auto;
-          /* margin-bottom: 1000px; */
-          /* height: 100vh; */
-          border-radius: 3px;
-
-          box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-          
-          opacity: 0;
-          -webkit-animation: fadeIn ease-in 1;
-           -moz-animation: fadeIn ease-in 1;
-          animation: fadeIn ease-in 1;
-
-          -webkit-animation-fill-mode: forwards;
-          -moz-animation-fill-mode: forwards;
-          animation-fill-mode: forwards;
-
-          -webkit-animation-duration: 0.5s;
-          -moz-animation-duration: 0.5s;
-          animation-duration: 0.5s;         
-
-                    width: 765px;
-                    margin: 16px auto;
-                    /* margin-bottom: 1000px; */
-                    /* height: 100vh; */
-                    border-radius: 3px;
-
-                    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-
->>>>>>> 98796414e378db92b01b78470eddb4f13c562e20
                 }
                 paper-search-bar {
                     margin-left: 50px;
@@ -281,7 +221,6 @@
 
                     <iron-ajax auto url="/group/read" handle-as="json" on-response="_groupLoaded" debounce-duration="300"></iron-ajax>
                     <iron-scroll-document id="threshold">
-<<<<<<< HEAD
                         <div class="allocation">
                             <template is="dom-repeat" items="[[groupItems]]" as="item">
                                     <a href="/allocation/group/{{item.group}}" style="text-decoration: none;">
@@ -303,50 +242,6 @@
                             </a>
                             </template>
                            </div>
-=======
-                        <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_allocationLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
-                        <template is="dom-repeat" items="[[allocations]]" as="item">
-                            <div class="allocation">
-                                <div id="header" class="header" style="background-color:cornflowerblue; padding: 16px; padding-bottom: 5px; font-size: 14px;">
-                                    <a href="/allocation/edit/{{item._id}}">
-                                        <paper-icon-button id="{{item._id}}" noink on-tap="_editAllocation" data-args="{{item._id}}" icon="my-icons:edit" alt="{{item._id}}"
-                                            style="float: right; margin-top:-10px; margin-right:-10px;color: white;"></paper-icon-button>
-                                    </a>
-                                    <div style="color: white">
-                                        <iron-icon icon="my-icons:flag" id="date" style="color: white"></iron-icon>
-                                        Created
-                                        <span>
-                                            <time-ago datetime$="{{_timeStampToDateTime(item.createdAt)}}">{{_timeStampToDateTime(item.createdAt)}}</time-ago>
-                                            &nbsp;by&nbsp;
-                                            <!--[[item.created_by]]-->Jeino</span>
-                                    </div>
-                                    <div style="color: white">
-                                        <iron-icon icon="my-icons:update" id="date" style="color: white"></iron-icon>
-                                        Last Modified
-                                        <span>
-                                            <time-ago datetime$="{{_timeStampToDateTime(item.updatedAt)}}">{{_timeStampToDateTime(item.updatedAt)}}</time-ago>
-                                            &nbsp;by&nbsp;
-                                            <!--[[item.updated_by]]-->Jeino</span>
-                                    </div>
-                                </div>
-                                <div style="padding: 16px; background-color: white;">
-                                    <div style="margin-top: 5px;">
-                                        <iron-icon icon="my-icons:location-city" id="date" style="color: gray; margin-top: -10px"></iron-icon>
-                                        <span id="type" style="font-size: 24px;">
-                                            [[item.hotel]]
-                                        </span>
-                                    </div>
-                                    <!-- [[item.room1]] -->
-                                    <div style="margin-top: 12px; font-size: 14px;">
-                                        <iron-icon icon="my-icons:speaker-notes" id="date" style="color: gray"></iron-icon>
-                                        <span id="type" style="color:gray;font-size: 14px; ">
-                                            [[item.note]]
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </template>
->>>>>>> 98796414e378db92b01b78470eddb4f13c562e20
                     </iron-scroll-document>
                 </app-header-layout>
             </div>
