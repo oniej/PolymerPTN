@@ -6,6 +6,7 @@ const AllocationSchema = new Schema({
     active: Boolean,
     group: String,
     hotel: String,
+    hotelname: String,
     dateFrom: String,
     dateTo: String,
     rooms: Object,

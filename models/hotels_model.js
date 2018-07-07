@@ -4,9 +4,8 @@ const Schema = mongoose.Schema;
 // object that shows the shape of your database entries.
 const HotelsSchema = new Schema({
     hotel: String,
-    room1: String,
-    room2: String,
-    room3: String,
+    hotelname: String,
+    room: Array,
     created_by: String,
     updated_by: String
     // room2: String,

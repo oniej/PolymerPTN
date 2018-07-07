@@ -4,8 +4,10 @@ const Schema = mongoose.Schema;
 // object that shows the shape of your database entries.
 const BlockingSchema = new Schema({
     active: Boolean,
+    agent: String,
     group: String,
     hotel: String,
+    hotelname: String,
     // dateFrom: String,
     // dateTo: String,
     rooms: Object,

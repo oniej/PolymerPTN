@@ -8,10 +8,10 @@ const router = express.Router();
 router.get('/dummy', (req, res) => {
     return res.json({ success: true, data: [] });
 });
-router.post('/add', (req, res) => { 
+router.post('/add', (req, res) => {
     const allocation = new Allocation();
     // body parser lets us use the req.body
-    const {active, group,hotel,dateFrom,dateTo,rooms,note,seasondate } = req.body;
+    const { active, group, hotel, hotelname, dateFrom, dateTo, rooms, note, seasondate } = req.body;
     if (!group || !hotel || !dateFrom || !dateTo || !note) {
         return res.json({
             success: false,
@@ -21,6 +21,7 @@ router.post('/add', (req, res) => {
     allocation.active = active;
     allocation.group = group;
     allocation.hotel = hotel;
+    allocation.hotelname = hotelname;
     allocation.dateFrom = dateFrom;
     allocation.dateTo = dateTo;
     allocation.rooms = rooms;
@@ -53,10 +54,11 @@ router.put('/update/:editKey', (req, res) => {
     }
     Allocation.findById(editKey, (error, allocation) => {
         if (error) return res.json({ success: false, error });
-        const {active,group, hotel,dateFrom,dateTo,rooms,note,seasondate } = req.body;
+        const { active, group, hotelname, dateFrom, dateTo, rooms, note, seasondate } = req.body;
         allocation.active = active;
         if (group) allocation.group = group;
-        if (hotel) allocation.hotel = hotel;
+        // if (hotel) allocation.hotel = hotel;
+        if (hotelname) allocation.hotelname = hotelname;
         if (dateFrom) allocation.dateFrom = dateFrom;
         if (dateTo) allocation.dateTo = dateTo;
         if (rooms) allocation.rooms = rooms;
@@ -96,20 +98,6 @@ router.get('/filterR/:room', (req, res) => {
 });
 
 router.get('/filterstartdate/:newdate', (req, res) => {
-    const newdate = req.params.newdate;
-    Allocation.find({ 'dateFrom': { $gte: newdate } }, (error, avilafilter) => {
-        if (error) return res.json({ success: false, error });
-        return res.json({ success: true, data: avilafilter });
-    });
-});
-router.get('/filterenddate/:newdate1', (req, res) => {
-    const newdate1 = req.params.newdate1;
-    Allocation.find({ 'dateFrom': { $lte: newdate1 } }, (error, allocfilter) => {
-        if (error) return res.json({ success: false, error });
-        return res.json({ success: true, data: allocfilter });
-    });
-}); 
-router.get('/filterstartdate/:newdate', (req, res) => {
     const [newdate, newdate1] = req.params.newdate.split("_");
     Allocation.find({ dateFrom: { $gte: newdate, $lte: newdate1 } }, (error, allocfilter) => {
         if (error) return res.json({ success: false, error });
@@ -121,6 +109,66 @@ router.get('/filterenddate/:newdate1', (req, res) => {
     Allocation.find({ dateTo: { $lte: newdate1, $gte: newdate } }, (error, allocfilter) => {
         if (error) return res.json({ success: false, error });
         return res.json({ success: true, data: allocfilter });
+    });
+});
+
+router.get('/filteralloc/:newdate', (req, res) => {
+    const [hotel, newdate, newdate2] = req.params.newdate.split("_");
+    Allocation.find({
+        $and: [
+            { hotel: hotel },
+            { dateFrom: { $lte: newdate} },
+            { dateTo: { $gte: newdate2} }
+        ]
+    }, (error, allocfilter) => {
+        if (error) return res.json({ success: false, error });
+        return res.json({ success: true, data: allocfilter });
+    });
+});
+router.get('/filterallocR/:newdate', (req, res) => {
+    const [room, newdate, newdate2] = req.params.newdate.split("_");
+    Allocation.find({
+        $and: [
+            { 'rooms.room': room },
+            { dateFrom: { $lte: newdate} },
+            { dateTo: { $gte: newdate2} }
+        ]
+    }, (error, allocfilter) => {
+        if (error) return res.json({ success: false, error });
+        return res.json({ success: true, data: allocfilter });
+    });
+});
+router.get('/filterallocF/:newdate', (req, res) => {
+    const [hotel, room, newdate, newdate2] = req.params.newdate.split("_");
+    Allocation.find({
+        $and: [
+            { hotel: hotel },
+            { 'rooms.room': room },
+            { dateFrom: { $lte: newdate} },
+            { dateTo: { $gte: newdate2} }
+        ]
+    }, (error, allocfilter) => {
+        if (error) return res.json({ success: false, error });
+        return res.json({ success: true, data: allocfilter });
+    });
+});
+router.get('/filterallocD/:newdate', (req, res) => {
+    const [newdate, newdate2] = req.params.newdate.split("_");
+    Allocation.find({
+        $and: [
+            { dateFrom: { $lte: newdate} },
+            { dateTo: { $gte: newdate2} }
+        ]
+    }, (error, allocfilter) => {
+        if (error) return res.json({ success: false, error });
+        return res.json({ success: true, data: allocfilter });
+    });
+});
+router.get('/filterG/:groupKey', (req, res) => {
+    const groupKey = req.params.groupKey;
+    Allocation.find({ group: groupKey }, (error, hotels) => {
+        if (error) return res.json({ success: false, error });
+        return res.json({ success: true, data: hotels });
     });
 });
 module.exports = router;

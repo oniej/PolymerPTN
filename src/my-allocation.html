@@ -1,13 +1,3 @@
-<!--
-@license
-Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
@@ -43,6 +33,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="my-allocation-add.html">
 <link rel="import" href="my-allocation-edit.html">
+<link rel="import" href="my-allocation-group.html">
 
 <link rel="import" href="../bower_components/neon-animation/web-animations.html">
 <link rel="import" href="../bower_components/neon-animation/neon-animations.html">
@@ -59,53 +50,38 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 display: flex;
                 flex-direction: column;
             }
+
             @-webkit-keyframes fadeIn {
-        from {
-          opacity: 0;
-        }
-        to {
-          opacity: 1;
-        }
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
             }
+
             @-moz-keyframes fadeIn {
-        from {
-          opacity: 0;
-        }
-        to {
-          opacity: 1;
-        }
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
             }
+
             @keyframes fadeIn {
-        from {
-          opacity: 0;
-        }
-        to {
-          opacity: 1;
-        }
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
             }
+
             @media (max-width: 768px) {
-                div .allocation {
-                    margin: 16px;
-                    /* margin-top: 16px; */
-                    display: flex;
-                    /* height: 100vh; */
-                    flex-direction: column;
-                    border-radius: 3px;
-                    /* box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2); */
-              
-                      opacity: 0;
-        
-                -webkit-animation: fadeIn ease-in 1;
-                 -moz-animation: fadeIn ease-in 1;
-                animation: fadeIn ease-in 1;
-                    
-                -webkit-animation-fill-mode: forwards;
-                -moz-animation-fill-mode: forwards;
-                animation-fill-mode: forwards;
-                    
-                -webkit-animation-duration: 0.5s;
-                -moz-animation-duration: 0.5s;
-                animation-duration: 0.5s;
+                paper-card {
+                    width: 100%;
+                    margin-top: 16px;
                 }
                 paper-search-bar {
                     margin-left: 80px;
@@ -113,28 +89,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     color: black;
                 }
             }
-            @media (min-width: 768px) {
+
+            @media (min-width: 850px) {
                 div .allocation {
-          width: 765px;
-          margin: 16px auto;
-          /* margin-bottom: 1000px; */
-          /* height: 100vh; */
-          border-radius: 3px;
-
-          box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-          
-          opacity: 0;
-          -webkit-animation: fadeIn ease-in 1;
-           -moz-animation: fadeIn ease-in 1;
-          animation: fadeIn ease-in 1;
-
-          -webkit-animation-fill-mode: forwards;
-          -moz-animation-fill-mode: forwards;
-          animation-fill-mode: forwards;
-
-          -webkit-animation-duration: 0.5s;
-          -moz-animation-duration: 0.5s;
-          animation-duration: 0.5s;         
+                    width: 850px;
+                    padding: 20px;
+                    margin: 0 auto;
+                }
+                paper-card {
+                    width: 46%;
+                    margin-right: 10px;
+                    margin-bottom: 10px;
                 }
                 paper-search-bar {
                     margin-left: 50px;
@@ -142,24 +107,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     color: black;
                 }
             }
+
             paper-fab.orange {
                 position: fixed;
                 bottom: 32px;
                 right: 32px;
             }
+
             app-header {
                 color: rgb(255, 255, 255);
                 background-color: darkorange;
-                /* background-color: var(--paper-indigo-500); */
-                /* background-color: #388E3C; */
             }
+
             #tool1 {
                 color: rgb(255, 255, 255);
                 background-color: darkorange;
             }
+
             #tool2 {
                 background-color: white;
             }
+
             .item {
                 @apply --layout-horizontal;
                 /* padding: 20px; */
@@ -169,30 +137,36 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 margin-bottom: 10px;
                 box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
             }
+
             .pad {
                 padding: 0 16px;
                 @apply --layout-flex;
                 @apply --layout-vertical;
             }
+
             #action {
                 /* display: inline-block; */
                 margin-top: 10px;
                 float: right;
             }
+
             div .option {
                 position: absolute;
                 left: 300px;
                 top: 200px;
             }
+
             #btn-clear {
                 position: fixed;
                 right: 80px;
                 color: gray;
             }
+
             #btn-arrow {
                 position: absolute;
                 color: black;
             }
+
             #btn-menu {
                 color: gray;
                 position: fixed;
@@ -203,11 +177,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <style is="custom-style">
                 paper-fab.orange {
                     --paper-fab-background: darkorange;
-                
+
                 }
             </style>
         </custom-style>
+
+        <app-route route="{{route}}" pattern="/group/:_group" data="{{groupData}}" active="{{groupActive}}"></app-route>
         <app-route route="{{route}}" pattern="/edit/:_id" data="{{editData}}" active="{{editActive}}"></app-route>
+
         <iron-pages selected="[[route.path]]" attr-for-selected="name" fallback-selection="view404" role="main">
             <div name="">
                 <app-header-layout fullbleed has-scrolling-region>
@@ -215,7 +192,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <template is="dom-if" if="{{openSearch}}">
                             <app-toolbar primary id="tool2">
                                 <paper-icon-button id="btn-arrow" icon="my-icons:arrow-back" drawer-toggle on-tap="toggleReturn"></paper-icon-button>
-                                
+
                                 <!-- Start of Search -->
                                 <paper-search-bar id="search" query="{{search}}" disable-filter-button></paper-search-bar>
                                 <template is="dom-if" if="{{search}}">
@@ -240,62 +217,52 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             </app-toolbar>
                         </template>
                     </app-header>
+
+                    <iron-ajax auto url="/group/read" handle-as="json" on-response="_groupLoaded" debounce-duration="300"></iron-ajax>
                     <iron-scroll-document id="threshold">
-                        <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_allocationLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
-                        <template is="dom-repeat" items="[[allocations]]" as="item">
-                            <div class="allocation">
-                                <div id="header" class="header" style="background-color: #673AB7; padding: 16px; padding-bottom: 5px; font-size: 14px;">
-                                    <a href="/allocation/edit/{{item._id}}">
-                                        <paper-icon-button id="{{item._id}}" noink on-tap="_editAllocation" data-args="{{item._id}}" icon="my-icons:edit" alt="{{item._id}}"
-                                            style="float: right; margin-top:-10px; margin-right:-10px;color: white;"></paper-icon-button>
-                                    </a>
-                                    <div style="color: white">
-                                        <iron-icon icon="my-icons:flag" id="date" style="color: white"></iron-icon>
-                                        Created
-                                        <span>
-                                            <time-ago datetime$="{{_timeStampToDateTime(item.createdAt)}}">{{_timeStampToDateTime(item.createdAt)}}</time-ago>
-                                            &nbsp;by&nbsp;<!--[[item.created_by]]-->Jeino</span>
+                        <div class="allocation">
+                            <template is="dom-repeat" items="[[groupItems]]" as="item">
+                                    <a href="/allocation/group/{{item.group}}" style="text-decoration: none;">
+                                <paper-card>
+                                    <div class="card-content">
+                                        <center>
+                                        <div id="{{item.group}}" style="width: 110px;height: 110px;">
+                                         
+                                         
+                                                <paper-icon-button id="{{item.group}}" noink on-tap="_showGroup" data-args="{{item.group}}" icon="my-icons:folder" alt="{{item.group}}"
+                                                style="color:#673ab7;width: 110px;height: 110px;"></paper-icon-button>
+                                          <br>
+                                          <span style="color:#673ab7;"><b>[[item.group]]</b></span>   
+                                        </div>
+                                    </center>
                                     </div>
-                                    <div style="color: white">
-                                        <iron-icon icon="my-icons:update" id="date" style="color: white"></iron-icon>
-                                        Last Modified
-                                        <span>
-                                            <time-ago datetime$="{{_timeStampToDateTime(item.updatedAt)}}">{{_timeStampToDateTime(item.updatedAt)}}</time-ago>
-                                            &nbsp;by&nbsp;<!--[[item.updated_by]]-->Jeino</span>
-                                    </div>
-                                </div>
-                                <div style="padding: 16px; background-color: white;">
-                                    <div style="margin-top: 5px;">
-                                        <iron-icon icon="my-icons:location-city" id="date" style="color: gray; margin-top: -10px"></iron-icon>
-                                        <span id="type" style="font-size: 24px;">
-                                            [[item.hotel]]
-                                        </span>
-                                    </div>
-                                    <div style="margin-top: 12px; font-size: 14px;">
-                                        <iron-icon icon="my-icons:speaker-notes" id="date" style="color: gray"></iron-icon>
-                                        <span id="type" style="color:gray;font-size: 14px; ">
-                                            [[item.note]]
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </template>
+                                    <br>
+                                </paper-card>
+                            </a>
+                            </template>
+                           </div>
                     </iron-scroll-document>
                 </app-header-layout>
-                <a href="/allocation/add" style="text-decoration: none; ">
-                    <paper-fab noink on-tap="_availnew" icon="my-icons:add" class="orange"></paper-fab>
-                </a>
             </div>
+
             <div name="/add">
                 <div id="availnew"></div>
-                <my-allocation-add id="d23" path=" " prev-route="{{route.prefix}}"></my-allocation-add>
+                <my-allocation-add id="d23" path=" " prev-route="{{groupData._group}}"></my-allocation-add>
             </div>
+
             <div name="view404 ">Not found.</div>
         </iron-pages>
-        <div hidden$="{{!editActive}}">
-            <div id="availedit"></div>
-            <my-allocation-edit id="d24" edit-key='{{editData._id}}' prev-route="{{route.prefix}}"></my-allocation-edit>
+
+        <div hidden$="{{!groupActive}}">
+            <div id="allocationgroup"></div>
+            <my-allocation-group id="d24" group-key='{{groupData._group}}' prev-route="{{groupData._group}}"></my-allocation-group>
         </div>
+
+        <div hidden$="{{!editActive}}">
+            <div id="allocationedit"></div>
+            <my-allocation-edit id="d25" edit-key='{{editData._id}}' prev-route="{{groupData._group}}"></my-allocation-edit>
+        </div>
+
     </template>
     <script>
         Polymer({
@@ -304,8 +271,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 route: Object,
                 routeData: Object,
                 data: Object,
-                year: Number,
-                monthly: String,
                 openSearch: {
                     type: Boolean,
                     value: false,
@@ -321,11 +286,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 },
                 observers: [
                     '_searchChanged(filterBy, search)',]
-                // isMousedown: { type: Boolean, value: false, }
             },
+
             toggleSearch() {
                 this.openSearch = true;
-                
+
             },
             toggleReturn() {
                 this.openSearch = false;
@@ -336,12 +301,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
             _searchChanged(g, e) {
 
-            },
-            _allocationLoaded(data) {
-                if (this.url === '/allocation/read') {
-                    this.allocations = data.detail.response.data;
-                    // console.log(this.hotels);
-                }
             },
             _availnew() {
                 var node = Polymer.dom(this.root).querySelector("#availnew");
@@ -360,24 +319,44 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     Polymer.dom(node.parentNode).insertBefore(newDiv, currentDiv);
                 }
             },
-            _editAllocation(e) {
+            _showGroup(e) {
                 var data_args = Polymer.dom(e).rootTarget.getAttribute("alt");
-                var node = Polymer.dom(this.root).querySelector("#availedit");
+                var node = Polymer.dom(this.root).querySelector("#allocationgroup");
                 if (node) {
                     var oldDiv = Polymer.dom(node.parentNode).querySelector("#d24");
                     if (oldDiv) {
                         Polymer.dom(node.parentNode).removeChild(oldDiv);
                     }
-                    var newDiv = document.createElement("my-allocation-edit");
+                    var newDiv = document.createElement("my-allocation-group");
                     newDiv.setAttribute("id", "d24");
+                    newDiv.setAttribute("group-key", data_args);
+                    newDiv.setAttribute("prev-route", data_args);
+                    var currentDiv = document.getElementById("allocationgroup");
+                    Polymer.dom(node.parentNode).insertBefore(newDiv, currentDiv);
+                }
+            },
+            _editAllocation(e) {
+                var data_args = Polymer.dom(e).rootTarget.getAttribute("alt");
+                var node = Polymer.dom(this.root).querySelector("#allocationedit");
+                if (node) {
+                    var oldDiv = Polymer.dom(node.parentNode).querySelector("#d25");
+                    if (oldDiv) {
+                        Polymer.dom(node.parentNode).removeChild(oldDiv);
+                    }
+                    var newDiv = document.createElement("my-allocation-edit");
+                    newDiv.setAttribute("id", "d25");
                     newDiv.setAttribute("edit-key", data_args);
-                    newDiv.setAttribute("prev-route", this.route.prefix);
+                    newDiv.setAttribute("prev-route", data_args);
                     // newDiv.setAttribute("block ", "3 ")
                     //if open existing
                     // console.log(newDiv);
-                    var currentDiv = document.getElementById("availedit");
+                    var currentDiv = document.getElementById("allocationedit");
                     Polymer.dom(node.parentNode).insertBefore(newDiv, currentDiv);
                 }
+            },
+
+            _groupLoaded(data) {
+                this.groupItems = data.detail.response.data;
             },
             toggleDrawer() {
                 this.dispatchEvent(new CustomEvent('toggleDrawer', {
@@ -386,12 +365,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     }
                 }));
                 this.$.narrow = !this.$.narrow;
-            },
-            ready() {
-                this.url = '/allocation/read';
-            },
-            _timeStampToDateTime(ts) {
-                return new Date(ts);
             },
         });
     </script>
