@@ -26,7 +26,8 @@
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^5.0.0",
-    "prpl-server": "^1.1.0"
+    "prpl-server": "^1.1.0",
+    "vaadin-button": "github:vaadin/vaadin-button"
   },
   "engines": {
     "node": ">=8.0"

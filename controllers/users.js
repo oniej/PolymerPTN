@@ -84,12 +84,12 @@ router.put('/update/:editKey', (req, res) => {
     Users.findById(editKey, (error, user) => {
         if (error) return res.json({ success: false, error });
         const { account_key, account_type, group, fullname, email, active } = req.body;
-        if (account_key) user.account_key = account_key;
-        if (account_type) user.account_type = account_type;
-        if (group) user.group = group;
-        if (fullname) user.fullname = fullname;
-        if (email) user.email = email;
-        if (active == true) { user.active = true; } else { user.active = false; }
+        user.account_key = account_key;
+        user.account_type = account_type;
+        user.group = group;
+        user.fullname = fullname;
+        user.email = email;
+        // if (active == true) { user.active = true; } else { user.active = false; }
         user.save(error => {
             if (error) return res.json({ success: false, error });
             return res.json({ success: true });

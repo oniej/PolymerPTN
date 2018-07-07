@@ -31,12 +31,13 @@ router.post('/add', (req, res) => {
             return res.json({ success: true });
         });
 
+
 });
 router.get('/read', (req, res) => {
     Availability.find((err, availability) => {
         if (err) return res.json({ success: false, error: err });
         return res.json({ success: true, data: availability });
-    }).sort({ _id: -1 }).limit(20);
+    }).sort({ _id: 1 }).limit(20);
 });
 // router.get('/join', (req, res) => {
 //     Availability.aggregate([{
@@ -67,7 +68,6 @@ router.get('/filter/:hotel', (req, res) => {
         return res.json({ success: true, data: availability });
     });
 });
-
 router.put('/edit/:editId', (req, res) => {
     const { editId } = req.params;
     if (!editId) {
@@ -196,4 +196,5 @@ router.get('/filterh/:hotel', (req, res) => {
         return res.json({ success: true, data: hotels });
     });
 });
+
 module.exports = router;
