@@ -115,9 +115,9 @@ router.delete('/delete/:hotel', (req, res) => {
 });
 router.get('/filterstartdate/:newdate', (req, res) => {
     const [newdate, newdate1] = req.params.newdate.split("_");
-    Availability.find({ 'availability.date': { $gte: newdate, $lte: newdate1 } }, (error, avilafilter) => {
+    Availability.find({ 'availability.date': { $gte: newdate, $lte: newdate1 } }, (error, allocfilter) => {
         if (error) return res.json({ success: false, error });
-        return res.json({ success: true, data: avilafilter });
+        return res.json({ success: true, data: allocfilter });
     });
 });
 router.get('/filterenddate/:newdate1', (req, res) => {
@@ -125,6 +125,57 @@ router.get('/filterenddate/:newdate1', (req, res) => {
     Availability.find({ 'availability.date': { $lte: newdate1, $gte: newdate } }, (error, allocfilter) => {
         if (error) return res.json({ success: false, error });
         return res.json({ success: true, data: allocfilter });
+    });
+});
+
+router.get('/filteravail/:newdata', (req, res) => {
+    const [hotel, newdate1, newdate2] = req.params.newdata.split("_");
+    Availability.find({
+        $and: [
+            { hotel: hotel },
+            { 'availability.date': { $gte: newdate1, $lte: newdate2 } }
+        ]
+    }, (error, availfilter) => {
+        if (error) return res.json({ success: false, error });
+        return res.json({ success: true, data: availfilter });
+    });
+});
+
+router.get('/filteravailR/:newdataR', (req, res) => {
+    const [room, newdate1, newdate2] = req.params.newdataR.split("_");
+    Availability.find({
+        $and: [
+            { 'availability.room': room },
+            { 'availability.date': { $gte: newdate1, $lte: newdate2 } }
+        ]
+    }, (error, availfilter) => {
+        if (error) return res.json({ success: false, error });
+        return res.json({ success: true, data: availfilter });
+    });
+});
+
+router.get('/filteravailF/:newdata', (req, res) => {
+    const [hotel, room, newdate1, newdate2] = req.params.newdata.split("_");
+    Availability.find({
+        $and: [
+            { hotel: hotel },
+            { 'availability.room': room },
+            { 'availability.date': { $gte: newdate1, $lte: newdate2 } }
+        ]
+    }, (error, availfilter) => {
+        if (error) return res.json({ success: false, error });
+        return res.json({ success: true, data: availfilter });
+    });
+});
+router.get('/filteravailD/:newdata', (req, res) => {
+    const [newdate1, newdate2] = req.params.newdata.split("_");
+    Availability.find({
+        $and: [
+            { 'availability.date': { $gte: newdate1, $lte: newdate2 } }
+        ]
+    }, (error, availfilter) => {
+        if (error) return res.json({ success: false, error });
+        return res.json({ success: true, data: availfilter });
     });
 });
 router.get('/filterh/:hotel', (req, res) => {

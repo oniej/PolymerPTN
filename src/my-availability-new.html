@@ -333,7 +333,7 @@
                 if (data.detail.response.data) {
                     this.createdBy = data.detail.response.data.name;
                     this.modifiedBy = data.detail.response.data.name;
-                    console.log(this.createdBy);
+                    // console.log(this.createdBy);
                 }
             },
             _hotelLoaded(data) {
@@ -503,7 +503,7 @@
                                     _this.availabilities.push(data);
                                     _this.notifySplices('availabilities');
                                 }
-                                console.log(event.target.id);
+                                // console.log(event.target.id);
                             }
                             else {
                                 if (_this.availabilities.length > 0) {
@@ -615,19 +615,19 @@
                         var tdBlank = document.createElement('td');
                         // var dates = months + 1;
                         if (daysWeek < 10 && i < 10) {
-                            tdBlank.setAttribute('id', element.room + "_" + element.roomname + "_" + years + "-" + "0" + months + "-" + "0" + i);
+                            tdBlank.setAttribute('id', element.room + "_" + datas + "_" + years + "-" + "0" + months + "-" + "0" + i);
                             tr3.append(tdBlank);
                         } else if (daysWeek == 10 && i == 10) {
-                            tdBlank.setAttribute('id', element.room + "_" + element.roomname + "_" + years + "-" + months + "-" + i);
+                            tdBlank.setAttribute('id', element.room + "_" + datas + "_" + years + "-" + months + "-" + i);
                             tr3.append(tdBlank);
                         } else if (daysWeek < 10 && i >= 10) {
-                            tdBlank.setAttribute('id', element.room + "_" + element.roomname + "_" + years + "-" + "0" + months + "-" + i);
+                            tdBlank.setAttribute('id', element.room + "_" + datas + "_" + years + "-" + "0" + months + "-" + i);
                             tr3.append(tdBlank);
                         } else if (daysWeek >= 10 && i <= 10) {
-                            tdBlank.setAttribute('id', element.room + "_" + element.roomname + "_" + years + "-" + months + "-" + "0" + i);
+                            tdBlank.setAttribute('id', element.room + "_" + datas + "_" + years + "-" + months + "-" + "0" + i);
                             tr3.append(tdBlank);
                         } else {
-                            tdBlank.setAttribute('id', element.room + "_" + element.roomname + "_" + years + "-" + months + "-" + i);
+                            tdBlank.setAttribute('id', element.room + "_" + datas + "_" + years + "-" + months + "-" + i);
                             tr3.append(tdBlank);
                         }
                     }

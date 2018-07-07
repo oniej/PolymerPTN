@@ -1,31 +1,42 @@
-<!--
-@license
-Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-button-group/paper-button-group.html">
+<link rel="import" href="../bower_components/paper-buttons-group/paper-buttons-group.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/neon-animation/web-animations.html">
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../bower_components/paper-item/paper-icon-item.html">
 <link rel="import" href="../bower_components/paper-item/paper-item-body.html">
+<link rel="import" href="../bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="../bower_components/iron-list/iron-list.html">
 <link rel="import" href="../bower_components/iron-scroll-threshold/iron-scroll-threshold.html">
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/datetime-picker/date-picker.html">
+<link rel="import" href="../bower_components/pf-calendar/pf-calendar.html">
+<link rel="import" href="../bower_components/pf-calendar-events/pf-calendar-events.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-radio-button/paper-radio-button.html">
+<link rel="import" href="../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+
 <link rel="import" href="time-element.html">
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="my-allocation-add.html">
 <link rel="import" href="my-allocation-edit.html">
+<link rel="import" href="my-allocation-group.html">
+
+<link rel="import" href="../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animations.html">
 <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
 
 
@@ -38,6 +49,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 margin: 0;
                 display: flex;
                 flex-direction: column;
+            }
+
+            @-webkit-keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
+            }
+
+            @-moz-keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
+            }
+
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
             }
 
             @media (max-width: 768px) {
@@ -55,7 +93,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             @media (min-width: 850px) {
                 div .allocation {
                     width: 850px;
-                    padding: 16px;
+                    padding: 20px;
                     margin: 0 auto;
                 }
                 paper-card {
@@ -80,8 +118,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             app-header {
                 color: rgb(255, 255, 255);
                 background-color: darkorange;
-                /* background-color: var(--paper-indigo-500); */
-                /* background-color: #388E3C; */
             }
 
             #tool1 {
@@ -146,7 +182,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
             </style>
         </custom-style>
+
+        <app-route route="{{route}}" pattern="/group/:_group" data="{{groupData}}" active="{{groupActive}}"></app-route>
         <app-route route="{{route}}" pattern="/edit/:_id" data="{{editData}}" active="{{editActive}}"></app-route>
+
         <iron-pages selected="[[route.path]]" attr-for-selected="name" fallback-selection="view404" role="main">
             <div name="">
                 <app-header-layout fullbleed has-scrolling-region>
@@ -154,6 +193,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <template is="dom-if" if="{{openSearch}}">
                             <app-toolbar primary id="tool2">
                                 <paper-icon-button id="btn-arrow" icon="my-icons:arrow-back" drawer-toggle on-tap="toggleReturn"></paper-icon-button>
+
                                 <!-- Start of Search -->
                                 <paper-search-bar id="search" query="{{search}}" disable-filter-button></paper-search-bar>
                                 <template is="dom-if" if="{{search}}">
@@ -178,76 +218,52 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             </app-toolbar>
                         </template>
                     </app-header>
+
+                    <iron-ajax auto url="/group/read" handle-as="json" on-response="_groupLoaded" debounce-duration="300"></iron-ajax>
                     <iron-scroll-document id="threshold">
-                        <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_allocationLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
                         <div class="allocation">
-                            <a href="/allocation/add" style="text-decoration: none;">
-                                <paper-card on-tap="_availnew">
-                                    <div class="card-content">
-                                        <center>
-                                            <paper-icon-button icon="my-icons:add" style="color:#673ab7;width: 100px;height: 100px;">
-                                            </paper-icon-button>
-                                            <br>
-                                            <span style="color:#673ab7;">Add Allocation</span>
-                                            <!-- <iron-image src="../images/pluspng.png" sizing="contain" style="width:100px;height:100px;"></iron-image> -->
-                                        </center>
-                                    </div>
-                                </paper-card>
-                            </a>
-                            <template is="dom-repeat" items="[[allocations]]" as="item">
-                                <paper-card>
-                                    <div id="header" class="header" style="background-color:#673ab7; padding: 16px; padding-bottom: 5px; font-size: 11px;">
-                                        <a href="/allocation/edit/{{item._id}}">
-                                            <paper-icon-button id="{{item._id}}" noink on-tap="_editAllocation" data-args="{{item._id}}" icon="my-icons:edit" alt="{{item._id}}"
-                                                style="float: right; margin-top:-10px; margin-right:-10px;color: white;"></paper-icon-button>
-                                        </a>
-                                        <div style="color: white">
-                                            <iron-icon icon="my-icons:flag" id="date" style="color: white"></iron-icon>
-                                            Created
-                                            <span>
-                                                <time-ago datetime$="{{_timeStampToDateTime(item.createdAt)}}">{{_timeStampToDateTime(item.createdAt)}}</time-ago>
-                                                &nbsp;by&nbsp; [[item.created_by]]Jeino
-                                            </span>
+                            <template is="dom-repeat" items="[[groupItems]]" as="item">
+                                <a href="/allocation/group/{{item.group}}" style="text-decoration: none;">
+                                    <paper-card>
+                                        <div class="card-content">
+                                            <center>
+                                                <div id="{{item.group}}" style="width: 110px;height: 110px;">
+                                                    <paper-icon-button id="{{item.group}}" noink on-tap="_showGroup" data-args="{{item.group}}" icon="my-icons:folder" alt="{{item.group}}"
+                                                        style="color:#673ab7;width: 110px;height: 110px;"></paper-icon-button>
+                                                    <br>
+                                                    <span style="color:#673ab7;">
+                                                        <b>[[item.group]]</b>
+                                                    </span>
+                                                </div>
+                                            </center>
                                         </div>
-                                        <div style="color: white">
-                                            <iron-icon icon="my-icons:update" id="date" style="color: white"></iron-icon>
-                                            Last Modified
-                                            <span>
-                                                <time-ago datetime$="{{_timeStampToDateTime(item.updatedAt)}}">{{_timeStampToDateTime(item.updatedAt)}}</time-ago>
-                                                &nbsp;by&nbsp; [[item.updated_by]]Jeino
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div style="padding: 16px; background-color: white;" id="{{item._id}}">
-                                        <div style="margin-top:2px;">
-                                            <iron-icon icon="my-icons:location-city" id="date" style="color: gray;width: 20px;height: 20px;"></iron-icon>
-                                            <span id="type" style="font-size: 16px;">
-                                                [[item.hotel]]
-                                            </span>
-                                        </div>
-                                        <div style="margin-top:5px;">
-                                            <iron-icon icon="my-icons:speaker-notes" id="date" style="color: gray;width:20px;height: 20px;"></iron-icon>
-                                            <span id="type" style="color:gray;font-size: 11px; ">
-                                                [[item.notes]]
-                                            </span>
-                                        </div>
-                                    </div>
-                                </paper-card>
+                                        <br>
+                                    </paper-card>
+                                </a>
                             </template>
                         </div>
                     </iron-scroll-document>
                 </app-header-layout>
             </div>
+
             <div name="/add">
                 <div id="availnew"></div>
-                <my-allocation-add id="d23" path=" " prev-route="{{route.prefix}}"></my-allocation-add>
+                <my-allocation-add id="d23" path=" " prev-route="{{groupData._group}}"></my-allocation-add>
             </div>
+
             <div name="view404 ">Not found.</div>
         </iron-pages>
-        <div hidden$="{{!editActive}}">
-            <div id="availedit"></div>
-            <my-allocation-edit id="d24" edit-key='{{editData._id}}' prev-route="{{route.prefix}}"></my-allocation-edit>
+
+        <div hidden$="{{!groupActive}}">
+            <div id="allocationgroup"></div>
+            <my-allocation-group id="d24" group-key='{{groupData._group}}' prev-route="{{groupData._group}}"></my-allocation-group>
         </div>
+
+        <div hidden$="{{!editActive}}">
+            <div id="allocationedit"></div>
+            <my-allocation-edit id="d25" edit-key='{{editData._id}}' prev-route="{{groupData._group}}"></my-allocation-edit>
+        </div>
+
     </template>
     <script>
         Polymer({
@@ -256,8 +272,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 route: Object,
                 routeData: Object,
                 data: Object,
-                year: Number,
-                monthly: String,
                 openSearch: {
                     type: Boolean,
                     value: false,
@@ -273,8 +287,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 },
                 observers: [
                     '_searchChanged(filterBy, search)',]
-                // isMousedown: { type: Boolean, value: false, }
             },
+
             toggleSearch() {
                 this.openSearch = true;
 
@@ -288,12 +302,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
             _searchChanged(g, e) {
 
-            },
-            _allocationLoaded(data) {
-                if (this.url === '/allocation/read') {
-                    this.allocations = data.detail.response.data;
-                    // console.log(this.hotels);
-                }
             },
             _availnew() {
                 var node = Polymer.dom(this.root).querySelector("#availnew");
@@ -312,23 +320,45 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     Polymer.dom(node.parentNode).insertBefore(newDiv, currentDiv);
                 }
             },
-            _editAllocation(e) {
+            _showGroup(e) {
                 var data_args = Polymer.dom(e).rootTarget.getAttribute("alt");
-                var node = Polymer.dom(this.root).querySelector("#availedit");
+                var node = Polymer.dom(this.root).querySelector("#allocationgroup");
                 if (node) {
                     var oldDiv = Polymer.dom(node.parentNode).querySelector("#d24");
                     if (oldDiv) {
                         Polymer.dom(node.parentNode).removeChild(oldDiv);
                     }
-                    var newDiv = document.createElement("my-allocation-edit");
+                    var newDiv = document.createElement("my-allocation-group");
                     newDiv.setAttribute("id", "d24");
+                    newDiv.setAttribute("group-key", data_args);
+                    newDiv.setAttribute("prev-route", data_args);
+                    var currentDiv = document.getElementById("allocationgroup");
+                    Polymer.dom(node.parentNode).insertBefore(newDiv, currentDiv);
+                }
+            },
+            _editAllocation(e) {
+                var data_args = Polymer.dom(e).rootTarget.getAttribute("alt");
+                var node = Polymer.dom(this.root).querySelector("#allocationedit");
+                if (node) {
+                    var oldDiv = Polymer.dom(node.parentNode).querySelector("#d25");
+                    if (oldDiv) {
+                        Polymer.dom(node.parentNode).removeChild(oldDiv);
+                    }
+                    var newDiv = document.createElement("my-allocation-edit");
+                    newDiv.setAttribute("id", "d25");
                     newDiv.setAttribute("edit-key", data_args);
-                    newDiv.setAttribute("prev-route", this.route.prefix);
+                    newDiv.setAttribute("prev-route", data_args);
                     // newDiv.setAttribute("block ", "3 ")
                     //if open existing
                     // console.log(newDiv);
-                    var currentDiv = document.getElementById("availedit");
+                    var currentDiv = document.getElementById("allocationedit");
                     Polymer.dom(node.parentNode).insertBefore(newDiv, currentDiv);
+                }
+            },
+
+            _groupLoaded(data) {
+                if (data.detail.response) {
+                    this.groupItems = data.detail.response.data;
                 }
             },
             toggleDrawer() {
@@ -338,12 +368,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     }
                 }));
                 this.$.narrow = !this.$.narrow;
-            },
-            ready() {
-                this.url = '/allocation/read';
-            },
-            _timeStampToDateTime(ts) {
-                return new Date(ts);
             },
         });
     </script>

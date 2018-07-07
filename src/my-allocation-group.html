@@ -1,0 +1,352 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-button-group/paper-button-group.html">
+<link rel="import" href="../bower_components/paper-buttons-group/paper-buttons-group.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../bower_components/paper-item/paper-item-body.html">
+<link rel="import" href="../bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
+<link rel="import" href="../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../bower_components/iron-scroll-threshold/iron-scroll-threshold.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/datetime-picker/date-picker.html">
+<link rel="import" href="../bower_components/pf-calendar/pf-calendar.html">
+<link rel="import" href="../bower_components/pf-calendar-events/pf-calendar-events.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+
+<link rel="import" href="../bower_components/range-datepicker/range-datepicker-input.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-radio-button/paper-radio-button.html">
+<link rel="import" href="../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="time-element.html">
+<link rel="import" href="shared-styles.html">
+
+<link rel="import" href="../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animations.html">
+<script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+
+
+<link rel="import" href="search-bar.html">
+<dom-module id="my-allocation-group">
+    <template>
+        <style include="shared-styles">
+            :host {
+                height: 100vh;
+                margin: 0;
+                display: flex;
+                flex-direction: column;
+            }
+
+            @-webkit-keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
+            }
+
+            @-moz-keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
+            }
+
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
+            }
+
+            @media (max-width: 768px) {
+                paper-card {
+                    width: 100%;
+                    /* height: 100px; */
+                    margin-top: 16px;
+                }
+                /* paper-card .add {
+                    width: 46%;
+                    margin-right: 10px;
+                } */
+                paper-search-bar {
+                    margin-left: 80px;
+                    width: 50%;
+                    color: black;
+                }
+            }
+
+            @media (min-width: 850px) {
+                div .allocation {
+                    width: 850px;
+                    padding: 16px;
+                    margin: 20px;
+                    margin: 0 auto;
+                }
+                paper-card {
+                    width: 46%;
+                    margin-top: 20px;
+                    margin-left: 20px;
+                }
+                paper-search-bar {
+                    margin-left: 50px;
+                    width: 50%;
+                    color: black;
+                }
+            }
+
+            paper-fab.orange {
+                position: fixed;
+                bottom: 32px;
+                right: 32px;
+            }
+
+            app-header {
+                color: rgb(255, 255, 255);
+                background-color: darkorange;
+            }
+
+            #tool1 {
+                color: rgb(255, 255, 255);
+                background-color: darkorange;
+            }
+
+            #tool2 {
+                background-color: white;
+            }
+
+            .item {
+                @apply --layout-horizontal;
+                /* padding: 20px; */
+                background-color: white;
+                border-bottom: 1px solid #ddd;
+                cursor: pointer;
+                margin-bottom: 10px;
+                box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+            }
+
+            .pad {
+                padding: 0 16px;
+                @apply --layout-flex;
+                @apply --layout-vertical;
+            }
+
+            #action {
+                /* display: inline-block; */
+                margin-top: 10px;
+                float: right;
+            }
+
+            div .option {
+                position: absolute;
+                left: 300px;
+                top: 200px;
+            }
+
+            #btn-clear {
+                position: fixed;
+                right: 80px;
+                color: gray;
+            }
+
+            #btn-arrow {
+                position: absolute;
+                color: black;
+            }
+
+            #btn-menu {
+                color: gray;
+                position: fixed;
+                right: 40px;
+            }
+        </style>
+        <custom-style>
+            <style is="custom-style">
+                paper-fab.orange {
+                    --paper-fab-background: darkorange;
+
+                }
+            </style>
+        </custom-style>
+        <app-header-layout fullbleed has-scrolling-region>
+            <app-header fixed slot="header">
+                <template is="dom-if" if="{{openSearch}}">
+                    <app-toolbar primary id="tool2">
+                        <paper-icon-button id="btn-arrow" icon="my-icons:arrow-back" drawer-toggle on-tap="toggleReturn"></paper-icon-button>
+                        <!-- Start of Search -->
+                        <paper-search-bar id="search" query="{{search}}" disable-filter-button></paper-search-bar>
+                        <template is="dom-if" if="{{search}}">
+                            <paper-icon-button id="btn-clear" icon="my-icons:close" drawer-toggle on-tap="toggleClear"></paper-icon-button>
+                        </template>
+                        <paper-menu-button id="btn-menu" horizontal-align="right">
+                            <paper-icon-button slot="dropdown-trigger" icon="my-icons:tune"></paper-icon-button>
+                            <paper-listbox style="cursor:pointer" slot="dropdown-content" selected="{{filterBy}}">
+                                <paper-item style="display:none;">Filter By</paper-item>
+                                <paper-item>Staff Lastname</paper-item>
+                                <paper-item>Hotel</paper-item>
+                            </paper-listbox>
+                        </paper-menu-button>
+                        <!-- End of Search -->
+                    </app-toolbar>
+                </template>
+                <template is="dom-if" if="{{!openSearch}}">
+                    <app-toolbar primary id="tool1">
+                        <paper-icon-button class="menu" icon="my-icons:menu" drawer-toggle on-tap="toggleDrawer"></paper-icon-button>
+                        <div main-title> {{groupKey}} Allocation</div>
+                        <paper-icon-button class="menu" icon="my-icons:search" drawer-toggle on-tap="toggleSearch"></paper-icon-button>
+                    </app-toolbar>
+                </template>
+            </app-header>
+            <iron-scroll-document id="threshold">
+                <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_allocationLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
+                <div class="allocation">
+                    <a href="/allocation/add" style="text-decoration: none;">
+                        <paper-card on-tap="_availnew">
+                            <div class="card-content">
+                                <center>
+                                    <paper-icon-button icon="my-icons:add" style="color:#673ab7;width: 110px;height: 110px;">
+                                    </paper-icon-button>
+                                    <br>
+                                    <span style="color:#673ab7;">Add Allocation</span>
+                                </center>
+                            </div>
+                        </paper-card>
+                    </a>
+                    <template is="dom-repeat" items="[[allocations]]" as="item">
+                        <paper-card id="{{item._id}}">
+                            <div id="{{item._id}}" class="header" style="background-color:white; padding: 16px; padding-bottom: 5px; font-size: 16px;color: black;font-weight: bold">
+                                <a href="/allocation/edit/{{item._id}}">
+                                    <paper-icon-button id="{{item._id}}" noink data-args="{{item._id}}" icon="my-icons:edit" alt="{{item._id}}" style="float: right; margin-top:-10px; margin-right:-10px;color: black;"></paper-icon-button>
+                                </a>
+                                <div>
+                                    <iron-icon icon="my-icons:location-city" id="date" style="color: gray;width: 20px;height: 20px;"></iron-icon>
+                                    <span id="type">
+                                        [[item.hotelname]]
+                                    </span>
+                                </div>
+                            </div>
+                            <div>
+                                <div style="color: rgb(90, 89, 89);font-size: 14px; margin-left: 16px;">
+                                    <span>Duration: [[getFormat(item.dateFrom)]] ~ [[getFormat(item.dateTo)]] </span>
+                                </div>
+                            </div>
+                            <br>
+                            <div style="padding: 16px; background-color: white;">
+                                <div style="color: gray;font-size: 11px;">
+                                    <iron-icon icon="my-icons:flag" id="date" style="color: gray;width: 20px;height: 20px;"></iron-icon>
+                                    Created
+                                    <span>
+                                        <time-ago datetime$="{{_timeStampToDateTime(item.createdAt)}}">{{_timeStampToDateTime(item.createdAt)}}</time-ago>
+                                        &nbsp;by&nbsp;[[item.created_by]]</span>
+                                </div>
+                                <div style="color: gray;font-size: 11px;">
+                                    <iron-icon icon="my-icons:update" id="date" style="color: gray;width: 20px;height: 20px;"></iron-icon>
+                                    Last Modifieds
+                                    <span>
+                                        <time-ago datetime$="{{_timeStampToDateTime(item.updatedAt)}}">{{_timeStampToDateTime(item.updatedAt)}}</time-ago>
+                                        &nbsp;by&nbsp;[[item.updated_by]]</span>
+                                </div>
+                            </div>
+                        </paper-card>
+                    </template>
+                </div>
+            </iron-scroll-document>
+        </app-header-layout>
+    </template>
+    <script>
+        Polymer({
+            is: 'my-allocation-group',
+            properties: {
+                groupKey: { type: String, notify: true, observer: '_onkeyChanged' },
+                route: Object,
+                routeData: Object,
+                data: Object,
+                year: Number,
+                monthly: String,
+                openSearch: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                },
+                search: {
+                    type: String,
+                    value: '',
+                },
+                filterBy: {
+                    type: Number,
+                    value: 2
+                },
+                observers: [
+                    '_searchChanged(filterBy, search)',]
+            },
+            _onkeyChanged() {
+                if (this.groupKey) {
+                    this.url = '/allocation/filterG/' + this.groupKey;
+                }
+            },
+            toggleSearch() {
+                this.openSearch = true;
+
+            },
+            toggleReturn() {
+                this.openSearch = false;
+                this.search = '';
+            },
+            toggleClear() {
+                this.search = '';
+            },
+            _searchChanged(g, e) {
+
+            },
+            _allocationLoaded(data) {
+                if (data.detail.response) {
+                    if (this.url === '/allocation/filterG/' + this.groupKey) {
+                        this.allocations = data.detail.response.data;
+                    }
+                }
+            },
+            toggleDrawer() {
+                this.dispatchEvent(new CustomEvent('toggleDrawer', {
+                    bubbles: true, composed: true, detail: {
+                        narrow: this.$.narrow
+                    }
+                }));
+                this.$.narrow = !this.$.narrow;
+            },
+            ready() {
+                this.url = '/allocation/filterG/' + this.groupKey;
+            },
+            _timeStampToDateTime(ts) {
+                return new Date(ts);
+            },
+            getFormat(e) {
+                var month_names = ["Jan", "Feb", "Mar",
+                    "Apr", "May", "Jun", "Jul", "Aug", "Sep",
+                    "Oct", "Nov", "Dec"];
+
+                var today = new Date(e);
+                var day = today.getDate();
+                var month_index = today.getMonth();
+                var year = today.getFullYear();
+
+                return day + "-" + month_names[month_index] + "-" + year;
+            }
+        });
+    </script>
+</dom-module>

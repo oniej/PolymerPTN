@@ -742,19 +742,19 @@
                         var tdBlank = document.createElement('td');
                         // var dates = months + 1;
                         if (daysWeek < 10 && i < 10) {
-                            tdBlank.setAttribute('id', element.room + "_" + element.roomname + "_" + years + "-" + "0" + months + "-" + "0" + i);
+                            tdBlank.setAttribute('id', element.room + "_" + datas + "_" + years + "-" + "0" + this.mot + "-" + "0" + i);
                             tr3.append(tdBlank);
                         } else if (daysWeek == 10 && i == 10) {
-                            tdBlank.setAttribute('id', element.room + "_" + element.roomname + "_" + years + "-" + months + "-" + i);
+                            tdBlank.setAttribute('id', element.room + "_" + datas + "_" + years + "-" + this.mot + "-" + i);
                             tr3.append(tdBlank);
                         } else if (daysWeek < 10 && i >= 10) {
-                            tdBlank.setAttribute('id', element.room + "_" + element.roomname + "_" + years + "-" + "0" + months + "-" + i);
+                            tdBlank.setAttribute('id', element.room + "_" + datas + "_" + years + "-" + "0" + this.mot + "-" + i);
                             tr3.append(tdBlank);
                         } else if (daysWeek >= 10 && i <= 10) {
-                            tdBlank.setAttribute('id', element.room + "_" + element.roomname + "_" + years + "-" + months + "-" + "0" + i);
+                            tdBlank.setAttribute('id', element.room + "_" + datas + "_" + years + "-" + this.mot + "-" + "0" + i);
                             tr3.append(tdBlank);
                         } else {
-                            tdBlank.setAttribute('id', element.room + "_" + element.roomname + "_" + years + "-" + months + "-" + i);
+                            tdBlank.setAttribute('id', element.room + "_" + datas + "_" + years + "-" + this.mot + "-" + i);
                             tr3.append(tdBlank);
                         }
                     }
@@ -768,6 +768,7 @@
                     //weeks
                     var thweek = document.createElement('td');
                     var date = new Date(years, daysWeek, i)
+
                     var x = date.getDay();
                     var now = this._selectDays(x);
                     if (now == "Sun") {
@@ -787,6 +788,7 @@
                 }
                 else {
                     data.forEach(element => {
+                        // console.log(element);
                         var roomdata = element.room.split(" ").join("");
                         var roomname = element.roomname.split(" ").join("");
                         var tr = Polymer.dom(this.root).querySelector("#" + roomdata);

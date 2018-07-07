@@ -8,7 +8,8 @@
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="my-blocking-add.html">
 <link rel="import" href="my-blocking-edit.html">
-<link rel="import" href="time-element.html">
+<link rel="import" href="my-blocking-agent.html">
+
 <link rel="import" href="../bower_components/neon-animation/web-animations.html">
 <link rel="import" href="../bower_components/neon-animation/neon-animations.html">
 <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
@@ -26,11 +27,101 @@
                 flex-direction: column;
             }
 
+            @-webkit-keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
+            }
+
+            @-moz-keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
+            }
+
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
+            }
+
+            /* @media (max-width: 768px) {
+                div .blocking {
+                    margin: 16px;
+                    display: flex;
+                    flex-direction: column;
+                    border-radius: 3px;
+                    opacity: 0;
+
+                    -webkit-animation: fadeIn ease-in 1;
+                    -moz-animation: fadeIn ease-in 1;
+                    animation: fadeIn ease-in 1;
+
+                    -webkit-animation-fill-mode: forwards;
+                    -moz-animation-fill-mode: forwards;
+                    animation-fill-mode: forwards;
+
+                    -webkit-animation-duration: 0.5s;
+                    -moz-animation-duration: 0.5s;
+                    animation-duration: 0.5s;
+                }
+                paper-search-bar {
+                    margin-left: 80px;
+                    width: 50%;
+                    color: black;
+                }
+            }
+
+            @media (min-width: 850px) {
+                div .blocking {
+                    width: 765px;
+                    margin: 16px auto;
+                    border-radius: 3px;
+
+                    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+
+                    opacity: 0;
+
+                    -webkit-animation: fadeIn ease-in 1;
+                    -moz-animation: fadeIn ease-in 1;
+                    animation: fadeIn ease-in 1;
+
+                    -webkit-animation-fill-mode: forwards;
+                    -moz-animation-fill-mode: forwards;
+                    animation-fill-mode: forwards;
+
+                    -webkit-animation-duration: 0.5s;
+                    -moz-animation-duration: 0.5s;
+                    animation-duration: 0.5s;
+
+                }
+                paper-search-bar {
+                    margin-left: 50px;
+                    width: 50%;
+                    color: black;
+                }
+            }
+             */
+
             @media (max-width: 768px) {
                 paper-card {
                     width: 100%;
+                    /* height: 100px; */
                     margin-top: 16px;
                 }
+                /* paper-card .add {
+                    width: 46%;
+                    margin-right: 10px;
+                } */
                 paper-search-bar {
                     margin-left: 80px;
                     width: 50%;
@@ -46,9 +137,14 @@
                 }
                 paper-card {
                     width: 46%;
+                    /* height: 200px; */
                     margin-right: 10px;
                     margin-bottom: 10px;
                 }
+                /* paper-card .add {
+                    width: 46%;
+                    margin-right: 10px;
+                } */
                 paper-search-bar {
                     margin-left: 50px;
                     width: 50%;
@@ -151,6 +247,8 @@
                 } */
             </style>
         </custom-style>
+
+        <app-route route="{{route}}" pattern="/agent/:_agent" data="{{agentData}}" active="{{agentActive}}"></app-route>
         <app-route route="{{route}}" pattern="/edit/:_id" data="{{editData}}" active="{{editActive}}"></app-route>
 
         <iron-pages selected="[[route.path]]" attr-for-selected="name" fallback-selection="view404" role="main">
@@ -182,65 +280,181 @@
                             </app-toolbar>
                         </template>
                     </app-header>
+                    <iron-ajax auto url="/agent/read" handle-as="json" on-response="_agentLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
                     <iron-scroll-document id="threshold">
-                        <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_blockingLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
                         <div class="blocking">
-                            <a href="/blocking/add" style="text-decoration: none;">
-                                <paper-card on-tap="_availnew">
-                                    <div class="card-content">
-                                        <center>
-                                            <paper-icon-button icon="my-icons:add" style="color:#4CAF50;width: 100px;height: 100px;">
-                                            </paper-icon-button>
-                                            <br>
-                                            <span style="color:#4CAF50;">Add Blocking</span>
-                                            <!-- <iron-image src="../images/pluspng.png" sizing="contain" style="width:100px;height:100px;"></iron-image> -->
-                                        </center>
-                                    </div>
-                                </paper-card>
-                            </a>
+                            <!-- <a href="/blocking/add" style="text-decoration: none;">
+                                    <paper-card on-tap="_availnew">
+                                        <div class="card-content">
+                                            <center>
+                                                <paper-icon-button icon="my-icons:add" style="color:#4CAF50;width: 110px;height: 110px;">
+                                                </paper-icon-button>
+                                                <br>
+                                                <span style="color:#4CAF50;">Add Blocking</span>
+                                            </center>
+                                        </div>
+                                    </paper-card>
+                                </a> -->
+                            <template is="dom-repeat" items="[[agents]]" as="item">
+                                <a href="/blocking/agent/{{item.name}}" style="text-decoration: none;">
+                                    <paper-card>
+                                        <div class="card-content">
+                                            <center>
+                                                <div id="{{item.name}}" style="width: 110px;height: 110px;">
+
+
+                                                    <paper-icon-button id="{{item.name}}" noink on-tap="_showAgent" data-args="{{item.name}}" icon="my-icons:face" alt="{{item.name}}"
+                                                        style="color:#4CAF50;width: 110px;height: 110px;"></paper-icon-button>
+                                                    <br>
+                                                    <span style="color:#4CAF50;">
+                                                        <b>[[item.name]]</b>
+                                                    </span>
+                                                </div>
+                                            </center>
+                                        </div>
+                                        <br>
+                                    </paper-card>
+                                </a>
+
+                                <!-- <paper-card id="{{item._id}}">
+                                        <div id="{{item._id}}" class="header" style="background-color:white; padding: 16px; padding-bottom: 5px; font-size: 16px;color: black;font-weight: bold">
+                                            <a href="/blocking/edit/{{item._id}}">
+                                                <paper-icon-button id="{{item._id}}" noink on-tap="_editAvailavility" data-args="{{item._id}}" icon="my-icons:edit" alt="{{item._id}}"
+                                                    style="float: right; margin-top:-10px; margin-right:-10px;color: black;"></paper-icon-button>
+                                            </a>
+                                            <div>
+                                                <iron-icon icon="my-icons:location-city" id="date" style="color: gray;width: 20px;height: 20px;"></iron-icon>
+                                                <span id="type">
+                                                    [[item.hotel]]
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <br>
+                                        <div style="padding: 16px; background-color: white;">
+                                            <div style="color: gray;font-size: 11px;">
+                                                <iron-icon icon="my-icons:flag" id="date" style="color: gray;width: 20px;height: 20px;"></iron-icon>
+                                                Created
+                                                <span>
+                                                    <time-ago datetime$="{{_timeStampToDateTime(item.createdAt)}}">{{_timeStampToDateTime(item.createdAt)}}</time-ago>
+                                                    &nbsp;by&nbsp;[[item.created_by]]</span>
+                                            </div>
+                                            <div style="color: gray;font-size: 11px;">
+                                                <iron-icon icon="my-icons:update" id="date" style="color: gray;width: 20px;height: 20px;"></iron-icon>
+                                                Last Modified
+                                                <span>
+                                                    <time-ago datetime$="{{_timeStampToDateTime(item.updatedAt)}}">{{_timeStampToDateTime(item.updatedAt)}}</time-ago>
+                                                    &nbsp;by&nbsp;[[item.updated_by]]</span>
+                                            </div>
+                                        </div>
+                                    </paper-card> -->
+                            </template>
+                        </div>
+                    </iron-scroll-document>
+                    <!-- <iron-scroll-document id="threshold">
+                            <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_blockingLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
+                              <div class="blocking">
+                                <a href="/blocking/add" style="text-decoration: none;">
+                                    <paper-card on-tap="_availnew" class="add">
+                                        <div class="card-content">
+                                            <center>
+                                                <paper-icon-button icon="my-icons:add" style="color:#4CAF50;width: 100px;height: 83px;">
+                                                </paper-icon-button>
+                                                <br>
+                                                <span style="color:#4CAF50;">Add Blocking</span>
+                                            </center>
+                                        </div>
+                                    </paper-card>
+                                </a>
+                                <template is="dom-repeat" items="[[blockings]]" as="item">
+                                    <paper-card>
+                                        <div id="header" class="header" style="background-color:white; padding: 16px; padding-bottom: 5px; font-size: 11px;">
+                                                <a href="/blocking/edit/{{item._id}}">
+                                                    <paper-icon-button id="{{item._id}}" noink on-tap="_editBlocking" data-args="{{item._id}}" icon="my-icons:edit" alt="{{item._id}}"
+                                                        style="float: right; margin-top:-10px; margin-right:-10px;color:white; border-radius: 10px;"></paper-icon-button>
+                                                </a>
+                                            <div style="margin-top:2px;">
+                                                    <iron-icon icon="my-icons:location-city" id="date" style="color: gray; margin-top: -10px"></iron-icon>
+                                                    <span id="type" style="font-size: 24px;">
+                                                        [[item.hotel]]
+                                                    </span>
+                                                </div>
+                                        </div>
+                                        <div style="padding: 16px; background-color: white;" id="{{item._id}}">
+                                            <div style="color: black">
+                                                    <iron-icon icon="my-icons:flag" id="date" style="color: gray"></iron-icon>
+                                                    Created
+                                                    <span>
+                                                        <time-ago datetime$="{{_timeStampToDateTime(item.createdAt)}}">{{_timeStampToDateTime(item.createdAt)}}</time-ago>
+                                                        &nbsp;by&nbsp; [[item.created_by]]Jeino
+                                                    </span>
+                                                </div>
+                                                <div style="color: black">
+                                                    <iron-icon icon="my-icons:update" id="date" style="color: gray"></iron-icon>
+                                                    Last Modified
+                                                    <span>
+                                                        <time-ago datetime$="{{_timeStampToDateTime(item.updatedAt)}}">{{_timeStampToDateTime(item.updatedAt)}}</time-ago>
+                                                        &nbsp;by&nbsp; [[item.updated_by]]Jeino
+                                                    </span>
+                                                </div>
+                                        </div>
+                                    </paper-card>
+                                </template>
+                            </div>
+                        </iron-scroll-document> -->
+                    <!-- <iron-scroll-document id="threshold">
+                        <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_blockingLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
                             <template is="dom-repeat" items="[[blockings]]" as="item">
-                                <paper-card>
-                                    <div id="header" class="header" style="background-color: #4CAF50;  padding: 16px; padding-bottom: 5px; font-size: 11px;">
+                                <div class="blocking">
+                                    <div id="header" class="header" style="background-color: #4CAF50; padding: 16px; padding-bottom: 5px; font-size: 14px;">
                                         <a href="/blocking/edit/{{item._id}}">
                                             <paper-icon-button id="{{item._id}}" noink on-tap="_editBlocking" data-args="{{item._id}}" icon="my-icons:edit" alt="{{item._id}}"
-                                                style="float: right; margin-top:-10px; margin-right:-10px;color: white;"></paper-icon-button>
+                                                style="float: right; margin-top:-10px; margin-right:-10px;color:white; border-radius: 10px;"></paper-icon-button>
                                         </a>
                                         <div style="color: white">
                                             <iron-icon icon="my-icons:flag" id="date" style="color: white"></iron-icon>
                                             Created
                                             <span>
                                                 <time-ago datetime$="{{_timeStampToDateTime(item.createdAt)}}">{{_timeStampToDateTime(item.createdAt)}}</time-ago>
-                                                &nbsp;by&nbsp; [[item.created_by]]Jeino
-                                            </span>
+                                                &nbsp;by&nbsp;
+                                                Jeino</span>
                                         </div>
                                         <div style="color: white">
                                             <iron-icon icon="my-icons:update" id="date" style="color: white"></iron-icon>
                                             Last Modified
                                             <span>
                                                 <time-ago datetime$="{{_timeStampToDateTime(item.updatedAt)}}">{{_timeStampToDateTime(item.updatedAt)}}</time-ago>
-                                                &nbsp;by&nbsp; [[item.updated_by]]Jeino
-                                            </span>
+                                                &nbsp;by&nbsp;
+                                                Jeino</span>
                                         </div>
                                     </div>
-                                    <div style="padding: 16px; background-color: white;" id="{{item._id}}">
-                                        <div style="margin-top:2px;">
-                                            <iron-icon icon="my-icons:location-city" id="date" style="color: gray;width: 20px;height: 20px;"></iron-icon>
-                                            <span id="type" style="font-size: 16px;">
+                                    <div style="padding: 16px; background-color: white;">
+                                        <iron-icon icon="my-icons:account-circle" style="color: gray; margin-top: -10px"></iron-icon>
+                                        <span style="font-size: 20px;">
+                                                <b>[[item.agent]]</b>
+                                            </span>
+                                        <br>
+                                        <div style="margin-top: 5px;">
+                                            <iron-icon icon="my-icons:location-city" id="date" style="color: gray; margin-top: -10px"></iron-icon>
+                                            <span id="type" style="font-size: 24px;">
                                                 [[item.hotel]]
                                             </span>
                                         </div>
-                                        <div style="margin-top:5px;">
-                                            <iron-icon icon="my-icons:speaker-notes" id="date" style="color: gray;width:20px;height: 20px;"></iron-icon>
-                                            <span id="type" style="color:gray;font-size: 11px; ">
-                                                [[item.notes]]
+                                        <div style="margin-top: 12px; font-size: 14px;">
+                                            <iron-icon icon="my-icons:speaker-notes" id="date" style="color: gray"></iron-icon>
+                                            <span id="type" style="color:gray;font-size: 14px; ">
+                                                [[item.note]]
                                             </span>
                                         </div>
+
                                     </div>
                                 </paper-card>
                             </template>
                         </div>
 
-                    </iron-scroll-document>
+                                </div>
+                            </template>
+                    </iron-scroll-document> -->
                 </app-header-layout>
                 <!-- <a href="/blocking/add" style="text-decoration: none; ">
                     <paper-fab noink on-tap="_availnew" icon="my-icons:add" class="blue"></paper-fab>
@@ -249,14 +463,18 @@
 
             <div name="/add">
                 <div id="availnew"></div>
-                <my-blocking-add id="d23" path=" " prev-route="{{route.prefix}}"></my-blocking-add>
+                <my-blocking-add id="d23" path=" " prev-route="{{agentData._agent}}"></my-blocking-add>
             </div>
             <div name="view404 ">Not found.</div>
         </iron-pages>
 
         <div hidden$="{{!editActive}}">
             <div id="availedit"></div>
-            <my-blocking-edit id="d24" edit-key='{{editData._id}}' prev-route="{{route.prefix}}"></my-blocking-edit>
+            <my-blocking-edit id="d24" edit-key='{{editData._id}}' prev-route="{{agentData._agent}}"></my-blocking-edit>
+        </div>
+        <div hidden$="{{!agentActive}}">
+            <div id="agent"></div>
+            <my-blocking-agent id="d25" agent-key='{{agentData._agent}}' prev-route="{{agentData._agent}}"></my-blocking-agent>
         </div>
     </template>
 
@@ -267,8 +485,8 @@
                 route: Object,
                 routeData: Object,
                 data: Object,
-                year: Number,
-                monthly: String,
+                // year: Number,
+                // monthly: String,
                 openSearch: {
                     type: Boolean,
                     value: false,
@@ -301,12 +519,41 @@
             _searchChanged(g, e) {
 
             },
-            _blockingLoaded(data) {
-                if (this.url === '/blocking/read') {
-                    this.blockings = data.detail.response.data;
-                    // console.log(this.hotels);
-                }
-            },
+
+            // _blockingLoaded(data) {
+            //     if (this.url === '/blocking/read') {
+            //         if (data.detail.response.data) {
+            //             this.blockings = data.detail.response.data;
+
+            //             var agent = [];
+            //             this.blockings.forEach(element => {
+            //                 agent.push(element.agent);
+            //             });
+            //             var final = [];
+            //             var uniqueArray = function (arrArg) {
+            //                 return arrArg.filter(function (elem, pos, arr) {
+            //                     return arr.indexOf(elem) == pos;
+            //                 });
+            //             };
+            //             var uniqEs6 = (arrArg) => {
+            //                 return arrArg.filter((elem, pos, arr) => {
+            //                     return arr.indexOf(elem) == pos;
+            //                 });
+            //             }
+            //             this.agent = uniqueArray(final.concat(agent));
+            //             var finalArray = [];
+            //             this.agent.forEach(agentEl => {
+            //                 this.blockings.forEach(blEl => {
+            //                     if(agentEl === blEl.agent){
+            //                         agentEl = blEl.agent;
+            //                     }
+            //                 });
+            //                 finalArray.push(agentEl);
+            //             });
+            //             this.last = finalArray;
+            //         }
+            //     }
+            // },
             _availnew() {
                 var node = Polymer.dom(this.root).querySelector("#availnew");
                 if (node) {
@@ -336,12 +583,34 @@
                     var newDiv = document.createElement("my-blocking-edit");
                     newDiv.setAttribute("id", "d24");
                     newDiv.setAttribute("edit-key", data_args);
-                    newDiv.setAttribute("prev-route", this.route.prefix);
+                    newDiv.setAttribute("prev-route", data_args);
                     // newDiv.setAttribute("block ", "3 ")
                     //if open existing
                     // console.log(newDiv);
                     var currentDiv = document.getElementById("availedit");
                     Polymer.dom(node.parentNode).insertBefore(newDiv, currentDiv);
+                }
+            },
+            _showAgent(e) {
+                var data_args = Polymer.dom(e).rootTarget.getAttribute("alt");
+                var node = Polymer.dom(this.root).querySelector("#agent");
+                if (node) {
+                    var oldDiv = Polymer.dom(node.parentNode).querySelector("#d25");
+                    if (oldDiv) {
+                        Polymer.dom(node.parentNode).removeChild(oldDiv);
+                    }
+                    var newDiv = document.createElement("my-blocking-agent");
+                    newDiv.setAttribute("id", "d25");
+                    newDiv.setAttribute("agent-key", data_args);
+                    newDiv.setAttribute("prev-route", data_args);
+                    var currentDiv = document.getElementById("agent");
+                    Polymer.dom(node.parentNode).insertBefore(newDiv, currentDiv);
+                }
+            },
+            _agentLoaded(data) {
+                if (data.detail.response) {
+                    this.agents = data.detail.response.data;
+                    // console.log(this.agents);
                 }
             },
             toggleDrawer() {
@@ -352,13 +621,13 @@
                 }));
                 this.$.narrow = !this.$.narrow;
             },
-            ready() {
-                this.url = '/blocking/read';
+            // ready() {
+            //     this.url = '/blocking/read';
 
-            },
-            _timeStampToDateTime(ts) {
-                return new Date(ts);
-            },
+            // },
+            // _timeStampToDateTime(ts) {
+            //     return new Date(ts);
+            // },
         });
     </script>
 </dom-module>

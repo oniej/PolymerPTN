@@ -26,6 +26,23 @@ router.get('/readMe/:editkey', (req, res) => {
         //         return res.json({ success: true, data: hotels });
     });
 });
+
+router.get('/filterHotel/:hotel', (req, res) => {
+    const hotel = req.params.hotel;
+    Hotels.findOne({ hotel: hotel }, (error, hotels) => {
+        if (error) return res.json({ success: false, error });
+        var xresult = [];
+        if (hotels) {
+            hotels.room.forEach(element => {
+                xresult.push({
+                    label: element.name,
+                    value: element.room
+                });
+            });
+            return res.json({ success: true, data: xresult });
+        }
+    });
+});
 router.get('/filterR/:room', (req, res) => {
     const room = req.params.room;
     Hotels.findOne({ room: room }, (error, rooms) => {
