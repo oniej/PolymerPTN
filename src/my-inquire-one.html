@@ -5,6 +5,7 @@
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-button-group/paper-button-group.html">
 <link rel="import" href="../bower_components/paper-buttons-group/paper-buttons-group.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
@@ -159,7 +160,7 @@
                     margin: 5px;
                     padding: 5px;
                     border-radius: 5px;
-                    height: 210px;
+                    height: 250px;
                     width: 500px;
                     /* border-style: groove; */
                     background-color: #fff;
@@ -211,22 +212,25 @@
                         width: auto;
                     }
                 }
+                .leftcontent paper-button {
+                    padding: 5px;
+                    position: relative;
+                    width: 80px;
+                    right: -187px;
+                    margin-top: 5px;
+                    margin-left: 187px;
+                }
 
-                vaadin-text-field{
+                vaadin-text-field {
                     width: 130px;
                 }
-            
+
             }
 
-            /* @media (min-width:1200px){
-                vaadin-text-field{
-                    width: 160px;
-                }
-            } */
             div .allocation {
                 overflow: auto;
                 padding: 18px;
-                width: 90%;
+                /* width: 90%; */
                 margin-bottom: 20px;
                 margin: 0 auto;
                 background-color: #fff;
@@ -250,168 +254,188 @@
 
             }
 
-           
-    .a{
-    display: grid;
-    grid-column: 1;
-        /* grid-row: 1; */
-    }
-    .b {
-        position: relative;
-        grid-column: 2;
-        /* grid-row: 1; */
-        /* grid-column-start: 2;
-        grid-column-end: 2;
-        grid-row-start: 1;
-        grid-row-end: 4; */
-    }
-    .c {
-        position: relative;
-        grid-column: 3;
-        /* grid-row: 1; */
-        /* grid-column-start: 3;
-        grid-column-end: 3;
-        grid-row-start: 1;
-        grid-row-end: 4; */
-    }
-    .d {
-        grid-column: 4;
-        
-        position: relative;
+            .wrapper {
+                display: grid;
+            }
 
-        /* grid-row: 1; */
-        /* grid-column-start: 4;
-        grid-column-end: 4;
-        grid-row-start: 1;
-        grid-row-end: 4; */
-    }
-     .e {
-        position: relative;
-        /* grid-column-start: 5;
-        grid-column-end: 5;
-        grid-row-start: 1;
-        grid-row-end: 4; */
-        grid-column: 5;
-        /* grid-row: 1; */
-    }
-    .f {
-        grid-column: 6;
-        /* grid-row: 1; */
-        /* grid-column-start: 6;
-        grid-column-end: 6;
-        grid-row-start: 1;
-        grid-row-end: 4; */
-    }
-    .b .tooltiptext {
-    visibility: hidden;
-    width: 150px;
-    height: auto;
-    background-color: rgb(185, 185, 185);
-    text-align: center;
-    border-radius: 6px;
-    padding: 5px 0;
-    position: absolute;
-    z-index: 1;
-    bottom: 100%;
-    left: 50%;
-    margin-left: -80px;
-}
-.b .tooltiptext::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 10px;
-    border-style: solid;
-    border-color: black transparent transparent transparent;
-}
- .b:hover .tooltiptext {
-    visibility: visible;
-}
-.c .tooltiptext {
-    visibility: hidden;
-    width: 250px;
-    height: auto;
-    background-color: rgb(185, 185, 185);
-    text-align: center;
-    border-radius: 6px;
-    padding: 5px 0;
-    position: absolute;
-    z-index: 1;
-    bottom: 100%;
-    left: 50%;
-    margin-left: -150px;
-}
+            .a {
+                grid-column: 1;
+            }
 
-.c .tooltiptext::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 10px;
-    border-style: solid;
-    border-color: black transparent transparent transparent;
-}
+            .b {
+                grid-column: 2;
+            }
 
- .c:hover .tooltiptext {
-    visibility: visible;
-}
-.d .tooltiptext {
-    visibility: hidden;
-    width: 100px;
-    height: auto;
-    background-color: rgb(185, 185, 185);
-    text-align: center;
-    border-radius: 6px;
-    padding: 5px 0;
-    position: absolute;
-    z-index: 1;
-    bottom: 100%;
-    left: 50%;
-    margin-left: -60px;
-}
-.d .tooltiptext::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 10px;
-    border-style: solid;
-    border-color: black transparent transparent transparent;
-}
- .d:hover .tooltiptext {
-    visibility: visible;
-}
-.e .tooltiptext {
-    visibility: hidden;
-    width: 200px;
-    height: auto;
-    background-color: rgb(185, 185, 185);
-    text-align: center;
-    border-radius: 6px;
-    padding: 5px 0;
-    position: absolute;
-    z-index: 1;
-    bottom: 100%;
-    left: 50%;
-    margin-left: -100px;
-}
-.e .tooltiptext::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 10px;
-    border-style: solid;
-    border-color: black transparent transparent transparent;
-}
- .e:hover .tooltiptext {
-    visibility: visible;
-}
+            .c {
+                grid-column: 3;
+            }
+
+            .d {
+                grid-column: 4;
+            }
+
+            .e {
+                grid-column: 5;
+            }
+
+            .f {
+                grid-column: 6;
+            }
+
+            .b .tooltiptext {
+                visibility: hidden;
+                width: 150px;
+                height: auto;
+                background-color: rgb(185, 185, 185);
+                text-align: center;
+                border-radius: 6px;
+                padding: 5px 0;
+                position: absolute;
+                z-index: 1;
+                bottom: 100%;
+                left: 50%;
+                margin-left: -80px;
+            }
+
+            .b .tooltiptext::after {
+                content: "";
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                margin-left: -5px;
+                border-width: 10px;
+                border-style: solid;
+                border-color: black transparent transparent transparent;
+            }
+
+            .b:hover .tooltiptext {
+                visibility: visible;
+            }
+
+            .c .tooltiptext {
+                visibility: hidden;
+                width: 250px;
+                height: auto;
+                background-color: rgb(185, 185, 185);
+                text-align: center;
+                border-radius: 6px;
+                padding: 5px 0;
+                position: absolute;
+                z-index: 1;
+                bottom: 100%;
+                left: 50%;
+                margin-left: -150px;
+            }
+
+            .c .tooltiptext::after {
+                content: "";
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                margin-left: -5px;
+                border-width: 10px;
+                border-style: solid;
+                border-color: black transparent transparent transparent;
+            }
+
+            .c:hover .tooltiptext {
+                visibility: visible;
+            }
+
+            .d .tooltiptext {
+                visibility: hidden;
+                width: 100px;
+                height: auto;
+                background-color: rgb(185, 185, 185);
+                text-align: center;
+                border-radius: 6px;
+                padding: 5px 0;
+                position: absolute;
+                z-index: 1;
+                bottom: 100%;
+                left: 50%;
+                margin-left: -60px;
+            }
+
+            .d .tooltiptext::after {
+                content: "";
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                margin-left: -5px;
+                border-width: 10px;
+                border-style: solid;
+                border-color: black transparent transparent transparent;
+            }
+
+            .d:hover .tooltiptext {
+                visibility: visible;
+            }
+
+            .e .tooltiptext {
+                visibility: hidden;
+                width: 200px;
+                height: auto;
+                background-color: rgb(185, 185, 185);
+                text-align: center;
+                border-radius: 6px;
+                padding: 5px 0;
+                position: absolute;
+                z-index: 1;
+                bottom: 100%;
+                left: 50%;
+                margin-left: -100px;
+            }
+
+            .e .tooltiptext::after {
+                content: "";
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                margin-left: -5px;
+                border-width: 10px;
+                border-style: solid;
+                border-color: black transparent transparent transparent;
+            }
+
+            .e:hover .tooltiptext {
+                visibility: visible;
+            }
+
+            .searchbtn {
+                background-color: blue;
+                color: #fff;
+            }
+
+            .accordion {
+                background-color: #eee;
+                color: #444;
+                cursor: pointer;
+                transition: 0.4s;
+            }
+
+            .active,
+            .accordion:hover {
+                background-color: rgb(255, 255, 255);
+            }
+
+            .accordion:after {
+                content: '\002B';
+                color: rgb(255, 255, 255);
+
+            }
+
+            .active:after {
+                content: "\2212";
+            }
+
+            .panel {
+                padding: 0 18px;
+                background-color: white;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.2s ease-out;
+            }
         </style>
         <custom-style>
             <style is="custom-style">
@@ -434,35 +458,15 @@
                 paper-radio-button.limited {
                     --paper-radio-button-label-color: yellow;
                 }
-
-                /* paper-radio-button.available {
-                    --paper-radio-button-label-color: red;
-                } */
             </style>
         </custom-style>
         <iron-ajax auto url="/hotel/read" handle-as="json" on-response="_hotelLoaded" debounce-duration="300"></iron-ajax>
-
-        <!-- Hotel Search -->
-        <iron-ajax id="ajaxHotel" handle-as="json" on-response="_hotelsearched"></iron-ajax>
-        <iron-ajax id="ajaxHotelAllocation" handle-as="json" on-response="_hotelsearchedallocation"></iron-ajax>
-        <iron-ajax id="ajaxHotelBlocking" handle-as="json" on-response="_hotelsearchedblock"></iron-ajax>
-        <!-- Room Search -->
-        <iron-ajax id="ajaxRoom" handle-as="json" on-response="_roomsearched"></iron-ajax>
-        <iron-ajax id="ajaxRoomAllocation" handle-as="json" on-response="_roomsearchedallocation"></iron-ajax>
-        <iron-ajax id="ajaxRoomBlock" handle-as="json" on-response="_roomsearchedblock"></iron-ajax>
-
         <!-- Availability -->
-        <iron-ajax id="avail" url="{{avail}}" handle-as="json" method="GET" on-response="_availloaded"></iron-ajax>
-        <iron-ajax id="availin" url="{{availin}}" handle-as="json" method="GET" on-response="_inloaded"></iron-ajax>
-        <iron-ajax id="availout" url="{{availout}}" handle-as="json" method="GET" on-response="_outloaded"></iron-ajax>
-        <!-- Date Search -->
+        <iron-ajax id="available" handle-as="json" method="GET" on-response="_availableloaded"></iron-ajax>
         <!-- allocation -->
-        <iron-ajax id="startalloc" url="{{startalloc}}" handle-as="json" method="GET" on-response="_startallocloaded"></iron-ajax>
-        <iron-ajax id="endalloc" url="{{urlFilterend}}" handle-as="json" method="GET" on-response="_endallocloaded"></iron-ajax>
+        <iron-ajax id="allocate" handle-as="json" method="GET" on-response="_allocateloaded"></iron-ajax>
         <!-- blockings -->
-        <iron-ajax id="startblock" url="{{Startblockings}}" handle-as="json" method="GET" on-response="_startblockloaded"></iron-ajax>
-        <iron-ajax id="endblock" url="{{Endblockings}}" handle-as="json" method="GET" on-response="_endblockloaded"></iron-ajax>
-
+        <iron-ajax id="block" handle-as="json" method="GET" on-response="_blockloaded"></iron-ajax>
         <iron-pages selected="[[route.path]]" attr-for-selected="name" fallback-selection="view404" role="main">
             <div name="">
                 <app-drawer-layout fullbleed narrow="{{narrow}}" id="drawerLayout">
@@ -481,489 +485,345 @@
                                         <paper-dropdown-input id="hotel" label="HOTEL" items='[[hotelItems]]' filter-property="hotel" value="{{hotel}}">
                                             <template>
                                                 <template is="dom-repeat" items="[[items]]" as="item">
-                                                    <paper-item id="hotel" value="[[item.hotel]]">[[item.hotel]]</paper-item>
+                                                    <paper-item label="[[item.hotel]]">[[item.hotelname]]</paper-item>
                                                 </template>
                                             </template>
                                         </paper-dropdown-input>
-                                        <!-- <vaadin-combo-box allow-custom-value placeholder="HOTEL" items='[[hotelItems]]' filter-property="hotel" value="{{hotel}}">                            
-                                            <template is="dom-repeat" items="[[items]]" as="item">
-                                                <paper-item>[[item.hotel]]</paper-item>
-                                            </template>
-                                      </vaadin-combo-box> -->
                                         <br>
                                         <iron-icon icon="my-icons:hotel" style="color: grey"></iron-icon>&nbsp;
-                                        <paper-dropdown-input id="room" label="ROOM" items='[[roomele]]' filter-property="hotel" value="{{room}}">
+                                        <paper-dropdown-input id="room" label="ROOM" items='[[roomele]]' filter-property="room" value="{{room}}">
                                             <template>
                                                 <template is="dom-repeat" items="[[items]]" as="item">
-                                                    <paper-item>[[item]]</paper-item>
+                                                    <paper-item label="[[item.room]]">[[item.name]]</paper-item>
                                                 </template>
                                             </template>
                                         </paper-dropdown-input>
                                         <br>
-                                        <!-- <vaadin-combo-box id="room" always-float-label  placeholder="ROOM" items='[[roomfixed]]' filter-property="hotel" value="{{room}}">                            
-                                        <template is="dom-repeat" items="[[items]]" as="item">
-                                            <paper-item>[[item]]</paper-item>
-                                        </template>
-                                  </vaadin-combo-box> <br> -->
                                         <iron-icon icon="my-icons:date-range" style="color: grey"></iron-icon>&nbsp;
                                         <vaadin-date-picker placeholder="DATE FROM" id="startdate" value="{{checkin}}" max="{{checkout}}" date-format="DD-MMMM-YYYY"></vaadin-date-picker>
                                         <br>
                                         <iron-icon icon="my-icons:date-range" style="color: grey"></iron-icon>&nbsp;
                                         <vaadin-date-picker placeholder="DATE TO" id="enddate" value="{{checkout}}" min="{{checkin}}" date-format="DD-MMMM-YYYY"></vaadin-date-picker>
-
                                     </center>
+                                    <paper-button class="searchbtn" raised on-click="SearchBtn">Search</paper-button>
                                 </div>
                                 <br>
                             </div>
                         </div>
+                        <!-- <div>
+                            <center>
+                                <span id="msg"></span>
+                            </center>
+                        </div> -->
+
 
                         <iron-scroll-document id="threshold">
-
                             <div class="container flex-center-justified">
-                                <div class="allocation" style="background-color: #fff;">
+                                <div class="allocation" style="background-color: #fff; display: grid;">
                                     <div>
-                                        <vaadin-text-field value="Date" readonly></vaadin-text-field> &nbsp;
-                                        <vaadin-text-field value="Hotel" readonly></vaadin-text-field> &nbsp;
-                                        <vaadin-text-field value="Room" readonly></vaadin-text-field> &nbsp;
-                                        <vaadin-text-field value="Allocation" readonly></vaadin-text-field> &nbsp;
-                                        <vaadin-text-field value="Blocking" readonly></vaadin-text-field> &nbsp;
-                                        <vaadin-text-field value="Status" readonly></vaadin-text-field>
-                                    </div>
-
-                                    <div class="wrapper">
-                                         <div class="box a">
-                                                <template is="dom-repeat" items="{{datef}}" as="dt">
-                                                        <vaadin-text-field style="font-size: 15px;" value="{{dt}}" readonly></vaadin-text-field>
-                                                     
-                                                        <div class="box b">
-                                                            &nbsp;
-                                                    <template is="dom-repeat" items="{{hotelf}}">
-                                                            <vaadin-text-field value="{{hotelf}}" readonly></vaadin-text-field>
-                                                            <br>
-                                                            <template is="dom-repeat" items="{{roompeak}}" as="room">
-                                                                    <span class="tooltiptext"> 
-                                                                        Non Peak: {{room.nonpeak}} 
-                                                                        <br>
-                                                                        Non-peak Days: {{room.nonpdays}} 
-                                                                    </span>
-                                                            </template>
-                                                        </template>
-                                            </div>
-                                            <div class="box c">
-                                                    <template is="dom-repeat" items="{{roomf}}" as="room">
-                                                        &nbsp;   
-                                                        <vaadin-text-field value="{{room}}" readonly></vaadin-text-field>
-                                                            <br>
-                                                            <template is="dom-repeat" items="{{peakseason}}" as="season">
-                                                                    <span class="tooltiptext"> 
-                                                                        Peak Season Start: {{season.startValue}}
-                                                                        <br>
-                                                                        Peak Season End: {{season.endValue}} 
-                                                                    </span>
-                                                            </template>
-                                                        </template>
-                                            </div>
-                                            <div class="box d">
-
-                                                    <template is="dom-repeat" items="{{roompeak}}" as="room">
-                                                        &nbsp; 
-                                                        <vaadin-text-field value="{{room.peak}}" readonly></vaadin-text-field>
-
-                                                            <br>
-                                                            <span class="tooltiptext"> Cut-off: {{room.pdays}} </span>
-                                                        </template>
-                                            </div>
-                                            
-                                            <div class="box e">
-                                                    
-                                                    <template is="dom-repeat" items="{{roomblock}}" as="room">
-                                                            &nbsp;
-                                                            <vaadin-text-field value="{{room.block}}" readonly></vaadin-text-field>
-                                                            <br>
-                                                            <span class="tooltiptext"> Cancellation: {{room.cancel}} </span>
-                                                        </template>
-                                            </div>
-                                            <div class="box f">
-                                                    
-                                                    <template is="dom-repeat" items="{{roomstatus}}" as="status">
-                                                            <vaadin-text-field value="{{status}}" readonly></vaadin-text-field>
-                                                            <br>
-                                                        </template>
-                                            </div>
-                                        </template>
+                                        <div>
+                                            <vaadin-text-field value="Date" readonly></vaadin-text-field> &nbsp;
+                                            <vaadin-text-field value="Hotel" readonly></vaadin-text-field>
+                                            <vaadin-text-field value="Room" readonly></vaadin-text-field>
+                                            <vaadin-text-field value="Allocation" readonly></vaadin-text-field>
+                                            <vaadin-text-field value="Blocking" readonly></vaadin-text-field>
+                                            <vaadin-text-field value="Status" readonly></vaadin-text-field>
                                         </div>
-                                      </div>
 
-                                    <!-- <table>
-                                        <tr>
-                                            <td>
-                                                <template is="dom-repeat" items="{{datef}}" as="dt">
-                                                    <vaadin-text-field style="width: 130px;" value="{{dt}}" readonly></vaadin-text-field>
-                                                    <br>
-                                                    </template>
-                                            </td>
-                                            <td>
-                                                <template is="dom-repeat" items="{{hotelf}}">
-                                                    <vaadin-text-field style="width: 130px;" value="{{hotelf}}" readonly></vaadin-text-field>
-                                                    <br>
+                                        <div class="wrapper">
+                                            <template is="dom-repeat" items="[[final]]" as="item">
+                                                <div class="box a">
+                                                    <vaadin-text-field value="[[item.date]]" readonly></vaadin-text-field>
+                                                </div>
+                                                <div class="box b">
+                                                    <vaadin-text-field value="[[item.hotelname]]" readonly></vaadin-text-field>
+                                                </div>
+
+                                                <template is="dom-repeat" items="[[item.rooms]]" as="room">
+                                                    <div class="box c">
+                                                        <vaadin-text-field value="[[room.roomname]]" readonly></vaadin-text-field>
+                                                    </div>
+                                                    <div class="box d">
+                                                        <vaadin-text-field value="[[room.pk]]" readonly></vaadin-text-field>
+                                                    </div>
+                                                    <div class="box e">
+                                                        <vaadin-text-field value="[[room.block]]" readonly></vaadin-text-field>
+                                                    </div>
+                                                    <div class="box f">
+                                                        <vaadin-text-field value="[[room.status]]" readonly></vaadin-text-field>
+                                                    </div>
                                                 </template>
-                                            </td>
-                                            <td>
-                                                <template is="dom-repeat" items="{{roomf}}" as="room">
-                                                    <vaadin-text-field style="width: 130px;" value="{{room}}" readonly></vaadin-text-field>
-                                                    <br>
-                                                </template>
-                                            </td>
-                                            <td>
-                                                <template is="dom-repeat" items="{{roompeak}}" as="room">
-                                                    <vaadin-text-field style="width: 130px;" value="{{room.peak}}" readonly></vaadin-text-field>
-                                                    <br>
-                                                </template>
-                                            </td>
-                                            <td>
-                                                <template is="dom-repeat" items="{{roomblock}}" as="room">
-                                                    <vaadin-text-field style="width: 130px;" value="{{room.block}}" readonly></vaadin-text-field>
-                                                    <br>
-                                                </template>
-                                            </td>
-                                            <td>
-                                                <template is="dom-repeat" items="{{roomstatus}}" as="status">
-                                                    <vaadin-text-field style="width: 130px;" value="{{status.status}}" readonly></vaadin-text-field>
-                                                    <br>
-                                                </template>
-                                            </td>
-                                        </tr>
-                                    </table> -->
-                                     
+
+                                            </template>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+
                         </iron-scroll-document>
                     </app-header-layout>
                 </app-drawer-layout>
-            </div>
+                </div>
         </iron-pages>
         <iron-ajax verbose id="ajax" method="[[method]]" on-response="_handleResponse"></iron-ajax>
     </template>
     <script>
-
         Polymer({
             is: 'my-inquire-one',
             properties: {
                 hotelItems: Object,
                 roomele: Object,
-                array: Object,
-                roomItems: Object,
-                roomsItem: Object,
-                roomsblockItem: Object,
-                hotelsearch: Object,
-                startalloc: Object,
-                startblock: Object,
-                endblock: Object,
-                newBlock: String,
-                newAlloc: String,
-                joinedblock: String,
-                joinedalloc: String,
-                joinedavail: String,
+                hotel: String,
+                room: String,
                 checkout: String,
                 checkin: String,
-                startload: String,
-                endload: String,
-                avail: String,
-                availin: Object,
-                availout: Object,
-
+                availabledata: String,
+                allocatedata: String,
+                blockdata: String
                 // status: String
             },
             observers: [
-                '_Searchh(hotel)',
-                '_Searchr(room)',
-                '_startCheckin(checkin)',
-                '_endCheckout(checkout)',
-                '_joinDate(inload,outload)',
-                '_joinedAlloc(hotelItems,startload,endload)',
-                '_joinedBlock(hotelItems,startblock,endblock)',
-                '_joinedAvail(inload,outload)',
+                '_Searchh(hotel,room,checkin,checkout)',
                 '_searchDate(checkin,checkout)',
-                '_unionAll(hotel,joinedalloc,joinedblock)',
+                '_unionAll(availabledata,allocatedata,blockdata, datefn)'
             ],
-          
-            _Searchh(e) {
-                this.$.ajaxHotel.method = 'GET';
-                this.$.ajaxHotel.url = '/hotel/filter/' + e;
-                this.$.ajaxHotel.generateRequest();
-
-                this.$.ajaxHotelAllocation.method = 'GET';
-                this.$.ajaxHotelAllocation.url = '/allocation/filter/' + e;
-                this.$.ajaxHotelAllocation.generateRequest();
-
-                this.$.ajaxHotelBlocking.method = 'GET';
-                this.$.ajaxHotelBlocking.url = '/blocking/filter/' + e;
-                this.$.ajaxHotelBlocking.generateRequest();
-
-                this.avail = '/availability/filterh/' + e;
-                this.$.avail.generateRequest();
-
-                this.checkin = null;
-                this.checkout = null;
-            },
-  
-            _Searchr(d) {
-                // console.log(e);
-                this.$.ajaxRoom.method = 'GET';
-                this.$.ajaxRoom.url = '/hotel/filterR/' + d;
-                this.$.ajaxRoom.generateRequest();
-
-                this.$.ajaxRoomAllocation.method = 'GET';
-                this.$.ajaxRoomAllocation.url = '/allocation/filterR/' + d;
-                this.$.ajaxRoomAllocation.generateRequest();
-
-                this.$.ajaxRoomBlock.method = 'GET';
-                this.$.ajaxRoomBlock.url = '/blocking/filterR/' + d;
-                this.$.ajaxRoomBlock.generateRequest();
-
+            SearchBtn: function () {
 
             },
-            
-            _availloaded(data) {
-                if (data.detail.response) {
-                    this.avail = data.detail.response.data;
-                    var statusarray = [];
-                    this.avail.forEach(element => {
-                        element.availability.forEach(availability => {
-                            statusarray.push(availability.status);
-                        });
-                    });
-                    this.statusf = statusarray;
+            _Searchh(a, b, c, d) {
+                a = this.hotel;
+                b = this.room;
 
-                    var datearray = [];
-                    this.avail.forEach(element => {
-                        element.availability.forEach(availability => {
-                            datearray.push(availability.date);
-                        });
-                    });
-                    this.datesf = datearray;
+                if (a && !b && c && d) {
 
-                    var roomarray = [];
-                    this.avail.forEach(element => {
-                        element.availability.forEach(availability => {
-                            roomarray.push(availability.room);
-                        });
-                    });
-                    this.roomsf = roomarray;
+                    // select * hotel where from =  c  and to = d;
+                    // console.log(a);
+                    this.$.available.method = 'GET';
+                    this.$.available.url = '/availability/filteravail/' + a + "_" + c + "_" + d;
+                    this.$.available.generateRequest();
+
+                    this.$.allocate.method = 'GET';
+                    this.$.allocate.url = '/allocation/filteralloc/' + a + "_" + c + "_" + d;
+                    this.$.allocate.generateRequest();
+
+                    this.$.block.method = 'GET';
+                    this.$.block.url = '/blocking/filterblock/' + a + "_" + c + "_" + d;
+                    this.$.block.generateRequest();
+                }
+                else if (!a && b && c && d) {
+
+                    // select * room where from =  c  and to = d;
+                    this.$.available.method = 'GET';
+                    this.$.available.url = '/availability/filteravailR/' + b + "_" + c + "_" + d;
+                    this.$.available.generateRequest();
+
+                    this.$.allocate.method = 'GET';
+                    this.$.allocate.url = '/allocation/filterallocR/' + b + "_" + c + "_" + d;
+                    this.$.allocate.generateRequest();
+
+                    this.$.block.method = 'GET';
+                    this.$.block.url = '/blocking/filterblockR/' + b + "_" + c + "_" + d;
+                    this.$.block.generateRequest();
+                }
+                else if (a && b && c && d) {
+
+                    // select * hotel,room where from =  c  and to = d;
+                    this.$.available.method = 'GET';
+                    this.$.available.url = '/availability/filteravailF/' + a + "_" + b + "_" + c + "_" + d;
+                    this.$.available.generateRequest();
+
+                    this.$.allocate.method = 'GET';
+                    this.$.allocate.url = '/allocation/filterallocF/' + a + "_" + b + "_" + c + "_" + d;
+                    this.$.allocate.generateRequest();
+
+                    this.$.block.method = 'GET';
+                    this.$.block.url = '/blocking/filterblockF/' + a + "_" + b + "_" + c + "_" + d;
+                    this.$.block.generateRequest();
+                }
+                else if (!a && !b && c && d) {
+
+                    // select * from =  c  and to = d;
+                    this.$.available.method = 'GET';
+                    this.$.available.url = '/availability/filteravailD/' + c + "_" + d;
+                    this.$.available.generateRequest();
+
+                    this.$.allocate.method = 'GET';
+                    this.$.allocate.url = '/allocation/filterallocD/' + c + "_" + d;
+                    this.$.allocate.generateRequest();
+
+                    this.$.block.method = 'GET';
+                    this.$.block.url = '/blocking/filterblockD/' + c + "_" + d;
+                    this.$.block.generateRequest();
+                }
+                else { }
+            },
+            _availableloaded(data) {
+                if (data.detail.response.data) {
+                    this.availabledata = data.detail.response.data;
+                    // console.log(this.availabledata);
                 }
             },
-            _joinedAvail(f, g) {
-                if (this.inload && this.outload) {
-                    this.joinedavail = this.inload.concat(this.outload);
+            _allocateloaded(data) {
+                // console.log(data.detail.response.data);
+                if (data.detail.response.data) {
+                    this.allocatedata = data.detail.response.data;
+                    // console.log(this.allocatedata);
                 }
             },
-            // Date
-            _startCheckin(e) {
-                this.from = e;
-                this.startalloc =  '/allocation/filterstartdate/' + e + "_" + this.to;
-                this.Startblockings = '/blocking/filterstartdate/' + e + "_" + this.to;
-                this.availin = '/availability/filterstartdate/' + e + "_" + this.to;
-                this.$.startalloc.generateRequest();
-                this.$.startblock.generateRequest();
-                this.$.availin.generateRequest();
-            },
-            _endCheckout(f) {
-                this.to = f;
-                this.urlFilterend = '/allocation/filterenddate/' + f + "_" + this.from;
-                this.Endblockings = '/blocking/filterenddate/' + f + "_" + this.from;
-                this.availout = '/availability/filterenddate/' + f + "_" + this.from;
-                this.$.endalloc.generateRequest();
-                this.$.endblock.generateRequest();
-                this.$.availout.generateRequest();
-            },
-            _inloaded(data){
-                if (data.detail.response) {
-                    this.inload = data.detail.response.data;
-                    }
-            },
-            _outloaded(data){
-                if (data.detail.response) {
-                    this.outload = data.detail.response.data;
-                    }
-            },
-            _joinDate(t,y){
-                    var getDates = function (startDate, endDate) {
-                        var dates = [],
-                            currentDate = startDate,
-                            addDays = function (days) {
-                                var date = new Date(this.valueOf());
-                                date.setDate(date.getDate() + days);
-                                return date;
-                            };
-                        while (currentDate <= endDate) {
-                            dates.push(currentDate);
-                            currentDate = addDays.call(currentDate, 1);
-                        }
-                        return dates;
-                    };
-                    var dates = getDates(new Date(this.inload), new Date(this.outload));
-                    dates.forEach(function (date) {
-                        // console.log(date);
-                    });
-                    this.datefn = dates;
-                    // console.log(this.datefn);
-            },
-            _startallocloaded(data) {
-                if (data.detail.response) {
-                    this.startload = data.detail.response.data;
-                    // console.log(this.startload);
-                    // this.df = data.detail.response.data.dateFrom;
-                    // console.log(this.df);
-                    }
-            },
-            _startblockloaded(data) {
-                if (data.detail.response) {
-                    this.startblock = data.detail.response.data;
-                    // console.log(this.startblock);
+            _blockloaded(data) {
+                // console.log(data.detail.response.data);
+                if (data.detail.response.data) {
+                    this.blockdata = data.detail.response.data;
+                    // console.log(this.blockdata);
                 }
             },
-            _endallocloaded(data) {
-                if (data.detail.response) {
-                    this.endload = data.detail.response.data;
-                    // console.log(this.endload);
-                }
-            },
-            _endblockloaded(data) {
-                if (data.detail.response) {
-                    this.endblock = data.detail.response.data;
-                    // console.log(this.endblock);
-                }
-            },
-            _joinedAlloc(a, b, c) {
-                if (this.hotelItems && this.startload && this.endload) {
-                    this.joinedalloc = this.startload.concat(this.endload);
-                    // console.log(this.joinedalloc);
-                    this.newAlloc = this.joinedalloc.filter((allocarray) => {
-                        return this.hotelItems.some((hotelarray) => {
-                            return hotelarray.hotel === allocarray.hotel;
-                        });
-                    });
-                    var sameId = this.newAlloc;
-                    function printUniqueResults(arrayOfdatas, id) {
-                        return arrayOfdatas.filter((item, index, array) => {
-                            return array.map((mapItem) => mapItem[id]).indexOf(item[id]) === index
-                        })
-                    }
-                    var result = printUniqueResults(sameId, '_id')
-                    this.filterAlloc = result;
-                }
-            },
-            _joinedBlock(x, y, z) {
-                if (this.hotelItems && this.startblock && this.endblock) {
-                    this.joinedblock = this.startblock.concat(this.endblock);
-                    // console.log(this.joinedblock);
-                    this.newBlock = this.joinedblock.filter((allocarray) => {
-                        return this.hotelItems.some((hotelarray) => {
-                            return hotelarray.group === allocarray.group;
-                        });
-                    });
-                    var sameId = this.newBlock;
-                    function printUniqueResults(arrayOfdatas, id) {
-                        return arrayOfdatas.filter((item, index, array) => {
-                            return array.map((mapItem) => mapItem[id]).indexOf(item[id]) === index
-                        })
-                    }
-                    var filterresult = printUniqueResults(sameId, '_id')
-                    this.filterBlock = filterresult;
-                }
-            },
-           
-            _searchDate(x,y){   
+            _searchDate(x, y) {
                 var sdt = Polymer.dom(this.root).querySelector("#startdate");
                 var edt = Polymer.dom(this.root).querySelector("#enddate");
-                
-                this.datesearch = this.datesf;
+                var getDates = function (startDate, endDate) {
+                    var dates = [],
+                        currentDate = startDate,
+                        addDays = function (days) {
+                            var date = new Date(this.valueOf());
+                            date.setDate(date.getDate() + days);
+                            return date;
+                        };
 
-                    var getDates = function (startDate, endDate) {
-                        var dates = [],
-                            currentDate = startDate,
-                            addDays = function (days) {
-                                var date = new Date(this.valueOf());
-                                date.setDate(date.getDate() + days);
-                                return date;
-                            };
-                        while (currentDate <= endDate) {
-                            dates.push(currentDate);
-                            currentDate = addDays.call(currentDate, 1);
-                        }
-                        return dates;
-                    };
-                    var dates = getDates(new Date(sdt.value), new Date(edt.value));
-                    dates.forEach(function (date) {
-                    });
-                    this.datefn = dates;
-                    this.datefinal = (this.datesearch = this.datefn);
-                    // console.log(this.datefinal);
+                    function convert(date) {
+                        var monthNames = [
+                            "Jan", "Feb", "Mar",
+                            "Apr", "May", "Jun", "Jul",
+                            "Aug", "Sep", "Oct",
+                            "Nov", "Dec"
+                        ];
+
+                        return monthNames[date.getMonth()] + " " + date.getDate() + " " + date.getFullYear()
+                    }
+
+                    while (currentDate <= endDate) {
+                        dates.push(convert(currentDate));
+                        currentDate = addDays.call(currentDate, 1);
+                    }
+                    return dates;
+                };
+                var dates = getDates(new Date(sdt.value), new Date(edt.value));
+                this.datefn = dates;
             },
+            _unionAll(k, l, m, n) {
 
-            _unionAll(k, l, m) {
-                // if (this.checkin == "" || this.checkout == "") {
-                  
-                // }
-                // else {
-                    if (this.filterAlloc && this.filterBlock) {
+                if (this.hotel && !this.room && this.checkin && this.checkout) {
+                    if (this.allocatedata && this.blockdata) {
+                        function convert(date) {
+                            var monthNames = [
+                                "Jan", "Feb", "Mar",
+                                "Apr", "May", "Jun", "Jul",
+                                "Aug", "Sep", "Oct",
+                                "Nov", "Dec"
+                            ];
 
-                            var initialArray = [];
-                            this.filterAlloc.forEach(elAllo => {
-                                this.joinedavail.forEach(elAvail => {
+                            return monthNames[date.getMonth()] + " " + date.getDate() + " " + date.getFullYear()
+                        }
+                        var initialArray = [];
+                        n.forEach(nEl => {
+                            var data = {
+                                date: nEl
+                            }
+                            this.allocatedata.forEach(elAllo => {
+                                this.availabledata.forEach(elAvail => {
                                     if (elAllo.hotel === elAvail.hotel) {
-                                        elAllo.avail = elAvail;
+                                        data.hotelname = elAllo.hotelname;
+                                        data.rooms = elAllo.rooms;
+                                        data.rooms.forEach(roomEll => {
+                                            elAvail.availability.forEach(roomElA => {
+                                                if (roomEll.room === roomElA.room && convert(new Date(roomElA.date)) === nEl) {
+                                                    roomEll.status = roomElA.status;
+                                                }
+                                            });
+                                        });
                                     }
-                                    this.filterBlock.forEach(elBlock => {
-                                        if (elAllo.hotel === elBlock.hotel) {
-                                            elAllo.blocking = elBlock;
-                                            initialArray.push(elAllo);
+                                    this.blockdata.forEach(elBlock => {
+                                        if (elAllo.hotelname === elBlock.hotelname) {
+                                            data.rooms.forEach(roomEl => {
+                                                elBlock.rooms.forEach(roomElB => {
+                                                    if (roomEl.room === roomElB.room) {
+                                                        roomEl.block = roomElB.block;
+                                                    }
+                                                });
+                                            });
                                         }
                                     });
+                                    initialArray.push(data);
                                 });
                             });
-                            console.log(this.filterAlloc);
-                            function printUniqueResults(arrayOfdatas, hotel) {
-                                return arrayOfdatas.filter((item, index, array) => {
-                                    return array.map((mapItem) => mapItem[hotel]).indexOf(item[hotel]) === index
-                                })
-                            }
-                              var finalArray = printUniqueResults(initialArray, 'hotel');
-                        if (finalArray.length > 0) {
-                            var array = [];
-                            var array1 = [];
-                            var array2 = [];
-                            var array3 = [];
-                            finalArray.forEach(elements => {
-                                if (elements) {
-                                    array.push(elements.hotel);
-                                    array1.push(elements.rooms);
-                                    array2.push(elements.seasondate);
-                                    if (elements.avail) {
-                                    }
-                                }
-                            });
-                        }
-                        // console.log(finalArray);
-                        }
+                        });
 
-                if (this.array && this.joinedalloc && this.joinedblock) {
-                    this.hotelf = this.array;
-                    this.allocation = this.joinedalloc;
-                    this.blocking = this.joinedblock;
-                    this.roomf = this.roomItems;
-                    this.roompeak = this.roomsItem;
-                    this.peakseason = this.season;
-                    this.roomblock = this.roomsblockItem;
-                    this.roomstatus = this.statusf;
-                    // this.datef = this.datesf;
-                    // this.datef = this.datefinal;
-                    this.datef = (this.datesf = this.datefinal); 
+                        // console.log(initialArray);
+                        this.final = initialArray;
+
+                        // var ex = [];
+                        // if (initialArray = ex) {
+                        //     var message = Polymer.dom(this.root).querySelector("#msg").innerHTML = "<span>No Data Found</span>";
+                        // }
+                    }
                 }
-            // }
+                else if (!this.hotel && this.room && this.checkin && this.checkout)
+                {
+                    if (this.allocatedata && this.blockdata) {
+                        function convert(date) {
+                            var monthNames = [
+                                "Jan", "Feb", "Mar",
+                                "Apr", "May", "Jun", "Jul",
+                                "Aug", "Sep", "Oct",
+                                "Nov", "Dec"
+                            ];
+
+                            return monthNames[date.getMonth()] + " " + date.getDate() + " " + date.getFullYear()
+                        }
+                        var initialArray = [];
+                        n.forEach(nEl => {
+                            var data = {
+                                date: nEl
+                            }
+                            this.allocatedata.forEach(elAllo => {
+                                this.availabledata.forEach(elAvail => {
+                                    if (elAllo.rooms.room === elAvail.availability.room) {
+                                        data.hotelname = elAllo.hotelname;
+                                        data.rooms = elAllo.rooms;
+                                        data.rooms.forEach(roomEll => {
+                                            elAvail.availability.forEach(roomElA => {
+                                                if (roomEll.room === roomElA.room && convert(new Date(roomElA.date)) === nEl) {
+                                                    roomEll.status = roomElA.status;
+                                                }
+                                            });
+                                        });
+                                    }
+                                    this.blockdata.forEach(elBlock => {
+                                        if (elAllo.hotelname === elBlock.hotelname) {
+                                            data.rooms.forEach(roomEl => {
+                                                elBlock.rooms.forEach(roomElB => {
+                                                    if (roomEl.room === roomElB.room) {
+                                                        roomEl.block = roomElB.block;
+                                                    }
+                                                });
+                                            });
+                                        }
+                                    });
+                                    data.filter(data == this.room);
+                                    initialArray.push(data);
+                                });
+                            });
+                        });
+
+                        // console.log(initialArray);
+                        this.final = initialArray;
+
+                        //  var filterdata = initialArray.filter(room == (room === this.room));
+                        //  console.log(filterdata);
+                    }
+                
+                }
+        
             },
-           toggleDrawer() {
+            toggleDrawer() {
                 this.dispatchEvent(new CustomEvent('toggleDrawer', {
                     bubbles: true, composed: true, detail: {
                         narrow: this.$.narrow
@@ -975,46 +835,20 @@
                 this.url = '/hotel/read';
             },
             _hotelLoaded(data) {
-                this.hotelItems = data.detail.response.data;
+                if (data.detail.response.data) {
+                    this.hotelItems = data.detail.response.data;
 
-                var rooms = [];
-                this.hotelItems.forEach(element => {
-                    element.room.forEach(room => {
-                        rooms.push(room);
+                    var rooms = [];
+                    this.hotelItems.forEach(element => {
+                        element.room.forEach(room => {
+                            rooms.push(room);
+                        });
                     });
-                });
-                // console.log(rooms);
-                this.roomele = rooms;
-            },
-            _hotelsearched(data) {
-                this.hotelsearch = data.detail.response.data.hotel;
-                this.array = [this.hotelsearch];
-                this.roomItems = data.detail.response.data.room;
-            },
-            _hotelsearchedallocation(data) {
-                this.roomsItem = data.detail.response.data.rooms;
-                this.season = data.detail.response.data.seasondate;
-            },
-            _hotelsearchedblock(data) {
-                this.roomsblockItem = data.detail.response.data.rooms;
-            },
-            _roomsearched(data) {
-                this.hotelsearch = data.detail.response.data.hotel;
-                this.array = [this.hotelsearch];
-                this.roomItems = data.detail.response.data.room;
-                this.roomsItem = data.detail.response.data.rooms;
-            },
-            _roomsearchedallocation(data) {
-                this.hotelsearch = data.detail.response.data.hotel;
-                this.array = [this.hotelsearch];
-                this.roomItems = data.detail.response.data.rooms;
-                this.roomsItem = data.detail.response.data.rooms;
-            },
-            _roomsearchedblock(data) {
-                this.hotelsearch = data.detail.response.data.hotel;
-                this.array = [this.hotelsearch];
-                this.roomItems = data.detail.response.data.rooms;  
-                this.roomsblockItem = data.detail.response.data.rooms;
+                    // console.log(rooms);
+                    this.roomele = rooms;
+                    // console.log(this.roomele);
+
+                }
             },
             _timeStampToDateTime(ts) {
                 return new Date(ts);

@@ -72,7 +72,8 @@
     "vaadin-dropdown-menu": "vaadin/vaadin-dropdown-menu#^1.0.0",
     "vaadin-item": "vaadin/vaadin-item#^2.0.0",
     "vaadin-list-box": "vaadin/vaadin-list-box#^1.0.2",
-    "vaadin-combo-box": "vaadin/vaadin-combo-box#^4.0.1"
+    "vaadin-combo-box": "vaadin/vaadin-combo-box#^4.0.1",
+    "date-util": "*"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^6.0.0"
