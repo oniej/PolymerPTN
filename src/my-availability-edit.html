@@ -200,7 +200,7 @@
                         <div class="hotelSearch">
                             <div style="float:left;">
                                 <div style="display:flex;">
-                                    <paper-input always-float-label label="Hotel" value="{{hotel}}" readonly style="width: 160px;">
+                                    <paper-input always-float-label label="Hotel" value="{{hotelname}}" readonly style="width: 160px;">
                                         <iron-icon icon="my-icons:location-city" slot="prefix"></iron-icon>
                                     </paper-input>
                                 </div>
@@ -252,7 +252,7 @@
             </vaadin-dialog>
             <vaadin-dialog id="availabilityDelete" no-close-on-esc no-close-on-outside-click>
                 <template>
-                    <h3 style="text-align: center">Are you sure to delete "{{hotel}}"
+                    <h3 style="text-align: center">Are you sure to delete "{{hotelname}}"
                         <br> availability records permanently?
                         <br>there will be no undo</h3>
                     <hr>
@@ -282,6 +282,7 @@
                 <span style="float: right">
                     <paper-button on-tap="_saveToDB" auto-focus>Yes</paper-button>
                     <paper-button on-tap="_closeDialog">No</paper-button>
+                </span>
             </paper-dialog>
             </div>
         </app-drawer-layout>
@@ -301,6 +302,8 @@
                 monthly: String,
                 editId: String,
                 date: String,
+                nextmonth: String,
+                previousmonth: String,
                 prevmonth: String,
                 prevyear: String,
                 updateDate: String,
@@ -333,6 +336,7 @@
                     value: [],
                     notify: true,
                 },
+                saveDate: String
             },
             _openSave() {
                 this.$.availabilitySave.opened = true;
@@ -496,8 +500,7 @@
             },
             _saveToDB(e) {
                 if (this.hotel) {
-                    var dateSave = this.mot + "," + this.yer;
-                    if (this.editId && this.date == dateSave) {
+                    if (this.editId && this.date == this.saveDate) {
                         var types = [];
                         this.roomType.forEach(element => {
                             types.push(element);
@@ -524,8 +527,8 @@
                         this.$.ajax.generateRequest();
                         this.$.availabilitySave.opened = false;
                         this.$.successUpdate.opened = e;
-                        this.availabilities = [];
                     } else {
+                        this.saveDate = this.date;
                         var types = [];
                         this.roomType.forEach(element => {
                             types.push(element);
@@ -552,7 +555,6 @@
                         this.$.ajax.generateRequest();
                         this.$.availabilitySave.opened = false;
                         this.$.successUpdate.opened = e;
-                        this.availabilities = [];
                     }
                 }
                 Polymer.dom(this.root).querySelector("#next").disabled = false;
@@ -568,6 +570,7 @@
                             this.hotel = data.detail.response.data.hotel;
                             this.hotelname = data.detail.response.data.hotelname;
                             this.date = data.detail.response.data.date;
+                            this.saveDate = this.date;
                             this.monthly = data.detail.response.data.month.month;
                             this.yearly = data.detail.response.data.month.yearly;
                             this.mynotes = data.detail.response.data.notes;
@@ -580,7 +583,7 @@
                             this.roomType = data.detail.response.data.type;
                             var year = parseInt(this.yearly);
                             var month = parseInt(this.monthly);
-                            var currentMonthly = new Date(year, month)
+                            var currentMonthly = new Date(year, month);
                             var months = currentMonthly.getMonth();
                             var years = currentMonthly.getFullYear();
                             var dayToday = currentMonthly.getDay();
@@ -605,6 +608,7 @@
                 if (data.detail.response.data) {
                     var availability = [];
                     var data = data.detail.response.data;
+
                     data.forEach(element => {
                         this.editId = element._id;
                         this.date = element.date;
@@ -636,9 +640,11 @@
                     if (this.availabilities.length > 0) {
                         Polymer.dom(this.root).querySelector("#save").setAttribute("style", "display:position: fixed; bottom: 32px;right: 32px;");
                         Polymer.dom(this.root).querySelector("#notes").setAttribute("style", "display:block");
+                        this.saveDate = this.date;
                     } else {
                         Polymer.dom(this.root).querySelector("#save").setAttribute("style", "display:none");
                         Polymer.dom(this.root).querySelector("#notes").setAttribute("style", "display:none");
+                        this.saveDate = null;
                     }
                 }
             },
@@ -667,6 +673,7 @@
                     var date = new Date(this.yer, x + 1, 0).getDate();
                     this._createTable(date, this.mot, this.yer, x)
                 }
+
                 this.prevmonth = this.mot;
                 this.prevyear = y;
                 this.method = 'GET';
@@ -695,6 +702,7 @@
                     var date = new Date(this.yer, x + 1, 0).getDate();
                     this._createTable(date, this.mot, this.yer, x)
                 }
+                this.nextmonth = this.date;
                 this.prevmonth = this.mot;
                 this.prevyear = y;
                 this.method = 'GET';
@@ -788,7 +796,6 @@
                 }
                 else {
                     data.forEach(element => {
-                        // console.log(element);
                         var roomdata = element.room.split(" ").join("");
                         var roomname = element.roomname.split(" ").join("");
                         var tr = Polymer.dom(this.root).querySelector("#" + roomdata);

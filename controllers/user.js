@@ -154,7 +154,6 @@ router.get('/read', (req, res) => {
 });
 router.get('/edit/:editkey', (req, res) => {
     const editkey = req.params.editkey;
-    console.log(this.editkey);
     User.findById({ _id: editkey }, (error, users) => {
         if (error) return res.json({ success: false, error });
         return res.json({ success: true, data: users });
@@ -166,6 +165,7 @@ router.put('/update/:editKey', (req, res) => {
         return res.json({ success: false, error: 'No hotel id provided' });
     }
     User.findById(editKey, (error, updateUser) => {
+        var oldEmail = updateUser.email;
         if (error) return res.json({ success: false, error });
         const { name, email, role, group } = req.body;
         updateUser.name = name;
@@ -174,7 +174,14 @@ router.put('/update/:editKey', (req, res) => {
         updateUser.group = group;
         updateUser.save(error => {
             if (error) return res.json({ success: false, error });
-            return res.json({ success: true });
+            if (!updateUser.isEmailVerified && updateUser.email !== oldEmail) {
+                nodemailer.sendNewUserRegistration(req.headers.host, updateUser.email, updateUser.accountkey, function (err, info) {
+                    if (err) return res.json({ success: false, msg: error });
+                    return res.json({ success: true, msg: "Account updated and email verification sent to " + updateUser.email + "." });
+                });
+            } else {
+                return res.json({ success: true, msg: "Account updated successfully." });
+            }
         });
     });
 });

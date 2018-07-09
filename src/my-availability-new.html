@@ -333,7 +333,6 @@
                 if (data.detail.response.data) {
                     this.createdBy = data.detail.response.data.name;
                     this.modifiedBy = data.detail.response.data.name;
-                    // console.log(this.createdBy);
                 }
             },
             _hotelLoaded(data) {
@@ -347,7 +346,7 @@
                 }
             },
             _handleResponse(data) {
-                if (data.detail.response.data) {
+                if (!(Array.isArray(data.detail.response.data))) {
                     this.hotelData = data.detail.response.data.rooms;
                     var showTable = Polymer.dom(this.root).querySelector("#table").setAttribute("style", "width:100%;overflow-x:auto;");
                     var showoption = Polymer.dom(this.root).querySelector("#option").setAttribute("style", "display:block");

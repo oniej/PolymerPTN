@@ -202,7 +202,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                         <div>
                                             <iron-icon icon="my-icons:location-city" id="date" style="color: gray;width: 20px;height: 20px;"></iron-icon>
                                             <span id="type">
-                                                [[item.hotel]]
+                                                [[item.hotelname]]
                                             </span>
                                         </div>
                                     </div>
@@ -304,7 +304,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             return array.map((mapItem) => mapItem[hotel]).indexOf(item[hotel]) === index
                         })
                     }
-                    var result = printUniqueResults(datas, 'hotel')
+                    var result = printUniqueResults(datas, 'hotelname')
                     this.availabilities = result;
                 }
             },

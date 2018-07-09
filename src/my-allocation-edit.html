@@ -181,8 +181,7 @@
                 background: green;
                 color: black;
             }
-
-            </style>
+        </style>
         <custom-style>
             <style is="custom-style">
                 paper-fab.blue {
@@ -503,7 +502,7 @@
             _allocationLoaded(data) {
                 if (this.editKey) {
                     if (this.url === '/allocation/readEdit/' + this.editKey) {
-                        if (data.detail.response) {
+                        if (data.detail.response.data) {
                             this.allocations = data.detail.response.data;
                             this.group = data.detail.response.data.group;
                             this.active = data.detail.response.data.active;
@@ -515,7 +514,7 @@
                             var _rangeDate = Polymer.dom(this.root).querySelector("#rangeDate");
                             _rangeDate.dateFrom = new Date(data.detail.response.data.dateFrom);
                             _rangeDate.dateTo = new Date(data.detail.response.data.dateTo);
-                            
+
                             this.note = data.detail.response.data.note;
 
                             this.allocationDetails = data.detail.response.data.rooms;
@@ -527,7 +526,7 @@
                             this.created_by = data.detail.response.data.created_by;
                             this.updated_by = data.detail.response.data.updated_by;
                         }
-                
+
                     }
                     if (this.active == true) {
                         var actoggle = Polymer.dom(this.root).querySelector("#active").checked = this.active;

@@ -213,14 +213,14 @@
             },
             roleAddChanged() {
                 if (this.roleAdd == 0) {
-                    this.role = 'Staff';
+                    this.role = 'Admin Staff';
                 }
                 else if (this.roleAdd == 1) {
+                    this.role = 'Staff';
+                }
+                else if (this.roleAdd == 2) {
                     this.role = 'Agent';
                 }
-                // else if (this.roleAdd == 2) {
-                //     this.role = 'Agent';
-                // }
             },
             guid: function () {
                 var uid = new ShortUniqueId();
@@ -297,7 +297,7 @@
                 }
             },
             _usersLoad(data) {
-                if (data.detail.response) {
+                if (data.detail.response.data) {
                     if (this.editKey) {
                         if (this.url === '/user/edit/' + this.editKey) {
                             this.fullname = data.detail.response.data.name;

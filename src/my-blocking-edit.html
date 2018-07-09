@@ -79,7 +79,7 @@
                 .groupdiv {
                     position: absolute;
                     top: 20px;
-                   
+
                 }
                 .group {
                     width: 45%;
@@ -255,25 +255,25 @@
                     </app-toolbar>
                 </app-header>
                 <div class="card">
-                        <div>
-                                <paper-toggle-button style="float: right;" value="{{active}}" id="active" on-tap="_active">ACTIVE</paper-toggle-button>
-                            </div>
+                    <div>
+                        <paper-toggle-button style="float: right;" value="{{active}}" id="active" on-tap="_active">ACTIVE</paper-toggle-button>
+                    </div>
                     <div class="agentdiv">
-                            <paper-input always-float-label label="Agent" value="{{prevRoute}}" readonly></paper-input>
-                     </div>
-                   
+                        <paper-input always-float-label label="Agent" value="{{prevRoute}}" readonly></paper-input>
+                    </div>
+
                     <paper-input always-float-label value={{hotel}} hidden></paper-input>
                     <paper-input always-float-label value={{hotelname}} label="HOTEL" readonly></paper-input>
                     <paper-textarea always-float-label value="{{note}}" label="REMARKS"></paper-textarea>
-                  
+
                     <x-array-data-provider items="{{blockingDetails}}" size="200"></x-array-data-provider>
                     <vaadin-combo-box style="width: 245px;" id="room" label="ROOM"></vaadin-combo-box>
-                        <vaadin-date-picker style="width: 160px;" label="Start" id="dateFrom" value="{{dateFrom}}" max="{{dateTo}}"></vaadin-date-picker>
-                        <vaadin-date-picker style="width: 160px;" label="End" id="dateTo" value="{{dateTo}}"  min="{{dateFrom}}"></vaadin-date-picker>
-                        <vaadin-text-field style="width:80px;" id="block" label="QUANTITY"></vaadin-text-field>
-                        <vaadin-date-picker style="width: 160px;" id="cancel" label="CANCELLATION" max="{{dateFrom}}"></vaadin-date-picker>
-                        <vaadin-button on-click="_addBlockingDetails">Add</vaadin-button>
-                   
+                    <vaadin-date-picker style="width: 160px;" label="Start" id="dateFrom" value="{{dateFrom}}" max="{{dateTo}}"></vaadin-date-picker>
+                    <vaadin-date-picker style="width: 160px;" label="End" id="dateTo" value="{{dateTo}}" min="{{dateFrom}}"></vaadin-date-picker>
+                    <vaadin-text-field style="width:80px;" id="block" label="QUANTITY"></vaadin-text-field>
+                    <vaadin-date-picker style="width: 160px;" id="cancel" label="CANCELLATION" max="{{dateFrom}}"></vaadin-date-picker>
+                    <vaadin-button on-click="_addBlockingDetails">Add</vaadin-button>
+
                     <vaadin-grid theme="compact" id="grid" items="[[blockingDetails]]">
 
                         <vaadin-grid-column width="205px" resizable>
@@ -307,7 +307,7 @@
                         <vaadin-grid-column width="160px" resizable>
                             <template class="header">CANCELLATION</template>
                             <template>
-                                <vaadin-date-picker style="width: 155px;" id="cancel-[[index]]" value="[[item.cancel]]"  max="[[item.dateTo]]" readonly$="[[!_isEditingBlockingDetails(editingBlockingDetails, item)]]"></vaadin-date-picker>
+                                <vaadin-date-picker style="width: 155px;" id="cancel-[[index]]" value="[[item.cancel]]" max="[[item.dateTo]]" readonly$="[[!_isEditingBlockingDetails(editingBlockingDetails, item)]]"></vaadin-date-picker>
                             </template>
                         </vaadin-grid-column>
                         <vaadin-grid-column width="12em">
@@ -327,18 +327,18 @@
                             </template>
                         </vaadin-grid-column>
                     </vaadin-grid>
-                  <div>
-                            <iron-icon icon="my-icons:flag" slot="prefix"></iron-icon>
-                            <span id="created">Created by:</span>
-                            <!--{{created_by}} -->Jeino &nbsp;
-                            <time-ago datetime$="{{_timeStampToDateTime(createdAt)}}">{{_timeStampToDateTime(createdAt)}}</time-ago>
-                        </div>
-                        <div>
-                            <iron-icon icon="my-icons:update" slot="prefix"></iron-icon>
-                            <span id="created">Last Modified by:</span>
-                            <!--{{updated_by}}-->Jeino &nbsp;
-                            <time-ago datetime$="{{_timeStampToDateTime(updatedAt)}}">{{_timeStampToDateTime(updatedAt)}}</time-ago>
-                        </div>
+                    <div>
+                        <iron-icon icon="my-icons:flag" slot="prefix"></iron-icon>
+                        <span id="created">Created by:</span>
+                        <!--{{created_by}} -->Jeino &nbsp;
+                        <time-ago datetime$="{{_timeStampToDateTime(createdAt)}}">{{_timeStampToDateTime(createdAt)}}</time-ago>
+                    </div>
+                    <div>
+                        <iron-icon icon="my-icons:update" slot="prefix"></iron-icon>
+                        <span id="created">Last Modified by:</span>
+                        <!--{{updated_by}}-->Jeino &nbsp;
+                        <time-ago datetime$="{{_timeStampToDateTime(updatedAt)}}">{{_timeStampToDateTime(updatedAt)}}</time-ago>
+                    </div>
                 </div>
             </app-header-layout>
             <!-- save -->
@@ -442,7 +442,7 @@
             _blockingLoaded(data) {
                 if (this.editKey) {
                     if (this.url === '/blocking/readEdit/' + this.editKey) {
-                        if (data.detail.response) {
+                        if (data.detail.response.data) {
                             this.blockings = data.detail.response.data;
                             // this.group = data.detail.response.data.group;
                             this.active = data.detail.response.data.active;
@@ -455,7 +455,7 @@
                             this.updatedAt = data.detail.response.data.updatedAt;
                             this.created_by = data.detail.response.data.created_by;
                             this.updated_by = data.detail.response.data.updated_by;
-                            
+
                             if (this.active == true) {
                                 var actoggle = Polymer.dom(this.root).querySelector("#active").checked = this.active;
                             }
@@ -484,7 +484,7 @@
                 this.$.successUpdate.opened = false;
                 window.location.assign('/blocking/agent/' + this.prevRoute);
             },
-          
+
             _update() {
                 // console.log(this.rooms)
                 if (this.hotel) {
@@ -578,8 +578,8 @@
             _getEditPrevRouteLink(e) {
                 return '/blocking/agent/' + e.toString();
             },
-         // Blocking Grid Function
-         _addBlockingDetails(e) {
+            // Blocking Grid Function
+            _addBlockingDetails(e) {
                 if (this.$.room.selectedItem.label !== '' && this.$.dateFrom.value !== '' && this.$.dateTo.value && this.$.block.value && this.$.cancel.value) {
                     var roomdata = {
                         room: this.$.room.selectedItem.value,
@@ -638,7 +638,7 @@
                 this.$.grid.querySelector('#edit-button').focus();
             },
 
-       
+
         })
     </script>
 </dom-module>

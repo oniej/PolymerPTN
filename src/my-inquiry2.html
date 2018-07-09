@@ -76,7 +76,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
             #hotels {
-                font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+                font-size: small;
+                /* font-family: "Trebuchet MS", Arial, Helvetica, sans-serif; */
                 border-collapse: collapse;
                 width: 100%;
             }
@@ -85,8 +86,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             #hotels th {
                 text-align: center;
                 border: 1px solid #ddd;
-                padding: 2px;
-
+                /* padding: 2px; */
             }
 
             #hotels th {
@@ -331,7 +331,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             _urlFilterworkspaceloaded(data) {
                 this.groupworkspace = data.detail.response.data;
             },
-
             _startCheckin(e) {
                 this.from = e;
                 this.urlFilterStart = '/allocation/filterstartdate/' + e + "_" + this.to;
@@ -352,6 +351,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 if (data.detail.response.data) {
                     if (this.endavail) {
                         this.startavail = data.detail.response.data;
+                        console.log(this.startavail);
                     }
                 }
             },
@@ -364,21 +364,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
             _endCheckout(f) {
                 this.to = f;
-                this.urlFilterend = '/allocation/filterenddate/' + f + "_" + this.from;
-                this.Endavail = '/availability/filterenddate/' + f + "_" + this.from;
-                this.Endblockings = '/blocking/filterenddate/' + f + "_" + this.from;
+                this.urlFilterend = '/allocation/inquirySource/' + f + "_" + this.from + "_" + "002" + "_" + "r1" + "_" + "gabriel";
+                // this.Endavail = '/availability/filterenddate/' + f + "_" + this.from;
+                // this.Endblockings = '/blocking/filterenddate/' + f + "_" + this.from;
                 this.$.endalloc.generateRequest();
-                this.$.endavail.generateRequest();
-                this.$.endblock.generateRequest();
+                // this.$.endavail.generateRequest();
+                // this.$.endblock.generateRequest();
             },
             _endavailloaded(data) {
                 if (data.detail.response.data) {
                     this.endavail = data.detail.response.data;
+                    console.log(this.endavail);
                 }
             },
             _urlFilterend(data) {
                 if (data.detail.response.data) {
                     this.endload = data.detail.response.data;
+                    console.log(this.endload);
                 }
             },
             _endblockloaded(data) {
@@ -550,11 +552,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 var t1 = document.createTextNode("Hotel");
                 var th1 = document.createElement('td');
                 var t2 = document.createTextNode("Rooms");
+                var tr2 = document.createElement('tr');
+                var t3 = document.createElement('td');
+                var td1 = document.createTextNode("");
+                var t4 = document.createElement('td');
+                var td2 = document.createTextNode("Cut-off");
                 th1.append(t1);
                 th2.append(t2);
+                t3.append(td1);
+                t4.append(td2);
                 tr1.append(th1);
                 tr1.append(th2);
+                tr2.append(t3);
+                tr2.append(t4);
                 table.append(tr1);
+                table.append(tr2);
 
                 var [year, month, date] = this.from.split("-");
                 var [yearend, monthend, dateend] = this.to.split("-");
@@ -582,8 +594,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         if (monthend == month) {
                             for (i = datestart; i < dateEnd + 1; ++i) {
                                 var tdblanks2 = document.createElement('td');
+                                var cutoffblanks = document.createElement('td');
                                 var cal = parseInt(eles.nonpeak) + parseInt(eles.peak);
                                 var seasondates = JSON.stringify(newData.seasondate);
+                                tr2.append(t3);
+                                tr2.append(t4);
                                 // console.log(tdblanks2);
                                 if (newData.avail) {
                                     if (eles.availability) {
@@ -599,7 +614,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                                 var self = this;
                                                 tdblanks2.addEventListener('click', function (e) {
                                                     self.tapped = e.target.id;
-
                                                 });
                                             }
                                         }
@@ -662,6 +676,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                 var tdblanks2 = document.createElement('td');
                                 tdblanks2.setAttribute('id', eles.availability.status + "~" + eles.nonpeak + "~" + eles.peak + "~" + seasondates + "~" + eles.blocking.block + "~" + eles.blocking.cancel + "~" + eles.pdays + "~" + eles.nonpdays);
                                 tr3.append(tdblanks2);
+                                // tr2.append(cutoffblanks);
                             }
                         }
                     });

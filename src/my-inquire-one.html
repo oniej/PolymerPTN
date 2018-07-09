@@ -765,8 +765,7 @@
                         // }
                     }
                 }
-                else if (!this.hotel && this.room && this.checkin && this.checkout)
-                {
+                else if (!this.hotel && this.room && this.checkin && this.checkout) {
                     if (this.allocatedata && this.blockdata) {
                         function convert(date) {
                             var monthNames = [
@@ -819,9 +818,9 @@
                         //  var filterdata = initialArray.filter(room == (room === this.room));
                         //  console.log(filterdata);
                     }
-                
+
                 }
-        
+
             },
             toggleDrawer() {
                 this.dispatchEvent(new CustomEvent('toggleDrawer', {

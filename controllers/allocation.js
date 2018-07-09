@@ -1,6 +1,10 @@
 // first we import our dependencies…
 const express = require('express');
 const Allocation = require('../models/allocation');
+const Allocation2 = require('../models/allocation');
+const Blocking = require('../models/blocking');
+const Availability = require('../models/availability_model');
+
 
 // and create our instances
 const router = express.Router();
@@ -117,8 +121,8 @@ router.get('/filteralloc/:newdate', (req, res) => {
     Allocation.find({
         $and: [
             { hotel: hotel },
-            { dateFrom: { $lte: newdate} },
-            { dateTo: { $gte: newdate2} }
+            { dateFrom: { $lte: newdate } },
+            { dateTo: { $gte: newdate2 } }
         ]
     }, (error, allocfilter) => {
         if (error) return res.json({ success: false, error });
@@ -130,8 +134,8 @@ router.get('/filterallocR/:newdate', (req, res) => {
     Allocation.find({
         $and: [
             { 'rooms.room': room },
-            { dateFrom: { $lte: newdate} },
-            { dateTo: { $gte: newdate2} }
+            { dateFrom: { $lte: newdate } },
+            { dateTo: { $gte: newdate2 } }
         ]
     }, (error, allocfilter) => {
         if (error) return res.json({ success: false, error });
@@ -144,8 +148,8 @@ router.get('/filterallocF/:newdate', (req, res) => {
         $and: [
             { hotel: hotel },
             { 'rooms.room': room },
-            { dateFrom: { $lte: newdate} },
-            { dateTo: { $gte: newdate2} }
+            { dateFrom: { $lte: newdate } },
+            { dateTo: { $gte: newdate2 } }
         ]
     }, (error, allocfilter) => {
         if (error) return res.json({ success: false, error });
@@ -156,8 +160,8 @@ router.get('/filterallocD/:newdate', (req, res) => {
     const [newdate, newdate2] = req.params.newdate.split("_");
     Allocation.find({
         $and: [
-            { dateFrom: { $lte: newdate} },
-            { dateTo: { $gte: newdate2} }
+            { dateFrom: { $lte: newdate } },
+            { dateTo: { $gte: newdate2 } }
         ]
     }, (error, allocfilter) => {
         if (error) return res.json({ success: false, error });
@@ -170,5 +174,154 @@ router.get('/filterG/:groupKey', (req, res) => {
         if (error) return res.json({ success: false, error });
         return res.json({ success: true, data: hotels });
     });
+});
+router.get('/inquirySource/:xparams', (req, res) => {
+    const [datefrom, dateto, hotel, room, agent, group] = req.params.xparams.split("_");
+    const _dateFrom = new Date(datefrom);
+    const _dateTo = new Date(dateto);
+
+    const one_day = 1000 * 60 * 60 * 24;
+    const difference_ms = _dateFrom.getTime() - _dateTo.getTime();
+    const _numOfDays = Math.round(difference_ms / one_day);
+
+    var i;
+    var _currentDate = new Date(_dateFrom);
+    for (i = 0; i < _numOfDays; i++) {
+
+        //increment datefrom and formulate proper date for query 2018-07-01
+        _currentDate.setDate(_currentDate.getDate() + 1);
+        var _currentDate_format = _currentDate.getFullYear() + "-" + ("0" + (_currentDate.getMonth() + 1)).slice(-2) + "-" + ("0" + _currentDate.getDate()).slice(-2)
+
+        //get allocation details
+        // var _paramAND;
+        // if (hotel && room) {
+        //     _paramAND = {
+        //         $and: [
+        //             { hotel: hotel },
+        //             { 'rooms.room': room },
+        //             { dateFrom: { $gte: _currentDate_format } },
+        //             { dateTo: { $lte: _currentDate_format } }
+        //         ]};
+        // }
+        // else if (hotel && !room) {
+        //     _paramAND = {
+        //         $and:
+        //         [
+        //             { hotel: hotel },
+        //             { dateFrom: { $gte: _currentDate_format } },
+        //             { dateTo: { $lte: _currentDate_format } }
+        //         ]};
+        // }
+        // else if (!hotel && room) {
+        //     _paramAND = {
+        //         $and:
+        //         [
+        //             { 'rooms.room': room },
+        //             { dateFrom: { $gte: _currentDate_format } },
+        //             { dateTo: { $lte: _currentDate_format } }
+        //         ]};
+        // }
+        // else {
+        var _paramAND = {
+            $and:
+                [
+                    { dateFrom: { $lte: _currentDate_format } },
+                    { dateTo: { $gte: _currentDate_format } }
+                ]
+        };
+        // }
+
+        Allocation.find(_paramAND, (error, _allocationData) => {
+            if (error) return res.json({ success: false, error });
+
+            const _toReturnData = [];
+
+            //enumerate result
+            _allocationData.forEach(_allocationItem => {
+
+
+                //get peak season
+                Allocation2.find({
+                    // $and: [
+                    hotel: '002'
+                    // {
+                    //     seasondate: {
+                    // 'seasondate.startValue': { $lte: _currentDate_format },
+                    // 'seasondate.endValue': { $gte: _currentDate_format }
+                    //     }
+                    // }
+                    // ]
+                }, (error, _peakseasons) => {
+                    if (error) return res.json({ success: false, error });
+
+                    Blocking.find({
+                        // $and: [
+                        hotel: '002'
+                        // {
+                        //     seasondate: {
+                        // 'seasondate.startValue': { $lte: _currentDate_format },
+                        // 'seasondate.endValue': { $gte: _currentDate_format }
+                        //     }
+                        // }
+                        // ]
+                    }, (error, _blocking) => {
+                        if (error) return res.json({ success: false, error });
+
+                        Availability.find({
+                            // $and: [
+                            hotel: '002'
+                            // {
+                            //     seasondate: {
+                            // 'seasondate.startValue': { $lte: _currentDate_format },
+                            // 'seasondate.endValue': { $gte: _currentDate_format }
+                            //     }
+                            // }
+                            // ]
+                        }, (error, _availability) => {
+                            if (error) return res.json({ success: false, error });
+
+
+
+                            _allocationItem.rooms.forEach(_roomItem => {
+
+                                var _toReturnItem = {};
+
+                                _toReturnItem.xdate = _currentDate;
+                                _toReturnItem.hotel = _allocationItem.hotelname;
+                                _toReturnItem.room = _roomItem.roomname;
+                                _toReturnItem.isPeakSeason = (_peakseasons.values.length > 0 ? 1 : 0);
+                                _toReturnItem.pk = _roomItem.pk;
+                                _toReturnItem.pk_coff = _roomItem.pk_coff;
+                                _toReturnItem.npk = _roomItem.npk;
+                                _toReturnItem.npk_coff = _roomItem.npk_coff;
+
+                                _toReturnData.push(_toReturnItem);
+
+
+                            });
+
+                            return res.json({ success: true, data: _toReturnData });
+
+                        });
+
+                    });
+                    //get blocking
+                    //get availability
+                });
+
+                // return res.json({ success: true, data: _toReturnData });
+
+            });
+
+            //console.log(_toReturnData);
+            // return res.json({ success: true, data: _toReturnData });
+        });
+
+
+
+
+    }
+
+
 });
 module.exports = router;

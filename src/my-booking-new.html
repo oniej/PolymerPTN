@@ -96,24 +96,24 @@
                     <div>
                         <paper-input value="{{reference}}" always-float-label label="Reference" autofocus></paper-input>
                         <paper-input value="{{guest}}" always-float-label label="Guest" autofocus></paper-input>
-                        <paper-dropdown-input label="Agent" items='[[agentItems]]' filter-property="fullname" value="{{agent}}">
+                        <paper-dropdown-input id="agents" label="Agent" items='[[agentItems]]' filter-property="fullname" value="{{agent}}">
                             <template>
                                 <template is="dom-repeat" items="[[items]]" as="item">
-                                    <paper-item>[[item.fullname]]</paper-item>
+                                    <paper-item label="[[item.code]]">[[item.name]]</paper-item>
                                 </template>
                             </template>
                         </paper-dropdown-input>
-                        <paper-dropdown-input label="Hotel" items='[[hotelItems]]' filter-property="hotel" value="{{hotel}}" style="margin-left: 30px;">
+                        <paper-dropdown-input id="hotels" label="Hotel" items='[[hotelItems]]' filter-property="hotel" value="{{hotel}}" style="margin-left: 30px;">
                             <template>
                                 <template is="dom-repeat" items="[[items]]" as="item">
-                                    <paper-item>[[item.hotel]]</paper-item>
+                                    <paper-item label="[[item.hotel]]">[[item.hotelname]]</paper-item>
                                 </template>
                             </template>
                         </paper-dropdown-input>
-                        <paper-dropdown-input label="Room" items='[[roomItems]]' filter-property="room" value="{{room}}" style="margin-left: 30px;">
+                        <paper-dropdown-input label="Room" items='[[roomItems]]' filter-property="name" value="{{room}}" style="margin-left: 30px;">
                             <template>
                                 <template is="dom-repeat" items="[[items]]" as="item">
-                                    <paper-item>[[item]]</paper-item>
+                                    <paper-item>[[item.name]]</paper-item>
                                 </template>
                             </template>
                         </paper-dropdown-input>
@@ -202,8 +202,8 @@
                 this.$.ajax.body = {
                     reference: this.reference,
                     guest: this.guest,
-                    agent: this.agent,
-                    hotel: this.hotel,
+                    agent: this.$.agents.selectedItemLabel,
+                    hotel: this.$.hotels.selectedItemLabel,
                     room: this.room,
                     checkin: this.checkin,
                     checkout: this.checkout,
@@ -226,7 +226,7 @@
                 this.guest = "";
                 this.deduction = "";
                 // this.filterallocation = '/allocation/'
-                this.filteragent = '/users/read';
+                this.filteragent = '/agent/read';
                 this.filterhotel = '/hotel/read';
                 this.$.agent.handleAs = "json";
                 this.$.hotel.handleAs = "json";
@@ -281,7 +281,7 @@
                 }
             },
             _allocationloaded(data) {
-                if (data.detail.response.data) {
+                if (data.detail.response) {
                     var datas = data.detail.response.data;
                     console.log(datas);
                 }

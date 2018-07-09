@@ -12,6 +12,7 @@
     "test": "polymer test",
     "test:integration": "polymer build # test that psk builds without error with the CLI",
     "start": "node index.js",
+    "postinstall": "bower update",
     "start:dev": "prpl-server --root ./build/ --config ./build/polymer.json"
   },
   "dependencies": {

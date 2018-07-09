@@ -112,7 +112,7 @@
                         <paper-input value="{{email}}" float-label label="Email"></paper-input>
                         <paper-dropdown-menu style="cursor:pointer" label="Account Type">
                             <paper-listbox slot="dropdown-content" class="dropdown-content" selected="{{roleAdd}}">
-                                <!-- <paper-item>Admin Staff</paper-item> -->
+                                <paper-item>Admin Staff</paper-item>
                                 <paper-item>Staff</paper-item>
                                 <paper-item>Agent</paper-item>
                             </paper-listbox>
@@ -172,14 +172,14 @@
             roleAddChanged() {
                 this.account_key = this.guid();
                 if (this.roleAdd == 0) {
-                    this.role = 'Staff';
+                    this.role = 'Admin Staff';
                 }
                 else if (this.roleAdd == 1) {
+                    this.role = 'Staff';
+                }
+                else if (this.roleAdd == 2) {
                     this.role = 'Agent';
                 }
-                // else if (this.roleAdd == 2) {
-                //     this.role = 'Agent';
-                // }
             },
             _ready() {
                 // this.fullname;

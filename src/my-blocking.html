@@ -283,26 +283,12 @@
                     <iron-ajax auto url="/agent/read" handle-as="json" on-response="_agentLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
                     <iron-scroll-document id="threshold">
                         <div class="blocking">
-                            <!-- <a href="/blocking/add" style="text-decoration: none;">
-                                    <paper-card on-tap="_availnew">
-                                        <div class="card-content">
-                                            <center>
-                                                <paper-icon-button icon="my-icons:add" style="color:#4CAF50;width: 110px;height: 110px;">
-                                                </paper-icon-button>
-                                                <br>
-                                                <span style="color:#4CAF50;">Add Blocking</span>
-                                            </center>
-                                        </div>
-                                    </paper-card>
-                                </a> -->
                             <template is="dom-repeat" items="[[agents]]" as="item">
                                 <a href="/blocking/agent/{{item.name}}" style="text-decoration: none;">
                                     <paper-card>
                                         <div class="card-content">
                                             <center>
                                                 <div id="{{item.name}}" style="width: 110px;height: 110px;">
-
-
                                                     <paper-icon-button id="{{item.name}}" noink on-tap="_showAgent" data-args="{{item.name}}" icon="my-icons:face" alt="{{item.name}}"
                                                         style="color:#4CAF50;width: 110px;height: 110px;"></paper-icon-button>
                                                     <br>
@@ -315,150 +301,10 @@
                                         <br>
                                     </paper-card>
                                 </a>
-
-                                <!-- <paper-card id="{{item._id}}">
-                                        <div id="{{item._id}}" class="header" style="background-color:white; padding: 16px; padding-bottom: 5px; font-size: 16px;color: black;font-weight: bold">
-                                            <a href="/blocking/edit/{{item._id}}">
-                                                <paper-icon-button id="{{item._id}}" noink on-tap="_editAvailavility" data-args="{{item._id}}" icon="my-icons:edit" alt="{{item._id}}"
-                                                    style="float: right; margin-top:-10px; margin-right:-10px;color: black;"></paper-icon-button>
-                                            </a>
-                                            <div>
-                                                <iron-icon icon="my-icons:location-city" id="date" style="color: gray;width: 20px;height: 20px;"></iron-icon>
-                                                <span id="type">
-                                                    [[item.hotel]]
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <br>
-                                        <br>
-                                        <div style="padding: 16px; background-color: white;">
-                                            <div style="color: gray;font-size: 11px;">
-                                                <iron-icon icon="my-icons:flag" id="date" style="color: gray;width: 20px;height: 20px;"></iron-icon>
-                                                Created
-                                                <span>
-                                                    <time-ago datetime$="{{_timeStampToDateTime(item.createdAt)}}">{{_timeStampToDateTime(item.createdAt)}}</time-ago>
-                                                    &nbsp;by&nbsp;[[item.created_by]]</span>
-                                            </div>
-                                            <div style="color: gray;font-size: 11px;">
-                                                <iron-icon icon="my-icons:update" id="date" style="color: gray;width: 20px;height: 20px;"></iron-icon>
-                                                Last Modified
-                                                <span>
-                                                    <time-ago datetime$="{{_timeStampToDateTime(item.updatedAt)}}">{{_timeStampToDateTime(item.updatedAt)}}</time-ago>
-                                                    &nbsp;by&nbsp;[[item.updated_by]]</span>
-                                            </div>
-                                        </div>
-                                    </paper-card> -->
                             </template>
                         </div>
                     </iron-scroll-document>
-                    <!-- <iron-scroll-document id="threshold">
-                            <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_blockingLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
-                              <div class="blocking">
-                                <a href="/blocking/add" style="text-decoration: none;">
-                                    <paper-card on-tap="_availnew" class="add">
-                                        <div class="card-content">
-                                            <center>
-                                                <paper-icon-button icon="my-icons:add" style="color:#4CAF50;width: 100px;height: 83px;">
-                                                </paper-icon-button>
-                                                <br>
-                                                <span style="color:#4CAF50;">Add Blocking</span>
-                                            </center>
-                                        </div>
-                                    </paper-card>
-                                </a>
-                                <template is="dom-repeat" items="[[blockings]]" as="item">
-                                    <paper-card>
-                                        <div id="header" class="header" style="background-color:white; padding: 16px; padding-bottom: 5px; font-size: 11px;">
-                                                <a href="/blocking/edit/{{item._id}}">
-                                                    <paper-icon-button id="{{item._id}}" noink on-tap="_editBlocking" data-args="{{item._id}}" icon="my-icons:edit" alt="{{item._id}}"
-                                                        style="float: right; margin-top:-10px; margin-right:-10px;color:white; border-radius: 10px;"></paper-icon-button>
-                                                </a>
-                                            <div style="margin-top:2px;">
-                                                    <iron-icon icon="my-icons:location-city" id="date" style="color: gray; margin-top: -10px"></iron-icon>
-                                                    <span id="type" style="font-size: 24px;">
-                                                        [[item.hotel]]
-                                                    </span>
-                                                </div>
-                                        </div>
-                                        <div style="padding: 16px; background-color: white;" id="{{item._id}}">
-                                            <div style="color: black">
-                                                    <iron-icon icon="my-icons:flag" id="date" style="color: gray"></iron-icon>
-                                                    Created
-                                                    <span>
-                                                        <time-ago datetime$="{{_timeStampToDateTime(item.createdAt)}}">{{_timeStampToDateTime(item.createdAt)}}</time-ago>
-                                                        &nbsp;by&nbsp; [[item.created_by]]Jeino
-                                                    </span>
-                                                </div>
-                                                <div style="color: black">
-                                                    <iron-icon icon="my-icons:update" id="date" style="color: gray"></iron-icon>
-                                                    Last Modified
-                                                    <span>
-                                                        <time-ago datetime$="{{_timeStampToDateTime(item.updatedAt)}}">{{_timeStampToDateTime(item.updatedAt)}}</time-ago>
-                                                        &nbsp;by&nbsp; [[item.updated_by]]Jeino
-                                                    </span>
-                                                </div>
-                                        </div>
-                                    </paper-card>
-                                </template>
-                            </div>
-                        </iron-scroll-document> -->
-                    <!-- <iron-scroll-document id="threshold">
-                        <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_blockingLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
-                            <template is="dom-repeat" items="[[blockings]]" as="item">
-                                <div class="blocking">
-                                    <div id="header" class="header" style="background-color: #4CAF50; padding: 16px; padding-bottom: 5px; font-size: 14px;">
-                                        <a href="/blocking/edit/{{item._id}}">
-                                            <paper-icon-button id="{{item._id}}" noink on-tap="_editBlocking" data-args="{{item._id}}" icon="my-icons:edit" alt="{{item._id}}"
-                                                style="float: right; margin-top:-10px; margin-right:-10px;color:white; border-radius: 10px;"></paper-icon-button>
-                                        </a>
-                                        <div style="color: white">
-                                            <iron-icon icon="my-icons:flag" id="date" style="color: white"></iron-icon>
-                                            Created
-                                            <span>
-                                                <time-ago datetime$="{{_timeStampToDateTime(item.createdAt)}}">{{_timeStampToDateTime(item.createdAt)}}</time-ago>
-                                                &nbsp;by&nbsp;
-                                                Jeino</span>
-                                        </div>
-                                        <div style="color: white">
-                                            <iron-icon icon="my-icons:update" id="date" style="color: white"></iron-icon>
-                                            Last Modified
-                                            <span>
-                                                <time-ago datetime$="{{_timeStampToDateTime(item.updatedAt)}}">{{_timeStampToDateTime(item.updatedAt)}}</time-ago>
-                                                &nbsp;by&nbsp;
-                                                Jeino</span>
-                                        </div>
-                                    </div>
-                                    <div style="padding: 16px; background-color: white;">
-                                        <iron-icon icon="my-icons:account-circle" style="color: gray; margin-top: -10px"></iron-icon>
-                                        <span style="font-size: 20px;">
-                                                <b>[[item.agent]]</b>
-                                            </span>
-                                        <br>
-                                        <div style="margin-top: 5px;">
-                                            <iron-icon icon="my-icons:location-city" id="date" style="color: gray; margin-top: -10px"></iron-icon>
-                                            <span id="type" style="font-size: 24px;">
-                                                [[item.hotel]]
-                                            </span>
-                                        </div>
-                                        <div style="margin-top: 12px; font-size: 14px;">
-                                            <iron-icon icon="my-icons:speaker-notes" id="date" style="color: gray"></iron-icon>
-                                            <span id="type" style="color:gray;font-size: 14px; ">
-                                                [[item.note]]
-                                            </span>
-                                        </div>
-
-                                    </div>
-                                </paper-card>
-                            </template>
-                        </div>
-
-                                </div>
-                            </template>
-                    </iron-scroll-document> -->
                 </app-header-layout>
-                <!-- <a href="/blocking/add" style="text-decoration: none; ">
-                    <paper-fab noink on-tap="_availnew" icon="my-icons:add" class="blue"></paper-fab>
-                </a> -->
             </div>
 
             <div name="/add">
@@ -468,14 +314,14 @@
             <div name="view404 ">Not found.</div>
         </iron-pages>
 
-        <div hidden$="{{!editActive}}">
+        <template is="dom-if" if="{{editActive}}" restamp>
             <div id="availedit"></div>
             <my-blocking-edit id="d24" edit-key='{{editData._id}}' prev-route="{{agentData._agent}}"></my-blocking-edit>
-        </div>
-        <div hidden$="{{!agentActive}}">
+        </template>
+        <template is="dom-if" if="{{agentActive}}" restamp>
             <div id="agent"></div>
             <my-blocking-agent id="d25" agent-key='{{agentData._agent}}' prev-route="{{agentData._agent}}"></my-blocking-agent>
-        </div>
+        </template>
     </template>
 
     <script>
@@ -485,8 +331,6 @@
                 route: Object,
                 routeData: Object,
                 data: Object,
-                // year: Number,
-                // monthly: String,
                 openSearch: {
                     type: Boolean,
                     value: false,
@@ -502,7 +346,6 @@
                 },
                 observers: [
                     '_searchChanged(filterBy, search)',]
-                // isMousedown: { type: Boolean, value: false, }
             },
 
             toggleSearch() {
@@ -519,41 +362,6 @@
             _searchChanged(g, e) {
 
             },
-
-            // _blockingLoaded(data) {
-            //     if (this.url === '/blocking/read') {
-            //         if (data.detail.response.data) {
-            //             this.blockings = data.detail.response.data;
-
-            //             var agent = [];
-            //             this.blockings.forEach(element => {
-            //                 agent.push(element.agent);
-            //             });
-            //             var final = [];
-            //             var uniqueArray = function (arrArg) {
-            //                 return arrArg.filter(function (elem, pos, arr) {
-            //                     return arr.indexOf(elem) == pos;
-            //                 });
-            //             };
-            //             var uniqEs6 = (arrArg) => {
-            //                 return arrArg.filter((elem, pos, arr) => {
-            //                     return arr.indexOf(elem) == pos;
-            //                 });
-            //             }
-            //             this.agent = uniqueArray(final.concat(agent));
-            //             var finalArray = [];
-            //             this.agent.forEach(agentEl => {
-            //                 this.blockings.forEach(blEl => {
-            //                     if(agentEl === blEl.agent){
-            //                         agentEl = blEl.agent;
-            //                     }
-            //                 });
-            //                 finalArray.push(agentEl);
-            //             });
-            //             this.last = finalArray;
-            //         }
-            //     }
-            // },
             _availnew() {
                 var node = Polymer.dom(this.root).querySelector("#availnew");
                 if (node) {

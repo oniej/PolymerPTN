@@ -29,9 +29,8 @@ router.post('/add', (req, res) => {
         availabilityAdd.updated_by = updated_by,
         availabilityAdd.save(err => {
             if (err) return res.json({ success: false, error: err });
-            return res.json({ success: true });
+            return res.json({ success: true, data: [availabilityAdd] });
         });
-
 });
 router.get('/read', (req, res) => {
     Availability.find((err, availability) => {

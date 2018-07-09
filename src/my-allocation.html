@@ -253,16 +253,15 @@
 
             <div name="view404 ">Not found.</div>
         </iron-pages>
-
-        <div hidden$="{{!groupActive}}">
+        <template is="dom-if" if="{{groupActive}}" restamp>
             <div id="allocationgroup"></div>
             <my-allocation-group id="d24" group-key='{{groupData._group}}' prev-route="{{groupData._group}}"></my-allocation-group>
-        </div>
+        </template>
 
-        <div hidden$="{{!editActive}}">
+        <template is="dom-if" if="{{editActive}}" restamp>
             <div id="allocationedit"></div>
             <my-allocation-edit id="d25" edit-key='{{editData._id}}' prev-route="{{groupData._group}}"></my-allocation-edit>
-        </div>
+        </template>
 
     </template>
     <script>

@@ -123,8 +123,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                 <div class="pad" id="{{item._id}}">
                                     <div id="{{item._id}}" class="primary">[[item.group]]</div>
                                 </div>
-                                <paper-icon-button id="{{item._id}}" noink on-tap="_editUsers" data-args="{{item._id}}" icon="my-icons:edit" alt="{{item._id}}"
-                                    style="float: right; margin-top:-10px; margin-right:-10px;color: black;"></paper-icon-button>
+                                <!-- <paper-icon-button id="{{item._id}}" noink on-tap="_editUsers" data-args="{{item._id}}" icon="my-icons:edit" alt="{{item._id}}"
+                                    style="float: right; margin-top:-10px; margin-right:-10px;color: black;"></paper-icon-button> -->
                             </div>
                         </template>
                     </iron-scroll-document>
@@ -208,10 +208,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
 
             _groupsLoaded(data) {
-                this.groups = data.detail.response.data;
+                if (data.detail.response) {
+                    this.groups = data.detail.response.data;
+                }
             },
             _handleResponse(data) {
-                this.group = data.detail.response.data.group;
+                if (data.detail.response) {
+                    this.group = data.detail.response.data.group;
+                }
             },
             _saveGroup() {
                 if (this.editKey) {
