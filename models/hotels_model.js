@@ -5,7 +5,6 @@ const Schema = mongoose.Schema;
 const HotelsSchema = new Schema({
     hotel: String,
     hotelname: String,
-    room: Array,
     created_by: String,
     updated_by: String,
 

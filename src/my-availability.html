@@ -9,30 +9,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/polymer/polymer.html">
-<link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animations.html">
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../bower_components/paper-item/paper-item-body.html">
 <link rel="import" href="../bower_components/iron-list/iron-list.html">
 <link rel="import" href="../bower_components/iron-scroll-threshold/iron-scroll-threshold.html">
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/iron-collapse/iron-collapse.html">
+
+
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
-<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 
 <link rel="import" href="time-element.html">
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="my-availability-new.html">
 <link rel="import" href="my-availability-edit.html">
 
-<link rel="import" href="../bower_components/neon-animation/web-animations.html">
-<link rel="import" href="../bower_components/neon-animation/neon-animations.html">
 <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
 <link rel="import" href="search-bar.html">
-<dom-module id="my-availability">s
+<dom-module id="my-availability">
     <template>
         <style include="shared-styles">
             :host {
@@ -43,13 +44,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
             @media (max-width: 768px) {
-                div .availability {
-                    margin: 16px;
-                    /* margin-top: 16px; */
-                    display: flex;
-                    /* height: 100vh; */
-                    flex-direction: column;
-                    border-radius: 3px;
+                paper-card {
+                    width: 100%;
+                    margin-top: 16px;
                 }
                 paper-search-bar {
                     margin-left: 80px;
@@ -58,15 +55,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
             }
 
-            @media (min-width: 768px) {
+            @media (min-width: 850px) {
                 div .availability {
-                    width: 765px;
-                    margin: 16px auto;
-                    /* margin-bottom: 1000px; */
-                    /* height: 100vh; */
-                    border-radius: 3px;
-
-                    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+                    width: 850px;
+                    padding: 16px;
+                    margin: 0 auto;
+                }
+                paper-card {
+                    width: 46%;
+                    margin-right: 10px;
+                    margin-bottom: 10px;
                 }
                 paper-search-bar {
                     margin-left: 50px;
@@ -113,7 +111,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
             #action {
-                /* display: inline-block; */
                 margin-top: 10px;
                 float: right;
             }
@@ -140,35 +137,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 position: fixed;
                 right: 40px;
             }
+
+            hr {
+                background-color: #eee;
+                border: 0 none;
+                color: #eee;
+                height: 1px;
+            }
         </style>
-        <custom-style>
-            <style is="custom-style">
-                paper-fab.blue {
-                    /* --paper-fab-background: var(--paper-indigo-500); */
-                    --paper-fab-background: darkorange;
-                    /* --paper-fab-background: var(--paper-light-blue-900); */
-                    /* --paper-fab-keyboard-focus-background: var(--paper-light-blue-900); */
-                }
-
-                paper-radio-button {
-                    --paper-radio-button-label-spacing: 5px;
-                    --paper-radio-button-size: 24px;
-                }
-
-                paper-radio-button.close {
-                    --paper-radio-button-label-color: red;
-                }
-
-                paper-radio-button.limited {
-                    --paper-radio-button-label-color: yellow;
-                }
-
-                /* paper-radio-button.available {
-                    --paper-radio-button-label-color: red;
-                } */
-            </style>
-        </custom-style>
-
         <app-route route="{{route}}" pattern="/edit/:_id" data="{{editData}}" active="{{editActive}}"></app-route>
 
         <iron-pages selected="[[route.path]]" attr-for-selected="name" fallback-selection="view404" role="main">
@@ -202,67 +178,71 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     </app-header>
                     <iron-scroll-document id="threshold">
                         <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_availabilityLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
-                        <template is="dom-repeat" items="[[availabilities]]" as="item">
-                            <div class="availability">
-                                <div id="{{item._id}}" class="header" style="background-color:cornflowerblue; padding: 16px; padding-bottom: 5px; font-size: 11px;">
-                                    <a href="/availability/edit/{{item._id}}">
-                                        <paper-icon-button id="{{item._id}}" noink on-tap="_editAvailavility" data-args="{{item._id}}" icon="my-icons:edit" alt="{{item._id}}"
-                                            style="float: right; margin-top:-10px; margin-right:-10px;color: white;"></paper-icon-button>
-                                    </a>
-                                    <div style="color: white">
-                                        <iron-icon icon="my-icons:flag" id="date" style="color: white"></iron-icon>
-                                        Created
-                                        <span>
-                                            <time-ago datetime$="{{_timeStampToDateTime(item.createdAt)}}">{{_timeStampToDateTime(item.createdAt)}}</time-ago>
-                                            &nbsp;by&nbsp;[[item.created_by]]</span>
+                        <div class="availability">
+                            <a href="/availability/new" style="text-decoration: none;">
+                                <paper-card on-tap="_availnew">
+                                    <div class="card-content">
+                                        <center>
+                                            <paper-icon-button icon="my-icons:add" style="color:cornflowerblue;width: 125px;height: 125px;">
+                                            </paper-icon-button>
+                                            <br>
+                                            <span style="color:cornflowerblue;">Add Availability</span>
+                                        </center>
                                     </div>
-                                    <div style="color: white">
-                                        <iron-icon icon="my-icons:update" id="date" style="color: white"></iron-icon>
-                                        Last Modified
-                                        <span>
-                                            <time-ago datetime$="{{_timeStampToDateTime(item.updatedAt)}}">{{_timeStampToDateTime(item.updatedAt)}}</time-ago>
-                                            &nbsp;by&nbsp;[[item.updated_by]]</span>
+                                    <!-- <iron-image src="../images/pluspng.png" sizing="contain" style="width:100px;height:100px;"></iron-image> -->
+                                </paper-card>
+                            </a>
+                            <template is="dom-repeat" items="[[availabilities]]" as="item">
+                                <paper-card id="{{item._id}}">
+                                    <div id="{{item._id}}" class="header" style="background-color:white; padding: 16px; padding-bottom: 5px; font-size: 16px;color: black;font-weight: bold">
+                                        <a href="/availability/edit/{{item._id}}">
+                                            <paper-icon-button id="{{item._id}}" noink on-tap="_editAvailavility" data-args="{{item._id}}" icon="my-icons:edit" alt="{{item._id}}"
+                                                style="float: right; margin-top:-10px; margin-right:-10px;color: black;"></paper-icon-button>
+                                        </a>
+                                        <div>
+                                            <iron-icon icon="my-icons:location-city" id="date" style="color: gray;width: 20px;height: 20px;"></iron-icon>
+                                            <span id="type">
+                                                [[item.hotel]]
+                                            </span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div style="padding: 16px; background-color: white;">
-                                    <div id="{{item._id}}" style="margin-top: 5px;">
-                                        <iron-icon icon="my-icons:location-city" id="date" style="color: gray; margin-top: -10px"></iron-icon>
-                                        <span id="type" style="font-size: 24px;">
-                                            [[item.hotel]]
-                                        </span>
+                                    <br>
+                                    <br>
+                                    <div style="padding: 16px; background-color: white;">
+                                        <hr>
+                                        <div style="color: gray;font-size: 11px;">
+                                            <iron-icon icon="my-icons:flag" id="date" style="color: gray;width: 20px;height: 20px;"></iron-icon>
+                                            Created
+                                            <span>
+                                                <time-ago datetime$="{{_timeStampToDateTime(item.createdAt)}}">{{_timeStampToDateTime(item.createdAt)}}</time-ago>
+                                                &nbsp;by&nbsp;[[item.created_by]]</span>
+                                        </div>
+                                        <div style="color: gray;font-size: 11px;">
+                                            <iron-icon icon="my-icons:update" id="date" style="color: gray;width: 20px;height: 20px;"></iron-icon>
+                                            Last Modified
+                                            <span>
+                                                <time-ago datetime$="{{_timeStampToDateTime(item.updatedAt)}}">{{_timeStampToDateTime(item.updatedAt)}}</time-ago>
+                                                &nbsp;by&nbsp;[[item.updated_by]]</span>
+                                        </div>
                                     </div>
-                                    <div style="margin-top: 12px; font-size: 14px;">
-                                        <iron-icon icon="my-icons:speaker-notes" id="date" style="color: gray"></iron-icon>
-                                        <span id="type" style="color:gray;font-size: 11px; ">
-                                            [[item.notes]]
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </template>
+                                </paper-card>
+                            </template>
+                        </div>
                     </iron-scroll-document>
                 </app-header-layout>
-                <a href="/availability/new" style="text-decoration: none; ">
-                    <paper-fab noink on-tap="_availnew" icon="my-icons:add" class="blue"></paper-fab>
-                </a>
             </div>
-
             <div name="/new">
                 <div id="availnew"></div>
-                <my-availability-new id="d23" path=" " prev-route="{{route.prefix}}"></my-availability-new>
+                <my-availability-new id="d23" path=" " account-key='{{accountKey}}' prev-route="{{route.prefix}}"></my-availability-new>
             </div>
             <div name="view404 ">Not found.</div>
         </iron-pages>
 
         <div hidden$="{{!editActive}}">
             <div id="availedit"></div>
-            <!-- <template is="dom-if" if="{{editActive}}" restamp> -->
             <my-availability-edit id="d24" edit-key='{{editData._id}}' prev-route="{{route.prefix}}"></my-availability-edit>
-            <!-- </template> -->
         </div>
-
         <iron-ajax verbose id="ajax" method="[[method]]" on-response="_handleResponse"></iron-ajax>
-
     </template>
 
     <script>
@@ -273,6 +253,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 routeData: Object,
                 data: Object,
                 year: Number,
+                accountKey: String,
                 monthly: String,
                 sameHotel: String,
                 openSearch: {
@@ -291,6 +272,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 observers: [
                     '_searchChanged(filterBy, search)',]
             },
+
             toggleSearch() {
                 this.openSearch = true;
             },
@@ -338,6 +320,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     }
                     var newDiv = document.createElement("my-availability-new");
                     newDiv.setAttribute("id", "d23");
+                    newDiv.setAttribute("account-key", this.accountKey);
+
                     newDiv.setAttribute("prev-route", this.route.prefix);
                     var currentDiv = document.getElementById("availnew");
                     Polymer.dom(node.parentNode).insertBefore(newDiv, currentDiv);

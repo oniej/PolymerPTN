@@ -98,14 +98,26 @@ interface IronFormElement extends Polymer.Element {
   headers: object|null|undefined;
 
   /**
-   * Set the `withCredentials` flag on the request. See PolymerElements/iron-ajax for
-   * more details. Only works when `allowRedirect` is false.
+   * Set the `withCredentials` flag on the request. See
+   * PolymerElements/iron-ajax for more details. Only works when
+   * `allowRedirect` is false.
    */
   withCredentials: boolean|null|undefined;
   attached(): void;
   detached(): void;
   _init(): void;
-  _saveInitialValues(): void;
+
+  /**
+   * Saves the values of all form elements that will be used when resetting
+   * the form. Initially called asynchronously on attach. Any time you
+   * call this function, the previously saved values for a form element will
+   * be overwritten.
+   *
+   * This function is useful if you are dynamically adding elements to
+   * the form, or if your elements are asynchronously setting their values.
+   */
+  saveResetValues(): void;
+  _saveInitialValues(overwriteValues?: boolean): void;
 
   /**
    * Validates all the required elements (custom and native) in the form.

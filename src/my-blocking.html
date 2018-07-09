@@ -1,9 +1,7 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/polymer/polymer.html">
-
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
-
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/iron-scroll-threshold/iron-scroll-threshold.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
@@ -16,12 +14,8 @@
 <link rel="import" href="../bower_components/neon-animation/neon-animations.html">
 <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
 
-<<<<<<< HEAD
- 
-=======
 
 
->>>>>>> 98796414e378db92b01b78470eddb4f13c562e20
 <link rel="import" href="search-bar.html">
 <dom-module id="my-blocking">
     <template>
@@ -87,7 +81,7 @@
                 }
             }
 
-            @media (min-width: 768px) {
+            @media (min-width: 850px) {
                 div .blocking {
                     width: 765px;
                     margin: 16px auto;
@@ -117,7 +111,7 @@
                 }
             }
              */
-            
+
             @media (max-width: 768px) {
                 paper-card {
                     width: 100%;
@@ -288,8 +282,8 @@
                     </app-header>
                     <iron-ajax auto url="/agent/read" handle-as="json" on-response="_agentLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
                     <iron-scroll-document id="threshold">
-                            <div class="blocking">
-                                    <!-- <a href="/blocking/add" style="text-decoration: none;">
+                        <div class="blocking">
+                            <!-- <a href="/blocking/add" style="text-decoration: none;">
                                     <paper-card on-tap="_availnew">
                                         <div class="card-content">
                                             <center>
@@ -301,26 +295,28 @@
                                         </div>
                                     </paper-card>
                                 </a> -->
-                                <template is="dom-repeat" items="[[agents]]" as="item">
-                                        <a href="/blocking/agent/{{item.name}}" style="text-decoration: none;">
-                                            <paper-card>
-                                                <div class="card-content">
-                                                    <center>
-                                                    <div id="{{item.name}}" style="width: 110px;height: 110px;">
-                                                     
-                                                     
-                                                            <paper-icon-button id="{{item.name}}" noink on-tap="_showAgent" data-args="{{item.name}}" icon="my-icons:face" alt="{{item.name}}"
-                                                            style="color:#4CAF50;width: 110px;height: 110px;"></paper-icon-button>
-                                                      <br>
-                                                      <span style="color:#4CAF50;"><b>[[item.name]]</b></span>   
-                                                    </div>
-                                                </center>
+                            <template is="dom-repeat" items="[[agents]]" as="item">
+                                <a href="/blocking/agent/{{item.name}}" style="text-decoration: none;">
+                                    <paper-card>
+                                        <div class="card-content">
+                                            <center>
+                                                <div id="{{item.name}}" style="width: 110px;height: 110px;">
+
+
+                                                    <paper-icon-button id="{{item.name}}" noink on-tap="_showAgent" data-args="{{item.name}}" icon="my-icons:face" alt="{{item.name}}"
+                                                        style="color:#4CAF50;width: 110px;height: 110px;"></paper-icon-button>
+                                                    <br>
+                                                    <span style="color:#4CAF50;">
+                                                        <b>[[item.name]]</b>
+                                                    </span>
                                                 </div>
-                                                <br>
-                                            </paper-card>
-                                        </a>
-                              
-                                    <!-- <paper-card id="{{item._id}}">
+                                            </center>
+                                        </div>
+                                        <br>
+                                    </paper-card>
+                                </a>
+
+                                <!-- <paper-card id="{{item._id}}">
                                         <div id="{{item._id}}" class="header" style="background-color:white; padding: 16px; padding-bottom: 5px; font-size: 16px;color: black;font-weight: bold">
                                             <a href="/blocking/edit/{{item._id}}">
                                                 <paper-icon-button id="{{item._id}}" noink on-tap="_editAvailavility" data-args="{{item._id}}" icon="my-icons:edit" alt="{{item._id}}"
@@ -352,9 +348,9 @@
                                             </div>
                                         </div>
                                     </paper-card> -->
-                                </template>
-                            </div>
-                        </iron-scroll-document>
+                            </template>
+                        </div>
+                    </iron-scroll-document>
                     <!-- <iron-scroll-document id="threshold">
                             <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_blockingLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
                               <div class="blocking">
@@ -452,6 +448,9 @@
                                         </div>
 
                                     </div>
+                                </paper-card>
+                            </template>
+                        </div>
 
                                 </div>
                             </template>
@@ -464,7 +463,7 @@
 
             <div name="/add">
                 <div id="availnew"></div>
-                <my-blocking-add id="d23" path=" " prev-route="{{agentData._agent}}"></my-blocking-add>
+                <my-blocking-add  account-key='{{accountKey}}' id="d23" path=" " prev-route="{{agentData._agent}}"></my-blocking-add>
             </div>
             <div name="view404 ">Not found.</div>
         </iron-pages>
@@ -474,11 +473,11 @@
             <my-blocking-edit id="d24" edit-key='{{editData._id}}' prev-route="{{agentData._agent}}"></my-blocking-edit>
         </div>
         <div hidden$="{{!agentActive}}">
-                <div id="agent"></div>
-                <my-blocking-agent id="d25" agent-key='{{agentData._agent}}' prev-route="{{agentData._agent}}"></my-blocking-agent>
-            </div>
+            <div id="agent"></div>
+            <my-blocking-agent id="d25" agent-key='{{agentData._agent}}' prev-route="{{agentData._agent}}"></my-blocking-agent>
+        </div>
     </template>
-    
+
     <script>
         Polymer({
             is: 'my-blocking',
@@ -501,6 +500,7 @@
                     type: Number,
                     value: 2
                 },
+                accountKey: String,
                 observers: [
                     '_searchChanged(filterBy, search)',]
                 // isMousedown: { type: Boolean, value: false, }
@@ -566,6 +566,7 @@
                     var newDiv = document.createElement("my-blocking-add");
                     newDiv.setAttribute("id", "d23");
                     newDiv.setAttribute("prev-route", this.route.prefix);
+                    newDiv.setAttribute("account-key", this.accountKey);
                     // newDiv.setAttribute("block ", "3 ")
                     //if open existing
                     var currentDiv = document.getElementById("availnew");
@@ -608,9 +609,11 @@
                     Polymer.dom(node.parentNode).insertBefore(newDiv, currentDiv);
                 }
             },
-            _agentLoaded(data){
-                this.agents = data.detail.response.data;
-                // console.log(this.agents);
+            _agentLoaded(data) {
+                if (data.detail.response) {
+                    this.agents = data.detail.response.data;
+                    // console.log(this.agents);
+                }
             },
             toggleDrawer() {
                 this.dispatchEvent(new CustomEvent('toggleDrawer', {
@@ -620,10 +623,10 @@
                 }));
                 this.$.narrow = !this.$.narrow;
             },
-            // ready() {
-            //     this.url = '/blocking/read';
-
-            // },
+            ready() {
+                // this.url = '/blocking/read';
+                // console.log(this.accountKey);
+            },
             // _timeStampToDateTime(ts) {
             //     return new Date(ts);
             // },

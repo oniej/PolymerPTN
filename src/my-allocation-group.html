@@ -29,7 +29,6 @@
 <link rel="import" href="../bower_components/paper-radio-button/paper-radio-button.html">
 <link rel="import" href="../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="../bower_components/date-util/date-util.html">
 <link rel="import" href="time-element.html">
 <link rel="import" href="shared-styles.html">
 
@@ -254,14 +253,14 @@
                                     Created
                                     <span>
                                         <time-ago datetime$="{{_timeStampToDateTime(item.createdAt)}}">{{_timeStampToDateTime(item.createdAt)}}</time-ago>
-                                        <!-- &nbsp;by&nbsp;[[item.created_by]]</span> -->
+                                        &nbsp;by&nbsp;[[item.created_by]]</span>
                                 </div>
                                 <div style="color: gray;font-size: 11px;">
                                     <iron-icon icon="my-icons:update" id="date" style="color: gray;width: 20px;height: 20px;"></iron-icon>
-                                    Last Modified
+                                    Last Modifieds
                                     <span>
                                         <time-ago datetime$="{{_timeStampToDateTime(item.updatedAt)}}">{{_timeStampToDateTime(item.updatedAt)}}</time-ago>
-                                        <!-- &nbsp;by&nbsp;[[item.updated_by]]</span> -->
+                                        &nbsp;by&nbsp;[[item.updated_by]]</span>
                                 </div>
                             </div>
                         </paper-card>
@@ -316,8 +315,10 @@
 
             },
             _allocationLoaded(data) {
-                if (this.url === '/allocation/filterG/' + this.groupKey) {
-                    this.allocations = data.detail.response.data;
+                if (data.detail.response) {
+                    if (this.url === '/allocation/filterG/' + this.groupKey) {
+                        this.allocations = data.detail.response.data;
+                    }
                 }
             },
             toggleDrawer() {
@@ -330,6 +331,7 @@
             },
             ready() {
                 this.url = '/allocation/filterG/' + this.groupKey;
+           
             },
             _timeStampToDateTime(ts) {
                 return new Date(ts);
@@ -343,7 +345,7 @@
                 var day = today.getDate();
                 var month_index = today.getMonth();
                 var year = today.getFullYear();
-                
+
                 return day + "-" + month_names[month_index] + "-" + year;
             }
         });

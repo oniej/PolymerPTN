@@ -373,13 +373,13 @@
                         <div>
                             <iron-icon icon="my-icons:flag" slot="prefix"></iron-icon>
                             <span id="created">Created by:</span>
-                            <!--{{created_by}} -->Jeino &nbsp;
+                            {{created_by}} &nbsp;
                             <time-ago datetime$="{{_timeStampToDateTime(createdAt)}}">{{_timeStampToDateTime(createdAt)}}</time-ago>
                         </div>
                         <div>
                             <iron-icon icon="my-icons:update" slot="prefix"></iron-icon>
                             <span id="created">Last Modified by:</span>
-                            <!--{{updated_by}}-->Jeino &nbsp;
+                            {{updated_by}} &nbsp;
                             <time-ago datetime$="{{_timeStampToDateTime(updatedAt)}}">{{_timeStampToDateTime(updatedAt)}}</time-ago>
                         </div>
                     </div>
@@ -585,7 +585,7 @@
                             note: this.note,
                             seasondate: this.seasonDetails,
                             created_by: this.created_by,
-                            updated_by: this.updated_by,
+                            updated_by: this.updated_by, 
                         };
                         this.$.ajax.generateRequest();
                         this.$.allocationSave.opened = false;

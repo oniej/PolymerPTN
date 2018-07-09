@@ -73,7 +73,10 @@
     "vaadin-item": "vaadin/vaadin-item#^2.0.0",
     "vaadin-list-box": "vaadin/vaadin-list-box#^1.0.2",
     "vaadin-combo-box": "vaadin/vaadin-combo-box#^4.0.1",
-    "date-util": "*"
+    "g-element": "tigerlegab/g-element",
+    "iron-icon": "PolymerElements/iron-icon#^2.1.0",
+    "iron-meta": "PolymerElements/iron-meta#^2.0.0",
+    "vaadin-usage-statistics": "vaadin/vaadin-usage-statistics#optout"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^6.0.0"
@@ -86,6 +89,10 @@
     "iron-iconset-svg": "^2.0.0",
     "webcomponentsjs": "^v1.0.19",
     "polymer": "^2.2.0",
-    "iron-flex-layout": "^2.0.0"
+    "iron-flex-layout": "^2.0.0",
+    "vaadin-button": "^2.0.1",
+    "moment": "^2.22.1",
+    "iron-icon": "^2.0.1",
+    "vaadin-control-state-mixin": "^2.0.0"
   }
 }

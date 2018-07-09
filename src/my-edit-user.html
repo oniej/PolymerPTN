@@ -102,16 +102,18 @@
 
                 <div class="docu">
                     <div class="details">
+                        <paper-input value="{{account_key}}" always-float-label label="Account No." readonly></paper-input>
                         <paper-input value="{{fullname}}" float-label label="Full Name"></paper-input>
                         <paper-input value="{{email}}" float-label label="Email"></paper-input>
-                        <paper-dropdown-menu style="cursor:pointer" label="Account Type" value="{{account_type}}">
-                            <paper-listbox slot="dropdown-content" class="dropdown-content" selected="{{roleAdd}}">
+                        <paper-dropdown-menu style="cursor:pointer" label="Account Type" id="role">
+                            <paper-listbox slot="dropdown-content" class="dropdown-content" selected="{{roleAdd}}" value="{{role}}">
+                                <!-- <paper-item>Admin Staff</paper-item> -->
                                 <paper-item>Staff</paper-item>
                                 <paper-item>Agent</paper-item>
                             </paper-listbox>
                         </paper-dropdown-menu>
-                        <paper-dropdown-menu style="cursor:pointer" label="Group" value="{{group}}">
-                            <paper-listbox slot="dropdown-content" class="dropdown-content" selected="{{groupAdd}}">
+                        <paper-dropdown-menu style="cursor:pointer" label="Group" id="group">
+                            <paper-listbox slot="dropdown-content" class="dropdown-content" selected="{{groupAdd}}" value="{{group}}">
                                 <paper-item>Tabikobu</paper-item>
                                 <paper-item>PTN</paper-item>
                             </paper-listbox>
@@ -125,6 +127,7 @@
                             <paper-button id="favright" class="cancel" on-tap="_cancel">Cancel</paper-button>
                         </a>
                         <paper-button id="favleft" class="darkorange" on-click="_submit" raised>Update</paper-button>
+
                     </span>
                 </div>
 
@@ -189,24 +192,17 @@
                 selectedItem: {
                     observer: '_selectedItemChanged'
                 },
-                selectedItems: {
-                    type: Object,
-                },
+                selectedItems: Object,
                 roleAdd: {
                     type: Number,
                     observer: 'roleAddChanged'
                 },
-                role: {
-                    type: String,
-                    value: ''
-                },
+                role: String,
                 groupAd: {
                     type: Number,
                     observer: '_groupAddChanged',
                 },
-                group: {
-                    type: String,
-                }
+                group: String,
             },
             _groupAddChanged() {
                 if (this.groupAd == 0) {
@@ -217,17 +213,15 @@
             },
             roleAddChanged() {
                 if (this.roleAdd == 0) {
-                    this.account_type = 'Staff';
+                    this.role = 'Staff';
                 }
                 else if (this.roleAdd == 1) {
-                    this.account_type = 'Agent';
+                    this.role = 'Agent';
                 }
+                // else if (this.roleAdd == 2) {
+                //     this.role = 'Agent';
+                // }
             },
-            // getpath() {
-            //     this.accountkey = this.guid();
-            //     this.path = 'accountlist/' + this.accountkey;
-            //     return this.path;
-            // },
             guid: function () {
                 var uid = new ShortUniqueId();
                 return uid.randomUUID(6);
@@ -238,7 +232,6 @@
             _close() {
                 this.$.deactivateSuccess.opened = false;
                 this.$.deactivate.opened = false;
-                // window.location.assign('/users');
             }, _ok() {
                 this.$.deactivateSuccess.opened = false;
                 window.location.assign('/users');
@@ -246,47 +239,48 @@
             _deactivateSelected() {
                 this.$.deactivate.opened = true;
             },
-            _deactivate() {
-                if (this.editKey) {
-                    this.method = 'PUT';
-                    this.$.ajax.url = '/users/block/' + this.editKey;
-                    this.$.ajax.contentType = "application/json";
-                    this.$.ajax.body = {
-                        active: this.active = false,
-                    };
-                    // console.log(this.$.ajax.body);
-                    this.$.ajax.generateRequest();
-                    this.$.deactivate.opened = false;
-                    this.$.deactivateSuccess.opened = true;
-                    this.url = '/users/dummy';
-                }
-                else {
-                    this.msg = "All fields required";
-                }
-            },
+            // _deactivate() {
+            //     if (this.editKey) {
+            //         this.method = 'PUT';
+            //         this.$.ajax.url = '/users/block/' + this.editKey;
+            //         this.$.ajax.contentType = "application/json";
+            //         this.$.ajax.body = {
+            //             active: this.active = false,
+            //         };
+            //         // console.log(this.$.ajax.body);
+            //         this.$.ajax.generateRequest();
+            //         this.$.deactivate.opened = false;
+            //         this.$.deactivateSuccess.opened = true;
+            //         this.url = '/users/dummy';
+            //     }
+            //     else {
+            //         this.msg = "All fields required";
+            //     }
+            // },
             _update() {
-                if (this.fullname && this.email) {
-                    if (this.editKey) {
-                        this.method = 'PUT';
-                        this.$.ajax.url = '/users/update/' + this.editKey;
-                        this.$.ajax.contentType = "application/json";
-                        this.$.ajax.body = {
-                            fullname: this.fullname,
-                            email: this.email,
-                            account_type: this.account_type,
-                            group: this.group,
-                            active: false,
-
-                        };
-                        // console.log(this.$.ajax.body);
-                        this.$.ajax.generateRequest();
-
-                        this.$.UpdateModal.opened = false;
-                        this.$.successModal.opened = true;
-                        this.url = '/users/dummy';
+                if (!this.fullname || !this.email || !this.role || !this.group) {
+                    alert('Please fill up all required fields..');
+                } else {
+                    var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                    if (!filter.test(this.email)) {
+                        alert('Please provide a valid email address');
+                        this.email.focus;
+                        return false;
                     }
                     else {
-                        this.msg = "All fields required";
+                        this.method = 'PUT';
+                        this.$.ajax.url = '/user/update/' + this.editKey;
+                        this.$.ajax.contentType = "application/json";
+                        this.$.ajax.body = {
+                            name: this.fullname,
+                            email: this.email,
+                            role: this.role,
+                            group: this.group,
+                        };
+                        this.$.ajax.generateRequest();
+                        this.$.UpdateModal.opened = false;
+                        this.$.successModal.opened = true;
+                        this.url = '';
                     }
                 }
             },
@@ -296,19 +290,25 @@
             },
             _editKeyChanged() {
                 if (this.editKey) {
-                    this.url = '/users/readMe/' + this.editKey;
+                    this.url = '/user/edit/' + this.editKey;
                 }
                 else {
                     this.url = '/users/dummy';
                 }
             },
             _usersLoad(data) {
-                if (this.editKey) {
-                    if (this.url === '/users/readMe/' + this.editKey) {
-                        this.fullname = data.detail.response.data.fullname;
-                        this.email = data.detail.response.data.email;
-                        this.account_type = data.detail.response.data.account_type;
-                        this.group = data.detail.response.data.group;
+                if (data.detail.response) {
+                    if (this.editKey) {
+                        if (this.url === '/user/edit/' + this.editKey) {
+                            this.fullname = data.detail.response.data.name;
+                            this.email = data.detail.response.data.email;
+                            this.account_key = data.detail.response.data.accountkey;
+                            this.role = data.detail.response.data.role;
+                            this.group = data.detail.response.data.group;
+
+                            Polymer.dom(this.root).querySelector("#group").value = this.group;
+                            Polymer.dom(this.root).querySelector("#role").value = this.role;
+                        }
                     }
                 }
             },

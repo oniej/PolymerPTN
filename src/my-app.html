@@ -27,6 +27,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../bower_components/paper-item/paper-icon-item.html">
 <link rel="import" href="../bower_components/paper-item/paper-item-body.html">
+<link rel="import" href="../bower_components/g-element/mongo-auth.html">
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner.html">
+
 
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="my-icons.html">
@@ -34,17 +37,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="lazy-import" href="my-inquire-one.html">
 <link rel="lazy-import" href="my-availability.html">
 <link rel="lazy-import" href="my-blocking.html">
+<link rel="lazy-import" href="my-booking.html">
 <link rel="lazy-import" href="my-hotels.html">
 <link rel="lazy-import" href="my-users.html">
 <link rel="lazy-import" href="my-group.html">
 <link rel="lazy-import" href="my-allocation.html">
-<link rel="lazy-import" href="my-agent.html">
-
 <link rel="lazy-import" href="my-settings.html">
 <link rel="lazy-import" href="my-inquiry2.html">
-
+<link rel="lazy-import" href="my-agent.html">
 <!-- <link rel="lazy-import" href="my-view1.html"> -->
-<!-- <link rel="lazy-import" href="my-signin.html"> -->
+<link rel="lazy-import" href="my-signin.html">
+<link rel="lazy-import" href="my-account-deactivated">
+<link rel="lazy-import" href="my-account-setup.html">
+<link rel="lazy-import" href="my-resetpw.html">
+<link rel="lazy-import" href="my-resetpwlink.html">
+
 <!--<link rel="lazy-import" href="my-view2.html">
 
 <link rel="lazy-import" href="my-view404.html"> -->
@@ -204,6 +211,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        z-index: 2;
       }
 
       .avatar-container {
@@ -264,9 +272,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         opacity: 0;
       }
     </style>
-
+    <div id="overlay">
+      <paper-spinner id="spinner" active></paper-spinner>
+    </div>
     <app-location route="{{route}}" url-space-regex="^[[rootPath]]">
     </app-location>
+
+    <mongo-auth id="auth" status-known="{{statusknown}}" user="{{user}}"></mongo-auth>
 
     <app-route route="{{route}}" pattern="[[rootPath]]:page" data="{{routeData}}" tail="{{subroute}}">
     </app-route>
@@ -276,100 +288,371 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <my-signin name="signin"></my-signin>
     </iron-pages>
   </template> -->
-    <app-drawer-layout fullbleed narrow="{{narrow}}" id="drawerLayout">
-      <app-drawer id="drawerMain" slot="drawer" swipe-open="[[narrow]]">
-        <div style="height: 100%; overflow: auto;">
-          <app-header fixed slot="header">
-            <div class="avatar-container">
-              <div class="image">
+    <template is="dom-if" if="{{statusknown}}">
+      <template is="dom-if" if="{{user.active}}">
+        <!-- for admmin staff -->
+        <template is="dom-if" if="{{_checkAdmin(user.role)}}">
+          <app-drawer-layout fullbleed narrow="{{narrow}}" id="drawerLayout">
+            <app-drawer id="drawerMain" slot="drawer" swipe-open="[[narrow]]">
+              <div style="height: 100%; overflow: auto;">
+                <app-header fixed slot="header">
+                  <div class="avatar-container">
+                    <div class="image">
+                    </div>
+                  </div>
+                  <div class="contact-info">
+                    <div class="name">[[user.email]]</div>
+                    <div class="email">[[user.role]]</div>
+                  </div>
+                </app-header>
+
+                <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
+                  <a name="availability" href="[[rootPath]]availability">
+                    <paper-icon-item toggles="true" class="menuSelected">
+                      <iron-icon icon="my-icons:dashboard" slot="item-icon"></iron-icon>
+                      <span>Availability</span>
+                    </paper-icon-item>
+                  </a>
+                  <a name="allocation" href="[[rootPath]]allocation">
+                    <paper-icon-item toggles="true" class="menuSelected">
+                      <iron-icon icon="my-icons:dashboard" slot="item-icon"></iron-icon>
+                      <span>Allocation</span>
+                    </paper-icon-item>
+                  </a>
+                  <a name="blocking" href="[[rootPath]]blocking">
+                    <paper-icon-item toggles="true" class="menuSelected">
+                      <iron-icon icon="my-icons:block" slot="item-icon"></iron-icon>
+                      <span>Blocking</span>
+                    </paper-icon-item>
+                  </a>
+                  <a name="inquiry2" href="[[rootPath]]inquiry2">
+                    <paper-icon-item toggles="true" class="menuSelected">
+                      <iron-icon icon="my-icons:dashboard" slot="item-icon"></iron-icon>
+                      <span>Inquiry 1</span>
+                    </paper-icon-item>
+                  </a>
+                  <a name="inquire-one" href="[[rootPath]]inquire-one">
+                    <paper-icon-item toggles="true" class="menuSelected">
+                      <iron-icon icon="my-icons:dashboard" slot="item-icon"></iron-icon>
+                      <span>Inquiry 2</span>
+                    </paper-icon-item>
+                  </a>
+                  <a name="hotels" href="[[rootPath]]hotels">
+                    <paper-icon-item toggles="true" class="menuSelected">
+                      <iron-icon icon="my-icons:location-city" slot="item-icon"></iron-icon>
+                      <span>Hotels</span>
+                    </paper-icon-item>
+                  </a>
+                  <a name="users" href="[[rootPath]]users">
+                    <paper-icon-item toggles="true" class="menuSelected">
+                      <iron-icon icon="my-icons:account-circle" slot="item-icon"></iron-icon>
+                      <span>Users</span>
+                    </paper-icon-item>
+                  </a>
+                  <a name="agent" href="[[rootPath]]agent">
+                    <paper-icon-item toggles="true" class="menuSelected">
+                      <iron-icon icon="my-icons:account-circle" slot="item-icon"></iron-icon>
+                      <span>Agent</span>
+                    </paper-icon-item>
+                  </a>
+                  <a name="group" href="[[rootPath]]group">
+                    <paper-icon-item toggles="true" class="menuSelected">
+                      <iron-icon icon="my-icons:group" slot="item-icon"></iron-icon>
+                      <span>Group</span>
+                    </paper-icon-item>
+                  </a>
+                  <a name="settings" href="[[rootPath]]settings">
+                    <paper-icon-item toggles="true" class="menuSelected">
+                      <iron-icon icon="my-icons:build" slot="item-icon"></iron-icon>
+                      <span>Settings</span>
+                    </paper-icon-item>
+                  </a>
+                  <a on-tap="_signOut" href="#">
+                    <paper-icon-item toggles="true">
+                      <iron-icon icon="my-icons:power-settings-new" slot="item-icon"></iron-icon>
+                      <span>Sign-out</span>
+                    </paper-icon-item>
+                  </a>
+                </iron-selector>
               </div>
-            </div>
-            <div class="contact-info">
-              <div class="name">pvillac95@gmail.com</div>
-              <div class="email">Staff</div>
-            </div>
-          </app-header>
+            </app-drawer>
+            <!-- Main content -->
+            <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
+              <my-inquire-one name="inquire-one" route="{{subroute}}"></my-inquire-one>
+              <my-inquiry-one name="inquiry-one" route="{{subroute}}"></my-inquiry-one>
+              <my-availability name="availability" route="{{subroute}}"></my-availability>
+              <my-allocation name="allocation" route="{{subroute}}"></my-allocation>
+              <my-blocking name="blocking" route="{{subroute}}"></my-blocking>
+              <!-- <my-inquire-one name="inquire-one" route="{{subroute}}"></my-inquire-one> -->
+              <my-inquiry2 name="inquiry2" route="{{subroute}}"></my-inquiry2>
+              <my-hotels name="hotels" route="{{subroute}}"></my-hotels>
+              <my-users name="users" route="{{subroute}}"></my-users>
+              <my-agent name="agent" route="{{subroute}}"></my-agent>
+              <my-group name="group" route="{{subroute}}"></my-group>
+              <my-settings name="settings" route="{{subroute}}"></my-settings>
+              <my-view404 name="view404"></my-view404>
+            </iron-pages>
+          </app-drawer-layout>
+        </template>
+        <!-- for Staff only -->
+        <template is="dom-if" if="{{_checkStaff(user.role)}}">
+          <app-drawer-layout fullbleed narrow="{{narrow}}" id="drawerLayout">
+            <app-drawer id="drawerMain" slot="drawer" swipe-open="[[narrow]]">
+              <div style="height: 100%; overflow: auto;">
+                <app-header fixed slot="header">
+                  <div class="avatar-container">
+                    <div class="image">
+                    </div>
+                  </div>
+                  <div class="contact-info">
+                    <div class="name">[[user.email]]</div>
+                    <div class="email">[[user.role]]</div>
+                  </div>
+                </app-header>
 
-          <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-            <a name="inquire-one" href="[[rootPath]]inquire-one">
-              <paper-icon-item toggles="true" class="menuSelected">
-                <iron-icon icon="my-icons:dashboard" slot="item-icon"></iron-icon>
-                <span>Inquiry One</span>
-              </paper-icon-item>
-            </a>
-            <a name="availability" href="[[rootPath]]availability">
-              <paper-icon-item toggles="true" class="menuSelected">
-                <iron-icon icon="my-icons:dashboard" slot="item-icon"></iron-icon>
-                <span>Availability</span>
-              </paper-icon-item>
-            </a>
-            <a name="blocking" href="[[rootPath]]blocking">
-              <paper-icon-item toggles="true" class="menuSelected">
-                <iron-icon icon="my-icons:dashboard" slot="item-icon"></iron-icon>
-                <span>Blocking</span>
-              </paper-icon-item>
-            </a>
-            <a name="allocation" href="[[rootPath]]allocation">
-              <paper-icon-item toggles="true" class="menuSelected">
-                <iron-icon icon="my-icons:dashboard" slot="item-icon"></iron-icon>
-                <span>Allocation</span>
-              </paper-icon-item>
-            </a>
-            <a name="inquiry2" href="[[rootPath]]inquiry2">
-              <paper-icon-item toggles="true" class="menuSelected">
-                <iron-icon icon="my-icons:dashboard" slot="item-icon"></iron-icon>
-                <span>Inquiry 2</span>
-              </paper-icon-item>
-            </a>
-            <a name="hotels" href="[[rootPath]]hotels">
-              <paper-icon-item toggles="true" class="menuSelected">
-                <iron-icon icon="my-icons:location-city" slot="item-icon"></iron-icon>
-                <span>Hotels</span>
-              </paper-icon-item>
-            </a>
-            <a name="users" href="[[rootPath]]users">
-              <paper-icon-item toggles="true" class="menuSelected">
-                <iron-icon icon="my-icons:account-circle" slot="item-icon"></iron-icon>
-                <span>Users</span>
-              </paper-icon-item>
-            </a>
-            <a name="agent" href="[[rootPath]]agent">
-                <paper-icon-item toggles="true" class="menuSelected">
-                  <iron-icon icon="my-icons:account-circle" slot="item-icon"></iron-icon>
-                  <span>Agent</span>
-                </paper-icon-item>
-              </a>
-            <a name="settings" href="[[rootPath]]settings">
-              <paper-icon-item toggles="true" class="menuSelected">
-                <iron-icon icon="my-icons:build" slot="item-icon"></iron-icon>
-                <span>Settings</span>
-              </paper-icon-item>
-            </a>
-            <a on-tap="_signOut" href="/">
-              <paper-icon-item toggles="true">
-                <iron-icon icon="my-icons:power-settings-new" slot="item-icon"></iron-icon>
-                <span>Sign-out</span>
-              </paper-icon-item>
-            </a>
-          </iron-selector>
-        </div>
-      </app-drawer>
-      <!-- Main content -->
+                <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
+                  <a name="availability" href="[[rootPath]]availability">
+                    <paper-icon-item toggles="true" class="menuSelected">
+                      <iron-icon icon="my-icons:dashboard" slot="item-icon"></iron-icon>
+                      <span>Availability</span>
+                    </paper-icon-item>
+                  </a>
+                  <a name="allocation" href="[[rootPath]]allocation">
+                    <paper-icon-item toggles="true" class="menuSelected">
+                      <iron-icon icon="my-icons:dashboard" slot="item-icon"></iron-icon>
+                      <span>Allocation</span>
+                    </paper-icon-item>
+                  </a>
+                  <a name="blocking" href="[[rootPath]]blocking">
+                    <paper-icon-item toggles="true" class="menuSelected">
+                      <iron-icon icon="my-icons:block" slot="item-icon"></iron-icon>
+                      <span>Blocking</span>
+                    </paper-icon-item>
+                  </a>
+                  <a name="booking" href="[[rootPath]]booking">
+                    <paper-icon-item toggles="true" class="menuSelected">
+                      <iron-icon icon="my-icons:dashboard" slot="item-icon"></iron-icon>
+                      <span>Booking</span>
+                    </paper-icon-item>
+                  </a>
+                  <a name="inquiry2" href="[[rootPath]]inquiry2">
+                    <paper-icon-item toggles="true" class="menuSelected">
+                      <iron-icon icon="my-icons:dashboard" slot="item-icon"></iron-icon>
+                      <span>Inquiry 1</span>
+                    </paper-icon-item>
+                  </a>
+                  <a name="inquire-one" href="[[rootPath]]inquire-one">
+                    <paper-icon-item toggles="true" class="menuSelected">
+                      <iron-icon icon="my-icons:dashboard" slot="item-icon"></iron-icon>
+                      <span>Inquiry 2</span>
+                    </paper-icon-item>
+                  </a>
+                  <a name="hotels" href="[[rootPath]]hotels">
+                    <paper-icon-item toggles="true" class="menuSelected">
+                      <iron-icon icon="my-icons:location-city" slot="item-icon"></iron-icon>
+                      <span>Hotels</span>
+                    </paper-icon-item>
+                  </a>
+                  <a name="group" href="[[rootPath]]group">
+                    <paper-icon-item toggles="true" class="menuSelected">
+                      <iron-icon icon="my-icons:group" slot="item-icon"></iron-icon>
+                      <span>Group</span>
+                    </paper-icon-item>
+                  </a>
+                  <a name="users" href="[[rootPath]]users">
+                    <paper-icon-item toggles="true" class="menuSelected">
+                      <iron-icon icon="my-icons:account-circle" slot="item-icon"></iron-icon>
+                      <span>Users</span>
+                    </paper-icon-item>
+                  </a>
+                  <a name="agent" href="[[rootPath]]agent">
+                    <paper-icon-item toggles="true" class="menuSelected">
+                      <iron-icon icon="my-icons:account-circle" slot="item-icon"></iron-icon>
+                      <span>Agent</span>
+                    </paper-icon-item>
+                  </a>
+                  <a name="settings" href="[[rootPath]]settings">
+                    <paper-icon-item toggles="true" class="menuSelected">
+                      <iron-icon icon="my-icons:build" slot="item-icon"></iron-icon>
+                      <span>Settings</span>
+                    </paper-icon-item>
+                  </a>
+                  <a on-tap="_signOut" href="#">
+                    <paper-icon-item toggles="true">
+                      <iron-icon icon="my-icons:power-settings-new" slot="item-icon"></iron-icon>
+                      <span>Sign-out</span>
+                    </paper-icon-item>
+                  </a>
+                </iron-selector>
+              </div>
+            </app-drawer>
+            <!-- Main content -->
+            <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
+              <my-inquire-one name="inquire-one" route="{{subroute}}"></my-inquire-one>
+              <my-inquiry-one name="inquiry-one" route="{{subroute}}"></my-inquiry-one>
+              <my-availability name="availability" route="{{subroute}}" account-key="{{user.accountkey}}"></my-availability>
+              <my-allocation name="allocation" route="{{subroute}}" account-key="{{user.accountkey}}"></my-allocation>
+              <my-blocking name="blocking" route="{{subroute}}" account-key="{{user.accountkey}}"></my-blocking>
+              <my-booking name="booking" route="{{subroute}}"></my-booking>
+              <my-users name="users" route="{{subroute}}"></my-users>
+              <my-inquiry2 name="inquiry2" route="{{subroute}}"></my-inquiry2>
+              <my-hotels name="hotels" route="{{subroute}}"></my-hotels>
+              <my-group name="group" route="{{subroute}}"></my-group>
+              <my-agent name="agent" route="{{subroute}}"></my-agent>
+              <my-settings name="settings" route="{{subroute}}"></my-settings>
+              <my-view404 name="view404"></my-view404>
+            </iron-pages>
+          </app-drawer-layout>
+        </template>
+        <!-- for agent -->
+        <template is="dom-if" if="{{_checkAgent(user.role)}}">
+          <app-drawer-layout fullbleed narrow="{{narrow}}" id="drawerLayout">
+            <app-drawer id="drawerMain" slot="drawer" swipe-open="[[narrow]]">
+              <div style="height: 100%; overflow: auto;">
+                <app-header fixed slot="header">
+                  <div class="avatar-container">
+                    <div class="image">
+                    </div>
+                  </div>
+                  <div class="contact-info">
+                    <div class="name">[[user.email]]</div>
+                    <div class="email">[[user.role]]</div>
+                  </div>
+                </app-header>
+
+                <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
+                  <a name="inquiry2" href="[[rootPath]]inquiry2">
+                    <paper-icon-item toggles="true" class="menuSelected">
+                      <iron-icon icon="my-icons:dashboard" slot="item-icon"></iron-icon>
+                      <span>Inquiry 1</span>
+                    </paper-icon-item>
+                  </a>
+                  <a name="inquire-one" href="[[rootPath]]inquire-one">
+                    <paper-icon-item toggles="true" class="menuSelected">
+                      <iron-icon icon="my-icons:dashboard" slot="item-icon"></iron-icon>
+                      <span>Inquiry 2</span>
+                    </paper-icon-item>
+                  </a>
+                  <a on-tap="_signOut" href="#">
+                    <paper-icon-item toggles="true">
+                      <iron-icon icon="my-icons:power-settings-new" slot="item-icon"></iron-icon>
+                      <span>Sign-out</span>
+                    </paper-icon-item>
+                  </a>
+                </iron-selector>
+              </div>
+            </app-drawer>
+            <!-- Main content -->
+            <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
+              <my-inquire-one name="inquire-one" route="{{subroute}}"></my-inquire-one>
+              <my-inquiry-one name="inquiry-one" route="{{subroute}}"></my-inquiry-one>
+              <my-inquiry2 name="inquiry2" route="{{subroute}}"></my-inquiry2>
+              <my-view404 name="view404"></my-view404>
+            </iron-pages>
+          </app-drawer-layout>
+        </template>
+      </template>
+
+      <template is="dom-if" if="{{!user.active}}">
+        <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
+          <my-account-deactivated name="account-deactivated"></my-account-deactivated>
+        </iron-pages>
+      </template>
+
+    </template>
+
+    <template is="dom-if" if="{{!statusknown}}" restamp>
       <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
-        <my-inquire-one name="inquire-one" route="{{subroute}}"></my-inquire-one>
-        <my-availability name="availability" route="{{subroute}}"></my-availability>
-        <my-blocking name="blocking" route="{{subroute}}"></my-blocking>
-        <my-allocation name="allocation" route="{{subroute}}"></my-allocation>
-        <my-inquiry2 name="inquiry2" route="{{subroute}}"></my-inquiry2>
-        <my-hotels name="hotels" route="{{subroute}}"></my-hotels>
-        <my-users name="users" route="{{subroute}}"></my-users>
-        <my-agent name="agent" route="{{subroute}}"></my-agent>
-        <my-settings name="settings" route="{{subroute}}"></my-settings> 
-        <my-view404 name="view404"></my-view404>
-      </iron-pages>
-    </app-drawer-layout>
-  </template>
+        <my-signin name="signin" status-known="{{statusknown}}" user="{{user}}"></my-signin>
+        <my-account-setup name="account-setup" route="[[subroute]]"></my-account-setup>
+        <my-resetpw name="resetpw"></my-resetpw>
+        <my-resetpwlink name="resetpwlink" route="[[subroute]]"></my-resetpwlink>
+        </div>
+        <div class="contact-info">
+          <div class="name">pvillac95@gmail.com</div>
+          <div class="email">Staff</div>
+        </div>
+        </app-header>
 
+        <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
+          <a name="inquire-one" href="[[rootPath]]inquire-one">
+            <paper-icon-item toggles="true" class="menuSelected">
+              <iron-icon icon="my-icons:dashboard" slot="item-icon"></iron-icon>
+              <span>Inquiry One</span>
+            </paper-icon-item>
+          </a>
+          <a name="availability" href="[[rootPath]]availability">
+            <paper-icon-item toggles="true" class="menuSelected">
+              <iron-icon icon="my-icons:dashboard" slot="item-icon"></iron-icon>
+              <span>Availability</span>
+            </paper-icon-item>
+          </a>
+          <a name="blocking" href="[[rootPath]]blocking">
+            <paper-icon-item toggles="true" class="menuSelected">
+              <iron-icon icon="my-icons:dashboard" slot="item-icon"></iron-icon>
+              <span>Blocking</span>
+            </paper-icon-item>
+          </a>
+          <a name="allocation" href="[[rootPath]]allocation">
+            <paper-icon-item toggles="true" class="menuSelected">
+              <iron-icon icon="my-icons:dashboard" slot="item-icon"></iron-icon>
+              <span>Allocation</span>
+            </paper-icon-item>
+          </a>
+          <a name="inquiry2" href="[[rootPath]]inquiry2">
+            <paper-icon-item toggles="true" class="menuSelected">
+              <iron-icon icon="my-icons:dashboard" slot="item-icon"></iron-icon>
+              <span>Inquiry 2</span>
+            </paper-icon-item>
+          </a>
+          <a name="hotels" href="[[rootPath]]hotels">
+            <paper-icon-item toggles="true" class="menuSelected">
+              <iron-icon icon="my-icons:location-city" slot="item-icon"></iron-icon>
+              <span>Hotels</span>
+            </paper-icon-item>
+          </a>
+          <a name="users" href="[[rootPath]]users">
+            <paper-icon-item toggles="true" class="menuSelected">
+              <iron-icon icon="my-icons:account-circle" slot="item-icon"></iron-icon>
+              <span>Users</span>
+            </paper-icon-item>
+          </a>
+          <a name="agent" href="[[rootPath]]agent">
+            <paper-icon-item toggles="true" class="menuSelected">
+              <iron-icon icon="my-icons:account-circle" slot="item-icon"></iron-icon>
+              <span>Agent</span>
+            </paper-icon-item>
+          </a>
+          <a name="settings" href="[[rootPath]]settings">
+            <paper-icon-item toggles="true" class="menuSelected">
+              <iron-icon icon="my-icons:build" slot="item-icon"></iron-icon>
+              <span>Settings</span>
+            </paper-icon-item>
+          </a>
+          <a on-tap="_signOut" href="/">
+            <paper-icon-item toggles="true">
+              <iron-icon icon="my-icons:power-settings-new" slot="item-icon"></iron-icon>
+              <span>Sign-out</span>
+            </paper-icon-item>
+          </a>
+        </iron-selector>
+        </div>
+        </app-drawer>
+        <!-- Main content -->
+        <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
+          <my-inquire-one name="inquire-one" route="{{subroute}}"></my-inquire-one>
+          <my-availability name="availability" route="{{subroute}}"></my-availability>
+          <my-blocking name="blocking" route="{{subroute}}"></my-blocking>
+          <my-allocation name="allocation" route="{{subroute}}"></my-allocation>
+          <my-inquiry2 name="inquiry2" route="{{subroute}}"></my-inquiry2>
+          <my-hotels name="hotels" route="{{subroute}}"></my-hotels>
+          <my-users name="users" route="{{subroute}}"></my-users>
+          <my-agent name="agent" route="{{subroute}}"></my-agent>
+          <my-settings name="settings" route="{{subroute}}"></my-settings>
+          <my-view404 name="view404"></my-view404>
+        </iron-pages>
+    </template>
+  </template>
   <script>
     // Gesture events like tap and track generated from touch will not be
     // preventable, allowing for better scrolling performance.
@@ -385,7 +668,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             reflectToAttribute: true,
             observer: '_pageChanged',
           },
-          notLogin: { type: Boolean, value: true },
           narrow: {
             type: Boolean,
             notify: true
@@ -408,7 +690,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       static get observers() {
         return [
-          '_routePageChanged(routeData.page)',
+          '_routePageChanged(routeData.page, statusknown, user.active,role)',
         ];
       }
       toggleMenu() {
@@ -422,22 +704,34 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
 
       }
-      _routePageChanged(page) {
-        // console.log(page);
-        // If no page was found in the route data, page will be an empty string.
-        // Default to 'view1' in that case.
-        this.page = page || 'availability';
+      _routePageChanged(page, statusknown, active, role) {
+        Polymer.dom(this.root).querySelector("#overlay").style.display = 'flex';
+        Polymer.dom(this.root).querySelector("#spinner").active = true;
+        if (statusknown == true) {
+          Polymer.dom(this.root).querySelector("#overlay").style.display = 'none';
+          Polymer.dom(this.root).querySelector("#spinner").active = false;
+          if (active == true) {
+            if (role === 'Staff') {
+              this.page = page || 'availability';
+            } else {
+              this.page = page || 'inquiry2';
+            }
+          } else {
+            Polymer.dom(this.root).querySelector("#overlay").style.display = 'none';
+            Polymer.dom(this.root).querySelector("#spinner").active = false;
+            this.page = page || 'account-deactivated';
+          }
+        } else {
+          Polymer.dom(this.root).querySelector("#overlay").style.display = 'none';
+          Polymer.dom(this.root).querySelector("#spinner").active = false;
+          this.page = page || 'signin';
+        }
         var drawer = Polymer.dom(this.root).querySelector("#drawerMain");
         if (drawer) {
           if (!drawer.persistent) {
             drawer.close();
           }
         }
-
-        // Close a non-persistent drawer when the page & route are changed.
-        // if (!this.$.darwer.persistent) {
-        //   this.$.drawer.close();
-        // }
       }
       ready() {
         super.ready();
@@ -465,15 +759,43 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         drawerlayout.forceNarrow = e.detail.narrow;
         // console.log(drawerlayout);
       }
-
+      _checkAdmin(e) {
+        if (e === 'Admin Staff') return true;
+        else return false;
+      }
+      _checkStaff(e) {
+        if (e === 'Staff') return true;
+        else return false;
+      }
+      _checkAgent(e) {
+        if (e === 'Agent') return true;
+        else return false;
+      }
       _pageChanged(page) {
         // Load page import on demand. Show 404 page if fails
+        var loader = Polymer.dom(this.root).querySelector("#overlay");
+        var spinner = Polymer.dom(this.root).querySelector("#spinner");
         var resolvedPageUrl = this.resolveUrl('my-' + page + '.html');
+        loader.style.display = 'flex';
+        spinner.active = true;
         Polymer.importHref(
           resolvedPageUrl,
-          null,
+          function () {
+            loader.style.display = 'none';
+            spinner.active = false;
+          },
           this._showPage404.bind(this),
           true);
+        // Polymer.importHref(
+        //   resolvedPageUrl,
+        //   null,
+        //   this._showPage404.bind(this),
+        //   true);
+      }
+
+      _signOut() {
+        this.$.auth.signOut();
+        location.reload();
       }
 
       _showPage404() {

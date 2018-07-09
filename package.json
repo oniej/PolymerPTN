@@ -15,19 +15,17 @@
     "start:dev": "prpl-server --root ./build/ --config ./build/polymer.json"
   },
   "dependencies": {
-    "bcrypt": "^2.0.1",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "bower": "^1.8.4",
     "cors": "^2.8.4",
     "express": "^4.16.3",
-    "express-session": "^1.15.6",
-    "mongoose": "^5.1.1",
+    "jsonwebtoken": "^8.3.0",
+    "mongoose": "5.2.0",
     "morgan": "^1.9.0",
+    "nodemailer": "^4.6.7",
     "passport": "^0.4.0",
-    "passport-local": "^1.0.0",
-    "passport-local-mongoose": "^5.0.0",
-    "prpl-server": "^1.1.0",
-    "vaadin-button": "github:vaadin/vaadin-button"
+    "prpl-server": "^1.1.0"
   },
   "engines": {
     "node": ">=8.0"

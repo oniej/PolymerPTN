@@ -69,7 +69,7 @@
                 position: fixed;
                 bottom: 30px;
                 right: 30px;
-                background-color: #3F51B5;
+                background-color: darkorange;
             }
 
             @-webkit-keyframes fadeIn {
@@ -151,7 +151,7 @@
                 .group {
                     width: 45%;
                 }
-           }
+            }
 
             @media (min-width: 768px) {
                 .docu {
@@ -189,7 +189,7 @@
                 .group {
                     width: 100%;
                 }
-              }
+            }
 
             paper-toast {
                 width: 20%;
@@ -198,12 +198,12 @@
                 left: 10px;
                 margin-left: 20%;
             }
-
-     </style>
+        </style>
         <iron-ajax auto url="/users/read" handle-as="json" on-response="_agentLoaded" debounce-duration="300"></iron-ajax>
         <iron-ajax auto url="/hotel/read" handle-as="json" on-response="_hotelLoaded" debounce-duration="300"></iron-ajax>
         <iron-ajax id="ajaxRoom" handle-as="json" on-response="_roomsLoaded"></iron-ajax>
         <iron-ajax auto url="/group/read" handle-as="json" on-response="_groupLoaded" debounce-duration="300"></iron-ajax>
+        <iron-ajax auto url="{{urluser}}" params='{}' handle-as="json" on-response="_userLoaded"></iron-ajax>
         <app-drawer-layout fullbleed narrow="{{narrow}}" id="drawerLayout">
             <app-header-layout id="appheader" has-scrolling-region>
                 <app-header fixed slot="header">
@@ -223,9 +223,9 @@
                 </app-header>
                 <div class="card">
                     <div class="docu-header">
-                            <div class="activediv">
-                                    <paper-toggle-button style="float: right;" value="{{active}}" id="active" on-tap="_active" checked>ACTIVE</paper-toggle-button>
-                                </div>
+                        <div class="activediv">
+                            <paper-toggle-button style="float: right;" value="{{active}}" id="active" on-tap="_active" checked>ACTIVE</paper-toggle-button>
+                        </div>
                         <div class="groupdiv">
                             <paper-dropdown-input class="group" label="Group" items='[[groupItems]]' filter-property="group" value="{{group}}">
                                 <template>
@@ -236,16 +236,18 @@
                             </paper-dropdown-input>
                             <paper-input always-float-label label="Agent" value="{{prevRoute}}" readonly></paper-input>
                         </div>
-                        <br><br>
+                        <br>
+                        <br>
                     </div>
                     <br>
                     <div class="details" id="form">
-                        <br><br>
-                        <paper-dropdown-input id="hotelLbl"  always-float-label style="width: 100%" label="Hotel" items='[[hotelItems]]' filter-property="hotel"
+                        <br>
+                        <br>
+                        <paper-dropdown-input id="hotelLbl" always-float-label style="width: 100%" label="Hotel" items='[[hotelItems]]' filter-property="hotel"
                             value="{{hotel}}">
                             <template>
                                 <template is="dom-repeat" items="[[items]]" as="item">
-                                        <paper-item label="[[item.hotel]]">[[item.hotelname]]</paper-item>
+                                    <paper-item label="[[item.hotel]]">[[item.hotelname]]</paper-item>
                                 </template>
                             </template>
                         </paper-dropdown-input>
@@ -261,7 +263,7 @@
                             </vaadin-combo-box> -->
                             <vaadin-combo-box style="width: 245px;" id="room" label="ROOM"></vaadin-combo-box>
                             <vaadin-date-picker style="width: 160px;" label="Start" id="dateFrom" value="{{dateFrom}}" max="{{dateTo}}"></vaadin-date-picker>
-                            <vaadin-date-picker style="width: 160px;" label="End" id="dateTo" value="{{dateTo}}"  min="{{dateFrom}}"></vaadin-date-picker>
+                            <vaadin-date-picker style="width: 160px;" label="End" id="dateTo" value="{{dateTo}}" min="{{dateFrom}}"></vaadin-date-picker>
                             <vaadin-text-field style="width:80px;" id="block" label="QUANTITY"></vaadin-text-field>
                             <vaadin-date-picker style="width: 160px;" id="cancel" label="CANCELLATION" max="{{dateFrom}}"></vaadin-date-picker>
                             <vaadin-button on-click="_addBlockingDetails">Add</vaadin-button>
@@ -299,7 +301,7 @@
                             <vaadin-grid-column width="160px" resizable>
                                 <template class="header">CANCELLATION</template>
                                 <template>
-                                    <vaadin-date-picker style="width: 155px;" id="cancel-[[index]]" value="[[item.cancel]]"  max="[[item.dateTo]]" readonly$="[[!_isEditingBlockingDetails(editingBlockingDetails, item)]]"></vaadin-date-picker>
+                                    <vaadin-date-picker style="width: 155px;" id="cancel-[[index]]" value="[[item.cancel]]" max="[[item.dateTo]]" readonly$="[[!_isEditingBlockingDetails(editingBlockingDetails, item)]]"></vaadin-date-picker>
                                 </template>
                             </vaadin-grid-column>
                             <vaadin-grid-column width="12em">
@@ -369,9 +371,10 @@
                     value: [],
                 },
                 editingBlockingDetails: Object,
+                accountKey: String,
             },
-            observers: ['_hotelChanged(hotel)'],
-            _hotelChanged(e) {
+            observers: ['_hotelIdChanged(hotelId,accountKey)'],
+            _hotelChanged(e,f) {
                 this.$.room.value = '';
                 this.$.dateFrom.value = '';
                 this.$.dateTo.value = '';
@@ -380,8 +383,12 @@
 
                 this.$.ajaxRoom.method = 'GET';
                 this.$.ajaxRoom.url = '/hotel/filterHotel/' + e;
-
                 this.$.ajaxRoom.generateRequest();
+
+                  this.method = 'GET';
+                    this.urluser = '/user/getkey/' + f;
+                    this.$.ajax.handleAs = "json";
+                    this.$.ajax.generateRequest();
             },
             _active() {
                 this.$.active.checked;
@@ -408,6 +415,8 @@
                         hotelname: this.$.hotelLbl.selectedItemLabel,
                         rooms: this.blockingDetails,
                         note: this.note,
+                        created_by: this.createdBy,
+                        updated_by: this.modifiedBy,
                     };
                     this.$.ajax.generateRequest();
                     this.$.successModal.opened = true;
@@ -428,29 +437,39 @@
                 this.url = '/hotel/read';
 
                 this.editingBlockingDetails = null;
+
+                // console.log(this.accountKey);
             },
             _hotelLoaded(data) {
-                this.hotelItems = data.detail.response.data;
+                if (data.detail.response) {
+                    this.hotelItems = data.detail.response.data;
+                }
             },
             _agentLoaded(data) {
-                this.userItems = data.detail.response.data;
-                // this.username = data.detail.response.data.fullname[0];
+                if (data.detail.response) {
+                    this.userItems = data.detail.response.data;
+                    // this.username = data.detail.response.data.fullname[0];
 
-                var agentname = [];
-                this.userItems.forEach(element => {
-                    // console.log(element.fullname);
-                    agentname.push(element.fullname);
-                });
-                this.agentnamefull = agentname;
-                // console.log(this.userItems);
+                    var agentname = [];
+                    this.userItems.forEach(element => {
+                        // console.log(element.fullname);
+                        agentname.push(element.fullname);
+                    });
+                    this.agentnamefull = agentname;
+                    // console.log(this.userItems);
+                }
             },
             _groupLoaded(data) {
-                this.groupItems = data.detail.response.data;
+                if (data.detail.response) {
+                    this.groupItems = data.detail.response.data;
+                }
             },
             _roomsLoaded(data) {
-                var combobox = Polymer.dom(this.root).querySelector('#room');
+                if (data.detail.response) {
+                    var combobox = Polymer.dom(this.root).querySelector('#room');
                     combobox.items = data.detail.response.data;
-                // this.roomItems = data.detail.response.data.room;
+                    // this.roomItems = data.detail.response.data.room;
+                }
 
             },
             _getEditPrevRouteLink(e) {

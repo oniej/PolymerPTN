@@ -39,7 +39,6 @@
 <link rel="import" href="../bower_components/neon-animation/neon-animations.html">
 <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
 
-
 <link rel="import" href="search-bar.html">
 <dom-module id="my-allocation">
     <template>
@@ -223,23 +222,23 @@
                     <iron-scroll-document id="threshold">
                         <div class="allocation">
                             <template is="dom-repeat" items="[[groupItems]]" as="item">
-                                    <a href="/allocation/group/{{item.group}}" style="text-decoration: none;">
-                                <paper-card>
-                                    <div class="card-content">
-                                        <center>
-                                        <div id="{{item.group}}" style="width: 110px;height: 110px;">
-                                         
-                                         
-                                                <paper-icon-button id="{{item.group}}" noink on-tap="_showGroup" data-args="{{item.group}}" icon="my-icons:folder" alt="{{item.group}}"
-                                                style="color:#673ab7;width: 110px;height: 110px;"></paper-icon-button>
-                                          <br>
-                                          <span style="color:#673ab7;"><b>[[item.group]]</b></span>   
+                                <a href="/allocation/group/{{item.group}}" style="text-decoration: none;">
+                                    <paper-card>
+                                        <div class="card-content">
+                                            <center>
+                                                <div id="{{item.group}}" style="width: 110px;height: 110px;">
+                                                    <paper-icon-button id="{{item.group}}" noink on-tap="_showGroup" data-args="{{item.group}}" icon="my-icons:folder" alt="{{item.group}}"
+                                                        style="color:#673ab7;width: 110px;height: 110px;"></paper-icon-button>
+                                                    <br>
+                                                    <span style="color:#673ab7;">
+                                                        <b>[[item.group]]</b>
+                                                    </span>
+                                                </div>
+                                            </center>
                                         </div>
-                                    </center>
-                                    </div>
-                                    <br>
-                                </paper-card>
-                            </a>
+                                        <br>
+                                    </paper-card>
+                                </a>
                             </template>
                            </div>
                     </iron-scroll-document>
@@ -248,7 +247,7 @@
 
             <div name="/add">
                 <div id="availnew"></div>
-                <my-allocation-add id="d23" path=" " prev-route="{{groupData._group}}"></my-allocation-add>
+                <my-allocation-add id="d23" account-key='{{accountKey}}' path=" " prev-route="{{groupData._group}}"></my-allocation-add>
             </div>
 
             <div name="view404 ">Not found.</div>
@@ -285,6 +284,7 @@
                     type: Number,
                     value: 2
                 },
+                accountKey: String,
                 observers: [
                     '_searchChanged(filterBy, search)',]
             },
@@ -310,10 +310,11 @@
                     if (oldDiv) {
                         Polymer.dom(node.parentNode).removeChild(oldDiv);
 
-                    }
+                    } 
                     var newDiv = document.createElement("my-allocation-add");
                     newDiv.setAttribute("id", "d23");
                     newDiv.setAttribute("prev-route", this.route.prefix);
+                    newDiv.setAttribute("account-key", this.accountKey);
                     // newDiv.setAttribute("block ", "3 ")
                     //if open existing
                     var currentDiv = document.getElementById("availnew");
@@ -357,7 +358,9 @@
             },
 
             _groupLoaded(data) {
-                this.groupItems = data.detail.response.data;
+                if (data.detail.response) {
+                    this.groupItems = data.detail.response.data;
+                }
             },
             toggleDrawer() {
                 this.dispatchEvent(new CustomEvent('toggleDrawer', {

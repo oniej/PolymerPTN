@@ -6,11 +6,9 @@
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
-
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/paper-menu-button/paper-menu-button.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
-
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
@@ -27,7 +25,6 @@
 <link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../bower_components/neon-animation/web-animations.html">
 <link rel="import" href="../bower_components/neon-animation/neon-animations.html">
-<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
 <link rel="import" href="../bower_components/vaadin-dropdown-menu/vaadin-dropdown-menu.html">
 <link rel="import" href="../bower_components/vaadin-item/vaadin-item.html">
 <link rel="import" href="../bower_components/vaadin-list-box/vaadin-list-box.html">
@@ -71,7 +68,7 @@
                 position: fixed;
                 bottom: 30px;
                 right: 30px;
-                background-color: #3F51B5;
+                background-color: darkorange;
             }
 
             @-webkit-keyframes fadeIn {
@@ -112,24 +109,9 @@
                     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
 
                     opacity: 0;
-                    /* make things invisible upon start */
-                    -webkit-animation: fadeIn ease-in 1;
-                    /* call our keyframe named fadeIn, use animattion ease-in and repeat it only 1 time */
-                    -moz-animation: fadeIn ease-in 1;
-                    animation: fadeIn ease-in 1;
+                  }
+            } 
 
-                    -webkit-animation-fill-mode: forwards;
-                    /* this makes sure that after animation is done we remain at the last keyframe value (opacity: 1)*/
-                    -moz-animation-fill-mode: forwards;
-                    animation-fill-mode: forwards;
-
-                    -webkit-animation-duration: 0.5s;
-                    -moz-animation-duration: 0.5s;
-                    animation-duration: 0.5s;
-                }
-
-                /* background-color: darkorange; */
-            }
             @media (max-width: 768px) {
                 #buttonform {
                     display: none;
@@ -208,6 +190,7 @@
         <iron-ajax auto url="/hotel/read" handle-as="json" on-response="_hotelLoaded" debounce-duration="300"></iron-ajax>
         <iron-ajax id="ajaxRoom" handle-as="json" on-response="_roomsLoaded"></iron-ajax>
         <iron-ajax auto url="/group/read" handle-as="json" on-response="_groupLoaded" debounce-duration="300"></iron-ajax>
+        <iron-ajax auto url="{{urluser}}" params='{}' handle-as="json" on-response="_userLoaded"></iron-ajax>
         <app-drawer-layout fullbleed narrow="{{narrow}}" id="drawerLayout">
             <app-header-layout id="appheader" has-scrolling-region>
                 <app-header fixed slot="header">
@@ -367,7 +350,7 @@
                         </vaadin-grid>
                     </div>
                 </div>
-                <paper-fab on-tap="_submit" style=" float: right; " class="fab" icon="my-icons:save">+</paper-fab>
+                <paper-fab on-tap="_submit" style="float: right;" class="fab" icon="my-icons:save"></paper-fab>
             </app-header-layout>
         </app-drawer-layout>
         <iron-ajax verbose id="ajax" method="[[method]]" on-response="_handleResponse"></iron-ajax>
@@ -399,6 +382,7 @@
                     type: String,
                     value: 'Ardie Derrayal'
                 },
+                room: String,
                 rooms: {
                     type: Array,
                     value: []
@@ -425,9 +409,10 @@
                 },
                 editingAllocationDetails: Object,
                 editingSeasonDetails: Object,
+                accountKey: String,
             },
-            observers: ['_hotelChanged(hotel)'],
-            _hotelChanged(e) {
+            observers: ['_hotelIdChanged(hotelId,accountKey)'],
+            _hotelChanged(e, f) {
                 // this.$.room.value = '';
                 // this.$.pk.value = '';
                 // this.$.pk_coff.value = '';
@@ -439,8 +424,23 @@
                 this.$.ajaxRoom.url = '/hotel/filterHotel/' + e;
 
                 this.$.ajaxRoom.generateRequest();
-
+                
+                this.method = 'GET';
+                    this.urluser = '/user/getkey/' + f;
+                    this.$.ajax.handleAs = "json";
+                    this.$.ajax.generateRequest();
                 // console.log(e);
+            },
+            _userLoaded(data) {
+                if (data.detail.response.data) {
+                    this.createdBy = data.detail.response.data.name;
+                    this.modifiedBy = data.detail.response.data.name;
+                    // console.log(this.createdBy);
+                }
+            },
+            _roomChanged(e) {
+                this.room = e;
+                console.log(e);
             },
             _active() {
                 this.$.active.checked;
@@ -473,7 +473,9 @@
                         dateTo: _dateTo,
                         rooms: this.allocationDetails,
                         note: this.note,
-                        seasondate: this.seasonDetails
+                        seasondate: this.seasonDetails,
+                        created_by: this.createdBy,
+                        updated_by: this.modifiedBy,
                     };
                     this.$.ajax.generateRequest();
                     this.$.successModal.opened = true;
@@ -493,6 +495,8 @@
 
                 this.editingAllocationDetails = null;
                 this.editingSeasonDetails = null;
+
+                // console.log(this.accountKey);
 
             },
             _hotelLoaded(data) {

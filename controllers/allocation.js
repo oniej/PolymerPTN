@@ -11,7 +11,7 @@ router.get('/dummy', (req, res) => {
 router.post('/add', (req, res) => {
     const allocation = new Allocation();
     // body parser lets us use the req.body
-    const { active, group, hotel, hotelname, dateFrom, dateTo, rooms, note, seasondate } = req.body;
+    const { active, group, hotel, hotelname, dateFrom, dateTo, rooms, note, seasondate, updated_by, created_by } = req.body;
     if (!group || !hotel || !dateFrom || !dateTo || !note) {
         return res.json({
             success: false,
@@ -26,7 +26,9 @@ router.post('/add', (req, res) => {
     allocation.dateTo = dateTo;
     allocation.rooms = rooms;
     allocation.note = note;
-    allocation.seasondate = seasondate;
+    allocation.seasondate = seasondate; 
+    allocation.updated_by = updated_by,
+    allocation.created_by = created_by;
     allocation.save(err => {
         if (err) return res.json({ success: false, error: err });
         return res.json({ success: true });
@@ -54,7 +56,7 @@ router.put('/update/:editKey', (req, res) => {
     }
     Allocation.findById(editKey, (error, allocation) => {
         if (error) return res.json({ success: false, error });
-        const { active, group, hotelname, dateFrom, dateTo, rooms, note, seasondate } = req.body;
+        const { active, group, hotelname, dateFrom, dateTo, rooms, note, seasondate, updated_by, created_by } = req.body;
         allocation.active = active;
         if (group) allocation.group = group;
         // if (hotel) allocation.hotel = hotel;
@@ -64,7 +66,8 @@ router.put('/update/:editKey', (req, res) => {
         if (rooms) allocation.rooms = rooms;
         if (note) allocation.note = note;
         if (seasondate) allocation.seasondate = seasondate;
-
+        allocation.updated_by = updated_by,
+        allocation.created_by = created_by;
         allocation.save(error => {
             if (error) return res.json({ success: false, error });
             return res.json({ success: true });

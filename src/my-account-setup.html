@@ -1,0 +1,239 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="my-account-setup">
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+                --app-primary-color: #4285f4;
+                --app-secondary-color: black;
+            }
+
+            @media (min-width: 767px) {
+                .main-container {
+                    height: 100%;
+                    background-color: white;
+                    max-width: 370px;
+                    margin: 16px auto;
+                    padding: 40px;
+                    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+                }
+                .blue {
+                    text-decoration: none;
+                    color: royalblue;
+                }
+
+            }
+
+            @media (max-width: 767px) {
+                :host {
+                    height: 100%;
+                }
+                .main-container {
+                    height: 100%;
+                    background-color: white;
+                    margin: 0 auto;
+                    padding: 40px;
+                    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+
+                }
+
+            }
+
+            .header {
+                font-size: 18px;
+                color: grey;
+                /* font-weight: 400; */
+                text-align: justify;
+            }
+
+            .action-btn {
+                float: right;
+            }
+
+            .blue {
+                text-decoration: none;
+                color: darkorange;
+            }
+        </style>
+
+        <!-- <iron-ajax verbose id="ajax" method="POST" url="/changePassword" on-response="_handleResponse"></iron-ajax> -->
+
+        <template is="dom-if" if="{{!isLinkExpired}}">
+            <div class="main-container">
+                <center>
+                    <iron-image placeholder="images/ptn1.png" data-src="images/ptn1.png" sizing="cover" preload fade style="width:300px; height:150px;"></iron-image>
+                </center>
+                <div class="header">
+                    <span>Welcome To PTN</span>
+                    <br>
+                    <span>Setup a password for your account</span>
+                </div>
+                <div id="errorMsgDiv" style="display: none;">
+                    <iron-icon icon="my-icons:error-outline"></iron-icon>&nbsp;{{validationMessage}}</div>
+                <paper-input label="Password" type="password" value="{{password}}">
+                </paper-input>
+                <paper-input label="Confirm password" type="password" value="{{password2}}">
+                </paper-input>
+                <br>
+                <div class="footer">
+                    <paper-button id="next" raised class="darkorange" on-tap="_submit" style="float: right">Submit</paper-button>
+                    <!-- <a href="/ubc-signin" class="blue">Sign in instead</a> -->
+                </div>
+                <br>
+            </div>
+        </template>
+
+        <template is="dom-if" if="{{isLinkExpired}}">
+            <div class="main-container">
+                <div class="container-card">
+                    <iron-image src="..images/ptn1.png"></iron-image>
+                    <h1>Sorry the link has expired.</h1>
+                </div>
+            </div>
+        </template>
+
+        <paper-dialog id="modal" modal>
+            <p>Congratulations! You successfully set-up your account.</p>
+            <div class="buttons">
+                <paper-button dialog-confirm autofocus>
+                    <a href="/signin" class="darkorange" style="float: right">SIGN IN</a>
+                </paper-button>
+            </div>
+        </paper-dialog>
+
+        <iron-ajax verbose id="ajax" method="[[method]]" on-response="_handleResponse"></iron-ajax>
+
+    </template>
+
+    <script>
+        class MyAccountSetup extends Polymer.Element {
+            static get is() { return 'my-account-setup'; }
+            static get properties() {
+                return {
+                    route: Object,
+                    isLinkExpired: {
+                        type: Boolean,
+                        value: true
+                    }
+                }
+            }
+
+            ready() {
+                super.ready();
+
+                if (this.route.__queryParams) {
+                    if (this.route.__queryParams.e && this.route.__queryParams.p && this.route.__queryParams.k) {
+                        this.email = this.route.__queryParams.e;
+                        this.oldpassword = this.route.__queryParams.p;
+
+                        // given date
+                        var key = this.route.__queryParams.k;
+                        var keyTimestamp = this.convertToTimestamp(key);
+
+                        // today
+                        var days = 7;
+                        var date = new Date(keyTimestamp);
+                        var res = date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+
+                        if (keyTimestamp >= res) this.isLinkExpired = true;
+                        else this.isLinkExpired = false;
+                    }
+                    else {
+                        this.isLinkExpired = true;
+                    }
+                }
+                else {
+                    this.isLinkExpired = true;
+                }
+            }
+
+            _handleResponse(e) {
+                if (e.detail.response.success) {
+                    this.$.modal.open();
+                    this.reset();
+                } else {
+                    this.errorMSG = 'Set-up for your account has been denied.';
+                }
+            }
+
+            _submit() {
+                if (!this.password) {
+                    var errormsg = Polymer.dom(this.root).querySelector("#errorMsgDiv");
+                    errormsg.setAttribute("style", "font-size:12px; display: block; background-color:red; color:white; text-align:center; border-radius: 5px; opacity:0.5; padding:5px");
+                    this.validationMessage = "Please enter password";
+                    var errorLogin = Polymer.dom(this.root).querySelector("#next").disabled = true;
+                } else if (!this.password2) {
+                    var errormsg = Polymer.dom(this.root).querySelector("#errorMsgDiv");
+                    errormsg.setAttribute("style", "font-size:12px; display: block; background-color:red; color:white; text-align:center; border-radius: 5px; opacity:0.5; padding:5px");
+                    this.validationMessage = "Please enter confirm password";
+                    var errorLogin = Polymer.dom(this.root).querySelector("#next").disabled = true;
+                } else if (this.password != this.password2) {
+                    var errormsg = Polymer.dom(this.root).querySelector("#errorMsgDiv");
+                    errormsg.setAttribute("style", "font-size:12px; display: block; background-color:red; color:white; text-align:center; border-radius: 5px; opacity:0.5; padding:5px");
+                    this.validationMessage = "Password did not match";
+                    var errorLogin = Polymer.dom(this.root).querySelector("#next").disabled = true;
+                } else {
+                    this.errorMSG = "";
+                    this.method = 'POST';
+                    this.$.ajax.url = '/user/changePassword';
+                    this.$.ajax.contentType = "application/json";
+                    this.$.ajax.body = {
+                        email: this.email,
+                        oldpassword: this.oldpassword,
+                        newpassword: this.password,
+                        link: true
+                    };
+                    this.$.ajax.generateRequest();
+                }
+            }
+
+            reset() {
+                this.password = null;
+                this.password2 = null;
+                this.errorMSG = "";
+            }
+
+            convertToTimestamp(key) {
+                var PUSH_CHARS = "-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz";
+                function decode(id) {
+                    id = id.substring(0, 8);
+                    var timestamp = 0;
+                    for (var i = 0; i < id.length; i++) {
+                        var c = id.charAt(i);
+                        timestamp = timestamp * 64 + PUSH_CHARS.indexOf(c);
+                    }
+                    return timestamp;
+                }
+
+                // var key = prompt("Enter Firebase push ID");
+                if (key) {
+                    var timestamp = decode(key);
+                    // var date = new Date(timestamp);
+                    // return date.toDateString();
+                    return timestamp;
+                }
+            }
+
+        }
+
+        window.customElements.define(MyAccountSetup.is, MyAccountSetup);
+    </script>
+</dom-module>

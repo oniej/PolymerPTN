@@ -159,7 +159,7 @@
                 position: fixed;
                 bottom: 32px;
                 right: 32px;
-                background-color: #3F51B5;
+                background-color: darkorange;
             }
 
             app-header {
@@ -286,14 +286,14 @@
                         <vaadin-grid-column width="160px" resizable>
                             <template class="header">START</template>
                             <template>
-                                <vaadin-date-picker style="width: 155px;" id="dateFrom-[[index]]" value="[[item.dateFrom]]" max="[[item.dateTo]]" readonly$="[[!_isEditingBlockingDetails(editingBlockingDetails, item)]]"></vaadin-date-picker>
+                                <vaadin-date-picker style="width: 155px;" id="dateFrom-[[index]]" value="[[item.dateFrom]]" readonly$="[[!_isEditingBlockingDetails(editingBlockingDetails, item)]]"></vaadin-date-picker>
                             </template>
                         </vaadin-grid-column>
 
                         <vaadin-grid-column width="160px" resizable>
                             <template class="header">END</template>
                             <template>
-                                <vaadin-date-picker style="width: 155px;" id="dateTo-[[index]]" value="[[item.dateTo]]" min="[[item.dateFrom]]" readonly$="[[!_isEditingBlockingDetails(editingBlockingDetails, item)]]"></vaadin-date-picker>
+                                <vaadin-date-picker style="width: 155px;" id="dateTo-[[index]]" value="[[item.dateTo]]"  readonly$="[[!_isEditingBlockingDetails(editingBlockingDetails, item)]]"></vaadin-date-picker>
                             </template>
                         </vaadin-grid-column>
 
@@ -307,7 +307,7 @@
                         <vaadin-grid-column width="160px" resizable>
                             <template class="header">CANCELLATION</template>
                             <template>
-                                <vaadin-date-picker style="width: 155px;" id="cancel-[[index]]" value="[[item.cancel]]"  max="[[item.dateTo]]" readonly$="[[!_isEditingBlockingDetails(editingBlockingDetails, item)]]"></vaadin-date-picker>
+                                <vaadin-date-picker style="width: 155px;" id="cancel-[[index]]" value="[[item.cancel]]" readonly$="[[!_isEditingBlockingDetails(editingBlockingDetails, item)]]"></vaadin-date-picker>
                             </template>
                         </vaadin-grid-column>
                         <vaadin-grid-column width="12em">
@@ -330,13 +330,13 @@
                   <div>
                             <iron-icon icon="my-icons:flag" slot="prefix"></iron-icon>
                             <span id="created">Created by:</span>
-                            <!--{{created_by}} -->Jeino &nbsp;
+                            {{created_by}} &nbsp;
                             <time-ago datetime$="{{_timeStampToDateTime(createdAt)}}">{{_timeStampToDateTime(createdAt)}}</time-ago>
                         </div>
                         <div>
                             <iron-icon icon="my-icons:update" slot="prefix"></iron-icon>
                             <span id="created">Last Modified by:</span>
-                            <!--{{updated_by}}-->Jeino &nbsp;
+                            {{updated_by}} &nbsp;
                             <time-ago datetime$="{{_timeStampToDateTime(updatedAt)}}">{{_timeStampToDateTime(updatedAt)}}</time-ago>
                         </div>
                 </div>
@@ -467,11 +467,7 @@
                 }
             },
             _active() {
-                // console.log(this.selectActive);
-                // this.selectActive = true;
-                // console.log(this.selectActive);
                 this.$.active.checked;
-                // console.log(this.$.active.checked);
             },
             _openSave() {
                 this.$.blockingSave.opened = true;
@@ -507,7 +503,7 @@
                             rooms: this.blockingDetails,
                             note: this.note,
                             created_by: this.created_by,
-                            updated_by: this.updated_by,
+                            updated_by: this.updated_by, 
                         };
                         this.$.ajax.generateRequest();
                         this.$.blockingSave.opened = false;

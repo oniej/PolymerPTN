@@ -4,17 +4,16 @@ const Schema = mongoose.Schema;
 // object that shows the shape of your database entries.
 const AvailabilitySchema = new Schema({
     hotel: String,
+    hotelname: String,
     created_by: String,
     updated_by: String,
     notes: String,
-    numOfdays: String,
     type: Array,
     availability: Object,
     date: String,
     month: {
         month: String,
         yearly: String,
-        monthDay: String,
     },
     nameweeks: String,
 }, { timestamps: true });

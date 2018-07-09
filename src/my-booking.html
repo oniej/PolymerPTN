@@ -1,0 +1,325 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animations.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-item/paper-item-body.html">
+<link rel="import" href="../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../bower_components/iron-scroll-threshold/iron-scroll-threshold.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/iron-collapse/iron-collapse.html">
+
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+
+<link rel="import" href="time-element.html">
+<link rel="import" href="my-booking-new.html">
+<link rel="import" href="my-booking-edit.html">
+<link rel="import" href="shared-styles.html">
+<script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+<link rel="import" href="search-bar.html">
+<dom-module id="my-booking">
+    <template>
+        <style include="shared-styles">
+            :host {
+                height: 100vh;
+                margin: 0;
+                display: flex;
+                flex-direction: column;
+            }
+
+            @media (max-width: 768px) {
+                paper-card {
+                    width: 100%;
+                    margin-top: 16px;
+                }
+                paper-search-bar {
+                    margin-left: 80px;
+                    width: 50%;
+                    color: black;
+                }
+            }
+
+            @media (min-width: 850px) {
+                div .availability {
+                    width: 850px;
+                    padding: 16px;
+                    margin: 0 auto;
+                }
+                paper-card {
+                    width: 46%;
+                    margin-right: 10px;
+                    margin-bottom: 10px;
+                }
+                paper-search-bar {
+                    margin-left: 50px;
+                    width: 50%;
+                    color: black;
+                }
+            }
+
+            paper-fab.blue {
+                position: fixed;
+                bottom: 32px;
+                right: 32px;
+
+            }
+
+            app-header {
+                color: rgb(255, 255, 255);
+                background-color: darkorange;
+            }
+
+            #tool1 {
+                color: rgb(255, 255, 255);
+                background-color: darkorange;
+            }
+
+            #tool2 {
+                background-color: white;
+            }
+
+            .item {
+                @apply --layout-horizontal;
+                background-color: white;
+                border-bottom: 1px solid #ddd;
+                cursor: pointer;
+                margin-bottom: 10px;
+                box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+            }
+
+            .pad {
+                padding: 0 16px;
+                @apply --layout-flex;
+                @apply --layout-vertical;
+            }
+
+            #action {
+                margin-top: 10px;
+                float: right;
+            }
+
+            div .option {
+                position: absolute;
+                left: 300px;
+                top: 200px;
+            }
+
+            #btn-clear {
+                position: fixed;
+                right: 80px;
+                color: gray;
+            }
+
+            #btn-arrow {
+                position: absolute;
+                color: black;
+            }
+
+            #btn-menu {
+                color: gray;
+                position: fixed;
+                right: 40px;
+            }
+
+            hr {
+                background-color: #eee;
+                border: 0 none;
+                color: #eee;
+                height: 1px;
+            }
+        </style>
+        <app-route route="{{route}}" pattern="/edit/:_id" data="{{editData}}" active="{{editActive}}"></app-route>
+
+        <iron-pages selected="[[route.path]]" attr-for-selected="name" fallback-selection="view404" role="main">
+            <div name="">
+                <app-header-layout fullbleed has-scrolling-region>
+                    <app-header fixed slot="header">
+                        <template is="dom-if" if="{{openSearch}}">
+                            <app-toolbar primary id="tool2">
+                                <paper-icon-button id="btn-arrow" icon="my-icons:arrow-back" drawer-toggle on-tap="toggleReturn"></paper-icon-button>
+                                <paper-search-bar id="search" query="{{search}}" disable-filter-button></paper-search-bar>
+                                <template is="dom-if" if="{{search}}">
+                                    <paper-icon-button id="btn-clear" icon="my-icons:close" drawer-toggle on-tap="toggleClear"></paper-icon-button>
+                                </template>
+                                <paper-menu-button id="btn-menu" horizontal-align="right">
+                                    <paper-icon-button slot="dropdown-trigger" icon="my-icons:tune"></paper-icon-button>
+                                    <paper-listbox style="cursor:pointer" slot="dropdown-content" selected="{{filterBy}}">
+                                        <paper-item style="display:none;">Filter By</paper-item>
+                                        <paper-item>Staff Lastname</paper-item>
+                                        <paper-item>Hotel</paper-item>
+                                    </paper-listbox>
+                                </paper-menu-button>
+                            </app-toolbar>
+                        </template>
+                        <template is="dom-if" if="{{!openSearch}}">
+                            <app-toolbar primary id="tool1">
+                                <paper-icon-button class="menu" icon="my-icons:menu" drawer-toggle on-tap="toggleDrawer"></paper-icon-button>
+                                <div main-title>Booking</div>
+                                <paper-icon-button class="menu" icon="my-icons:search" drawer-toggle on-tap="toggleSearch"></paper-icon-button>
+                            </app-toolbar>
+                        </template>
+                    </app-header>
+                    <iron-scroll-document id="threshold">
+                        <iron-ajax id="readall" url="{{urlRead}}" handle-as="json" method="GET" on-response="_blockingLoaded" loading="{{loadingData}}"
+                            debounce-duration="300"></iron-ajax>
+                        <div class="availability">
+                            <a href="/booking/new" style="text-decoration: none;">
+                                <paper-card on-tap="_bookNew">
+                                    <div class="card-content">
+                                        <center>
+                                            <paper-icon-button icon="my-icons:add" style="color:darkorange;width: 100px;height: 100px;">
+                                            </paper-icon-button>
+                                            <br>
+                                            <span style="color:darkorange;">Add Booking</span>
+                                            <!-- <iron-image src="../images/pluspng.png" sizing="contain" style="width:100px;height:100px;"></iron-image> -->
+                                        </center>
+                                    </div>
+                                </paper-card>
+                            </a>
+                            <template is="dom-repeat" items="[[bookings]]" as="item">
+                                <paper-card id="{{item._id}}">
+                                    <div id="{{item._id}}" class="header" style="background-color:white; padding: 16px; padding-bottom: 5px; font-size: 16px;color: black;font-weight: bold">
+                                        <a href="/booking/edit/{{item._id}}">
+                                            <paper-icon-button id="{{item._id}}" noink on-tap="_editBooking" data-args="{{item._id}}" icon="my-icons:edit" alt="{{item._id}}"
+                                                style="float: right; margin-top:-10px; margin-right:-10px;color: black;"></paper-icon-button>
+                                        </a>
+                                        <div>
+                                            <iron-icon icon="my-icons:bookmark" id="date" style="color: gray;width: 20px;height: 20px;"></iron-icon>
+                                            <!-- <span id="type"> -->
+                                            Reference: [[item.reference]]
+                                            <!-- </span> -->
+                                            <hr>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div style="padding: 16px; background-color: white;">
+                                        <div style="color: gray;font-size: 11px;">
+                                            <iron-icon icon="my-icons:group" id="date" style="color: gray;width: 20px;height: 20px;"></iron-icon>
+                                            Guest: [[item.guest]]
+                                        </div>
+                                        <div style="color: gray;font-size: 11px;">
+                                            <iron-icon icon="my-icons:person" id="date" style="color: gray;width: 20px;height: 20px;"></iron-icon>
+                                            Agent: [[item.agent]]
+                                        </div>
+                                    </div>
+                                </paper-card>
+                            </template>
+                        </div>
+                    </iron-scroll-document>
+                </app-header-layout>
+            </div>
+            <div name="/new">
+                <div id="booknew"></div>
+                <my-booking-new id="d23" path=" " prev-route="{{route.prefix}}"></my-booking-new>
+            </div>
+            <div name="view404 ">Not found.</div>
+        </iron-pages>
+        <div hidden$="{{!editActive}}">
+            <div id="bookingedit"></div>
+            <my-booking-edit id="d24" edit-key='{{editData._id}}' prev-route="{{route.prefix}}"></my-booking-edit>
+        </div>
+        <iron-ajax verbose id="ajax" method="[[method]]" on-response="_handleResponse"></iron-ajax>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'my-booking',
+            properties: {
+                route: Object,
+                routeData: Object,
+                data: Object,
+                openSearch: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                },
+                search: {
+                    type: String,
+                    value: '',
+                },
+                filterBy: {
+                    type: Number,
+                    value: 0
+                },
+                observers: [
+                    '_searchChanged(filterBy, search)',]
+            },
+
+            toggleSearch() {
+                this.openSearch = true;
+            },
+            toggleReturn() {
+                this.openSearch = false;
+                this.search = '';
+            },
+            toggleClear() {
+                this.search = '';
+            },
+            ready() {
+                this.urlRead = '/booking/read';
+                this.$.readall.handleAs = "json";
+                this.$.readall.generateRequest();
+            },
+            _blockingLoaded(data) {
+                this.bookings = data.detail.response.data;
+            },
+            _bookNew() {
+                // this.$.addNew.opened = true;
+                var node = Polymer.dom(this.root).querySelector("#booknew");
+                if (node) {
+                    var oldDiv = Polymer.dom(node.parentNode).querySelector("#d23");
+                    if (oldDiv) {
+                        Polymer.dom(node.parentNode).removeChild(oldDiv);
+                    }
+                    var newDiv = document.createElement("my-booking-new");
+                    newDiv.setAttribute("id", "d23");
+                    newDiv.setAttribute("prev-route", this.route.prefix);
+                    var currentDiv = document.getElementById("booknew");
+                    Polymer.dom(node.parentNode).insertBefore(newDiv, currentDiv);
+                }
+            },
+            _editBooking(e) {
+                var data_args = Polymer.dom(e).rootTarget.getAttribute("alt");
+                var node = Polymer.dom(this.root).querySelector("#bookingedit");
+                if (node) {
+                    var oldDiv = Polymer.dom(node.parentNode).querySelector("#d24");
+                    if (oldDiv) {
+                        Polymer.dom(node.parentNode).removeChild(oldDiv);
+                    }
+                    var newDiv = document.createElement("my-booking-edit");
+                    newDiv.setAttribute("id", "d24");
+                    newDiv.setAttribute("edit-key", data_args);
+                    newDiv.setAttribute("prev-route", this.route.prefix);
+                    var currentDiv = document.getElementById("bookingedit");
+                    Polymer.dom(node.parentNode).insertBefore(newDiv, currentDiv);
+                }
+            },
+            toggleDrawer() {
+                this.dispatchEvent(new CustomEvent('toggleDrawer', {
+                    bubbles: true, composed: true, detail: {
+                        narrow: this.$.narrow
+                    }
+                }));
+                this.$.narrow = !this.$.narrow;
+            },
+            _timeStampToDateTime(ts) {
+                return new Date(ts);
+            },
+        });
+    </script>
+</dom-module>
