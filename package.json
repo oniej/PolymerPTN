@@ -3,7 +3,7 @@
   "license": "BSD-3-Clause",
   "scripts": {
     "start": "node index.js",
-    "postinstall": "bower update"
+    "postinstall": "bower install --save PolymerElements/iron-icons & bower install --save PolymerElements/iron-icon"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
