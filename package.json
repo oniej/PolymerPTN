@@ -3,7 +3,7 @@
   "license": "BSD-3-Clause",
   "scripts": {
     "start": "node index.js",
-    "postinstall": "bower install --save vaadin/vaadin-button"
+    "postinstall": "bower install --save PolymerElements/iron-icons"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -16,7 +16,7 @@
     "morgan": "^1.9.0",
     "nodemailer": "^4.6.7",
     "passport": "^0.4.0",
-    "prpl-server": "^1.1.0" 
+    "prpl-server": "^1.1.0"
   },
   "engines": {
     "node": ">=8.0"
