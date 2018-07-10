@@ -1,8 +1,0 @@
-/coverage
-/dist
-/jsdoc
-/node_modules
-.DS_Store
-*.stackdump
-/bower.json
-/package-lock.json
