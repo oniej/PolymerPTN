@@ -29,25 +29,23 @@
     "iron-test-helpers": "^2.0.0",
     "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.1.5",
-    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^2.0.0"
+    "vaadin-demo-helpers": "^1.0.0"
   },
   "dependencies": {
     "polymer": "^2.0.0",
-    "vaadin-control-state-mixin": "vaadin/vaadin-control-state-mixin#^2.1.0",
-    "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.2.0",
-    "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#^1.1.0",
-    "vaadin-material-styles": "vaadin/vaadin-material-styles#^1.0.0",
-    "vaadin-element-mixin": "vaadin/vaadin-element-mixin#^1.1.0"
+    "vaadin-control-state-mixin": "vaadin/vaadin-control-state-mixin#^2.0.0",
+    "vaadin-themable-mixin": "^1.1.0",
+    "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#^1.0.0",
+    "vaadin-element-mixin": "vaadin/vaadin-element-mixin#^1.0.1"
   },
-  "version": "2.1.0-alpha2",
-  "_release": "2.1.0-alpha2",
+  "version": "2.0.1",
+  "_release": "2.0.1",
   "_resolution": {
     "type": "version",
-    "tag": "v2.1.0-alpha2",
-    "commit": "db54ab133302caa7bf525e08b533c450eaf5a48a"
+    "tag": "v2.0.1",
+    "commit": "423f0a7a595e7a5ec9feffa85ce3cb4cead7397b"
   },
   "_source": "https://github.com/vaadin/vaadin-button.git",
-  "_target": "2.1.0-alpha2",
-  "_originalSource": "vaadin/vaadin-button",
-  "_direct": true
+  "_target": "^2.0.0",
+  "_originalSource": "vaadin-button"
 }
