@@ -738,6 +738,7 @@
                 this.roomType.forEach(element => {
                     var tr3 = document.createElement('tr');
                     var th3 = document.createElement('td');
+                    var dataroom = element.room.split(" ").join("");
                     var datas = element.roomname.split(" ").join("");
                     var tdTxt = document.createTextNode(datas);
                     th3.setAttribute("style", "text-align:left");
@@ -750,19 +751,19 @@
                         var tdBlank = document.createElement('td');
                         // var dates = months + 1;
                         if (daysWeek < 10 && i < 10) {
-                            tdBlank.setAttribute('id', element.room + "_" + datas + "_" + years + "-" + "0" + this.mot + "-" + "0" + i);
+                            tdBlank.setAttribute('id', dataroom + "_" + datas + "_" + years + "-" + "0" + this.mot + "-" + "0" + i);
                             tr3.append(tdBlank);
                         } else if (daysWeek == 10 && i == 10) {
-                            tdBlank.setAttribute('id', element.room + "_" + datas + "_" + years + "-" + this.mot + "-" + i);
+                            tdBlank.setAttribute('id', dataroom + "_" + datas + "_" + years + "-" + this.mot + "-" + i);
                             tr3.append(tdBlank);
                         } else if (daysWeek < 10 && i >= 10) {
-                            tdBlank.setAttribute('id', element.room + "_" + datas + "_" + years + "-" + "0" + this.mot + "-" + i);
+                            tdBlank.setAttribute('id', dataroom + "_" + datas + "_" + years + "-" + "0" + this.mot + "-" + i);
                             tr3.append(tdBlank);
                         } else if (daysWeek >= 10 && i <= 10) {
-                            tdBlank.setAttribute('id', element.room + "_" + datas + "_" + years + "-" + this.mot + "-" + "0" + i);
+                            tdBlank.setAttribute('id', dataroom + "_" + datas + "_" + years + "-" + this.mot + "-" + "0" + i);
                             tr3.append(tdBlank);
                         } else {
-                            tdBlank.setAttribute('id', element.room + "_" + datas + "_" + years + "-" + this.mot + "-" + i);
+                            tdBlank.setAttribute('id', dataroom + "_" + datas + "_" + years + "-" + this.mot + "-" + i);
                             tr3.append(tdBlank);
                         }
                     }
@@ -776,7 +777,6 @@
                     //weeks
                     var thweek = document.createElement('td');
                     var date = new Date(years, daysWeek, i)
-
                     var x = date.getDay();
                     var now = this._selectDays(x);
                     if (now == "Sun") {

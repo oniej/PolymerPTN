@@ -177,7 +177,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         </template>
                     </app-header>
                     <iron-scroll-document id="threshold">
-                        <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_availabilityLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
+                        <iron-ajax id="availGet" url="{{url}}" params='{}' handle-as="json" on-response="_availabilityLoaded" loading="{{loadingData}}"
+                            debounce-duration="300"></iron-ajax>
+                        <iron-ajax verbose id="ajax" method="[[method]]" on-response="_handleResponse"></iron-ajax>
                         <div class="availability">
                             <a href="/availability/new" style="text-decoration: none;">
                                 <paper-card on-tap="_availnew">
@@ -242,7 +244,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <div id="availedit"></div>
             <my-availability-edit id="d24" edit-key='{{editData._id}}' prev-route="{{route.prefix}}"></my-availability-edit>
         </div>
-        <iron-ajax verbose id="ajax" method="[[method]]" on-response="_handleResponse"></iron-ajax>
     </template>
 
     <script>
@@ -295,6 +296,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
             ready() {
                 this.url = '/availability/read';
+                Polymer.dom(this.root).querySelector('#availGet').generateRequest();
+            },
+            _handleResponse(data) {
+                Polymer.dom(this.root).querySelector('#availGet').generateRequest();
             },
             _availabilityLoaded(data) {
                 if (this.url === '/availability/read') {

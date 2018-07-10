@@ -254,7 +254,9 @@
                 <template>
                     <!-- <h3 style="text-align: center">Added Successfully</h3> -->
                     <hr>
-                    <paper-button on-tap="_closeDialog" style="float: right">Ok</paper-button>
+                    <a href=" /availability">
+                        <paper-button style="float: right">Ok</paper-button>
+                    </a>
                 </template>
             </vaadin-dialog>
 
@@ -390,7 +392,7 @@
                 }
             },
             _closeDialog() {
-                window.location.assign('/availability');
+                // window.location.assign('/availability');
                 this.$.availabilitySave.opened = false;
             },
             _available() {
