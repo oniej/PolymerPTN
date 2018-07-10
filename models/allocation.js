@@ -11,6 +11,8 @@ const AllocationSchema = new Schema({
     dateTo: String,
     rooms: Object,
     note: String,
+    pk_coff: String,
+    npk_coff: String,
     seasondate: Object
 }, { timestamps: true });
 // export our module to use in server.js

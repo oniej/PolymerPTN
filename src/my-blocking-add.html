@@ -14,7 +14,6 @@
 <link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/vaadin-dialog/vaadin-dialog.html">
-<link rel="import" href="../bower_components/vaadin-button/vaadin-button.html">
 <link rel="import" href="../bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/vaadin-text-field/vaadin-text-field.html">
@@ -72,6 +71,33 @@
                 background-color: darkorange;
             }
 
+            @-webkit-keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
+            }
+
+            @-moz-keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
+            }
+
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
+            }
+
             @media (max-width: 420px) {
                 .docu {
                     margin-left: 16px;
@@ -81,6 +107,22 @@
 
                     background-color: #fff;
                     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+
+                    opacity: 0;
+                    /* make things invisible upon start */
+                    -webkit-animation: fadeIn ease-in 1;
+                    /* call our keyframe named fadeIn, use animattion ease-in and repeat it only 1 time */
+                    -moz-animation: fadeIn ease-in 1;
+                    animation: fadeIn ease-in 1;
+
+                    -webkit-animation-fill-mode: forwards;
+                    /* this makes sure that after animation is done we remain at the last keyframe value (opacity: 1)*/
+                    -moz-animation-fill-mode: forwards;
+                    animation-fill-mode: forwards;
+
+                    -webkit-animation-duration: 0.5s;
+                    -moz-animation-duration: 0.5s;
+                    animation-duration: 0.5s;
                 }
                 #buttonform {
                     display: none;
@@ -121,6 +163,20 @@
                     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
 
                     opacity: 0;
+                    /* make things invisible upon start */
+                    -webkit-animation: fadeIn ease-in 1;
+                    /* call our keyframe named fadeIn, use animattion ease-in and repeat it only 1 time */
+                    -moz-animation: fadeIn ease-in 1;
+                    animation: fadeIn ease-in 1;
+
+                    -webkit-animation-fill-mode: forwards;
+                    /* this makes sure that after animation is done we remain at the last keyframe value (opacity: 1)*/
+                    -moz-animation-fill-mode: forwards;
+                    animation-fill-mode: forwards;
+
+                    -webkit-animation-duration: 0.5s;
+                    -moz-animation-duration: 0.5s;
+                    animation-duration: 0.5s;
                 }
                 #iconform {
                     display: none;
@@ -146,6 +202,7 @@
         <iron-ajax auto url="/hotel/read" handle-as="json" on-response="_hotelLoaded" debounce-duration="300"></iron-ajax>
         <iron-ajax id="ajaxRoom" handle-as="json" on-response="_roomsLoaded"></iron-ajax>
         <iron-ajax auto url="/group/read" handle-as="json" on-response="_groupLoaded" debounce-duration="300"></iron-ajax>
+        <iron-ajax auto url="{{urluser}}" params='{}' handle-as="json" on-response="_userLoaded"></iron-ajax>
         <app-drawer-layout fullbleed narrow="{{narrow}}" id="drawerLayout">
             <app-header-layout id="appheader" has-scrolling-region>
                 <app-header fixed slot="header">
@@ -208,7 +265,7 @@
                             <vaadin-date-picker style="width: 160px;" label="End" id="dateTo" value="{{dateTo}}" min="{{dateFrom}}"></vaadin-date-picker>
                             <vaadin-text-field style="width:80px;" id="block" label="QUANTITY"></vaadin-text-field>
                             <vaadin-date-picker style="width: 160px;" id="cancel" label="CANCELLATION" max="{{dateFrom}}"></vaadin-date-picker>
-                            <vaadin-button on-click="_addBlockingDetails">Add</vaadin-button>
+                            <paper-button on-click="_addBlockingDetails">Add</paper-button>
                         </div>
                         <vaadin-grid theme="compact" id="grid" items="[[blockingDetails]]">
 
@@ -249,16 +306,16 @@
                             <vaadin-grid-column width="12em">
                                 <template>
                                     <div style="text-align: right;">
-                                        <vaadin-button id="edit-button" hidden="[[editingBlockingDetails]]" on-click="_editBlockingDetails" focus-target$="[[!editingBlockingDetails]]"
+                                        <paper-button id="edit-button" hidden="[[editingBlockingDetails]]" on-click="_editBlockingDetails" focus-target$="[[!editingBlockingDetails]]"
                                             theme="icon" aria-label="Edit">
                                             <iron-icon icon="lumo:edit"></iron-icon>
-                                        </vaadin-button>
-                                        <vaadin-button hidden="[[editingBlockingDetails]]" on-click="_removeBlockingDetails" theme="icon error" aria-label="Delete">
+                                        </paper-button>
+                                        <paper-button hidden="[[editingBlockingDetails]]" on-click="_removeBlockingDetails" theme="icon error" aria-label="Delete">
                                             <iron-icon icon="lumo:cross"></iron-icon>
-                                        </vaadin-button>
-                                        <vaadin-button hidden="[[!_isEditingBlockingDetails(editingBlockingDetails, item)]]" on-click="_saveBlockingDetails" focus-target$="[[editingBlockingDetails]]"
-                                            theme="primary">Save</vaadin-button>
-                                        <vaadin-button hidden="[[!_isEditingBlockingDetails(editingBlockingDetails, item)]]" on-click="_cancelBlockingDetails">Cancel</vaadin-button>
+                                        </paper-button>
+                                        <paper-button hidden="[[!_isEditingBlockingDetails(editingBlockingDetails, item)]]" on-click="_saveBlockingDetails" focus-target$="[[editingBlockingDetails]]"
+                                            theme="primary">Save</paper-button>
+                                        <paper-button hidden="[[!_isEditingBlockingDetails(editingBlockingDetails, item)]]" on-click="_cancelBlockingDetails">Cancel</paper-button>
                                     </div>
                                 </template>
                             </vaadin-grid-column>
@@ -313,19 +370,18 @@
                     value: [],
                 },
                 editingBlockingDetails: Object,
+                accountKey: String,
             },
-            observers: ['_hotelChanged(hotel)'],
-            _hotelChanged(e) {
-                this.$.room.value = '';
-                this.$.dateFrom.value = '';
-                this.$.dateTo.value = '';
-                this.$.block.value = '';
-                this.$.cancel.value = '';
-
+            observers: ['_hotelIdChanged(hotel,accountKey)'],
+            _hotelIdChanged(e,f) {
                 this.$.ajaxRoom.method = 'GET';
                 this.$.ajaxRoom.url = '/hotel/filterHotel/' + e;
-
                 this.$.ajaxRoom.generateRequest();
+
+                  this.method = 'GET';
+                    this.urluser = '/user/getkey/' + f;
+                    this.$.ajax.handleAs = "json";
+                    this.$.ajax.generateRequest();
             },
             _active() {
                 this.$.active.checked;
@@ -352,6 +408,8 @@
                         hotelname: this.$.hotelLbl.selectedItemLabel,
                         rooms: this.blockingDetails,
                         note: this.note,
+                        created_by: this.createdBy,
+                        updated_by: this.modifiedBy,
                     };
                     this.$.ajax.generateRequest();
                     this.$.successModal.opened = true;
@@ -372,6 +430,8 @@
                 this.url = '/hotel/read';
 
                 this.editingBlockingDetails = null;
+
+                // console.log(this.accountKey);
             },
             _hotelLoaded(data) {
                 if (data.detail.response) {

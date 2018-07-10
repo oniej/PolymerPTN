@@ -74,8 +74,7 @@
     "g-element": "tigerlegab/g-element",
     "paper-input": "PolymerElements/paper-input#^2.2.3",
     "gold-password-input": "GeoloeG/gold-password-input#^2.1.0",
-    "iron-icon": "PolymerElements/iron-icon#^2.1.0",
-    "vaadin-button":"justsimplepedro/vaadin-button#^2.0.1-peter"
+    "iron-icon": "PolymerElements/iron-icon#^2.1.0"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^6.0.0"

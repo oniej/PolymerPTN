@@ -11,7 +11,6 @@
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/vaadin-dialog/vaadin-dialog.html">
-<link rel="import" href="../bower_components/vaadin-button/vaadin-button.html">
 <link rel="import" href="../bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/vaadin-text-field/vaadin-text-field.html">
@@ -39,6 +38,7 @@
         <style include="shared-styles">
             :host {
                 display: block;
+
                 padding: 10px;
             }
 
@@ -59,6 +59,21 @@
                 }
                 #Notes {
                     display: none;
+                }
+                div .blocking {
+                    opacity: 0;
+
+                    -webkit-animation: fadeIn ease-in 1;
+                    -moz-animation: fadeIn ease-in 1;
+                    animation: fadeIn ease-in 1;
+
+                    -webkit-animation-fill-mode: forwards;
+                    -moz-animation-fill-mode: forwards;
+                    animation-fill-mode: forwards;
+
+                    -webkit-animation-duration: 0.5s;
+                    -moz-animation-duration: 0.5s;
+                    animation-duration: 0.5s;
                 }
                 .groupdiv {
                     position: absolute;
@@ -102,6 +117,23 @@
                     position: relative;
                     top: -10px;
                 }
+            }
+
+            div .card {
+
+                opacity: 0;
+
+                -webkit-animation: fadeIn ease-in 1;
+                -moz-animation: fadeIn ease-in 1;
+                animation: fadeIn ease-in 1;
+
+                -webkit-animation-fill-mode: forwards;
+                -moz-animation-fill-mode: forwards;
+                animation-fill-mode: forwards;
+
+                -webkit-animation-duration: 0.5s;
+                -moz-animation-duration: 0.5s;
+                animation-duration: 0.5s;
             }
 
             #hotels {
@@ -161,6 +193,33 @@
                 height: 1px;
             }
 
+            @-webkit-keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
+            }
+
+            @-moz-keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
+            }
+
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
+            }
+
             .griddiv {
                 border-style: solid;
                 border-color: gray;
@@ -212,7 +271,7 @@
                     <vaadin-date-picker style="width: 160px;" label="End" id="dateTo" value="{{dateTo}}" min="{{dateFrom}}"></vaadin-date-picker>
                     <vaadin-text-field style="width:80px;" id="block" label="QUANTITY"></vaadin-text-field>
                     <vaadin-date-picker style="width: 160px;" id="cancel" label="CANCELLATION" max="{{dateFrom}}"></vaadin-date-picker>
-                    <vaadin-button on-click="_addBlockingDetails">Add</vaadin-button>
+                    <paper-button on-click="_addBlockingDetails">Add</paper-button>
 
                     <vaadin-grid theme="compact" id="grid" items="[[blockingDetails]]">
 
@@ -226,14 +285,14 @@
                         <vaadin-grid-column width="160px" resizable>
                             <template class="header">START</template>
                             <template>
-                                <vaadin-date-picker style="width: 155px;" id="dateFrom-[[index]]" value="[[item.dateFrom]]" max="[[item.dateTo]]" readonly$="[[!_isEditingBlockingDetails(editingBlockingDetails, item)]]"></vaadin-date-picker>
+                                <vaadin-date-picker style="width: 155px;" id="dateFrom-[[index]]" value="[[item.dateFrom]]" readonly$="[[!_isEditingBlockingDetails(editingBlockingDetails, item)]]"></vaadin-date-picker>
                             </template>
                         </vaadin-grid-column>
 
                         <vaadin-grid-column width="160px" resizable>
                             <template class="header">END</template>
                             <template>
-                                <vaadin-date-picker style="width: 155px;" id="dateTo-[[index]]" value="[[item.dateTo]]" min="[[item.dateFrom]]" readonly$="[[!_isEditingBlockingDetails(editingBlockingDetails, item)]]"></vaadin-date-picker>
+                                <vaadin-date-picker style="width: 155px;" id="dateTo-[[index]]" value="[[item.dateTo]]" readonly$="[[!_isEditingBlockingDetails(editingBlockingDetails, item)]]"></vaadin-date-picker>
                             </template>
                         </vaadin-grid-column>
 
@@ -247,22 +306,22 @@
                         <vaadin-grid-column width="160px" resizable>
                             <template class="header">CANCELLATION</template>
                             <template>
-                                <vaadin-date-picker style="width: 155px;" id="cancel-[[index]]" value="[[item.cancel]]" max="[[item.dateTo]]" readonly$="[[!_isEditingBlockingDetails(editingBlockingDetails, item)]]"></vaadin-date-picker>
+                                <vaadin-date-picker style="width: 155px;" id="cancel-[[index]]" value="[[item.cancel]]" readonly$="[[!_isEditingBlockingDetails(editingBlockingDetails, item)]]"></vaadin-date-picker>
                             </template>
                         </vaadin-grid-column>
                         <vaadin-grid-column width="12em">
                             <template>
                                 <div style="text-align: right;">
-                                    <vaadin-button id="edit-button" hidden="[[editingBlockingDetails]]" on-click="_editBlockingDetails" focus-target$="[[!editingBlockingDetails]]"
+                                    <paper-button id="edit-button" hidden="[[editingBlockingDetails]]" on-click="_editBlockingDetails" focus-target$="[[!editingBlockingDetails]]"
                                         theme="icon" aria-label="Edit">
                                         <iron-icon icon="lumo:edit"></iron-icon>
-                                    </vaadin-button>
-                                    <vaadin-button hidden="[[editingBlockingDetails]]" on-click="_removeBlockingDetails" theme="icon error" aria-label="Delete">
+                                    </paper-button>
+                                    <paper-button hidden="[[editingBlockingDetails]]" on-click="_removeBlockingDetails" theme="icon error" aria-label="Delete">
                                         <iron-icon icon="lumo:cross"></iron-icon>
-                                    </vaadin-button>
-                                    <vaadin-button hidden="[[!_isEditingBlockingDetails(editingBlockingDetails, item)]]" on-click="_saveBlockingDetails" focus-target$="[[editingBlockingDetails]]"
-                                        theme="primary">Save</vaadin-button>
-                                    <vaadin-button hidden="[[!_isEditingBlockingDetails(editingBlockingDetails, item)]]" on-click="_cancelBlockingDetails">Cancel</vaadin-button>
+                                    </paper-button>
+                                    <paper-button hidden="[[!_isEditingBlockingDetails(editingBlockingDetails, item)]]" on-click="_saveBlockingDetails" focus-target$="[[editingBlockingDetails]]"
+                                        theme="primary">Save</paper-button>
+                                    <paper-button hidden="[[!_isEditingBlockingDetails(editingBlockingDetails, item)]]" on-click="_cancelBlockingDetails">Cancel</paper-button>
                                 </div>
                             </template>
                         </vaadin-grid-column>
@@ -270,13 +329,13 @@
                     <div>
                         <iron-icon icon="my-icons:flag" slot="prefix"></iron-icon>
                         <span id="created">Created by:</span>
-                        <!--{{created_by}} -->Jeino &nbsp;
+                        {{created_by}} &nbsp;
                         <time-ago datetime$="{{_timeStampToDateTime(createdAt)}}">{{_timeStampToDateTime(createdAt)}}</time-ago>
                     </div>
                     <div>
                         <iron-icon icon="my-icons:update" slot="prefix"></iron-icon>
                         <span id="created">Last Modified by:</span>
-                        <!--{{updated_by}}-->Jeino &nbsp;
+                        {{updated_by}} &nbsp;
                         <time-ago datetime$="{{_timeStampToDateTime(updatedAt)}}">{{_timeStampToDateTime(updatedAt)}}</time-ago>
                     </div>
                 </div>
@@ -382,7 +441,7 @@
             _blockingLoaded(data) {
                 if (this.editKey) {
                     if (this.url === '/blocking/readEdit/' + this.editKey) {
-                        if (data.detail.response.data) {
+                        if (data.detail.response) {
                             this.blockings = data.detail.response.data;
                             // this.group = data.detail.response.data.group;
                             this.active = data.detail.response.data.active;
