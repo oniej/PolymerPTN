@@ -15,7 +15,6 @@
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/vaadin-text-field/vaadin-text-field.html">
 <link rel="import" href="../bower_components/vaadin-lumo-styles/icons.html">
-<link rel="import" href="../bower_components/vaadin-date-picker/vaadin-date-picker.html">
 <link rel="import" href="../bower_components/vaadin-notification/vaadin-notification.html">
 <link rel="import" href="../bower_components/range-datepicker/range-datepicker-input.html">
 <link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
@@ -78,7 +77,7 @@
                 .groupdiv {
                     position: absolute;
                     top: 20px;
-
+                   
                 }
                 .group {
                     width: 45%;
@@ -254,25 +253,25 @@
                     </app-toolbar>
                 </app-header>
                 <div class="card">
-                    <div>
-                        <paper-toggle-button style="float: right;" value="{{active}}" id="active" on-tap="_active">ACTIVE</paper-toggle-button>
-                    </div>
+                        <div>
+                                <paper-toggle-button style="float: right;" value="{{active}}" id="active" on-tap="_active">ACTIVE</paper-toggle-button>
+                            </div>
                     <div class="agentdiv">
-                        <paper-input always-float-label label="Agent" value="{{prevRoute}}" readonly></paper-input>
-                    </div>
-
+                            <paper-input always-float-label label="Agent" value="{{prevRoute}}" readonly></paper-input>
+                     </div>
+                   
                     <paper-input always-float-label value={{hotel}} hidden></paper-input>
                     <paper-input always-float-label value={{hotelname}} label="HOTEL" readonly></paper-input>
                     <paper-textarea always-float-label value="{{note}}" label="REMARKS"></paper-textarea>
-
+                  
                     <x-array-data-provider items="{{blockingDetails}}" size="200"></x-array-data-provider>
                     <vaadin-combo-box style="width: 245px;" id="room" label="ROOM"></vaadin-combo-box>
-                    <vaadin-date-picker style="width: 160px;" label="Start" id="dateFrom" value="{{dateFrom}}" max="{{dateTo}}"></vaadin-date-picker>
-                    <vaadin-date-picker style="width: 160px;" label="End" id="dateTo" value="{{dateTo}}" min="{{dateFrom}}"></vaadin-date-picker>
-                    <vaadin-text-field style="width:80px;" id="block" label="QUANTITY"></vaadin-text-field>
-                    <vaadin-date-picker style="width: 160px;" id="cancel" label="CANCELLATION" max="{{dateFrom}}"></vaadin-date-picker>
-                    <paper-button on-click="_addBlockingDetails">Add</paper-button>
-
+                        <paper-input type="date" style="width: 160px;" label="Start" id="dateFrom" value="{{dateFrom}}" max="{{dateTo}}"></paper-input>
+                        <paper-input type="date" style="width: 160px;" label="End" id="dateTo" value="{{dateTo}}"  min="{{dateFrom}}"></paper-input>
+                        <vaadin-text-field style="width:80px;" id="block" label="QUANTITY"></vaadin-text-field>
+                        <paper-input type="date" style="width: 160px;" id="cancel" label="CANCELLATION" max="{{dateFrom}}"></paper-input>
+                        <paper-button on-click="_addBlockingDetails">Add</paper-button>
+                   
                     <vaadin-grid theme="compact" id="grid" items="[[blockingDetails]]">
 
                         <vaadin-grid-column width="205px" resizable>
@@ -285,14 +284,14 @@
                         <vaadin-grid-column width="160px" resizable>
                             <template class="header">START</template>
                             <template>
-                                <vaadin-date-picker style="width: 155px;" id="dateFrom-[[index]]" value="[[item.dateFrom]]" readonly$="[[!_isEditingBlockingDetails(editingBlockingDetails, item)]]"></vaadin-date-picker>
+                                <paper-input type="date" style="width: 155px;" id="dateFrom-[[index]]" value="[[item.dateFrom]]" readonly$="[[!_isEditingBlockingDetails(editingBlockingDetails, item)]]"></paper-input>
                             </template>
                         </vaadin-grid-column>
 
                         <vaadin-grid-column width="160px" resizable>
                             <template class="header">END</template>
                             <template>
-                                <vaadin-date-picker style="width: 155px;" id="dateTo-[[index]]" value="[[item.dateTo]]" readonly$="[[!_isEditingBlockingDetails(editingBlockingDetails, item)]]"></vaadin-date-picker>
+                                <paper-input type="date" style="width: 155px;" id="dateTo-[[index]]" value="[[item.dateTo]]"  readonly$="[[!_isEditingBlockingDetails(editingBlockingDetails, item)]]"></paper-input>
                             </template>
                         </vaadin-grid-column>
 
@@ -306,7 +305,7 @@
                         <vaadin-grid-column width="160px" resizable>
                             <template class="header">CANCELLATION</template>
                             <template>
-                                <vaadin-date-picker style="width: 155px;" id="cancel-[[index]]" value="[[item.cancel]]" readonly$="[[!_isEditingBlockingDetails(editingBlockingDetails, item)]]"></vaadin-date-picker>
+                                <paper-input type="date" style="width: 155px;" id="cancel-[[index]]" value="[[item.cancel]]" readonly$="[[!_isEditingBlockingDetails(editingBlockingDetails, item)]]"></paper-input>
                             </template>
                         </vaadin-grid-column>
                         <vaadin-grid-column width="12em">
@@ -326,18 +325,18 @@
                             </template>
                         </vaadin-grid-column>
                     </vaadin-grid>
-                    <div>
-                        <iron-icon icon="my-icons:flag" slot="prefix"></iron-icon>
-                        <span id="created">Created by:</span>
-                        {{created_by}} &nbsp;
-                        <time-ago datetime$="{{_timeStampToDateTime(createdAt)}}">{{_timeStampToDateTime(createdAt)}}</time-ago>
-                    </div>
-                    <div>
-                        <iron-icon icon="my-icons:update" slot="prefix"></iron-icon>
-                        <span id="created">Last Modified by:</span>
-                        {{updated_by}} &nbsp;
-                        <time-ago datetime$="{{_timeStampToDateTime(updatedAt)}}">{{_timeStampToDateTime(updatedAt)}}</time-ago>
-                    </div>
+                  <div>
+                            <iron-icon icon="my-icons:flag" slot="prefix"></iron-icon>
+                            <span id="created">Created by:</span>
+                            {{created_by}} &nbsp;
+                            <time-ago datetime$="{{_timeStampToDateTime(createdAt)}}">{{_timeStampToDateTime(createdAt)}}</time-ago>
+                        </div>
+                        <div>
+                            <iron-icon icon="my-icons:update" slot="prefix"></iron-icon>
+                            <span id="created">Last Modified by:</span>
+                            {{updated_by}} &nbsp;
+                            <time-ago datetime$="{{_timeStampToDateTime(updatedAt)}}">{{_timeStampToDateTime(updatedAt)}}</time-ago>
+                        </div>
                 </div>
             </app-header-layout>
             <!-- save -->
@@ -454,7 +453,7 @@
                             this.updatedAt = data.detail.response.data.updatedAt;
                             this.created_by = data.detail.response.data.created_by;
                             this.updated_by = data.detail.response.data.updated_by;
-
+                            
                             if (this.active == true) {
                                 var actoggle = Polymer.dom(this.root).querySelector("#active").checked = this.active;
                             }
@@ -483,7 +482,7 @@
                 this.$.successUpdate.opened = false;
                 window.location.assign('/blocking/agent/' + this.prevRoute);
             },
-
+          
             _update() {
                 // console.log(this.rooms)
                 if (this.hotel) {
@@ -502,7 +501,7 @@
                             rooms: this.blockingDetails,
                             note: this.note,
                             created_by: this.created_by,
-                            updated_by: this.updated_by,
+                            updated_by: this.updated_by, 
                         };
                         this.$.ajax.generateRequest();
                         this.$.blockingSave.opened = false;
@@ -577,8 +576,8 @@
             _getEditPrevRouteLink(e) {
                 return '/blocking/agent/' + e.toString();
             },
-            // Blocking Grid Function
-            _addBlockingDetails(e) {
+         // Blocking Grid Function
+         _addBlockingDetails(e) {
                 if (this.$.room.selectedItem.label !== '' && this.$.dateFrom.value !== '' && this.$.dateTo.value && this.$.block.value && this.$.cancel.value) {
                     var roomdata = {
                         room: this.$.room.selectedItem.value,
@@ -637,7 +636,7 @@
                 this.$.grid.querySelector('#edit-button').focus();
             },
 
-
+       
         })
     </script>
 </dom-module>

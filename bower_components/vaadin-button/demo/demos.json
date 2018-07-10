@@ -2,33 +2,11 @@
   "name": "Vaadin Button",
   "pages": [
   {
-    "name": "Basics",
+    "name": "Basic Examples",
     "url": "button-basic-demos",
     "src": "button-basic-demos.html",
     "meta": {
-      "title": "Vaadin Button Basic Examples",
-      "description": "",
-      "image": ""
-     }
-  }
-  ,
-  {
-    "name": "Accessibility",
-    "url": "button-accessibility-demos",
-    "src": "button-a11y-demos.html",
-        "meta": {
-      "title": "Vaadin Button Accessibility",
-      "description": "",
-      "image": ""
-     }
-  }
-  ,
-  {
-    "name": "Lumo Theme",
-    "url": "button-lumo-theme-demos",
-    "src": "button-lumo-theme-demos.html",
-        "meta": {
-      "title": "Vaadin Button Lumo Theme",
+      "title": "vaadin-button Basic Examples",
       "description": "",
       "image": ""
      }

@@ -18,7 +18,6 @@
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/vaadin-text-field/vaadin-text-field.html">
 <link rel="import" href="../bower_components/vaadin-lumo-styles/icons.html">
-<link rel="import" href="../bower_components/vaadin-date-picker/vaadin-date-picker.html">
 <link rel="import" href="../bower_components/vaadin-notification/vaadin-notification.html">
 <link rel="import" href="../bower_components/range-datepicker/range-datepicker-input.html">
 <link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
@@ -108,8 +107,8 @@
                     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
 
                     opacity: 0;
-                }
-            }
+                  }
+            } 
 
             @media (max-width: 768px) {
                 #buttonform {
@@ -234,8 +233,8 @@
                                 </div>
                             </template>
                         </range-datepicker-input>
-                        <paper-input always-float-label value="{{pk_coff}}" label="PEAK CUT-OFF" style="width: 49%; float: left;"></paper-input>
-                        <paper-input always-float-label value="{{npk_coff}}" label="NON-PEAK CUT-OFF" style="width: 49%; float: right;"></paper-input>
+                        <paper-input  always-float-label value="{{pk_coff}}" label="PEAK CUT-OFF" style="width: 49%; float: left;"></paper-input>                         
+                        <paper-input  always-float-label value="{{npk_coff}}" label="NON-PEAK CUT-OFF" style="width: 49%; float: right;"></paper-input>
                         <br>
                         <x-array-data-provider items="{{allocationDetails}}" size="200"></x-array-data-provider>
                         <div style="margin-bottom: 20px">
@@ -295,24 +294,24 @@
                         </div>
                         <x-array-data-provider items="{{seasonDetails}}" size="200"></x-array-data-provider>
                         <div style="margin-bottom: 20px">
-                            <vaadin-date-picker style="width: 260px;" placeholder="Start" id="startValue" value="{{startValue}}" max="{{endValue}}" date-format="DD-MMMM-YYYY"></vaadin-date-picker>
-                            <vaadin-date-picker style="width: 260px;" placeholder="End" id="endValue" value="{{endValue}}" min="{{startValue}}" date-format="DD-MMMM-YYYY"></vaadin-date-picker>
-                            <paper-button on-click="_addSeasonDetails">Add</paper-button>
+                            <paper-input type="date" style="width: 260px; float: left;" label="Start" id="startValue" value="{{startValue}}" max="{{endValue}}" date-format="DD-MMMM-YYYY"></paper-input>
+                            <paper-input type="date" style="width: 260px; float: right;" label="End" id="endValue" value="{{endValue}}" min="{{startValue}}" date-format="DD-MMMM-YYYY"></paper-input>
+                            <br><paper-button on-click="_addSeasonDetails">Add</paper-button>
                         </div>
                         <vaadin-grid theme="compact" id="gridPS" items="[[seasonDetails]]">
 
                             <vaadin-grid-column width="270px" resizable>
                                 <template class="header">Peak Start</template>
                                 <template>
-                                    <vaadin-date-picker style="width: 260px;" id="startValue-[[index]]" value="[[item.startValue]]" readonly$="[[!_isEditingSeasonDetails(editingSeasonDetails, item)]]"></vaadin-date-picker>
-                                </template>
+                                    <paper-input type="date"  style="width: 260px;" id="startValue-[[index]]" value="[[item.startValue]]" readonly$="[[!_isEditingSeasonDetails(editingSeasonDetails, item)]]"></paper-input>
+                                 </template>
                             </vaadin-grid-column>
 
                             <vaadin-grid-column width="270px" resizable>
                                 <template class="header">Peak End</template>
                                 <template>
-                                    <vaadin-date-picker style="width: 260px;" id="endValue-[[index]]" value="[[item.endValue]]" readonly$="[[!_isEditingSeasonDetails(editingSeasonDetails, item)]]"></vaadin-date-picker>
-                                </template>
+                                    <paper-input type="date" style="width: 260px;" id="endValue-[[index]]" value="[[item.endValue]]" readonly$="[[!_isEditingSeasonDetails(editingSeasonDetails, item)]]"></paper-input>
+                               </template>
                             </vaadin-grid-column>
 
                             <vaadin-grid-column width="16em">
@@ -397,17 +396,17 @@
                 accountKey: String,
             },
             observers: ['_hotelChanged(hotel,accountKey)'],
-            _hotelChanged(e, f) {
+            _hotelChanged(e,f) {
                 // console.log(e);
                 this.$.ajaxRoom.method = 'GET';
                 this.$.ajaxRoom.url = '/hotel/filterHotel/' + e;
                 this.$.ajaxRoom.generateRequest();
-
+                
                 this.method = 'GET';
                 this.urluser = '/user/getkey/' + f;
                 this.$.ajax.handleAs = "json";
                 this.$.ajax.generateRequest();
-
+              
             },
             _userLoaded(data) {
                 if (data.detail.response.data) {
@@ -440,7 +439,7 @@
                         hotelname: this.$.hotelLbl.selectedItemLabel,
                         dateFrom: _dateFrom,
                         dateTo: _dateTo,
-                        pk_coff: this.pk_coff,
+                        pk_coff : this.pk_coff,
                         npk_coff: this.npk_coff,
                         rooms: this.allocationDetails,
                         note: this.note,
@@ -452,9 +451,9 @@
                     this.$.successModal.opened = true;
                     this.url = '';
                 }
-
+           
             },
-
+           
             _ok() {
                 this.$.successModal.opened = false;
                 window.location.assign('/allocation');
@@ -501,7 +500,7 @@
                         roomname: this.$.room.selectedItem.label,
                         pk: this.$.pk.value,
                         npk: this.$.npk.value,
-                    }
+                     }
                     this.allocationDetails.push(roomdata);
                     this.$.grid.clearCache();
 
@@ -533,7 +532,7 @@
                 var item = e.model.item;
                 item.pk = this.$.grid.querySelector('#pk-' + e.model.index).value;
                 item.npk = this.$.grid.querySelector('#npk-' + e.model.index).value;
-
+            
                 this.editingAllocationDetails = null;
 
                 this.$.grid.clearCache();
