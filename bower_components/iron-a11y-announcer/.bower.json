@@ -60,6 +60,6 @@
     "commit": "7e2c529fcb96582cb8c13905896fcf8496763966"
   },
   "_source": "https://github.com/PolymerElements/iron-a11y-announcer.git",
-  "_target": "^2.0.0",
-  "_originalSource": "iron-a11y-announcer"
+  "_target": "1 - 2",
+  "_originalSource": "PolymerElements/iron-a11y-announcer"
 }
