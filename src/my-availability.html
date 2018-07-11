@@ -242,7 +242,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <div hidden$="{{!editActive}}">
             <div id="availedit"></div>
-            <my-availability-edit id="d24" edit-key='{{editData._id}}' prev-route="{{route.prefix}}"></my-availability-edit>
+            <my-availability-edit id="d24" account-key='{{accountKey}}' edit-key='{{editData._id}}' prev-route="{{route.prefix}}"></my-availability-edit>
         </div>
     </template>
 
@@ -342,6 +342,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     }
                     var newDiv = document.createElement("my-availability-edit");
                     newDiv.setAttribute("id", "d24");
+                    newDiv.setAttribute("account-key", this.accountKey);
                     newDiv.setAttribute("edit-key", data_args);
                     newDiv.setAttribute("prev-route", this.route.prefix);
                     var currentDiv = document.getElementById("availedit");

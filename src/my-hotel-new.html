@@ -103,7 +103,7 @@
             }
         </style>
         <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_commentsLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
-
+        <iron-ajax auto url="{{urluser}}" params='{}' handle-as="json" on-response="_userLoaded"></iron-ajax>
         <app-drawer-layout fullbleed narrow="{{narrow}}" id="drawerLayout">
             <app-header-layout id="appheader" has-scrolling-region>
                 <app-header fixed slot="header">
@@ -116,7 +116,7 @@
 
                     <vaadin-dialog id="successModal" no-close-on-esc no-close-on-outside-click>
                         <template>
-                            <h3 style="text-align: center">Successfully Added {{hotel}}.</h3>
+                            <h3 style="text-align: center">Successfully Added {{hotelname}}.</h3>
                             <hr>
                             <paper-button on-tap="_ok" style="float: right">Ok</paper-button>
                         </template>
@@ -165,14 +165,9 @@
             properties: {
                 dateCreated: String,
                 msg: String,
-                created_by: {
-                    type: String,
-                    value: 'Peter Villaceran'
-                },
-                updated_by: {
-                    type: String,
-                    value: 'Ardie Derrayal'
-                },
+                created_by: String,
+                updated_by: String,
+                accountKey: String,
                 hotels: { type: Array, value: [], notify: true },
                 rooms: {
                     type: Array,
@@ -203,6 +198,11 @@
                 paperInput2.setAttribute("always-float-label", true);
                 paperInput2.setAttribute("style", "display:inline-block;width:300px;margin-left: 15px");
                 div.append(paperInput2);
+
+                this.method = 'GET';
+                this.urluser = '/user/getkey/' + this.accountKey;
+                this.$.ajax.handleAs = "json";
+                this.$.ajax.generateRequest();
             },
             _submit() {
                 var hotelnew = [];
@@ -235,8 +235,7 @@
                         hotelname: this.hotelname,
                         room: Xrooms,
                         created_by: this.created_by,
-                        updated_by: this.updated_by,
-
+                        updated_by: "",
                     };
                     this.$.ajax.generateRequest();
                     this.$.successModal.opened = true;
@@ -261,6 +260,7 @@
             },
             toggleDrawer() { },
             _cancel() { },
+
             ready() {
                 // this.fullname = "";
                 // this.room = "";
@@ -284,9 +284,12 @@
                     paperInput2.setAttribute("always-float-label", true);
                     paperInput2.setAttribute("style", "display:inline-block;width:300px;margin-left: 15px");
                     div.append(paperInput2);
-
-                    // div.append(divi);
                 });
+            },
+            _userLoaded(data) {
+                if (data.detail.response.data) {
+                    this.created_by = data.detail.response.data.name;
+                }
             },
             _handleResponse() { }
         })

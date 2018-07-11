@@ -67,22 +67,7 @@
                 #Notes {
                     display: none;
                 }
-                div .allocation {
-
-                    opacity: 0;
-
-                    -webkit-animation: fadeIn ease-in 1;
-                    -moz-animation: fadeIn ease-in 1;
-                    animation: fadeIn ease-in 1;
-
-                    -webkit-animation-fill-mode: forwards;
-                    -moz-animation-fill-mode: forwards;
-                    animation-fill-mode: forwards;
-
-                    -webkit-animation-duration: 0.5s;
-                    -moz-animation-duration: 0.5s;
-                    animation-duration: 0.5s;
-                }
+            
                 .groupdiv {
                     position: absolute;
                     top: 20px;
@@ -112,23 +97,6 @@
                 .hotelSearch {
                     margin-left: -5px;
                 }
-            }
-
-            div .card {
-
-                opacity: 0;
-
-                -webkit-animation: fadeIn ease-in 1;
-                -moz-animation: fadeIn ease-in 1;
-                animation: fadeIn ease-in 1;
-
-                -webkit-animation-fill-mode: forwards;
-                -moz-animation-fill-mode: forwards;
-                animation-fill-mode: forwards;
-
-                -webkit-animation-duration: 0.5s;
-                -moz-animation-duration: 0.5s;
-                animation-duration: 0.5s;
             }
 
             paper-fab.blue {
@@ -177,6 +145,10 @@
             .green {
                 background: green;
                 color: black;
+            }
+            paper-button{
+                background-color: cornflowerblue;
+                color: white;
             }
         </style>
         <custom-style>
@@ -317,7 +289,7 @@
                         <div style="margin-bottom: 20px">
                             <paper-input type="date" style="width: 260px; float: left;" label="Start" id="startValue" value="{{startValue}}" max="{{endValue}}"
                                 date-format="DD-MMMM-YYYY"></paper-input>
-                            <paper-input type="date" style="width: 260px; float: right;" label="End" id="endValue" value="{{endValue}}" min="{{startValue}}"
+                            <paper-input type="date" style="width: 260px; float: left; margin-left: 5px;" label="End" id="endValue" value="{{endValue}}" min="{{startValue}}"
                                 date-format="DD-MMMM-YYYY"></paper-input>
                             <paper-button on-click="_addSeasonDetails">Add</paper-button>
                         </div>
@@ -487,9 +459,10 @@
                 return e.base.join(', ');
             },
             _allocationLoaded(data) {
-                if (this.editKey) {
-                    if (this.url === '/allocation/readEdit/' + this.editKey) {
-                        if (data.detail.response) {
+                if (data.detail.response) {
+                    if (this.editKey) {
+                        if (this.url === '/allocation/readEdit/' + this.editKey) {
+
                             this.allocations = data.detail.response.data;
                             this.group = data.detail.response.data.group;
                             this.active = data.detail.response.data.active;
@@ -744,6 +717,8 @@
                 this.$.gridPS.clearCache();
                 this.$.gridPS.querySelector('#edit-button').focus();
             },
+
+
         })
     </script>
 </dom-module>

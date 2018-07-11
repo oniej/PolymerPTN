@@ -116,6 +116,7 @@
         </style>
 
         <iron-ajax auto url="/hotel/readMe/{{editKey}}" handle-as="json" on-response="_hotelsLoaded" debounce-duration="300"></iron-ajax>
+        <iron-ajax auto url="{{urluser}}" params='{}' handle-as="json" on-response="_userLoaded"></iron-ajax>
 
         <app-drawer-layout fullbleed narrow="{{narrow}}" id="drawerLayout">
             <app-header-layout id="appheader" has-scrolling-region>
@@ -156,7 +157,7 @@
             </app-header-layout>
             <vaadin-dialog id="hotelDelete" no-close-on-esc no-close-on-outside-click>
                 <template>
-                    <h3 style="text-align: center">Delete {{hotel}}?
+                    <h3 style="text-align: center">Delete {{hotelname}}?
                     </h3>
                     <hr>
                     <span style="float: right">
@@ -176,7 +177,7 @@
             </vaadin-dialog>
             <vaadin-dialog id="UpdateModal" no-close-on-esc no-close-on-outside-click>
                 <template>
-                    <h3 style="text-align: center">Update {{hotel}}?</h3>
+                    <h3 style="text-align: center">Update {{hotelname}}?</h3>
                     <hr>
                     <span style="float: right">
                         <paper-button on-tap="_update">Yes</paper-button>
@@ -202,6 +203,7 @@
             is: 'my-hotel-edit',
             properties: {
                 editKey: String,
+                accountKey: String,
                 route: Object,
                 data: Object,
                 createdAt: String,
@@ -252,12 +254,10 @@
                 paperInput.setAttribute("label", "Room " + roomNumber + ' Code');
                 paperInput.setAttribute("style", "display:inline-block;width:150px;margin-left: 30px");
                 div.append(paperInput);
-
                 if (el && elname) {
                     paperInput2.setAttribute("value", elname);
                     paperInput.setAttribute("value", el);
                     paperInput.readonly = true;
-
                 }
                 paperInput2.setAttribute("always-float-label", true);
                 paperInput.setAttribute("always-float-label", true);
@@ -277,7 +277,6 @@
                         });
                     }
                 });
-
                 if (this.editKey) {
                     if (!this.hotel) {
                         this.msg = "Hotel fields required";
@@ -290,6 +289,8 @@
                             hotel: this.hotel,
                             hotelname: this.hotelname,
                             room: roomupdate,
+                            created_by: this.created_by,
+                            updated_by: this.modifiedBy,
                         };
                         this.$.ajax.generateRequest();
                         this.$.successModalUpdate.opened = true;
@@ -327,9 +328,19 @@
                         });
                         this.createdby = data.detail.response.data.created_by;
                         this.createdAt = data.detail.response.data.createdAt;
-                        this.updatedby = data.detail.response.data.updated_by;
+                        // this.updatedby = data.detail.response.data.updated_by;
                         this.updatedAt = data.detail.response.data.updatedAt;
                     }
+                }
+                this.method = 'GET';
+                this.urluser = '/user/getkey/' + this.accountKey;
+                this.$.ajax.handleAs = "json";
+                this.$.ajax.generateRequest();
+            },
+            _userLoaded(data) {
+                if (data.detail.response.data) {
+                    this.modifiedBy = data.detail.response.data.name;
+                    console.log(this.modifiedBy);
                 }
             },
             _timeStampToDateTime(ts) {

@@ -69,33 +69,6 @@
                 background-color: darkorange;
             }
 
-            @-webkit-keyframes fadeIn {
-                from {
-                    opacity: 0;
-                }
-                to {
-                    opacity: 1;
-                }
-            }
-
-            @-moz-keyframes fadeIn {
-                from {
-                    opacity: 0;
-                }
-                to {
-                    opacity: 1;
-                }
-            }
-
-            @keyframes fadeIn {
-                from {
-                    opacity: 0;
-                }
-                to {
-                    opacity: 1;
-                }
-            }
-
             @media (max-width: 420px) {
                 .docu {
                     margin-left: 16px;
@@ -138,26 +111,9 @@
                     /* margin-left: 16px;
                     margin-right: 16px; */
                     padding: 16px;
-
-
                     background-color: #fff;
                     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
 
-                    opacity: 0;
-                    /* make things invisible upon start */
-                    -webkit-animation: fadeIn ease-in 1;
-                    /* call our keyframe named fadeIn, use animattion ease-in and repeat it only 1 time */
-                    -moz-animation: fadeIn ease-in 1;
-                    animation: fadeIn ease-in 1;
-
-                    -webkit-animation-fill-mode: forwards;
-                    /* this makes sure that after animation is done we remain at the last keyframe value (opacity: 1)*/
-                    -moz-animation-fill-mode: forwards;
-                    animation-fill-mode: forwards;
-
-                    -webkit-animation-duration: 0.5s;
-                    -moz-animation-duration: 0.5s;
-                    animation-duration: 0.5s;
                 }
                 #iconform {
                     display: none;
@@ -179,7 +135,10 @@
                 left: 10px;
                 margin-left: 20%;
             }
-
+            paper-button{
+                background-color: cornflowerblue;
+                color: white;
+            }
             paper-checkbox {
                 font-size: 14px;
                 margin-right: 5px;
@@ -295,8 +254,8 @@
                         <x-array-data-provider items="{{seasonDetails}}" size="200"></x-array-data-provider>
                         <div style="margin-bottom: 20px">
                             <paper-input type="date" style="width: 260px; float: left;" label="Start" id="startValue" value="{{startValue}}" max="{{endValue}}" date-format="DD-MMMM-YYYY"></paper-input>
-                            <paper-input type="date" style="width: 260px; float: right;" label="End" id="endValue" value="{{endValue}}" min="{{startValue}}" date-format="DD-MMMM-YYYY"></paper-input>
-                            <br><paper-button on-click="_addSeasonDetails">Add</paper-button>
+                            <paper-input type="date" style="width: 260px; float: left;margin-left: 5px;" label="End" id="endValue" value="{{endValue}}" min="{{startValue}}" date-format="DD-MMMM-YYYY"></paper-input>
+                            <paper-button on-click="_addSeasonDetails">Add</paper-button>
                         </div>
                         <vaadin-grid theme="compact" id="gridPS" items="[[seasonDetails]]">
 

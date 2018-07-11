@@ -93,10 +93,12 @@ router.put('/update/:editKey', (req, res) => {
     }
     Hotels.findById(editKey, (error, hotelinfo) => {
         if (error) return res.json({ success: false, error });
-        const { hotel, hotelname, room, } = req.body;
+        const { hotel, hotelname, room, created_by, updated_by } = req.body;
         hotelinfo.hotel = hotel;
         hotelinfo.hotelname = hotelname;
         hotelinfo.room = room;
+        hotelinfo.created_by = created_by;
+        hotelinfo.updated_by = updated_by;
         hotelinfo.save(error => {
             if (error) return res.json({ success: false, error });
             return res.json({ success: true });

@@ -260,14 +260,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                         <span style="color: gray">Created: &nbsp;
                                             <time-ago datetime$="{{_timeStampToDateTime(item.createdAt)}}">{{_timeStampToDateTime(item.createdAt)}}</time-ago>
                                             &nbsp;by&nbsp;[[item.created_by]]
-
                                         </span>
                                     </div>
-                                    <div id="{{item._id}}" style="margin-top: 2px; margin-left: 5px;">
+                                    <div id="updatedBy" style="margin-top: 2px; margin-left: 5px;">
                                         <span style="color: gray">Updated: &nbsp;
                                             <time-ago datetime$="{{_timeStampToDateTime(item.updatedAt)}}">{{_timeStampToDateTime(item.updatedAt)}}</time-ago>
                                             &nbsp;by&nbsp;[[item.updated_by]]
-                                        </span>
                                         </span>
                                     </div>
                                 </div>
@@ -282,14 +280,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </div>
             <div name="/new">
                 <div id="hotelnew"></div>
-                <my-hotel-new id="d23" path=" " prev-route="{{route.prefix}}"></my-hotel-new>
+                <my-hotel-new id="d23" path=" " account-key='{{accountKey}}' prev-route="{{route.prefix}}"></my-hotel-new>
             </div>
             <div name="view404 ">Not found.</div>
         </iron-pages>
 
         <!-- <div hidden$="{{!editActive}}"> -->
         <template is="dom-if" if="{{editActive}}" restamp>
-            <my-hotel-edit id="d24" edit-key='{{editData._id}}' prev-route="{{route.prefix}}"></my-hotel-edit>
+            <my-hotel-edit id="d24" account-key='{{accountKey}}' edit-key='{{editData._id}}' prev-route="{{route.prefix}}"></my-hotel-edit>
         </template>
         <!-- </div> -->
 
@@ -306,7 +304,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 route: Object,
                 routeData: Object,
                 hotelId: String,
+                modifiedHide: String,
                 data: Object,
+                accountKey: String,
                 openSearch: {
                     type: Boolean,
                     value: false,
@@ -356,6 +356,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     }
                     var newDiv = document.createElement("my-hotel-new");
                     newDiv.setAttribute("id", "d23");
+                    newDiv.setAttribute("account-key", this.accountKey);
                     newDiv.setAttribute("prev-route", this.route.prefix);
                     var currentDiv = document.getElementById("hotelnew");
                     Polymer.dom(node.parentNode).insertBefore(newDiv, currentDiv);
@@ -371,11 +372,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     }
                     var newDiv = document.createElement("my-hotel-edit");
                     newDiv.setAttribute("id", "d24");
+                    newDiv.setAttribute("account-key", this.accountKey);
                     newDiv.setAttribute("edit-key", data_args);
                     newDiv.setAttribute("prev-route", this.route.prefix);
-                    // newDiv.setAttribute("block ", "3 ")
-                    //if open existing
-                    // console.log(newDiv);s
                     var currentDiv = document.getElementById("availedit");
                     Polymer.dom(node.parentNode).insertBefore(newDiv, currentDiv);
                 }

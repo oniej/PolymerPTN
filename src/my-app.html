@@ -49,6 +49,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <!-- <link rel="lazy-import" href="my-view1.html"> -->
 <link rel="lazy-import" href="my-signin.html">
+<link rel="lazy-import" href="my-statusinquiry.html">
 <link rel="lazy-import" href="my-account-deactivated">
 <link rel="lazy-import" href="my-account-setup.html">
 <link rel="lazy-import" href="my-resetpw.html">
@@ -64,7 +65,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       :host {
         /* --app-primary-color: #FFFFFF; */
         --app-secondary-color: #000000;
-
         display: block;
       }
 
@@ -351,6 +351,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                       <span>Hotels</span>
                     </paper-icon-item>
                   </a>
+                  <a name="statusInquiry" href="[[rootPath]]statusInquiry">
+                    <paper-icon-item toggles="true" class="menuSelected">
+                      <iron-icon icon="my-icons:dashboard" slot="item-icon"></iron-icon>
+                      <span>status Inquiry </span>
+                    </paper-icon-item>
+                  </a>
                   <a name="users" href="[[rootPath]]users">
                     <paper-icon-item toggles="true" class="menuSelected">
                       <iron-icon icon="my-icons:group" slot="item-icon"></iron-icon>
@@ -394,6 +400,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <my-blocking name="blocking" route="{{subroute}}" account-key="{{user.accountkey}}"></my-blocking>
               <my-booking name="booking" route="{{subroute}}" account-key="{{user.accountkey}}"></my-booking>
               <!-- <my-inquire-one name="inquire-one" route="{{subroute}}"></my-inquire-one> -->
+              <my-statusinquiry name="statusInquiry" route="{{subroute}}" account-key="{{user.accountkey}}"></my-statusinquiry>
               <my-inquiry2 name="inquiry2" route="{{subroute}}" account-key="{{user.accountkey}}"></my-inquiry2>
               <my-hotels name="hotels" route="{{subroute}}" account-key="{{user.accountkey}}"></my-hotels>
               <my-users name="users" route="{{subroute}}" account-key="{{user.accountkey}}"></my-users>

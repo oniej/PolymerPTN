@@ -392,7 +392,7 @@
                 }
             },
             _closeDialog() {
-                // window.location.assign('/availability');
+                window.location.assign('/availability');
                 this.$.availabilitySave.opened = false;
             },
             _available() {
@@ -695,7 +695,7 @@
                     type: types,
                     availabilities: this.availabilities,
                     created_by: this.createdBy,
-                    updated_by: this.modifiedBy,
+                    updated_by: "",
                 };
                 this.$.ajax.generateRequest();
                 this.$.availabilitySave.opened = e;

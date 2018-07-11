@@ -184,6 +184,7 @@
         </custom-style>
         <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_availabilityLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
         <iron-ajax auto url="{{urlalloc}}" params='{}' handle-as="json" on-response="_allocLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
+        <iron-ajax auto url="{{urluser}}" params='{}' handle-as="json" on-response="_userLoaded"></iron-ajax>
         <app-drawer-layout fullbleed narrow="{{narrow}}" id="drawerLayout">
             <app-header-layout id="appheader" has-scrolling-region>
                 <app-header fixed slot="header">
@@ -301,6 +302,7 @@
                 yearly: String,
                 monthly: String,
                 editId: String,
+                accountKey: String,
                 date: String,
                 nextmonth: String,
                 previousmonth: String,
@@ -522,7 +524,7 @@
                                 yearly: year,
                             },
                             created_by: this.created_by,
-                            updated_by: this.updated_by,
+                            updated_by: this.modifiedBy,
                         };
                         this.$.ajax.generateRequest();
                         this.$.availabilitySave.opened = false;
@@ -550,7 +552,7 @@
                                 yearly: year,
                             },
                             created_by: this.created_by,
-                            updated_by: this.updated_by,
+                            updated_by: this.modifiedBy,
                         };
                         this.$.ajax.generateRequest();
                         this.$.availabilitySave.opened = false;
@@ -578,7 +580,7 @@
                             this.createdAt = data.detail.response.data.createdAt;
                             this.updatedAt = data.detail.response.data.updatedAt;
                             this.created_by = data.detail.response.data.created_by;
-                            this.updated_by = data.detail.response.data.updated_by;
+                            // this.updated_by = data.detail.response.data.updated_by;
                             var data1 = data.detail.response.data.availability;
                             this.roomType = data.detail.response.data.type;
                             var year = parseInt(this.yearly);
@@ -603,13 +605,17 @@
                         this.$.ajax.generateRequest();
                     }
                 }
+                this.method = 'GET';
+                this.urluser = '/user/getkey/' + this.accountKey;
+                this.$.ajax.handleAs = "json";
+                this.$.ajax.generateRequest();
             },
             _handleResponse(data) {
-                if (data.detail.response.data) {
+                if (data.detail.response) {
                     var availability = [];
-                    var data = data.detail.response.data;
+                    var datas = data.detail.response.data;
 
-                    data.forEach(element => {
+                    datas.forEach(element => {
                         this.editId = element._id;
                         this.date = element.date;
                         this.availabilityItem = element.availability;
@@ -828,6 +834,11 @@
                     this.url = '/availability/readEdit/' + this.editKey;
                 } else {
                     this.url = '/availability/dummy';
+                }
+            },
+            _userLoaded(data) {
+                if (data.detail.response.data) {
+                    this.modifiedBy = data.detail.response.data.name;
                 }
             },
             _timeStampToDateTime(ts) {
