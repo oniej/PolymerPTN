@@ -215,7 +215,7 @@
                         <div class="hotelSearch">
                             <div style="float:left;">
                                 <div style="display:flex;">
-                                    <paper-dropdown-input id="ids" label="Hotel" items='[[hotelItems]]' filter-property="hotel" value="{{hotelId}}" maxSize=10>
+                                    <paper-dropdown-input id="ids" label="Hotel" items='[[hotelItems]]' filter-property="hotel" value="{{hotel}}" max-size="10">
                                         <template>
                                             <template is="dom-repeat" items="[[items]]" as="item">
                                                 <paper-item label="[[item.hotel]]">[[item.hotelname]]</paper-item>
@@ -282,7 +282,7 @@
                 mynotes: String,
                 createdBy: String,
                 modifiedBy: String,
-                hotelId: String,
+                hotel: String,
                 mot: Number,
                 yer: Number,
                 days: Number,
@@ -320,10 +320,10 @@
                     value: []
                 },
             },
-            observers: ['_hotelIdChanged(hotelId,accountKey)',
+            observers: ['_hotelChanged(hotel,accountKey)',
                 '_resultLoaded(forAvailability,forHotel)'],
             ready() {
-                this.url = '/allocation/read';
+                this.url = '/hotel/read';
                 this.availabilityurl = '/availability/read';
                 var hideNotes = Polymer.dom(this.root).querySelector("#notes").setAttribute("style", "display:none");
                 var hideTable = Polymer.dom(this.root).querySelector("#table").setAttribute("style", "display:none");
@@ -349,7 +349,7 @@
             },
             _handleResponse(data) {
                 if (!(Array.isArray(data.detail.response.data))) {
-                    this.hotelData = data.detail.response.data.rooms;
+                    this.hotelData = data.detail.response.data.room;
                     var showTable = Polymer.dom(this.root).querySelector("#table").setAttribute("style", "width:100%;overflow-x:auto;");
                     var showoption = Polymer.dom(this.root).querySelector("#option").setAttribute("style", "display:block");
                     var showmonth = Polymer.dom(this.root).querySelector("#month").setAttribute("style", "margin-top: 10px; float: right");
@@ -368,11 +368,11 @@
                     this.prevyear = years;
                 }
             },
-            _hotelIdChanged(e, f) {
+            _hotelChanged(e, f) {
                 if (e) {
                     this.hotelRooms = e;
                     this.method = 'GET';
-                    this.$.ajax.url = '/allocation/filter/' + e;
+                    this.$.ajax.url = '/hotel/filter/' + e;
                     this.$.ajax.handleAs = "json";
                     this.$.ajax.generateRequest();
 
@@ -604,7 +604,8 @@
                 this.hotelData.forEach(element => {
                     var tr3 = document.createElement('tr');
                     var th3 = document.createElement('td');
-                    var datas = element.roomname.split(" ").join("");
+                    var datas = element.name.split(" ").join("");
+                    var roomSplit = element.room.split(" ").join("");
                     var tdTxt = document.createTextNode(datas);
                     th3.setAttribute("style", "text-align:left");
                     tr3.setAttribute('id', element.room);
@@ -616,19 +617,19 @@
                         var tdBlank = document.createElement('td');
                         // var dates = months + 1;
                         if (daysWeek < 10 && i < 10) {
-                            tdBlank.setAttribute('id', element.room + "_" + datas + "_" + years + "-" + "0" + months + "-" + "0" + i);
+                            tdBlank.setAttribute('id', roomSplit + "_" + datas + "_" + years + "-" + "0" + months + "-" + "0" + i);
                             tr3.append(tdBlank);
                         } else if (daysWeek == 10 && i == 10) {
-                            tdBlank.setAttribute('id', element.room + "_" + datas + "_" + years + "-" + months + "-" + i);
+                            tdBlank.setAttribute('id', roomSplit + "_" + datas + "_" + years + "-" + months + "-" + i);
                             tr3.append(tdBlank);
                         } else if (daysWeek < 10 && i >= 10) {
-                            tdBlank.setAttribute('id', element.room + "_" + datas + "_" + years + "-" + "0" + months + "-" + i);
+                            tdBlank.setAttribute('id', roomSplit + "_" + datas + "_" + years + "-" + "0" + months + "-" + i);
                             tr3.append(tdBlank);
                         } else if (daysWeek >= 10 && i <= 10) {
-                            tdBlank.setAttribute('id', element.room + "_" + datas + "_" + years + "-" + months + "-" + "0" + i);
+                            tdBlank.setAttribute('id', roomSplit + "_" + datas + "_" + years + "-" + months + "-" + "0" + i);
                             tr3.append(tdBlank);
                         } else {
-                            tdBlank.setAttribute('id', element.room + "_" + datas + "_" + years + "-" + months + "-" + i);
+                            tdBlank.setAttribute('id', roomSplit + "_" + datas + "_" + years + "-" + months + "-" + i);
                             tr3.append(tdBlank);
                         }
                     }
@@ -674,7 +675,7 @@
                 this.hotelData.forEach(element => {
                     types.push({
                         room: element.room,
-                        roomname: element.roomname
+                        roomname: element.name
                     });
                 });
                 var year = this.prevyear;
