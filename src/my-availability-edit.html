@@ -216,7 +216,7 @@
                     <div class="option">
                         <hr>
                         <paper-checkbox class="close" on-tap="_close" id="close">Close</paper-checkbox>
-                        <!-- <paper-checkbox class="limited" on-tap="_limited" id="limited">Limited</paper-checkbox> -->
+                        <paper-checkbox class="limited" on-tap="_limited" id="limited">Limited</paper-checkbox>
                         <paper-checkbox class="available" on-tap="_available" id="available">Open</paper-checkbox>
                         <span id="month" style="margin-top: 10px; float: right">
                             <paper-icon-button id="previous" noink on-tap="_preMonth" style="color: black;" icon="my-icons:keyboard-arrow-left"></paper-icon-button>
@@ -370,12 +370,13 @@
                 }
             },
             _available() {
-                var close = Polymer.dom(this.root).querySelector("#close").checked = false;
-                var cells = Polymer.dom(this.root).querySelectorAll("td");
-                var prev = Polymer.dom(this.root).querySelector("#previous");
-                var next = Polymer.dom(this.root).querySelector("#next");
                 var showsave = Polymer.dom(this.root).querySelector("#save");
+                var next = Polymer.dom(this.root).querySelector("#next");
+                var prev = Polymer.dom(this.root).querySelector("#previous");
                 var notes = Polymer.dom(this.root).querySelector("#notes");
+                var close = Polymer.dom(this.root).querySelector("#close").checked = false;
+                var limited = Polymer.dom(this.root).querySelector("#limited").checked = false;
+                var cells = Polymer.dom(this.root).querySelectorAll("td");
                 var _this = this;
                 for (var i = 0; i < cells.length; i++) {
                     cells[i].onclick = function (event) {
@@ -412,7 +413,8 @@
                                     _this.availabilities.push(data);
                                     _this.notifySplices('availabilities');
                                 }
-                            } else {
+                            }
+                            else {
                                 if (_this.availabilities.length > 0) {
                                     for (var i = 0; i < _this.availabilities.length; i++) {
                                         if (date == _this.availabilities[i].date && room == _this.availabilities[i].room) {
@@ -429,18 +431,84 @@
                                     }
                                 }
                             }
-
+                        }
+                    }
+                }
+            },
+            _limited() {
+                var showsave = Polymer.dom(this.root).querySelector("#save");
+                var next = Polymer.dom(this.root).querySelector("#next");
+                var prev = Polymer.dom(this.root).querySelector("#previous");
+                var notes = Polymer.dom(this.root).querySelector("#notes");
+                var close = Polymer.dom(this.root).querySelector("#close").checked = false;
+                var available = Polymer.dom(this.root).querySelector("#available").checked = false;
+                var cells = Polymer.dom(this.root).querySelectorAll("td");
+                var _this = this;
+                for (var i = 0; i < cells.length; i++) {
+                    cells[i].onclick = function (event) {
+                        if (event.target.id != "") {
+                            this.className = this.className === '' || this.className === "white" ? "yellow" : "white";
+                            var [room, roomname, date] = event.target.id.split("_");
+                            if (this.className == 'yellow') {
+                                var classColor = event.target.getAttribute("class");
+                                next.disabled = true;
+                                prev.disabled = true;
+                                showsave.setAttribute("style", "display:position: fixed; bottom: 32px;right: 32px;");
+                                notes.setAttribute("style", "display:block");
+                                var data = {
+                                    date: date,
+                                    room: room,
+                                    roomname: roomname,
+                                    classColor: classColor,
+                                    status: 'limited'
+                                }
+                                if (_this.availabilities.length > 0) {
+                                    for (var i = 0; i < _this.availabilities.length; i++) {
+                                        if (date == _this.availabilities[i].date && room == _this.availabilities[i].room) {
+                                            _this.availabilities[i].status = "limited";
+                                            _this.availabilities[i].classColor = "yellow";
+                                            _this.notifySplices('availabilities');
+                                            break;
+                                        }
+                                    }
+                                    if (i === _this.availabilities.length) {
+                                        _this.availabilities.push(data);
+                                        _this.notifySplices('availabilities');
+                                    }
+                                } else {
+                                    _this.availabilities.push(data);
+                                    _this.notifySplices('availabilities');
+                                }
+                            }
+                            else {
+                                if (_this.availabilities.length > 0) {
+                                    for (var i = 0; i < _this.availabilities.length; i++) {
+                                        if (date == _this.availabilities[i].date && room == _this.availabilities[i].room) {
+                                            _this.availabilities.splice(i, 1);
+                                            _this.notifySplices('availabilities');
+                                            break;
+                                        }
+                                    }
+                                    if (_this.availabilities.length === 0) {
+                                        next.disabled = false;
+                                        prev.disabled = false;
+                                        showsave.setAttribute("style", "display:none;");
+                                        notes.setAttribute("style", "display:none");
+                                    }
+                                }
+                            }
                         }
                     }
                 }
             },
             _close() {
-                var available = Polymer.dom(this.root).querySelector("#available").checked = false;
-                var cells = Polymer.dom(this.root).querySelectorAll("td");
-                var prev = Polymer.dom(this.root).querySelector("#previous");
-                var next = Polymer.dom(this.root).querySelector("#next");
                 var showsave = Polymer.dom(this.root).querySelector("#save");
+                var next = Polymer.dom(this.root).querySelector("#next");
+                var prev = Polymer.dom(this.root).querySelector("#previous");
                 var notes = Polymer.dom(this.root).querySelector("#notes");
+                var available = Polymer.dom(this.root).querySelector("#available").checked = false;
+                var limited = Polymer.dom(this.root).querySelector("#limited").checked = false;
+                var cells = Polymer.dom(this.root).querySelectorAll("td");
                 var _this = this;
                 for (var i = 0; i < cells.length; i++) {
                     cells[i].onclick = function (event) {
@@ -451,8 +519,8 @@
                                 var classColor = event.target.getAttribute("class");
                                 next.disabled = true;
                                 prev.disabled = true;
-                                notes.setAttribute("style", "display:block");
                                 showsave.setAttribute("style", "display:position: fixed; bottom: 32px;right: 32px;");
+                                notes.setAttribute("style", "display:block");
                                 var data = {
                                     date: date,
                                     room: room,
@@ -478,6 +546,7 @@
                                     _this.availabilities.push(data);
                                     _this.notifySplices('availabilities');
                                 }
+                                // console.log(event.target.id);
                             }
                             else {
                                 if (_this.availabilities.length > 0) {
@@ -688,6 +757,8 @@
                 this.$.ajax.generateRequest();
                 var close = Polymer.dom(this.root).querySelector("#close").checked = false;
                 var available = Polymer.dom(this.root).querySelector("#available").checked = false;
+                var limited = Polymer.dom(this.root).querySelector("#limited").checked = false;
+
             },
             _nextMonth() {
                 if (this.mot > 10) {
@@ -717,6 +788,8 @@
                 this.$.ajax.generateRequest();
                 var close = Polymer.dom(this.root).querySelector("#close").checked = false;
                 var available = Polymer.dom(this.root).querySelector("#available").checked = false;
+                var limited = Polymer.dom(this.root).querySelector("#limited").checked = false;
+
             },
             _createTable(numDays, months, years, daysWeek, data) {
                 var table = Polymer.dom(this.root).querySelector('#hotels');

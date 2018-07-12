@@ -1,7 +1,7 @@
 // first we import our dependencies…
 const express = require('express');
 const Allocation = require('../models/allocation');
-const Allocation2 = require('../models/allocation');
+const AllocPeak = require('../models/allocation');
 const Blocking = require('../models/blocking');
 const Booking = require('../models/booking');
 const Availability = require('../models/availability_model');
@@ -240,33 +240,102 @@ router.get('/inquirySource/:xparams', (req, res) => {
     // > db.student.find({ $and: [{ "sex": "Male" }, { "grd_point": { $gte: 31 } }, { "class": "VI" }] }).pretty();
 
     Allocation.find({
-        $and: [{ group: group }, { dateFrom: { $lte: _currentDate_format } }],
+        $and: [{ group: group }, { dateFrom: { $lte: datefrom } }],
         // dateFrom: { $lte: _currentDate_format }
     }, (error, _allocationData) => {
         if (error) return res.json({ success: false, error });
-
-        var _toReturnData = [];
-        for (var i = 0; i < _allocationData.length; i++) {
+        if (!group) { }
+        else {
+            var _toReturnData = [];
             _allocationData.forEach(_allocationItem => {
                 var _allocationItemToreturn = {};
                 _allocationItemToreturn.checkin = _currentDate_format;
                 _allocationItemToreturn.checkout = _currentDate_format_end;
+                _allocationItemToreturn.group = _allocationItem.group;
                 _allocationItemToreturn.hotel = _allocationItem.hotelname;
-                _allocationItemToreturn.rooms = _allocationItem.rooms;
-                _allocationItemToreturn.peakSeasons = _allocationItem.seasondate;
-                _toReturnData.push(_allocationItemToreturn)
-                // console.log(_allocationItem.seasondate);
+                _allocationItemToreturn.hotel = _allocationItem.hotelname;
+                if (_allocationItem.seasondate.length > 0) {
+                    _allocationItem.seasondate.forEach(_allocPeak => {
+                        _allocationItemToreturn.startpeak = _allocPeak.startValue;
+                        _allocationItemToreturn.endpeak = _allocPeak.endValue;
+                        _toReturnData.push(_allocationItemToreturn);
+                    });
+                    //  = _allocationItem.seasondate;
 
-                // Allocation2.find({
 
-                // }, (error, _peakseasons) => {
-                //     if (error) return res.json({ success: false, error });
+
+
+                }
+                // _allocationItem.rooms.forEach(_allocationRooms => {
+                //     _allocationItemToreturn.room = _allocationRooms.roomname;
+                //     _allocationItemToreturn.alloc_peak = _allocationRooms.pk;
+                //     _allocationItemToreturn.alloc_nonpeak = _allocationRooms.npk;
+                //     _toReturnData.push(_allocationItemToreturn);
+                // });
+                // _allocationItem.seasondate.forEach(_allocationPeak => {
+                //     _allocationItemToreturn.startdate = _allocationPeak.startValue;
+                //     _allocationItemToreturn.enddate = _allocationPeak.endValue;
+                //     _toReturnData.push(_allocationItemToreturn);
+
+                // });
+
+                // _toReturnData.push(_allocationItemToreturn);
+            });
+
+            // AllocPeak.find({
+            // $or: [{
+            //     "availability.date": { $gte: datefrom }, "availability.date": { $lte: dateto }
+            // }]
+            // }, (error, _availabilityData) => {
+            //     if (error) return res.json({ success: false, error });
+            // console.log(_toReturnData);
+            Availability.find({
+                $or: [{
+                    "availability.date": { $gte: datefrom }, "availability.date": { $lte: dateto }
+                }]
+            }, (error, _availabilityData) => {
+                if (error) return res.json({ success: false, error });
+                _availabilityData.forEach(_availData => {
+                    var _availToReturn = {};
+                    _availToReturn.hotel = _availData.hotelname;
+
+                    _availData.availability.forEach(_availarray => {
+                        _availToReturn.date = _availarray.date;
+                        _availToReturn.rooms = _availarray.roomname;
+                        _availToReturn.statuscolor = _availarray.classColor;
+                        _availToReturn.status = _availarray.status;
+                        _toReturnData.push(_availToReturn);
+                    });
+                });
+                Blocking.find({
+                    // $and: [{
+                    "rooms.dateFrom": { $gte: datefrom }, "rooms.dateTo": { $lte: dateto }
+                    // }]
+                }, (error, _blockingData) => {
+                    if (error) return res.json({ success: false, error });
+                    if (!group) {
+                    } else {
+                        _blockingData.forEach(_blockingDatarooms => {
+                            var _blockingToreturn = {};
+                            _blockingToreturn.hotel = _blockingDatarooms.hotelname
+                            _blockingToreturn.agent = _blockingDatarooms.agent;
+                            _blockingToreturn.group = _blockingDatarooms.group;
+                            _blockingDatarooms.rooms.forEach(_roomsArray => {
+                                _blockingToreturn.room = _roomsArray.roomname;
+                                _blockingToreturn.block_quantity = _roomsArray.block;
+                                _blockingToreturn.cancellation = _roomsArray.cancel;
+                                _blockingToreturn.startdate = _roomsArray.dateFrom;
+                                _blockingToreturn.enddate = _roomsArray.dateTo;
+                                _toReturnData.push(_blockingToreturn);
+                            });
+                        });
+                        return res.json({ success: true, data: _toReturnData });
+                    }
+                });
+                // });
             });
         }
-        console.log(_toReturnData);
-        return res.json({ success: true, data: _toReturnData });
-
-    }); 
+    });
     // }
 });
 
@@ -313,8 +382,6 @@ router.get('/inquirySource/:xparams', (req, res) => {
 //     ]
 // }, (error, _availability) => {
 //     if (error) return res.json({ success: false, error });
-
-
 
 //     _availability.forEach(element => {
 //         var _availabilityToreturn = {};

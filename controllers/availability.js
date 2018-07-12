@@ -36,7 +36,7 @@ router.get('/read', (req, res) => {
     Availability.find((err, availability) => {
         if (err) return res.json({ success: false, error: err });
         return res.json({ success: true, data: availability });
-    }).sort({ updatedAt: 1 }).limit(20);
+    }).sort({ updatedAt: -1 });
 });
 router.get('/readEdit/:editKey', (req, res) => {
     const editKey = req.params.editKey;
