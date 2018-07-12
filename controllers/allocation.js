@@ -181,7 +181,7 @@ router.get('/filterG/:groupKey', (req, res) => {
     });
 });
 router.get('/inquirySource/:xparams', (req, res) => {
-    const [datefrom, dateto, hotel, room, agent, group] = req.params.xparams.split("_");
+    const [datefrom, dateto, group, hotel, room, agent] = req.params.xparams.split("_");
     const _dateFrom = new Date(datefrom);
     const _dateTo = new Date(dateto);
 
@@ -189,140 +189,176 @@ router.get('/inquirySource/:xparams', (req, res) => {
     const difference_ms = _dateFrom.getTime() - _dateTo.getTime();
     const _numOfDays = Math.round(difference_ms / one_day);
 
-    var i;
     var _currentDate = new Date(_dateFrom);
     var _currentEndDate = new Date(_dateTo);
-    for (i = 0; i < _numOfDays; i++) {
+    // for (var i = 0; i < _numOfDays; i++) {
+    // increment datefrom and formulate proper date for query 2018 - 07 - 01
+    _currentDate.setDate(_currentDate.getDate() + 1);
+    var _currentDate_format = _currentDate.getFullYear() + "-" + ("0" + (_currentDate.getMonth() + 1)).slice(-2) + "-" + ("0" + _currentDate.getDate()).slice(-2)
+    _currentEndDate.setDate(_currentEndDate.getDate() - 1);
+    var _currentDate_format_end = _currentEndDate.getFullYear() + "-" + ("0" + (_currentEndDate.getMonth() + 1)).slice(-2) + "-" + ("0" + _currentEndDate.getDate()).slice(-2)
 
-        //increment datefrom and formulate proper date for query 2018-07-01
-        _currentDate.setDate(_currentDate.getDate() + 1);
-        var _currentDate_format = _currentDate.getFullYear() + "-" + ("0" + (_currentDate.getMonth() + 1)).slice(-2) + "-" + ("0" + _currentDate.getDate()).slice(-2)
+    //get allocation details
+    // var _paramAND;
+    // if (hotel && room) {
+    //     _paramAND = {
+    //         $and: [
+    //             { hotel: hotel },
+    //             { 'rooms.room': room },
+    //             { dateFrom: { $gte: _currentDate_format } },
+    //             { dateTo: { $lte: _currentDate_format } }
+    //         ]};
+    // }
+    // else if (hotel && !room) {
+    //     _paramAND = {
+    //         $and:
+    //         [
+    //             { hotel: hotel },
+    //             { dateFrom: { $gte: _currentDate_format } },
+    //             { dateTo: { $lte: _currentDate_format } }
+    //         ]};
+    // }
+    // else if (!hotel && room) {
+    //     _paramAND = {
+    //         $and:
+    //         [
+    //             { 'rooms.room': room },
+    //             { dateFrom: { $gte: _currentDate_format } },
+    //             { dateTo: { $lte: _currentDate_format } }
+    //         ]};
+    // }
+    // else {
+    // var _paramAND = {
+    // group: group,
+    // $and:
+    //     [
+    // dateFrom: { $lte: _currentDate_format },
+    // dateTo: { $lte: _currentDate_format }
+    // ]
+    // };
+    // }
+    // > db.student.find({ $and: [{ "sex": "Male" }, { "grd_point": { $gte: 31 } }, { "class": "VI" }] }).pretty();
 
-        //get allocation details
-        // var _paramAND;
-        // if (hotel && room) {
-        //     _paramAND = {
-        //         $and: [
-        //             { hotel: hotel },
-        //             { 'rooms.room': room },
-        //             { dateFrom: { $gte: _currentDate_format } },
-        //             { dateTo: { $lte: _currentDate_format } }
-        //         ]};
-        // }
-        // else if (hotel && !room) {
-        //     _paramAND = {
-        //         $and:
-        //         [
-        //             { hotel: hotel },
-        //             { dateFrom: { $gte: _currentDate_format } },
-        //             { dateTo: { $lte: _currentDate_format } }
-        //         ]};
-        // }
-        // else if (!hotel && room) {
-        //     _paramAND = {
-        //         $and:
-        //         [
-        //             { 'rooms.room': room },
-        //             { dateFrom: { $gte: _currentDate_format } },
-        //             { dateTo: { $lte: _currentDate_format } }
-        //         ]};
-        // }
-        // else {
-        var _paramAND = {
-            $and:
-                [
-                    { dateFrom: { $lte: _currentDate_format } },
-                    { dateTo: { $gte: _currentDate_format } }
-                ]
-        };
-        // }
+    Allocation.find({
+        $and: [{ group: group }, { dateFrom: { $lte: _currentDate_format } }],
+        // dateFrom: { $lte: _currentDate_format }
+    }, (error, _allocationData) => {
+        if (error) return res.json({ success: false, error });
 
-        Allocation.find(_paramAND, (error, _allocationData) => {
-            if (error) return res.json({ success: false, error });
-            const _toReturnData = [];
-            //enumerate result
+        var _toReturnData = [];
+        for (var i = 0; i < _allocationData.length; i++) {
             _allocationData.forEach(_allocationItem => {
-                //get peak season
-                Allocation2.find({
-                    // $and: [
-                    hotel: '002'
-                    // {
-                    //     seasondate: {
-                    // 'seasondate.startValue': { $lte: _currentDate_format },
-                    // 'seasondate.endValue': { $gte: _currentDate_format }
-                    //     }
-                    // }
-                    // ]
-                }, (error, _peakseasons) => {
-                    if (error) return res.json({ success: false, error });
+                var _allocationItemToreturn = {};
+                _allocationItemToreturn.checkin = _currentDate_format;
+                _allocationItemToreturn.checkout = _currentDate_format_end;
+                _allocationItemToreturn.hotel = _allocationItem.hotelname;
+                _allocationItemToreturn.rooms = _allocationItem.rooms;
+                _allocationItemToreturn.peakSeasons = _allocationItem.seasondate;
+                _toReturnData.push(_allocationItemToreturn)
+                // console.log(_allocationItem.seasondate);
 
-                    // Blocking.find({
-                    // $and: [
-                    // hotel: hotel,
-                    // $and: [
-                    //     {
-                    //             'dateFrom': { $gte: _currentDate_format },
-                    //             'dateTo': { $lte: _currentEndDate },
-                    //         }
-                    //     ]
-                    // }, (error, _blocking) => {
-                    //     if (error) return res.json({ success: false, error });
-                    Availability.find({
-                        // hotel: hotel,
-                        $and: [
-                            {
-                                'availability.date': { $gte: _currentDate_format },
-                                'availability.date': { $lte: _currentEndDate },
-                            }
-                        ]
-                    }, (error, _availability) => {
-                        if (error) return res.json({ success: false, error });
+                // Allocation2.find({
 
-
-
-                        _availability.forEach(element => {
-                            var _availabilityToreturn = {};
-                            _availabilityToreturn.hotel = hotelname;
-                            _availabilityToreturn.room = element.roomname;
-                            _availabilityToreturn.statusColor = element.classColor;
-                            _availabilityToreturn.status = element.status;
-                            _toReturnData.push(_availabilityToreturn);
-                        });
-
-                        _allocationItem.rooms.forEach(_roomItem => {
-                            var _toReturnItem = {};
-                            _toReturnItem.xdate = _currentDate;
-                            _toReturnItem.hotel = _allocationItem.hotelname;
-                            _toReturnItem.room = _roomItem.roomname;
-                            _toReturnItem.isPeakSeason = (_peakseasons.values.length > 0 ? 1 : 0);
-                            _toReturnItem.pk = _roomItem.pk;
-                            _toReturnItem.pk_coff = _roomItem.pk_coff;
-                            _toReturnItem.npk = _roomItem.npk;
-                            _toReturnItem.npk_coff = _roomItem.npk_coff;
-                            _toReturnData.push(_toReturnItem);
-                        });
-
-                        // return res.json({ success: true, data: _toReturnData });
-                        // });
-
-                    });
-                    //get blocking
-                    //get availability
-                });
-                return res.json({ success: true, data: _availability });
-                // return res.json({ success: true, data: _toReturnData });
-
+                // }, (error, _peakseasons) => {
+                //     if (error) return res.json({ success: false, error });
             });
+        }
+        console.log(_toReturnData);
+        return res.json({ success: true, data: _toReturnData });
 
-            //console.log(_toReturnData);
-            // return res.json({ success: true, data: _toReturnData });
-        });
-
-
-
-
-    }
-
-
+    }); 
+    // }
 });
+
+
+
+
+
+
+// const _toReturnData = [];
+//enumerate result
+// _allocationData.forEach(_allocationItem => {
+//get peak season
+// Allocation2.find({
+// $and: [
+// hotel: _allocationItem.hotel,
+// group: group,
+// {
+//     seasondate: {
+// 'seasondate.startValue': { $lte: _currentDate_format },
+// 'seasondate.endValue': { $gte: _currentDate_format }
+//     }
+// }
+// ]
+// }, (error, _peakseasons) => {
+// if (error) return res.json({ success: false, error });
+// Blocking.find({
+// $and: [
+// hotel: hotel,
+// $and: [
+//     {
+//             'dateFrom': { $gte: _currentDate_format },
+//             'dateTo': { $lte: _currentEndDate },
+//         }
+//     ]
+// }, (error, _blocking) => {
+//     if (error) return res.json({ success: false, error });
+// Availability.find({
+//     // hotel: hotel,
+//     $and: [
+//         {
+//             'availability.date': { $gte: _currentDate_format },
+//             'availability.date': { $lte: _currentEndDate },
+//         }
+//     ]
+// }, (error, _availability) => {
+//     if (error) return res.json({ success: false, error });
+
+
+
+//     _availability.forEach(element => {
+//         var _availabilityToreturn = {};
+//         _availabilityToreturn.hotel = hotelname;
+//         _availabilityToreturn.room = element.roomname;
+//         _availabilityToreturn.statusColor = element.classColor;
+//         _availabilityToreturn.status = element.status;
+//         _toReturnData.push(_availabilityToreturn);
+//     });
+
+// _allocationItem.rooms.forEach(_roomItem => {
+//     var _toReturnItem = {};
+//     _toReturnItem.xdate = _currentDate_format;
+//     _toReturnItem.hotel = _allocationItem.hotelname;
+//     _toReturnItem.room = _roomItem.roomname;
+// _toReturnItem.isPeakSeason = (_peakseasons.values.length > 0 ? 1 : 0);
+//     _toReturnItem.pk = _roomItem.pk;
+//     _toReturnItem.pk_coff = _roomItem.pk_coff;
+//     _toReturnItem.npk = _roomItem.npk;
+//     _toReturnItem.npk_coff = _roomItem.npk_coff;
+//     _toReturnData.push(_toReturnItem);
+// });
+
+// return res.json({ success: true, data: _toReturnData });
+// });
+
+// });
+//get blocking
+//get availability
+// });
+// return res.json({ success: true, data: _availability });
+// return res.json({ success: true, data: _toReturnData });
+
+// });
+
+//console.log(_toReturnData);
+// return res.json({ success: true, data: _toReturnData });
+// });
+
+
+
+
+// }
+
+
+// });
 module.exports = router;

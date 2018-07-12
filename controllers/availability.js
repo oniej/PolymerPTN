@@ -45,13 +45,6 @@ router.get('/readEdit/:editKey', (req, res) => {
         return res.json({ success: true, data: availability });
     });
 });
-router.get('/readEdit/:hotel', (req, res) => {
-    const hotel = req.params.hotel;
-    Availability.findOne({ hotel: hotel }, (error, availability) => {
-        if (error) return res.json({ success: false, error });
-        return res.json({ success: true, data: availability });
-    });
-});
 router.get('/filter/:hotel', (req, res) => {
     const [hotel, month, yearly] = req.params.hotel.split("~");
     var date = month + "," + yearly;

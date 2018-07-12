@@ -142,7 +142,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <div style="display: inline;" id="dateandRoom">
                             <div style="display: flex">
                                 <div style="display: flex">
-                                    <paper-dropdown-input label="Select Group" items='[[groupItems]]' filter-property="group" value="{{hotelId}}">
+                                    <paper-dropdown-input label="Select Group" items='[[groupItems]]' filter-property="group" value="{{group}}">
                                         <template>
                                             <template is="dom-repeat" items="[[items]]" as="item">
                                                 <paper-item>[[item.group]]</paper-item>
@@ -215,7 +215,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 checkout: String,
                 stardate: String,
                 enddate: String,
-                hotelId: String,
+                group: String,
                 groupworkspace: Object,
                 startload: Object,
                 endload: Object,
@@ -223,6 +223,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 endavail: Object,
                 endblock: Object,
                 startblock: Object,
+                roomSelected: String,
                 newBlock: {
                     type: Array,
                     notify: true
@@ -290,7 +291,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
             observers: ['_startCheckin(checkin)',
                 '_endCheckout(checkout)',
-                '_hotelIdChanged(hotelId)',
+                '_hotelIdChanged(group)',
                 '_joinedAvail(startavail,endavail)',
                 '_joinedAlloc(groupworkspace,startload,endload)',
                 '_joinedBlock(groupworkspace,startblock,endblock)',
@@ -324,6 +325,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
             _hotelIdChanged(j) {
                 this.stardate = this.checkin;
+                this.roomSelected = j;
                 this.urlFilterworkspace = '/group/filter/' + j;
                 this.$.workspace.handleAs = "json";
                 this.$.workspace.generateRequest();
@@ -351,7 +353,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 if (data.detail.response.data) {
                     if (this.endavail) {
                         this.startavail = data.detail.response.data;
-                        console.log(this.startavail);
                     }
                 }
             },
@@ -364,12 +365,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
             _endCheckout(f) {
                 this.to = f;
-                this.urlFilterend = '/allocation/inquirySource/' + f + "_" + this.from + "_" + "002" + "_" + "r1" + "_" + "gabriel";
-                // this.Endavail = '/availability/filterenddate/' + f + "_" + this.from;
-                // this.Endblockings = '/blocking/filterenddate/' + f + "_" + this.from;
-                this.$.endalloc.generateRequest();
-                // this.$.endavail.generateRequest();
-                // this.$.endblock.generateRequest();
+                if (this.to && this.from && this.roomSelected) {
+                    this.urlFilterend = '/allocation/inquirySource/' + this.from + "_" + this.to + "_" + this.roomSelected;
+                    // this.Endavail = '/availability/filterenddate/' + f + "_" + this.from;
+                    // this.Endblockings = '/blocking/filterenddate/' + f + "_" + this.from;
+                    this.$.endalloc.generateRequest();
+                    // this.$.endavail.generateRequest();
+                    // this.$.endblock.generateRequest();
+                }
             },
             _endavailloaded(data) {
                 if (data.detail.response.data) {

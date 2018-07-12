@@ -80,8 +80,8 @@
                     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
 
                     opacity: 0;
-                  }
-            } 
+                }
+            }
 
             @media (max-width: 768px) {
                 #buttonform {
@@ -135,10 +135,12 @@
                 left: 10px;
                 margin-left: 20%;
             }
-            paper-button{
+
+            paper-button {
                 background-color: cornflowerblue;
                 color: white;
             }
+
             paper-checkbox {
                 font-size: 14px;
                 margin-right: 5px;
@@ -176,7 +178,7 @@
                     </div>
                     <div class="details" id="form">
                         <paper-dropdown-input id="hotelLbl" always-float-label style="width: 100%" label="Hotel" items='[[hotelItems]]' filter-property="hotel"
-                            value="{{hotel}}">
+                            value="{{hotel}}" max-size="5">
                             <template>
                                 <template is="dom-repeat" items="[[items]]" as="item">
                                     <paper-item label="[[item.hotel]]">[[item.hotelname]]</paper-item>
@@ -192,8 +194,8 @@
                                 </div>
                             </template>
                         </range-datepicker-input>
-                        <paper-input  always-float-label value="{{pk_coff}}" label="PEAK CUT-OFF" style="width: 49%; float: left;"></paper-input>                         
-                        <paper-input  always-float-label value="{{npk_coff}}" label="NON-PEAK CUT-OFF" style="width: 49%; float: right;"></paper-input>
+                        <paper-input always-float-label value="{{pk_coff}}" label="PEAK CUT-OFF" style="width: 49%; float: left;"></paper-input>
+                        <paper-input always-float-label value="{{npk_coff}}" label="NON-PEAK CUT-OFF" style="width: 49%; float: right;"></paper-input>
                         <br>
                         <x-array-data-provider items="{{allocationDetails}}" size="200"></x-array-data-provider>
                         <div style="margin-bottom: 20px">
@@ -253,8 +255,10 @@
                         </div>
                         <x-array-data-provider items="{{seasonDetails}}" size="200"></x-array-data-provider>
                         <div style="margin-bottom: 20px">
-                            <paper-input type="date" style="width: 260px; float: left;" label="Start" id="startValue" value="{{startValue}}" max="{{endValue}}" date-format="DD-MMMM-YYYY"></paper-input>
-                            <paper-input type="date" style="width: 260px; float: left;margin-left: 5px;" label="End" id="endValue" value="{{endValue}}" min="{{startValue}}" date-format="DD-MMMM-YYYY"></paper-input>
+                            <paper-input type="date" style="width: 260px; float: left;" label="Start" id="startValue" value="{{startValue}}" max="{{endValue}}"
+                                date-format="DD-MMMM-YYYY"></paper-input>
+                            <paper-input type="date" style="width: 260px; float: left;margin-left: 5px;" label="End" id="endValue" value="{{endValue}}"
+                                min="{{startValue}}" date-format="DD-MMMM-YYYY"></paper-input>
                             <paper-button on-click="_addSeasonDetails">Add</paper-button>
                         </div>
                         <vaadin-grid theme="compact" id="gridPS" items="[[seasonDetails]]">
@@ -262,15 +266,15 @@
                             <vaadin-grid-column width="270px" resizable>
                                 <template class="header">Peak Start</template>
                                 <template>
-                                    <paper-input type="date"  style="width: 260px;" id="startValue-[[index]]" value="[[item.startValue]]" readonly$="[[!_isEditingSeasonDetails(editingSeasonDetails, item)]]"></paper-input>
-                                 </template>
+                                    <paper-input type="date" style="width: 260px;" id="startValue-[[index]]" value="[[item.startValue]]" readonly$="[[!_isEditingSeasonDetails(editingSeasonDetails, item)]]"></paper-input>
+                                </template>
                             </vaadin-grid-column>
 
                             <vaadin-grid-column width="270px" resizable>
                                 <template class="header">Peak End</template>
                                 <template>
                                     <paper-input type="date" style="width: 260px;" id="endValue-[[index]]" value="[[item.endValue]]" readonly$="[[!_isEditingSeasonDetails(editingSeasonDetails, item)]]"></paper-input>
-                               </template>
+                                </template>
                             </vaadin-grid-column>
 
                             <vaadin-grid-column width="16em">
@@ -355,17 +359,17 @@
                 accountKey: String,
             },
             observers: ['_hotelChanged(hotel,accountKey)'],
-            _hotelChanged(e,f) {
+            _hotelChanged(e, f) {
                 // console.log(e);
                 this.$.ajaxRoom.method = 'GET';
                 this.$.ajaxRoom.url = '/hotel/filterHotel/' + e;
                 this.$.ajaxRoom.generateRequest();
-                
+
                 this.method = 'GET';
                 this.urluser = '/user/getkey/' + f;
                 this.$.ajax.handleAs = "json";
                 this.$.ajax.generateRequest();
-              
+
             },
             _userLoaded(data) {
                 if (data.detail.response.data) {
@@ -398,7 +402,7 @@
                         hotelname: this.$.hotelLbl.selectedItemLabel,
                         dateFrom: _dateFrom,
                         dateTo: _dateTo,
-                        pk_coff : this.pk_coff,
+                        pk_coff: this.pk_coff,
                         npk_coff: this.npk_coff,
                         rooms: this.allocationDetails,
                         note: this.note,
@@ -410,9 +414,9 @@
                     this.$.successModal.opened = true;
                     this.url = '';
                 }
-           
+
             },
-           
+
             _ok() {
                 this.$.successModal.opened = false;
                 window.location.assign('/allocation');
@@ -459,7 +463,7 @@
                         roomname: this.$.room.selectedItem.label,
                         pk: this.$.pk.value,
                         npk: this.$.npk.value,
-                     }
+                    }
                     this.allocationDetails.push(roomdata);
                     this.$.grid.clearCache();
 
@@ -491,7 +495,7 @@
                 var item = e.model.item;
                 item.pk = this.$.grid.querySelector('#pk-' + e.model.index).value;
                 item.npk = this.$.grid.querySelector('#npk-' + e.model.index).value;
-            
+
                 this.editingAllocationDetails = null;
 
                 this.$.grid.clearCache();
