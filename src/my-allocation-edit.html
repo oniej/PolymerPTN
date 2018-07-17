@@ -67,7 +67,7 @@
                 #Notes {
                     display: none;
                 }
-            
+
                 .groupdiv {
                     position: absolute;
                     top: 20px;
@@ -146,9 +146,27 @@
                 background: green;
                 color: black;
             }
-            paper-button{
+
+            paper-button {
+                margin-top: 33px;
+                background: white;
+                height: 36px;
+                font-size: 12px;
+                font-weight: 400;
                 background-color: cornflowerblue;
                 color: white;
+                width: 80px;
+            }
+
+            paper-button#addPeak {
+                margin-top: 20px;
+                background: white;
+                height: 36px;
+                font-size: 12px;
+                font-weight: 400;
+                background-color: cornflowerblue;
+                color: white;
+                width: 80px;
             }
         </style>
         <custom-style>
@@ -238,8 +256,8 @@
                             </template>
                         </vaadin-combo-box> -->
                             <vaadin-combo-box style="width: 245px;" id="room" label="ROOM"></vaadin-combo-box>
-                            <vaadin-text-field style="width: 180px;" id="pk" label="PK"></vaadin-text-field>
-                            <vaadin-text-field style="width: 180px;" id="npk" label="NPK"></vaadin-text-field>
+                            <vaadin-text-field style="width: 180px;" id="pk" label="PK Quantity"></vaadin-text-field>
+                            <vaadin-text-field style="width: 180px;" id="npk" label="NPK Quantity"></vaadin-text-field>
                             <paper-button on-click="_addAllocationDetails">Add</paper-button>
                         </div>
                         <vaadin-grid theme="compact" id="grid" items="[[allocationDetails]]">
@@ -251,7 +269,7 @@
                             </vaadin-grid-column>
 
                             <vaadin-grid-column width="180px" resizable>
-                                <template class="header">PK</template>
+                                <template class="header">PK Quantity</template>
                                 <template>
                                     <vaadin-text-field style="width: 170px;" id="pk-[[index]]" value="[[item.pk]]" readonly$="[[!_isEditingAllocationDetails(editingAllocationDetails, item)]]"></vaadin-text-field>
                                 </template>
@@ -259,7 +277,7 @@
 
 
                             <vaadin-grid-column width="180px" resizable>
-                                <template class="header">NPK</template>
+                                <template class="header">NPK Quantity</template>
                                 <template>
                                     <vaadin-text-field style="width:170px;" id="npk-[[index]]" value="[[item.npk]]" readonly$="[[!_isEditingAllocationDetails(editingAllocationDetails, item)]]"></vaadin-text-field>
                                 </template>
@@ -267,7 +285,7 @@
 
                             <vaadin-grid-column width="12em">
                                 <template>
-                                    <div style="text-align: right;">
+                                    <div style="text-align: right; margin-top:-33px;">
                                         <paper-button id="edit-button" hidden="[[editingAllocationDetails]]" on-click="_editAllocationDetails" focus-target$="[[!editingAllocationDetails]]"
                                             theme="icon" aria-label="Edit">
                                             <iron-icon icon="lumo:edit"></iron-icon>
@@ -286,12 +304,12 @@
                             <h3>PEAK SEASONS</h3>
                         </div>
                         <x-array-data-provider items="{{seasonDetails}}" size="200"></x-array-data-provider>
-                        <div style="margin-bottom: 20px">
+                        <div style="margin-bottom: 30px">
                             <paper-input type="date" style="width: 260px; float: left;" label="Start" id="startValue" value="{{startValue}}" max="{{endValue}}"
                                 date-format="DD-MMMM-YYYY"></paper-input>
-                            <paper-input type="date" style="width: 260px; float: left; margin-left: 5px;" label="End" id="endValue" value="{{endValue}}" min="{{startValue}}"
-                                date-format="DD-MMMM-YYYY"></paper-input>
-                            <paper-button on-click="_addSeasonDetails">Add</paper-button>
+                            <paper-input type="date" style="width: 260px; float: left; margin-left: 5px;" label="End" id="endValue" value="{{endValue}}"
+                                min="{{startValue}}" date-format="DD-MMMM-YYYY"></paper-input>
+                            <paper-button id="addPeak" on-click="_addSeasonDetails">Add</paper-button>
                         </div>
                         <vaadin-grid theme="compact" id="gridPS" items="[[seasonDetails]]">
 
@@ -311,7 +329,7 @@
 
                             <vaadin-grid-column width="16em">
                                 <template>
-                                    <div style="text-align: right;">
+                                    <div style="margin-left:-10px;margin-top:-30px;">
                                         <paper-button id="edit-button" hidden="[[editingSeasonDetails]]" on-click="_editSeasonDetails" focus-target$="[[!editingSeasonDetails]]"
                                             theme="icon" aria-label="Edit">
                                             <iron-icon icon="lumo:edit"></iron-icon>

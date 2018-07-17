@@ -19,6 +19,8 @@
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/vaadin-dialog/vaadin-dialog.html">
 <link rel="import" href="../bower_components/vaadin-button/vaadin-button.html">
+<link rel="import" href="../bower_components/paper-dropdown-input/paper-dropdown-input.html">
+
 
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="my-icons.html">
@@ -87,6 +89,9 @@
             }
         </style>
         <!-- <iron-ajax auto url="{{url}}"  handle-as="json" on-response="_commentsLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax> -->
+        <iron-ajax auto url="{{urlgroup}}" params='{}' handle-as="json" on-response="_groupLoaded"></iron-ajax>
+        <iron-ajax auto url="{{urlagent}}" params='{}' handle-as="json" on-response="_agentLoaded"></iron-ajax>
+
         <app-drawer-layout fullbleed narrow="{{narrow}}" id="drawerLayout">
             <app-header-layout id="appheader" has-scrolling-region>
                 <app-header fixed slot="header">
@@ -112,17 +117,25 @@
                         <paper-input value="{{email}}" float-label label="Email"></paper-input>
                         <paper-dropdown-menu style="cursor:pointer" label="Account Type">
                             <paper-listbox slot="dropdown-content" class="dropdown-content" selected="{{roleAdd}}">
-                                <paper-item>Admin Staff</paper-item>
+                                <paper-item>Admin</paper-item>
                                 <paper-item>Staff</paper-item>
                                 <paper-item>Agent</paper-item>
                             </paper-listbox>
                         </paper-dropdown-menu>
-                        <paper-dropdown-menu style="cursor:pointer" label="Group">
-                            <paper-listbox slot="dropdown-content" class="dropdown-content" selected="{{groupAdd}}">
-                                <paper-item>Tabikobu</paper-item>
-                                <paper-item>PTN</paper-item>
-                            </paper-listbox>
-                        </paper-dropdown-menu>
+                        <paper-dropdown-input id="idgroup" label="Group" items='[[groupItems]]' filter-property="group" value="{{group}}" max-size="10">
+                            <template>
+                                <template is="dom-repeat" items="[[items]]" as="item">
+                                    <paper-item label="[[item.group]]">[[item.group]]</paper-item>
+                                </template>
+                            </template>
+                        </paper-dropdown-input>
+                        <paper-dropdown-input id="idagent" label="Agent" items='[[AgentItems]]' filter-property="code" value="{{code}}" max-size="10">
+                            <template>
+                                <template is="dom-repeat" items="[[items]]" as="item">
+                                    <paper-item label="[[item.code]]">[[item.name]]</paper-item>
+                                </template>
+                            </template>
+                        </paper-dropdown-input>
                     </div>
                     <br>
                     <br>
@@ -162,6 +175,7 @@
                 group: String,
                 account_key: String,
             },
+
             _groupAddChanged() {
                 if (this.groupAdd == 0) {
                     this.group = 'Tabikobu'
@@ -180,6 +194,13 @@
                 else if (this.roleAdd == 2) {
                     this.role = 'Agent';
                 }
+                this.method = 'GET';
+                this.urlgroup = '/group/read';
+                this.urlagent = '/agent/read';
+                this.$.ajax.handleAs = "json";
+                this.$.ajax.handleAs = "json";
+                this.$.ajax.generateRequest();
+                this.$.ajax.generateRequest();
             },
             _ready() {
                 // this.fullname;
@@ -187,6 +208,12 @@
                 // console.log(this.guid());
                 // this.groupAdd = "";
                 // this.roleAdd = "";
+            },
+            _groupLoaded(data) {
+                this.groupItems = data.detail.response.data;
+            },
+            _agentLoaded(data) {
+                this.AgentItems = data.detail.response.data;
             },
             guid: function () {
                 var uid = new ShortUniqueId();
@@ -210,7 +237,8 @@
                             name: this.fullname,
                             email: this.email,
                             role: this.role,
-                            group: this.group,
+                            group: this.$.idgroup.selectedItemLabel,
+                            agent: this.$.idagent.selectedItemLabel,
                             // active: this.active = true,
                             password: this.account_key,
                             accountkey: this.account_key,

@@ -11,7 +11,7 @@ router.get('/dummy', (req, res) => {
 router.post('/add', (req, res) => {
     const blocking = new Blocking();
     // body parser lets us use the req.body
-    const {active, agent, group,hotel,hotelname,rooms,note} = req.body;
+    const {active, agent, group,hotel,hotelname,rooms,note, updated_by, created_by} = req.body;
     if (!group || !hotel || !note) {
         // we should throw an error. we can do this check on the front end
         return res.json({
@@ -28,6 +28,8 @@ router.post('/add', (req, res) => {
     // blocking.dateTo = dateTo;
     blocking.rooms = rooms;
     blocking.note = note;
+    blocking.created_by = created_by;
+    blocking.updated_by = updated_by;
     blocking.save(err => {
         if (err) return res.json({ success: false, error: err });
         return res.json({ success: true });
@@ -56,7 +58,7 @@ router.put('/update/:editKey', (req, res) => {
     }
     Blocking.findById(editKey, (error, blocking) => {
         if (error) return res.json({ success: false, error });
-        const {active, agent, hotelname,rooms,note } = req.body;
+        const {active, agent, hotelname,rooms,note, updated_by, created_by } = req.body;
         blocking.active = active;
         // if (group) blocking.group = group;
         if (agent) blocking.agent = agent;
@@ -65,6 +67,8 @@ router.put('/update/:editKey', (req, res) => {
         if (hotelname) blocking.hotelname = hotelname;
         if (rooms) blocking.rooms = rooms;
         if (note) blocking.note = note;
+        blocking.created_by = created_by;
+        blocking.updated_by = updated_by;
         blocking.save(error => {
             if (error) return res.json({ success: false, error });
             return res.json({ success: true });

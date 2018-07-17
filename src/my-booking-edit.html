@@ -98,11 +98,11 @@
                         <paper-dropdown-input id="hotels" label="Hotel" items='[[hotelItems]]' filter-property="hotelname" value="{{hotel}}" style="margin-left: 30px;">
                             <template>
                                 <template is="dom-repeat" items="[[items]]" as="item">
-                                    <paper-item>[[item.hotelname]]</paper-item>
+                                    <paper-item label="[[item.hotelname]]">[[item.hotelname]]</paper-item>
                                 </template>
                             </template>
                         </paper-dropdown-input>
-                        <paper-dropdown-input id="roombook" label="Room" items='[[roomItems]]' filter-property="room.name" value="{{room}}" style="margin-left: 30px;">
+                        <paper-dropdown-input id="roombook" label="Room" items='[[roomItems]]' filter-property="name" value="{{room}}" style="margin-left: 30px;">
                             <template>
                                 <template is="dom-repeat" items="[[items]]" as="item">
                                     <paper-item>[[item.name]]</paper-item>
@@ -140,7 +140,7 @@
                         <a href="/booking" style="text-decoration:none">
                             <paper-button id="cancelButton" class="cancel" on-tap="_cancel">Cancel</paper-button>
                         </a>
-                        <paper-button id="submitButton" class="darkorange" on-click="_openConfirm" raised>Book</paper-button>
+                        <paper-button id="submitButton" class="darkorange" on-click="_openConfirm" raised>Update</paper-button>
                     </span>
                 </div>
             </app-header-layout>
@@ -273,9 +273,7 @@
                 }
             },
             _hotelChanged(h, r, a) {
-                // this.checkin = "";
-                // this.checkout = "";
-                this.filterrooms = '/hotel/filter/' + h;
+                this.filterrooms = '/hotel/filteredit/' + h;
                 this.$.rooms.handleAs = "json";
                 this.$.rooms.generateRequest();
                 if (h && r && a) {
@@ -285,8 +283,6 @@
                 }
             },
             _checkinChanged(ci) {
-                // this.hotel = "";
-                // this.room = "";
                 if (ci) {
                 }
             },
@@ -295,12 +291,8 @@
                 }
                 if (h && r && ci && co) {
                     this.filterallocation = '/allocation/filterall/' + h + "_" + r + "_" + ci + "_" + co;
-                    // this.filterblocking = '/hotel/read/';
                     this.$.allocation.handleAs = "json";
-                    // this.$.blocking.handleAs = "json";
                     this.$.allocation.generateRequest();
-                    // this.$.blocking.generateRequest();
-                    // console.log(this.filterallocation);
                 }
             },
             _allocationloaded(data) {
@@ -312,9 +304,7 @@
             },
             _roomsloaded(data) {
                 if (data.detail.response.data) {
-                    this.roomItems = data.detail.response.data;
-                    console.log(this.roomItems);
-                    console.log("this.roomItems");
+                    this.roomItems = data.detail.response.data.room;
                 }
             },
             _handleResponse(data) {
@@ -324,7 +314,7 @@
             _onkeyChanged() {
                 if (this.editKey) {
                     this.url = '/booking/readEdit/' + this.editKey;
-                    this.filterrooms = '/hotel/filter/' + this.hotel;
+                    this.filterrooms = '/hotel/filteredit/' + this.hotel;
                     this.filteragent = '/agent/read';
                     this.filterhotel = '/hotel/read';
                     this.$.agent.handleAs = "json";
@@ -347,13 +337,16 @@
                     this.numRooms = data.detail.response.data.numrooms;
                     this.deduction = data.detail.response.data.deduction;
 
+                    this.filterrooms = '/hotel/filteredit/' + this.hotel;
+                    this.$.rooms.handleAs = "json";
+                    this.$.rooms.generateRequest();
+
                     Polymer.dom(this.root).querySelector("#deductions").value = this.deduction;
-                    // Polymer.dom(this.root).querySelector("#hotels").value = this.hotel;
-                    // Polymer.dom(this.root).querySelector("#roombook").value = this.room;
-                    // Polymer.dom(this.root).querySelector("#agents").value = this.agent;
                     this.$.hotels.value = this.hotel;
                     this.$.roombook.value = this.room;
                     this.$.agents.value = this.agent;
+
+
                 }
             }
         })

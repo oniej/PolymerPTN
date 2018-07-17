@@ -188,10 +188,39 @@
                     width: 100%;
                 }
             }
-            paper-button{
+
+            paper-button.blue {
+                margin-top: 35px;
+                background: white;
+                height: 35px;
+                font-size: 12px;
+                font-weight: 400;
                 background-color: cornflowerblue;
                 color: white;
+                width: 80px;
             }
+
+            paper-button {
+                background: white;
+                height: 35px;
+                font-size: 12px;
+                font-weight: 400;
+                background-color: cornflowerblue;
+                color: white;
+                width: 80px;
+            }
+
+            paper-button#submit {
+                margin-top: 5px;
+                background: white;
+                height: 32px;
+                font-size: 12px;
+                font-weight: 400;
+                background-color: white;
+                color: white;
+                width: 80px;
+            }
+
             paper-toast {
                 width: 20%;
                 position: fixed;
@@ -218,7 +247,7 @@
                         <template>
                             <h3 style="text-align: center">Successfully Added.</h3>
                             <hr>
-                            <paper-button on-tap="_ok" style="float: right">Ok</paper-button>
+                            <paper-button id="submit" on-tap="_ok" style="float: right">Ok</paper-button>
                         </template>
                     </vaadin-dialog>
                 </app-header>
@@ -264,10 +293,13 @@
                             </vaadin-combo-box> -->
                             <vaadin-combo-box style="width: 205px;float: left;" id="room" label="ROOM"></vaadin-combo-box> &nbsp;
                             <vaadin-text-field style="width:80px;float: left;margin-left: 5px;" id="block" label="QUANTITY"></vaadin-text-field>
-                            <paper-input type="date" style="width: 160px;float: left; margin-left: 5px;" label="Start" id="dateFrom" value="{{dateFrom}}" max="{{dateTo}}"></paper-input>
-                            <paper-input type="date" style="width: 160px;float: left;margin-left: 5px;" label="End" id="dateTo" value="{{dateTo}}" min="{{dateFrom}}"></paper-input>
-                            <paper-input type="date" style="width: 160px;float: left;margin-left: 5px;" id="cancel" label="CANCELLATION" max="{{dateFrom}}"></paper-input>
-                            <paper-button on-click="_addBlockingDetails">Add</paper-button>
+                            <paper-input type="date" style="width: 160px;float: left; margin-left: 5px;margin-top: 15px;" label="Start" id="dateFrom"
+                                value="{{dateFrom}}" max="{{dateTo}}"></paper-input>
+                            <paper-input type="date" style="width: 160px;float: left;margin-left: 5px;margin-top: 15px;" label="End" id="dateTo" value="{{dateTo}}"
+                                min="{{dateFrom}}"></paper-input>
+                            <paper-input type="date" style="width: 160px;float: left;margin-left: 5px;margin-top: 15px;" id="cancel" label="CANCELLATION"
+                                max="{{dateFrom}}"></paper-input>
+                            <paper-button on-click="_addBlockingDetails" class="blue">Add</paper-button>
                         </div>
                         <br>
                         <vaadin-grid theme="compact" id="grid" items="[[blockingDetails]]">
@@ -289,26 +321,29 @@
                             <vaadin-grid-column width="160px" resizable>
                                 <template class="header">START</template>
                                 <template>
-                                    <paper-input type="date" style="width: 155px;" id="dateFrom-[[index]]" value="[[item.dateFrom]]" max="[[item.dateTo]]" readonly$="[[!_isEditingBlockingDetails(editingBlockingDetails, item)]]"></paper-input>
+                                    <paper-input type="date" style="width: 155px;margin-top: -10px;" id="dateFrom-[[index]]" value="[[item.dateFrom]]" max="[[item.dateTo]]"
+                                        readonly$="[[!_isEditingBlockingDetails(editingBlockingDetails, item)]]"></paper-input>
                                 </template>
                             </vaadin-grid-column>
 
                             <vaadin-grid-column width="160px" resizable>
                                 <template class="header">END</template>
                                 <template>
-                                    <paper-input type="date" style="width: 155px;" id="dateTo-[[index]]" value="[[item.dateTo]]" min="[[item.dateFrom]]" readonly$="[[!_isEditingBlockingDetails(editingBlockingDetails, item)]]"></paper-input>
+                                    <paper-input type="date" style="width: 155px;margin-top: -10px;" id="dateTo-[[index]]" value="[[item.dateTo]]" min="[[item.dateFrom]]"
+                                        readonly$="[[!_isEditingBlockingDetails(editingBlockingDetails, item)]]"></paper-input>
                                 </template>
                             </vaadin-grid-column>
 
                             <vaadin-grid-column width="160px" resizable>
                                 <template class="header">CANCELLATION</template>
                                 <template>
-                                    <paper-input type="date" style="width: 155px;" id="cancel-[[index]]" value="[[item.cancel]]" max="[[item.dateTo]]" readonly$="[[!_isEditingBlockingDetails(editingBlockingDetails, item)]]"></paper-input>
+                                    <paper-input type="date" style="width: 155px;margin-top: -10px;" id="cancel-[[index]]" value="[[item.cancel]]" max="[[item.dateTo]]"
+                                        readonly$="[[!_isEditingBlockingDetails(editingBlockingDetails, item)]]"></paper-input>
                                 </template>
                             </vaadin-grid-column>
                             <vaadin-grid-column width="12em">
                                 <template>
-                                    <div style="text-align: right;">
+                                    <div>
                                         <paper-button id="edit-button" hidden="[[editingBlockingDetails]]" on-click="_editBlockingDetails" focus-target$="[[!editingBlockingDetails]]"
                                             theme="icon" aria-label="Edit">
                                             <iron-icon icon="lumo:edit"></iron-icon>
@@ -347,14 +382,7 @@
 
                 dateCreated: String,
                 msg: String,
-                created_by: {
-                    type: String,
-                    value: 'Peter Villaceran'
-                },
-                updated_by: {
-                    type: String,
-                    value: 'Ardie Derrayal'
-                },
+              
                 rooms: {
                     type: Array,
                     value: []
@@ -376,18 +404,24 @@
                 accountKey: String,
             },
             observers: ['_hotelIdChanged(hotel,accountKey)'],
-            _hotelIdChanged(e,f) {
+            _hotelIdChanged(e, f) {
                 this.$.ajaxRoom.method = 'GET';
                 this.$.ajaxRoom.url = '/hotel/filterHotel/' + e;
                 this.$.ajaxRoom.generateRequest();
 
-                  this.method = 'GET';
-                    this.urluser = '/user/getkey/' + f;
-                    this.$.ajax.handleAs = "json";
-                    this.$.ajax.generateRequest();
+                this.method = 'GET';
+                this.urluser = '/user/getkey/' + f;
+                this.$.ajax.handleAs = "json";
+                this.$.ajax.generateRequest();
             },
             _active() {
                 this.$.active.checked;
+            },
+            _userLoaded(data) {
+                if (data.detail.response.data) {
+                    this.createdBy = data.detail.response.data.name;
+                    this.modifiedBy = data.detail.response.data.name;
+                }
             },
             _submit() {
 
@@ -531,7 +565,10 @@
                 this.$.grid.clearCache();
                 this.$.grid.querySelector('#edit-button').focus();
             },
+            _handleResponse() {
 
+            },
+           
         })
     </script>
 </dom-module>

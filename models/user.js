@@ -22,6 +22,7 @@ var userSchema = mongoose.Schema({
     isActive: Boolean,
     isEmailVerified: Boolean,
     group: String,
+    agent: String,
     role: String,
     resetPasswordToken: String,
     resetPasswordExpires: Date

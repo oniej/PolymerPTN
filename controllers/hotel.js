@@ -57,6 +57,13 @@ router.get('/filter/:hotel', (req, res) => {
         return res.json({ success: true, data: hotels });
     });
 });
+router.get('/filteredit/:hotel', (req, res) => {
+    const hotel = req.params.hotel;
+    Hotels.findOne({ hotelname: hotel }, (error, hotelsedit) => {
+        if (error) return res.json({ success: false, error });
+        return res.json({ success: true, data: hotelsedit });
+    });
+});
 
 router.get('/read', (req, res) => {
     Hotels.find((err, hotels) => {
