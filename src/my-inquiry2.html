@@ -207,6 +207,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <!-- group -->
         <iron-ajax auto url="{{urlGroup}}" handle-as="json" method="GET" on-response="_groupLoaded"></iron-ajax>
+        <iron-ajax auto url="{{urlAgent}}" handle-as="json" method="GET" on-response="_agentLoaded"></iron-ajax>
         <!-- <iron-ajax auto url="{{urlJoin}}" params='{}' handle-as="json" method="GET" on-response="_joinLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax> -->
         <!-- allocation -->
         <iron-ajax id="workspace" url="{{urlFilterworkspace}}" handle-as="json" method="GET" on-response="_urlFilterworkspaceloaded"></iron-ajax>
@@ -239,6 +240,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                             <template>
                                                 <template is="dom-repeat" items="[[items]]" as="item">
                                                     <paper-item>[[item.group]]</paper-item>
+                                                </template>
+                                            </template>
+                                        </paper-dropdown-input>
+                                        <paper-dropdown-input style="margin-left: 10px;" label="Select Agent" items='[[agentsload]]' filter-property="name" value="{{name}}">
+                                            <template>
+                                                <template is="dom-repeat" items="[[items]]" as="item">
+                                                    <paper-item>[[item.name]]</paper-item>
                                                 </template>
                                             </template>
                                         </paper-dropdown-input>
@@ -369,6 +377,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             ready() {
                 this.urlGroup = 'group/read';
                 this.urluser = '/user/getkey/' + this.accountKey;
+                this.urlAgent = '/agent/read';
                 var hidePeak = Polymer.dom(this.root).querySelector("#peak").setAttribute("style", "display:none");
                 var errormsg = Polymer.dom(this.root).querySelector("#errorMsgDiv").setAttribute("style", "display:none");
                 this.errorMsg = "";
@@ -383,6 +392,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.group = data.detail.response.data.group;
                 this.agent = data.detail.response.data.agent;
                 this.role = data.detail.response.data.role;
+            },
+            _agentLoaded(data) {
+                this.agentsload = data.detail.response.data;
             },
             checkRole(c) {
                 if (c === "Admin Staff" || c === "Staff") return true;
@@ -542,7 +554,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             _endCheckout(f) {
                 this.to = f;
                 if (this.role === "Admin Staff" || this.role === "Staff") {
-                    this.urlFilterend = '/allocation/inquirySource2/' + this.from + "_" + this.to + "_" + this.group + "_" + "WHITE BEAR FAMILY";
+                    this.urlFilterend = '/allocation/inquirySource2/' + this.from + "_" + this.to + "_" + this.group + "_" + this.name;
+                    console.log(this.urlFilterend);
                     this.$.endalloc.generateRequest();
                 }
                 else {
