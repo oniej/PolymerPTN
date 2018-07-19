@@ -11,6 +11,8 @@ const AllocationSchema = new Schema({
     dateTo: String,
     rooms: Object,
     note: String,
+    pk_coff: String,
+    npk_coff: String,
     seasondate: Object,
     created_by: String,
     updated_by:String

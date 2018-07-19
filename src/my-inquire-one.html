@@ -22,6 +22,7 @@
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../bower_components/datetime-picker/date-picker.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
 
 <link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../bower_components/paper-radio-button/paper-radio-button.html">
@@ -150,9 +151,7 @@
                         width: auto;
                     }
                 }
-                .leftcontent vaadin-date-picker {
-                    width: 250px;
-                }
+             
             }
 
             @media (min-width: 768px) {
@@ -174,9 +173,7 @@
                 .leftcontent vaadin-combo-box {
                     width: 400px;
                 }
-                .leftcontent vaadin-date-picker {
-                    width: 400px;
-                }
+               
                 .leftcontent paper-dropdown-input {
                     margin-bottom: 5px;
                     --paper-input-container-underline: {
@@ -500,10 +497,10 @@
                                         </paper-dropdown-input>
                                         <br>
                                         <iron-icon icon="my-icons:date-range" style="color: grey"></iron-icon>&nbsp;
-                                        <vaadin-date-picker placeholder="DATE FROM" id="startdate" value="{{checkin}}" max="{{checkout}}" date-format="DD-MMMM-YYYY"></vaadin-date-picker>
+                                        <paper-input type="date" placeholder="DATE FROM" id="startdate" value="{{checkin}}" max="{{checkout}}" date-format="DD-MMMM-YYYY"></paper-input>
                                         <br>
                                         <iron-icon icon="my-icons:date-range" style="color: grey"></iron-icon>&nbsp;
-                                        <vaadin-date-picker placeholder="DATE TO" id="enddate" value="{{checkout}}" min="{{checkin}}" date-format="DD-MMMM-YYYY"></vaadin-date-picker>
+                                        <paper-input type="date" placeholder="DATE TO" id="enddate" value="{{checkout}}" min="{{checkin}}" date-format="DD-MMMM-YYYY"></paper-input>
                                     </center>
                                     <paper-button class="searchbtn" raised on-click="SearchBtn">Search</paper-button>
                                 </div>

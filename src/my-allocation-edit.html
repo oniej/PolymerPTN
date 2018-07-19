@@ -12,14 +12,11 @@
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/vaadin-dialog/vaadin-dialog.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
-<link rel="import" href="../bower_components/vaadin-date-picker/vaadin-date-picker.html">
 <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-<link rel="import" href="../bower_components/vaadin-button/vaadin-button.html">
 <link rel="import" href="../bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/vaadin-text-field/vaadin-text-field.html">
 <link rel="import" href="../bower_components/vaadin-lumo-styles/icons.html">
-<link rel="import" href="../bower_components/vaadin-date-picker/vaadin-date-picker.html">
 <link rel="import" href="../bower_components/vaadin-notification/vaadin-notification.html">
 <link rel="import" href="../bower_components/range-datepicker/range-datepicker-input.html">
 <link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
@@ -70,22 +67,7 @@
                 #Notes {
                     display: none;
                 }
-                div .allocation {
-
-                    opacity: 0;
-
-                    -webkit-animation: fadeIn ease-in 1;
-                    -moz-animation: fadeIn ease-in 1;
-                    animation: fadeIn ease-in 1;
-
-                    -webkit-animation-fill-mode: forwards;
-                    -moz-animation-fill-mode: forwards;
-                    animation-fill-mode: forwards;
-
-                    -webkit-animation-duration: 0.5s;
-                    -moz-animation-duration: 0.5s;
-                    animation-duration: 0.5s;
-                }
+            
                 .groupdiv {
                     position: absolute;
                     top: 20px;
@@ -115,23 +97,6 @@
                 .hotelSearch {
                     margin-left: -5px;
                 }
-            }
-
-            div .card {
-
-                opacity: 0;
-
-                -webkit-animation: fadeIn ease-in 1;
-                -moz-animation: fadeIn ease-in 1;
-                animation: fadeIn ease-in 1;
-
-                -webkit-animation-fill-mode: forwards;
-                -moz-animation-fill-mode: forwards;
-                animation-fill-mode: forwards;
-
-                -webkit-animation-duration: 0.5s;
-                -moz-animation-duration: 0.5s;
-                animation-duration: 0.5s;
             }
 
             paper-fab.blue {
@@ -181,8 +146,11 @@
                 background: green;
                 color: black;
             }
-
-            </style>
+            paper-button{
+                background-color: cornflowerblue;
+                color: white;
+            }
+        </style>
         <custom-style>
             <style is="custom-style">
                 paper-fab.blue {
@@ -258,6 +226,9 @@
 
                             </template>
                         </range-datepicker-input>
+                        <paper-input always-float-label value="{{pk_coff}}" label="PEAK CUT-OFF" style="width: 49%; float: left;"></paper-input>
+                        <paper-input always-float-label value="{{npk_coff}}" label="NON-PEAK CUT-OFF" style="width: 49%; float: right;"></paper-input>
+                        <br>
                         <x-array-data-provider items="{{allocationDetailsEdit}}" size="200"></x-array-data-provider>
                         <div style="margin-bottom: 20px">
                             <!-- <vaadin-combo-box id="room" style="width: 245px;" always-float-label label="ROOM" items='[[roomItems]]' filter-property="hotel"
@@ -267,61 +238,46 @@
                             </template>
                         </vaadin-combo-box> -->
                             <vaadin-combo-box style="width: 245px;" id="room" label="ROOM"></vaadin-combo-box>
-                            <vaadin-text-field style="width: 80px;" id="pk" label="PK"></vaadin-text-field>
-                            <vaadin-text-field style="width: 80px;" id="pk_coff" label="PK C/OFF"></vaadin-text-field>
-                            <vaadin-text-field style="width: 80px;" id="npk" label="NPK"></vaadin-text-field>
-                            <vaadin-text-field style="width: 80px;" id="npk_coff" label="NPK C/OFF"></vaadin-text-field>
-                            <vaadin-button on-click="_addAllocationDetails">Add</vaadin-button>
+                            <vaadin-text-field style="width: 180px;" id="pk" label="PK"></vaadin-text-field>
+                            <vaadin-text-field style="width: 180px;" id="npk" label="NPK"></vaadin-text-field>
+                            <paper-button on-click="_addAllocationDetails">Add</paper-button>
                         </div>
                         <vaadin-grid theme="compact" id="grid" items="[[allocationDetails]]">
-                            <vaadin-grid-column width="230px" resizable>
+                            <vaadin-grid-column width="240px" resizable>
                                 <template class="header">ROOM</template>
                                 <template>
                                     <vaadin-text-field style="width: 230px;" id="room-[[index]]" value="[[item.roomname]]" readonly></vaadin-text-field>
                                 </template>
                             </vaadin-grid-column>
 
-                            <vaadin-grid-column width="80px" resizable>
+                            <vaadin-grid-column width="180px" resizable>
                                 <template class="header">PK</template>
                                 <template>
-                                    <vaadin-text-field style="width: 80px;" id="pk-[[index]]" value="[[item.pk]]" readonly$="[[!_isEditingAllocationDetails(editingAllocationDetails, item)]]"></vaadin-text-field>
+                                    <vaadin-text-field style="width: 170px;" id="pk-[[index]]" value="[[item.pk]]" readonly$="[[!_isEditingAllocationDetails(editingAllocationDetails, item)]]"></vaadin-text-field>
                                 </template>
                             </vaadin-grid-column>
 
-                            <vaadin-grid-column width="80px" resizable>
-                                <template class="header">PK C/OFF</template>
-                                <template>
-                                    <vaadin-text-field style="width: 80px;" id="pk_coff-[[index]]" value="[[item.pk_coff]]" readonly$="[[!_isEditingAllocationDetails(editingAllocationDetails, item)]]"></vaadin-text-field>
-                                </template>
-                            </vaadin-grid-column>
 
-                            <vaadin-grid-column width="80px" resizable>
+                            <vaadin-grid-column width="180px" resizable>
                                 <template class="header">NPK</template>
                                 <template>
-                                    <vaadin-text-field style="width:80px;" id="npk-[[index]]" value="[[item.npk]]" readonly$="[[!_isEditingAllocationDetails(editingAllocationDetails, item)]]"></vaadin-text-field>
-                                </template>
-                            </vaadin-grid-column>
-
-                            <vaadin-grid-column width="80px" resizable>
-                                <template class="header">NPK C/OFF</template>
-                                <template>
-                                    <vaadin-text-field style="width:80px;" id="npk_coff-[[index]]" value="[[item.npk_coff]]" readonly$="[[!_isEditingAllocationDetails(editingAllocationDetails, item)]]"></vaadin-text-field>
+                                    <vaadin-text-field style="width:170px;" id="npk-[[index]]" value="[[item.npk]]" readonly$="[[!_isEditingAllocationDetails(editingAllocationDetails, item)]]"></vaadin-text-field>
                                 </template>
                             </vaadin-grid-column>
 
                             <vaadin-grid-column width="12em">
                                 <template>
                                     <div style="text-align: right;">
-                                        <vaadin-button id="edit-button" hidden="[[editingAllocationDetails]]" on-click="_editAllocationDetails" focus-target$="[[!editingAllocationDetails]]"
+                                        <paper-button id="edit-button" hidden="[[editingAllocationDetails]]" on-click="_editAllocationDetails" focus-target$="[[!editingAllocationDetails]]"
                                             theme="icon" aria-label="Edit">
                                             <iron-icon icon="lumo:edit"></iron-icon>
-                                        </vaadin-button>
-                                        <vaadin-button hidden="[[editingAllocationDetails]]" on-click="_removeAllocationDetails" theme="icon error" aria-label="Delete">
+                                        </paper-button>
+                                        <paper-button hidden="[[editingAllocationDetails]]" on-click="_removeAllocationDetails" theme="icon error" aria-label="Delete">
                                             <iron-icon icon="lumo:cross"></iron-icon>
-                                        </vaadin-button>
-                                        <vaadin-button hidden="[[!_isEditingAllocationDetails(editingAllocationDetails, item)]]" on-click="_saveAllocationDetails"
-                                            focus-target$="[[editingAllocationDetails]]" theme="primary">Save</vaadin-button>
-                                        <vaadin-button hidden="[[!_isEditingAllocationDetails(editingAllocationDetails, item)]]" on-click="_cancelAllocationDetails">Cancel</vaadin-button>
+                                        </paper-button>
+                                        <paper-button hidden="[[!_isEditingAllocationDetails(editingAllocationDetails, item)]]" on-click="_saveAllocationDetails"
+                                            focus-target$="[[editingAllocationDetails]]" theme="primary">Save</paper-button>
+                                        <paper-button hidden="[[!_isEditingAllocationDetails(editingAllocationDetails, item)]]" on-click="_cancelAllocationDetails">Cancel</paper-button>
                                     </div>
                                 </template>
                             </vaadin-grid-column>
@@ -331,39 +287,56 @@
                         </div>
                         <x-array-data-provider items="{{seasonDetails}}" size="200"></x-array-data-provider>
                         <div style="margin-bottom: 20px">
-                            <vaadin-date-picker style="width: 260px;" placeholder="Start" id="startValue" value="{{startValue}}" max="{{endValue}}" date-format="DD-MMMM-YYYY"></vaadin-date-picker>
-                            <vaadin-date-picker style="width: 260px;" placeholder="End" id="endValue" value="{{endValue}}" min="{{startValue}}" date-format="DD-MMMM-YYYY"></vaadin-date-picker>
-                            <vaadin-button on-click="_addSeasonDetails">Add</vaadin-button>
+                            <paper-input type="date" style="width: 200px; float: left;" label="Start" id="startValue" value="{{startValue}}" max="{{endValue}}"
+                                date-format="DD-MMMM-YYYY"></paper-input>
+                            <paper-input type="date" style="width: 200px; float: left; margin-left: 5px;" label="End" id="endValue" value="{{endValue}}" min="{{startValue}}"
+                                date-format="DD-MMMM-YYYY"></paper-input>
+                            
+                                <paper-dropdown-input id="season" value="{{season}}" always-float-label style="width: 200px; margin-left: 5px;" label="Season">
+                                        <paper-item>Peak Season</paper-item>
+                                        <paper-item>High Season</paper-item>
+                               </paper-dropdown-input>
+                          <paper-button on-click="_addSeasonDetails">Add</paper-button>
                         </div>
                         <vaadin-grid theme="compact" id="gridPS" items="[[seasonDetails]]">
 
-                            <vaadin-grid-column width="270px" resizable>
+                            <vaadin-grid-column width="180px" resizable>
                                 <template class="header">Peak Start</template>
                                 <template>
-                                    <vaadin-date-picker style="width: 260px;" id="startValue-[[index]]" value="[[item.startValue]]" readonly$="[[!_isEditingSeasonDetails(editingSeasonDetails, item)]]"></vaadin-date-picker>
+                                    <paper-input type="date" style="width: 180px;" id="startValue-[[index]]" value="[[item.startValue]]" readonly$="[[!_isEditingSeasonDetails(editingSeasonDetails, item)]]"></paper-input>
                                 </template>
                             </vaadin-grid-column>
 
-                            <vaadin-grid-column width="270px" resizable>
+                            <vaadin-grid-column width="180px" resizable>
                                 <template class="header">Peak End</template>
                                 <template>
-                                    <vaadin-date-picker style="width: 260px;" id="endValue-[[index]]" value="[[item.endValue]]" readonly$="[[!_isEditingSeasonDetails(editingSeasonDetails, item)]]"></vaadin-date-picker>
+                                    <paper-input type="date" style="width: 180px;" id="endValue-[[index]]" value="[[item.endValue]]" readonly$="[[!_isEditingSeasonDetails(editingSeasonDetails, item)]]"></paper-input>
                                 </template>
                             </vaadin-grid-column>
 
-                            <vaadin-grid-column width="16em">
+                            <vaadin-grid-column width="190px" resizable>
+                                    <template class="header">Season</template>
+                                    <template>
+                                            <paper-dropdown-input style="width: 180;"  id="season-[[index]]" label="[[item.season]]" value="[[item.season]]" readonly$="[[!_isEditingSeasonDetails(editingSeasonDetails, item)]]">
+                                                    <paper-item>Peak Season</paper-item>
+                                                    <paper-item>High Season</paper-item>
+                                           </paper-dropdown-input>
+                                    </template>
+                                </vaadin-grid-column>
+
+                            <vaadin-grid-column width="12em">
                                 <template>
                                     <div style="text-align: right;">
-                                        <vaadin-button id="edit-button" hidden="[[editingSeasonDetails]]" on-click="_editSeasonDetails" focus-target$="[[!editingSeasonDetails]]"
+                                        <paper-button id="edit-button" hidden="[[editingSeasonDetails]]" on-click="_editSeasonDetails" focus-target$="[[!editingSeasonDetails]]"
                                             theme="icon" aria-label="Edit">
                                             <iron-icon icon="lumo:edit"></iron-icon>
-                                        </vaadin-button>
-                                        <vaadin-button hidden="[[editingSeasonDetails]]" on-click="_removeSeasonDetails" theme="icon error" aria-label="Delete">
+                                        </paper-button>
+                                        <paper-button hidden="[[editingSeasonDetails]]" on-click="_removeSeasonDetails" theme="icon error" aria-label="Delete">
                                             <iron-icon icon="lumo:cross"></iron-icon>
-                                        </vaadin-button>
-                                        <vaadin-button hidden="[[!_isEditingSeasonDetails(editingSeasonDetails, item)]]" on-click="_saveSeasonDetails" focus-target$="[[editingSeasonDetails]]"
-                                            theme="primary">Save</vaadin-button>
-                                        <vaadin-button hidden="[[!_isEditingSeasonDetails(editingSeasonDetails, item)]]" on-click="_cancelSeasonDetails">Cancel</vaadin-button>
+                                        </paper-button>
+                                        <paper-button hidden="[[!_isEditingSeasonDetails(editingSeasonDetails, item)]]" on-click="_saveSeasonDetails" focus-target$="[[editingSeasonDetails]]"
+                                            theme="primary">Save</paper-button>
+                                        <paper-button hidden="[[!_isEditingSeasonDetails(editingSeasonDetails, item)]]" on-click="_cancelSeasonDetails">Cancel</paper-button>
                                     </div>
                                 </template>
                             </vaadin-grid-column>
@@ -479,11 +452,12 @@
                     notify: true,
                     value: [],
                 },
+                accountKey: String,
                 editingAllocationDetails: Object,
                 editingSeasonDetails: Object,
             },
             observers: ['_hotelChanged(hotel)'],
-            _hotelChanged(e) {
+            _hotelChanged(e,f) {
                 this.room = null;
                 this.peak = null;
                 this.pdays = null;
@@ -494,28 +468,30 @@
                 this.endValue = null;
                 this.$.ajaxRoom.method = 'GET';
                 this.$.ajaxRoom.url = '/hotel/filterHotel/' + e;
-
                 this.$.ajaxRoom.generateRequest();
             },
+           
             displayLabels: function (e) {
                 return e.base.join(', ');
             },
             _allocationLoaded(data) {
-                if (this.editKey) {
-                    if (this.url === '/allocation/readEdit/' + this.editKey) {
-                        if (data.detail.response) {
+                if (data.detail.response) {
+                    if (this.editKey) {
+                        if (this.url === '/allocation/readEdit/' + this.editKey) {
+
                             this.allocations = data.detail.response.data;
                             this.group = data.detail.response.data.group;
                             this.active = data.detail.response.data.active;
                             this.hotel = data.detail.response.data.hotel;
                             this.hotelname = data.detail.response.data.hotelname;
-
+                            this.pk_coff = data.detail.response.data.pk_coff;
+                            this.npk_coff = data.detail.response.data.npk_coff;
                             // this.dateFrom = new Date(data.detail.response.data.dateFrom);
                             // this.dateTo = new Date(data.detail.response.data.dateTo);
                             var _rangeDate = Polymer.dom(this.root).querySelector("#rangeDate");
                             _rangeDate.dateFrom = new Date(data.detail.response.data.dateFrom);
                             _rangeDate.dateTo = new Date(data.detail.response.data.dateTo);
-                            
+
                             this.note = data.detail.response.data.note;
 
                             this.allocationDetails = data.detail.response.data.rooms;
@@ -527,7 +503,7 @@
                             this.created_by = data.detail.response.data.created_by;
                             this.updated_by = data.detail.response.data.updated_by;
                         }
-                
+
                     }
                     if (this.active == true) {
                         var actoggle = Polymer.dom(this.root).querySelector("#active").checked = this.active;
@@ -581,11 +557,13 @@
                             // hotel: this.hotel,
                             dateFrom: _dateFrom,
                             dateTo: _dateTo,
+                            pk_coff: this.pk_coff,
+                            npk_coff: this.npk_coff,
                             rooms: this.allocationDetails,
                             note: this.note,
                             seasondate: this.seasonDetails,
                             created_by: this.created_by,
-                            updated_by: this.updated_by, 
+                            updated_by: this.updated_by,
                         };
                         this.$.ajax.generateRequest();
                         this.$.allocationSave.opened = false;
@@ -618,6 +596,7 @@
             ready() {
                 this.editingAllocationDetails = null;
                 this.editingSeasonDetails = null;
+               
             },
             toggleDrawer() {
                 this.dispatchEvent(new CustomEvent('toggleDrawer', {
@@ -652,14 +631,12 @@
 
             // Allocation Grid Function
             _addAllocationDetails(e) {
-                if (this.$.room.selectedItem.label !== '' && this.$.pk.value !== '' && this.$.pk_coff.value && this.$.npk.value && this.$.npk_coff.value) {
+                if (this.$.room.selectedItem.label !== '' && this.$.pk.value !== '' && this.$.npk.value) {
                     var roomdata = {
                         room: this.$.room.selectedItem.value,
                         roomname: this.$.room.selectedItem.label,
                         pk: this.$.pk.value,
-                        pk_coff: this.$.pk_coff.value,
                         npk: this.$.npk.value,
-                        npk_coff: this.$.npk_coff.value
                     }
                     this.allocationDetails.push(roomdata);
                     this.$.grid.clearCache();
@@ -667,9 +644,7 @@
                     this.$.room.value = '';
                     this.$.room.selectedItem = null;
                     this.$.pk.value = '';
-                    this.$.pk_coff.value = '';
                     this.$.npk.value = '';
-                    this.$.npk_coff.value = '';
                 } else {
                     alert('Field required');
                 }
@@ -694,9 +669,7 @@
                 var item = e.model.item;
                 // item.room = this.$.grid.querySelector('#room-' + e.model.index).value;
                 item.pk = this.$.grid.querySelector('#pk-' + e.model.index).value;
-                item.pk_coff = this.$.grid.querySelector('#pk_coff-' + e.model.index).value;
                 item.npk = this.$.grid.querySelector('#npk-' + e.model.index).value;
-                item.npk_coff = this.$.grid.querySelector('#npk_coff-' + e.model.index).value;
 
                 this.editingAllocationDetails = null;
 
@@ -716,6 +689,7 @@
                     var season = {
                         startValue: this.$.startValue.value,
                         endValue: this.$.endValue.value,
+                        season : this.$.season.selectedItemLabel
                     }
                     this.seasonDetails.push(season);
                     this.$.gridPS.clearCache();
@@ -748,8 +722,8 @@
                 // item.room = this.$.grid.querySelector('#room-' + e.model.index).value;
                 item.startValue = this.$.gridPS.querySelector('#startValue-' + e.model.index).value;
                 item.endValue = this.$.gridPS.querySelector('#endValue-' + e.model.index).value;
-
-
+                item.season = this.$.gridPS.querySelector('#season-' + e.model.index).selectedItemLabel;
+               
                 this.editingSeasonDetails = null;
 
                 this.$.gridPS.clearCache();
