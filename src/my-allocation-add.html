@@ -28,7 +28,7 @@
 <link rel="import" href="../bower_components/vaadin-list-box/vaadin-list-box.html">
 <link rel="import" href="../bower_components/vaadin-combo-box/vaadin-combo-box.html">
 <link rel="import" href="../bower_components/vaadin-grid/vaadin-grid.html">
-
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="my-icons.html">
 <link rel="import" href="short-unique-id.html">
@@ -150,7 +150,7 @@
             paper-button#addPeak {
                 margin-top: 20px;
                 background: white;
-                height: 36px;
+                height: 38px;
                 font-size: 12px;
                 font-weight: 400;
                 background-color: cornflowerblue;
@@ -167,11 +167,6 @@
                 background-color: white;
                 color: black;
                 width: 80px;
-            }
-
-            paper-checkbox {
-                font-size: 14px;
-                margin-right: 5px;
             }
         </style>
         <iron-ajax auto url="/hotel/read" handle-as="json" on-response="_hotelLoaded" debounce-duration="300"></iron-ajax>
@@ -191,7 +186,7 @@
                         <template>
                             <h3 style="text-align: center">Successfully Added.</h3>
                             <hr>
-                            <paper-button id="added" on-tap="_ok" style="float: right">Ok</paper-button>
+                            <paper-button on-tap="_ok" style="float: right">Ok</paper-button>
                         </template>
                     </vaadin-dialog>
                 </app-header>
@@ -206,7 +201,7 @@
                     </div>
                     <div class="details" id="form">
                         <paper-dropdown-input id="hotelLbl" always-float-label style="width: 100%" label="Hotel" items='[[hotelItems]]' filter-property="hotel"
-                            value="{{hotel}}" max-size="5">
+                            value="{{hotel}}">
                             <template>
                                 <template is="dom-repeat" items="[[items]]" as="item">
                                     <paper-item label="[[item.hotel]]">[[item.hotelname]]</paper-item>
@@ -283,24 +278,41 @@
                         </div>
                         <x-array-data-provider items="{{seasonDetails}}" size="200"></x-array-data-provider>
                         <div style="margin-bottom: 30px;">
-                            <paper-input type="date" style="width: 260px; float: left;" label="Start" id="startValue" value="{{startValue}}" max="{{endValue}}"
+                            <paper-input type="date" style="width: 220px; float: left;" label="Start" id="startValue" value="{{startValue}}" max="{{endValue}}"
                                 date-format="DD-MMMM-YYYY"></paper-input>
-                            <paper-input type="date" style="width: 260px; float: left;margin-left: 5px;" label="End" id="endValue" value="{{endValue}}"
+                            <paper-input type="date" style="width: 220px; float: left;margin-left: 10px;" label="End" id="endValue" value="{{endValue}}"
                                 min="{{startValue}}" date-format="DD-MMMM-YYYY"></paper-input>
+                            <paper-dropdown-input id="season" value="{{season}}" always-float-label style="width: 200px; margin-left: 10px;" label="Season">
+                                <paper-item>Peak Season</paper-item>
+                                <paper-item>High Season</paper-item>
+                            </paper-dropdown-input>
                             <paper-button id="addPeak" on-click="_addSeasonDetails">Add</paper-button>
                         </div>
+                        <!-- 
+                            <paper-button style="margin-left:15px" on-click="_addSeasonDetails">Add</paper-button> -->
                         <vaadin-grid theme="compact" id="gridPS" items="[[seasonDetails]]">
-                            <vaadin-grid-column width="270px" resizable>
+
+                            <vaadin-grid-column width="180px" resizable>
                                 <template class="header">Peak Start</template>
                                 <template>
-                                    <paper-input type="date" style="width: 260px;" id="startValue-[[index]]" value="[[item.startValue]]" readonly$="[[!_isEditingSeasonDetails(editingSeasonDetails, item)]]"></paper-input>
+                                    <paper-input type="date" style="width: 180px;" id="startValue-[[index]]" value="[[item.startValue]]" readonly$="[[!_isEditingSeasonDetails(editingSeasonDetails, item)]]"></paper-input>
                                 </template>
                             </vaadin-grid-column>
 
-                            <vaadin-grid-column width="270px" resizable>
+                            <vaadin-grid-column width="180px" resizable>
                                 <template class="header">Peak End</template>
                                 <template>
-                                    <paper-input type="date" style="width: 260px; margin-left: 20px;" id="endValue-[[index]]" value="[[item.endValue]]" readonly$="[[!_isEditingSeasonDetails(editingSeasonDetails, item)]]"></paper-input>
+                                    <paper-input type="date" style="width: 180px;" id="endValue-[[index]]" value="[[item.endValue]]" readonly$="[[!_isEditingSeasonDetails(editingSeasonDetails, item)]]"></paper-input>
+                                </template>
+                            </vaadin-grid-column>
+
+                            <vaadin-grid-column width="190px" resizable>
+                                <template class="header">Season</template>
+                                <template>
+                                    <paper-dropdown-input style="width: 180;" id="season-[[index]]" label="[[item.season]]" value="[[item.season]]" readonly$="[[!_isEditingSeasonDetails(editingSeasonDetails, item)]]">
+                                        <paper-item>Peak Season</paper-item>
+                                        <paper-item>High Season</paper-item>
+                                    </paper-dropdown-input>
                                 </template>
                             </vaadin-grid-column>
 
@@ -398,11 +410,11 @@
                 this.$.ajax.generateRequest();
 
             },
+
             _userLoaded(data) {
                 if (data.detail.response.data) {
                     this.createdBy = data.detail.response.data.name;
                     this.modifiedBy = data.detail.response.data.name;
-                    // console.log(this.createdBy);
                 }
             },
             _active() {
@@ -455,8 +467,6 @@
 
                 this.editingAllocationDetails = null;
                 this.editingSeasonDetails = null;
-
-                // console.log(this.accountKey);
 
             },
             _hotelLoaded(data) {
@@ -541,8 +551,10 @@
                     var season = {
                         startValue: this.$.startValue.value,
                         endValue: this.$.endValue.value,
+                        season: this.$.season.selectedItemLabel
                     }
                     this.seasonDetails.push(season);
+
                     this.$.gridPS.clearCache();
 
                     this.$.startValue.value = '';
@@ -572,7 +584,7 @@
                 var item = e.model.item;
                 item.startValue = this.$.gridPS.querySelector('#startValue-' + e.model.index).value;
                 item.endValue = this.$.gridPS.querySelector('#endValue-' + e.model.index).value;
-
+                item.season = this.$.gridPS.querySelector('#season-' + e.model.index).selectedItemLabel;
 
                 this.editingSeasonDetails = null;
 

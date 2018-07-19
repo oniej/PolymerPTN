@@ -161,45 +161,25 @@
             paper-button#addPeak {
                 margin-top: 20px;
                 background: white;
-                height: 36px;
+                height: 38px;
                 font-size: 12px;
                 font-weight: 400;
                 background-color: cornflowerblue;
                 color: white;
                 width: 80px;
             }
+
+            paper-button#added {
+                margin-top: 20px;
+                background: white;
+                height: 36px;
+                font-size: 12px;
+                font-weight: 400;
+                background-color: white;
+                color: black;
+                width: 80px;
+            }
         </style>
-        <custom-style>
-            <style is="custom-style">
-                paper-fab.blue {
-                    /* --paper-fab-background: var(--paper-indigo-500); */
-                    --paper-fab-background: darkorange;
-                    --paper-fab-keyboard-focus-background: darkorange;
-                }
-
-                paper-checkbox {
-                    --paper-checkbox-label-spacing: 5px;
-                }
-
-                paper-checkbox.close {
-                    --paper-checkbox-unchecked-color: red;
-                    --paper-checkbox-checked-color: red;
-                    --paper-checkbox-label-color: red
-                }
-
-                paper-checkbox.limited {
-                    --paper-checkbox-unchecked-color: yellow;
-                    --paper-checkbox-checked-color: yellow;
-                    --paper-checkbox-label-color: yellow
-                }
-
-                paper-checkbox.available {
-                    --paper-checkbox-unchecked-color: green;
-                    --paper-checkbox-checked-color: green;
-                    --paper-checkbox-label-color: green
-                }
-            </style>
-        </custom-style>
         <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_allocationLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
         <iron-ajax id="ajaxRoom" handle-as="json" on-response="_roomsLoaded"></iron-ajax>
         <iron-ajax auto url="/group/read" handle-as="json" on-response="_groupLoaded" debounce-duration="300"></iron-ajax>
@@ -223,14 +203,6 @@
                             <paper-input always-float-label label="Group" value="{{group}}" readonly></paper-input>
                         </div>
                     </div>
-                    <!-- <div style="position: absolute; top: 20px; right: 40px;">
-                        <paper-dropdown-menu always-float-label style="cursor:pointer;width:150px;" label="Group">
-                            <paper-listbox attr-for-selected="name" slot="dropdown-content" class="dropdown-content" selected="{{group}}">
-                                <paper-item name="PTN">PTN</paper-item>
-                                <paper-item name="Tabikobu">Tabikobu</paper-item>
-                            </paper-listbox>
-                        </paper-dropdown-menu>
-                    </div> -->
                     <div class="details" id="form">
                         <paper-input always-float-label value="{{hotel}}" hidden></paper-input>
                         <paper-input always-float-label value="{{hotelname}}" label="HOTEL" readonly></paper-input>
@@ -249,12 +221,6 @@
                         <br>
                         <x-array-data-provider items="{{allocationDetailsEdit}}" size="200"></x-array-data-provider>
                         <div style="margin-bottom: 20px">
-                            <!-- <vaadin-combo-box id="room" style="width: 245px;" always-float-label label="ROOM" items='[[roomItems]]' filter-property="hotel"
-                            value="{{room}}">
-                            <template is="dom-repeat" items="[[items]]" as="item">
-                                <paper-item>[[item]]</paper-item>
-                            </template>
-                        </vaadin-combo-box> -->
                             <vaadin-combo-box style="width: 245px;" id="room" label="ROOM"></vaadin-combo-box>
                             <vaadin-text-field style="width: 180px;" id="pk" label="PK Quantity"></vaadin-text-field>
                             <vaadin-text-field style="width: 180px;" id="npk" label="NPK Quantity"></vaadin-text-field>
@@ -285,8 +251,8 @@
 
                             <vaadin-grid-column width="12em">
                                 <template>
-                                    <div style="text-align: right; margin-top:-33px;">
-                                        <paper-button id="edit-button" hidden="[[editingAllocationDetails]]" on-click="_editAllocationDetails" focus-target$="[[!editingAllocationDetails]]"
+                                    <div style="text-align: right;margin-top:-33px;">
+                                        <paper-button class="edit" id="edit-button" hidden="[[editingAllocationDetails]]" on-click="_editAllocationDetails" focus-target$="[[!editingAllocationDetails]]"
                                             theme="icon" aria-label="Edit">
                                             <iron-icon icon="lumo:edit"></iron-icon>
                                         </paper-button>
@@ -304,26 +270,40 @@
                             <h3>PEAK SEASONS</h3>
                         </div>
                         <x-array-data-provider items="{{seasonDetails}}" size="200"></x-array-data-provider>
-                        <div style="margin-bottom: 30px">
-                            <paper-input type="date" style="width: 260px; float: left;" label="Start" id="startValue" value="{{startValue}}" max="{{endValue}}"
+                        <div style="margin-bottom: 20px">
+                            <paper-input type="date" style="width: 220px; float: left;" label="Start" id="startValue" value="{{startValue}}" max="{{endValue}}"
                                 date-format="DD-MMMM-YYYY"></paper-input>
-                            <paper-input type="date" style="width: 260px; float: left; margin-left: 5px;" label="End" id="endValue" value="{{endValue}}"
+                            <paper-input type="date" style="width: 220px; float: left; margin-left: 5px;" label="End" id="endValue" value="{{endValue}}"
                                 min="{{startValue}}" date-format="DD-MMMM-YYYY"></paper-input>
+                            <paper-dropdown-input id="season" value="{{season}}" always-float-label style="width: 200px; margin-left: 5px;" label="Season">
+                                <paper-item>Peak Season</paper-item>
+                                <paper-item>High Season</paper-item>
+                            </paper-dropdown-input>
                             <paper-button id="addPeak" on-click="_addSeasonDetails">Add</paper-button>
                         </div>
                         <vaadin-grid theme="compact" id="gridPS" items="[[seasonDetails]]">
 
-                            <vaadin-grid-column width="270px" resizable>
+                            <vaadin-grid-column width="180px" resizable>
                                 <template class="header">Peak Start</template>
                                 <template>
-                                    <paper-input type="date" style="width: 260px;" id="startValue-[[index]]" value="[[item.startValue]]" readonly$="[[!_isEditingSeasonDetails(editingSeasonDetails, item)]]"></paper-input>
+                                    <paper-input type="date" style="width: 180px;" id="startValue-[[index]]" value="[[item.startValue]]" readonly$="[[!_isEditingSeasonDetails(editingSeasonDetails, item)]]"></paper-input>
                                 </template>
                             </vaadin-grid-column>
 
-                            <vaadin-grid-column width="270px" resizable>
+                            <vaadin-grid-column width="180px" resizable>
                                 <template class="header">Peak End</template>
                                 <template>
-                                    <paper-input type="date" style="width: 260px;" id="endValue-[[index]]" value="[[item.endValue]]" readonly$="[[!_isEditingSeasonDetails(editingSeasonDetails, item)]]"></paper-input>
+                                    <paper-input type="date" style="width: 180px;" id="endValue-[[index]]" value="[[item.endValue]]" readonly$="[[!_isEditingSeasonDetails(editingSeasonDetails, item)]]"></paper-input>
+                                </template>
+                            </vaadin-grid-column>
+
+                            <vaadin-grid-column width="190px" resizable>
+                                <template class="header">Season</template>
+                                <template>
+                                    <paper-dropdown-input style="width: 180;" id="season-[[index]]" label="[[item.season]]" value="[[item.season]]" readonly$="[[!_isEditingSeasonDetails(editingSeasonDetails, item)]]">
+                                        <paper-item>Peak Season</paper-item>
+                                        <paper-item>High Season</paper-item>
+                                    </paper-dropdown-input>
                                 </template>
                             </vaadin-grid-column>
 
@@ -455,11 +435,12 @@
                     notify: true,
                     value: [],
                 },
+                accountKey: String,
                 editingAllocationDetails: Object,
                 editingSeasonDetails: Object,
             },
             observers: ['_hotelChanged(hotel)'],
-            _hotelChanged(e) {
+            _hotelChanged(e, f) {
                 this.room = null;
                 this.peak = null;
                 this.pdays = null;
@@ -470,9 +451,9 @@
                 this.endValue = null;
                 this.$.ajaxRoom.method = 'GET';
                 this.$.ajaxRoom.url = '/hotel/filterHotel/' + e;
-
                 this.$.ajaxRoom.generateRequest();
             },
+
             displayLabels: function (e) {
                 return e.base.join(', ');
             },
@@ -598,6 +579,7 @@
             ready() {
                 this.editingAllocationDetails = null;
                 this.editingSeasonDetails = null;
+
             },
             toggleDrawer() {
                 this.dispatchEvent(new CustomEvent('toggleDrawer', {
@@ -690,6 +672,7 @@
                     var season = {
                         startValue: this.$.startValue.value,
                         endValue: this.$.endValue.value,
+                        season: this.$.season.selectedItemLabel
                     }
                     this.seasonDetails.push(season);
                     this.$.gridPS.clearCache();
@@ -722,7 +705,7 @@
                 // item.room = this.$.grid.querySelector('#room-' + e.model.index).value;
                 item.startValue = this.$.gridPS.querySelector('#startValue-' + e.model.index).value;
                 item.endValue = this.$.gridPS.querySelector('#endValue-' + e.model.index).value;
-
+                item.season = this.$.gridPS.querySelector('#season-' + e.model.index).selectedItemLabel;
 
                 this.editingSeasonDetails = null;
 

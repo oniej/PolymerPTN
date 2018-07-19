@@ -355,7 +355,9 @@ router.get('/inquirySource2/:xparams', getAvailability, getAllocation, getBlocki
         element.availability.forEach(availability => {
             var date = new Date(availability.date);
             date.setMonth(date.getMonth() + 1);
+            var returnDate = date.getFullYear() + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" + ("0" + date.getDate()).slice(-2);
             if (date >= filterDateFrom && date <= filterDateTo) {
+                availability.date = returnDate;
                 finalinquiry.push(availability);
             }
         });
@@ -373,7 +375,7 @@ function getAvailability(req, res, next) {
     Availability.find(
         {
             "availability.date": { $gte: _currentDateAvailquery },
-            "availability.date": { $lte: _currentEndDate }
+            // "availability.date": { $lte: _currentEndDate }
         }, (error, _availabilityData) => {
 
             var availability = [];
@@ -402,6 +404,7 @@ function getAvailability(req, res, next) {
 
             req.body.inquiry = availability;
             next();
+            // return res.json({ success: true, data: _availabilityData })
         });
 }
 function getAllocation(req, res, next) {
@@ -430,15 +433,31 @@ function getAllocation(req, res, next) {
                                 avail.availability.forEach(availMin => {
                                     var availDate = new Date(availMin.date);
                                     availDate.setMonth(availDate.getMonth() + 1);
-
                                     if (availDate >= new Date(allocation.dateFrom) && availDate <= new Date(allocation.dateTo)) {
                                         allocation.seasondate.forEach(peakalloc => {
-                                            if (new Date(availDate) >= new Date(peakalloc.startValue) && new Date(availDate) <= new Date(peakalloc.endValue)) {
-                                                availMin.peakStart = peakalloc.startValue;
-                                                availMin.peakEnd = peakalloc.endValue;
-                                                availMin.isPeak = true;
-                                                availMin.season = peakalloc.season;
-                                            }
+                                            allocation.rooms.forEach(allocationRoom => {
+                                                if (new Date(availDate) >= new Date(peakalloc.startValue) && new Date(availDate) <= new Date(peakalloc.endValue)) {
+                                                    availMin.peakStart = peakalloc.startValue;
+                                                    availMin.peakEnd = peakalloc.endValue;
+                                                    // availMin.pkcutoff = allocation.pk_coff;
+                                                    availMin.isPeak = true;
+                                                    availMin.season = peakalloc.season;
+                                                    var remove = allocationRoom.roomname.split(" ").join("");
+                                                    if (remove === availMin.roomname) {
+                                                        // availMin.peakAmount = allocationRoom.pk;
+                                                        availMin.peakAmount = allocationRoom.pk;
+                                                        availMin.pcutoff = allocation.pk_coff;
+                                                    }
+                                                }
+                                                else {
+                                                    var remove = allocationRoom.roomname.split(" ").join("");
+                                                    if (remove === availMin.roomname) {
+                                                        // availMin.peakAmount = allocationRoom.pk;
+                                                        availMin.npeakAmount = allocationRoom.npk;
+                                                        availMin.npcutoff = allocation.npk_coff;
+                                                    }
+                                                }
+                                            });
                                             // if (availDate >= new Date(peakalloc.startValue) && availDate <= new Date(peakalloc.endValue)) {
                                             //     availMin.isPeak = true;
                                             //     availMin.season = peakalloc.season;
@@ -452,12 +471,7 @@ function getAllocation(req, res, next) {
                                             //     ifs: ()
                                             // });
                                         });
-                                        allocation.rooms.forEach(allocationRoom => {
-                                            if (allocationRoom.roomname === availMin.roomname) {
-                                                availMin.peakAmount = allocationRoom.pk;
-                                                availMin.npeakAmount = allocationRoom.npk;
-                                            }
-                                        });
+
                                         availMin.hotel = allocation.hotelname;
                                         availMin.group = allocation.group;
                                         newData.push(avail);
@@ -500,13 +514,13 @@ function getBlocking(req, res, next) {
     var availability = req.body.inquiry;
     Blocking.find({
         $and: [
-            { group: group }, { agent: agent },
+            { group: group },
+            { agent: agent },
             { "rooms.dateFrom": { $lte: _currentDateAllocquery } }
         ]
     }, (error, _blockingData) => {
 
         var newData = [];
-
         if (_blockingData) {
             _blockingData.forEach(block => {
                 availability.forEach(availeach => {
@@ -525,7 +539,8 @@ function getBlocking(req, res, next) {
                                             availdate.agent = block.agent;
                                         }
                                         newData.push(availeach);
-                                    } else {
+                                    }
+                                    else {
                                         if (blockdata.roomname === availdate.roomname) {
                                             availdate.blocking = blockdata.block;
                                             availdate.cancellation = blockdata.cancel;
@@ -562,34 +577,35 @@ function getBooking(req, res, next) {
             { checkout: { $lt: _currentDateAllocquery } }
         ]
     }, (error, _bookingData) => {
-        if (_bookingData) {
-            var newData = [];
-            _bookingData.forEach(book => {
-                availability.forEach(availbook => {
-                    availbook.availability.forEach(availdeduct => {
-                        if (availbook.hotel === book.hotel) {
-                            if (book.deduction === "Blocking") {
-                                if (availdeduct.roomname === book.room) {
-                                    availdeduct.block = parseInt(availdeduct.blocking) - book.numrooms;
-                                }
-                                newData.push(availbook);
-                            } else {
-                                if (availdeduct.isPeak) {
-                                    availdeduct.block = parseInt(availdeduct.peakAmount) - book.numrooms;
-                                } else {
-                                    availdeduct.block = parseInt(availdeduct.npeakAmount) - book.numrooms;
-                                }
-                                newData.push(availbook);
+        if (_bookingData.length <= 0) {
+            console.log(_bookingData);
+            req.body.inquiry = availability;
+            next();
+        }
+        var newData = [];
+        _bookingData.forEach(book => {
+            availability.forEach(availbook => {
+                availbook.availability.forEach(availdeduct => {
+                    if (availbook.hotel === book.hotel) {
+                        if (book.deduction === "Blocking") {
+                            if (availdeduct.roomname === book.room) {
+                                availdeduct.block = parseInt(availdeduct.blocking) - book.numrooms;
                             }
+                            newData.push(availbook);
                         } else {
+                            if (availdeduct.isPeak) {
+                                availdeduct.block = parseInt(availdeduct.peakAmount) - book.numrooms;
+                            } else {
+                                availdeduct.block = parseInt(availdeduct.npeakAmount) - book.numrooms;
+                            }
                             newData.push(availbook);
                         }
-                    });
-                })
-            });
-        } else {
-            newData = availability;
-        }
+                    } else {
+                        newData.push(availbook);
+                    }
+                });
+            })
+        });
 
         req.body.inquiry = _uniqArray(newData);
         next();
