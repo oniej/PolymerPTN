@@ -555,6 +555,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.to = f;
                 if (this.role === "Admin Staff" || this.role === "Staff") {
                     this.urlFilterend = '/allocation/inquirySource2/' + this.from + "_" + this.to + "_" + this.group + "_" + this.name;
+                    console.log(this.urlFilterend);
                     this.$.endalloc.generateRequest();
                 }
                 else {
