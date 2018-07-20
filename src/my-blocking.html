@@ -207,19 +207,19 @@
 
             <div name="/add">
                 <div id="availnew"></div>
-                <my-blocking-add id="d23" path=" " prev-route="{{agentData._agent}}"></my-blocking-add>
+                <my-blocking-add  account-key='{{accountKey}}' id="d23" path=" " prev-route="{{agentData._agent}}"></my-blocking-add>
             </div>
             <div name="view404 ">Not found.</div>
         </iron-pages>
 
-        <template is="dom-if" if="{{editActive}}" restamp>
+        <div hidden$="{{!editActive}}">
             <div id="availedit"></div>
-            <my-blocking-edit id="d24" edit-key='{{editData._id}}' prev-route="{{agentData._agent}}"></my-blocking-edit>
-        </template>
-        <template is="dom-if" if="{{agentActive}}" restamp>
+            <my-blocking-edit id="d24" account-key='{{accountKey}}' edit-key='{{editData._id}}' prev-route="{{agentData._agent}}"></my-blocking-edit>
+        </div>
+        <div hidden$="{{!agentActive}}">
             <div id="agent"></div>
             <my-blocking-agent id="d25" agent-key='{{agentData._agent}}' prev-route="{{agentData._agent}}"></my-blocking-agent>
-        </template>
+        </div>
     </template>
 
     <script>
@@ -271,6 +271,7 @@
                     var newDiv = document.createElement("my-blocking-add");
                     newDiv.setAttribute("id", "d23");
                     newDiv.setAttribute("prev-route", this.route.prefix);
+                    newDiv.setAttribute("account-key", this.accountKey);
                     // newDiv.setAttribute("block ", "3 ")
                     //if open existing
                     var currentDiv = document.getElementById("availnew");
@@ -290,6 +291,7 @@
                     newDiv.setAttribute("id", "d24");
                     newDiv.setAttribute("edit-key", data_args);
                     newDiv.setAttribute("prev-route", data_args);
+                    newDiv.setAttribute("account-key", this.accountKey);
                     // newDiv.setAttribute("block ", "3 ")
                     //if open existing
                     // console.log(newDiv);

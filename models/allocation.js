@@ -13,6 +13,7 @@ const AllocationSchema = new Schema({
     note: String,
     pk_coff: String,
     npk_coff: String,
+    high_coff: String,
     seasondate: Object,
     created_by: String,
     updated_by:String

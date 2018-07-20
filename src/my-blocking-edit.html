@@ -262,6 +262,8 @@
         </custom-style>
         <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_blockingLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
         <iron-ajax id="ajaxRoom" handle-as="json" on-response="_roomsLoaded"></iron-ajax>
+        <iron-ajax auto url="{{urluser}}" params='{}' handle-as="json" on-response="_userLoaded"></iron-ajax>
+        
         <app-drawer-layout fullbleed narrow="{{narrow}}" id="drawerLayout">
             <app-header-layout id="appheader" has-scrolling-region>
                 <app-header fixed slot="header">
@@ -446,9 +448,10 @@
                     value: [],
                 },
                 editingBlockingDetails: Object,
+                accountKey: String,
             },
-            observers: ['_hotelChanged(hotel)'],
-            _hotelChanged(e) {
+            observers: ['_hotelChanged(hotel,accountKey)'],
+            _hotelChanged(e,f) {
                 //  var r = Polymer.dom(this.root).querySelector("#writeHere").innerHTML = null;
                 //  var d = Polymer.dom(this.root).querySelector("#writeHeredate").innerHTML = null;
                 this.$.room.value = '';
@@ -459,6 +462,11 @@
                 this.$.ajaxRoom.method = 'GET';
                 this.$.ajaxRoom.url = '/hotel/filterHotel/' + e;
                 this.$.ajaxRoom.generateRequest();
+
+                  this.method = 'GET';
+                this.urluser = '/user/getkey/' + f;
+                this.$.ajax.handleAs = "json";
+                this.$.ajax.generateRequest();
             },
             displayLabels: function (e) {
                 return e.base.join(', ');
@@ -527,7 +535,7 @@
                             rooms: this.blockingDetails,
                             note: this.note,
                             created_by: this.created_by,
-                            updated_by: this.updated_by,
+                            updated_by: this.modifiedBy,
                         };
                         this.$.ajax.generateRequest();
                         this.$.blockingSave.opened = false;
@@ -557,6 +565,12 @@
                     });
                 }
             },
+            _userLoaded(data) {
+                if (data.detail.response.data) {
+                    this.createdBy = data.detail.response.data.name;
+                    this.modifiedBy = data.detail.response.data.name;
+                }
+            },
             ready() {
                 var monthNames = ["January", "February", "March", "April", "May", "June",
                     "July", "August", "September", "October", "November", "December"
@@ -564,6 +578,8 @@
                 var currentMonths = new Date()
                 this.month = monthNames[currentMonths.getMonth()] + " " + currentMonths.getDate() + " " + currentMonths.getFullYear();
                 this.editingBlockingDetails = null;
+
+                //  console.log(this.accountKey);
             },
             _limited() {
                 var cells = Polymer.dom(this.root).querySelectorAll("td");

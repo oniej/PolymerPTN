@@ -220,20 +220,22 @@
 
             <div name="/add">
                 <div id="availnew"></div>
-                <my-allocation-add id="d23" path=" " prev-route="{{groupData._group}}"></my-allocation-add>
+                <my-allocation-add id="d23" account-key='{{accountKey}}' path=" " prev-route="{{groupData._group}}"></my-allocation-add>
             </div>
 
             <div name="view404 ">Not found.</div>
         </iron-pages>
-        <template is="dom-if" if="{{groupActive}}" restamp>
+
+        <div hidden$="{{!groupActive}}">
             <div id="allocationgroup"></div>
             <my-allocation-group id="d24" group-key='{{groupData._group}}' prev-route="{{groupData._group}}"></my-allocation-group>
-        </template>
+        </div>
 
-        <template is="dom-if" if="{{editActive}}" restamp>
+        <div hidden$="{{!editActive}}">
             <div id="allocationedit"></div>
-            <my-allocation-edit id="d25" edit-key='{{editData._id}}' prev-route="{{groupData._group}}"></my-allocation-edit>
-        </template>
+            <my-allocation-edit id="d25" account-key='{{accountKey}}' edit-key='{{editData._id}}' prev-route="{{groupData._group}}"></my-allocation-edit>
+        </div>
+
 
     </template>
     <script>
@@ -281,10 +283,11 @@
                     if (oldDiv) {
                         Polymer.dom(node.parentNode).removeChild(oldDiv);
 
-                    }
+                    } 
                     var newDiv = document.createElement("my-allocation-add");
                     newDiv.setAttribute("id", "d23");
                     newDiv.setAttribute("prev-route", this.route.prefix);
+                    newDiv.setAttribute("account-key", this.accountKey);
                     // newDiv.setAttribute("block ", "3 ")
                     //if open existing
                     var currentDiv = document.getElementById("availnew");
@@ -319,6 +322,7 @@
                     newDiv.setAttribute("id", "d25");
                     newDiv.setAttribute("edit-key", data_args);
                     newDiv.setAttribute("prev-route", data_args);
+                    newDiv.setAttribute("account-key", this.accountKey);
                     // newDiv.setAttribute("block ", "3 ")
                     //if open existing
                     // console.log(newDiv);
@@ -326,6 +330,7 @@
                     Polymer.dom(node.parentNode).insertBefore(newDiv, currentDiv);
                 }
             },
+
 
             _groupLoaded(data) {
                 if (data.detail.response) {
