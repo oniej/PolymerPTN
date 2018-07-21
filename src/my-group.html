@@ -17,7 +17,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-list/iron-list.html">
 <link rel="import" href="../bower_components/iron-scroll-threshold/iron-scroll-threshold.html">
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
-<link rel="import" href="../bower_components/vaadin-dialog/vaadin-dialog.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/salte-dialog/salte-dialog.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
@@ -136,7 +135,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </span>
             <div class="buttons">
                 <paper-button dialog-dismiss>Cancel</paper-button>
-                <paper-button dialog-confirm on-tap="_saveGroup" id="submit">Submit</paper-button>
+                <paper-button dialog-confirm on-tap="_saveGroup" id="submit">Save</paper-button>
             </div>
         </salte-dialog>
         <salte-dialog id="editGroup">
@@ -146,10 +145,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </span>
             <div class="buttons">
                 <paper-button dialog-dismiss>Cancel</paper-button>
-                <paper-button dialog-confirm on-tap="_saveGroup" id="submit">Submit</paper-button>
+                <paper-button dialog-confirm on-tap="_saveGroup" id="submit">Update</paper-button>
             </div>
         </salte-dialog>
-        <vaadin-dialog id="successAdd" no-close-on-esc no-close-on-outside-click>
+        <!-- <vaadin-dialog id="successAdd" no-close-on-esc no-close-on-outside-click>
             <template>
                 <h3 id="addSuccess" style="text-align: center">Success</h3>
                 <hr>
@@ -164,7 +163,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <paper-button on-tap="_delete" style="color: red">Yes</paper-button>
                         <paper-button on-tap="_closeModal">No</paper-button>
                     </span>
-            </template>
+            </template> -->
         </vaadin-dialog>
         <iron-ajax verbose id="ajax" method="[[method]]" on-response="_handleResponse"></iron-ajax>
 
@@ -179,13 +178,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             ready() {
                 this.url = '/group/read';
             },
-            _closeModal() {
-                this.$.successAdd.opened = false;
-                window.location.assign('/group');
-            },
+            // _closeModal() {
+            //     this.$.successAdd.opened = false;
+            //     window.location.assign('/group');
+            // },
             _addNew() {
                 this.$.addGroup.opened = true;
-                this.group = "";
+                this.code = "";
+                this.name = "";
             },
             _editGroup(e) {
                 var data_args = Polymer.dom(e).rootTarget.getAttribute("id");
@@ -215,7 +215,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         group: this.group
                     };
                     this.$.ajax.generateRequest();
-                    this.$.successAdd.opened = true;
+                    // this.$.successAdd.opened = true;
                     this.url = '';
                 } else {
                     this.method = 'POST';
@@ -225,7 +225,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         group: this.group
                     };
                     this.$.ajax.generateRequest();
-                    this.$.successAdd.opened = true;
+                    // this.$.successAdd.opened = true;
                     this.url = '';
                 }
             },

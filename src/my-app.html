@@ -35,7 +35,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="my-icons.html">
 
-<link rel="lazy-import" href="my-inquire-one.html">
+<!-- <link rel="lazy-import" href="my-inquire-one.html"> -->
 <link rel="lazy-import" href="my-availability.html">
 <link rel="lazy-import" href="my-blocking.html">
 <link rel="lazy-import" href="my-booking.html">
@@ -292,7 +292,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <template is="dom-if" if="{{statusknown}}">
       <template is="dom-if" if="{{user.active}}">
         <!-- for admmin staff -->
-        <template is="dom-if" if="{{_checkAdmin(user.role)}}">
+        <template is="dom-if" if="{{_checkAdmin(user.role)}}" restamp>
           <app-drawer-layout fullbleed narrow="{{narrow}}" id="drawerLayout">
             <app-drawer id="drawerMain" slot="drawer" swipe-open="[[narrow]]">
               <div style="height: 100%; overflow: auto;">
@@ -338,12 +338,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                       <span>Inquiry</span>
                     </paper-icon-item>
                   </a>
-                  <!-- <a name="inquire-one" href="[[rootPath]]inquire-one" style="display: none">
-                    <paper-icon-item toggles="true" class="menuSelected">
-                      <iron-icon icon="my-icons:dashboard" slot="item-icon"></iron-icon>
-                      <span>Inquiry 2</span>
-                    </paper-icon-item>
-                  </a> -->
                   <a name="hotels" href="[[rootPath]]hotels">
                     <paper-icon-item toggles="true" class="menuSelected">
                       <iron-icon icon="my-icons:location-city" slot="item-icon"></iron-icon>
@@ -386,13 +380,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </app-drawer>
             <!-- Main content -->
             <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
-              <my-inquire-one name="inquire-one" route="{{subroute}}" account-key="{{user.accountkey}}"> </my-inquire-one>
-              <my-inquiry-one name="inquiry-one" route="{{subroute}}" account-key="{{user.accountkey}}"></my-inquiry-one>
               <my-availability name="availability" route="{{subroute}}" account-key="{{user.accountkey}}"></my-availability>
               <my-allocation name="allocation" route="{{subroute}}" account-key="{{user.accountkey}}"></my-allocation>
               <my-blocking name="blocking" route="{{subroute}}" account-key="{{user.accountkey}}"></my-blocking>
               <my-booking name="booking" route="{{subroute}}" account-key="{{user.accountkey}}"></my-booking>
-              <!-- <my-inquire-one name="inquire-one" route="{{subroute}}"></my-inquire-one> -->
               <my-inquiry2 name="inquiry2" route="{{subroute}}" account-key="{{user.accountkey}}"></my-inquiry2>
               <my-hotels name="hotels" route="{{subroute}}" account-key="{{user.accountkey}}"></my-hotels>
               <my-users name="users" route="{{subroute}}" account-key="{{user.accountkey}}"></my-users>
@@ -404,7 +395,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </app-drawer-layout>
         </template>
         <!-- for Staff only -->
-        <template is="dom-if" if="{{_checkStaff(user.role)}}">
+        <template is="dom-if" if="{{_checkStaff(user.role)}}" restamp>
           <app-drawer-layout fullbleed narrow="{{narrow}}" id="drawerLayout">
             <app-drawer id="drawerMain" slot="drawer" swipe-open="[[narrow]]">
               <div style="height: 100%; overflow: auto;">
@@ -444,18 +435,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                       <span>Booking</span>
                     </paper-icon-item>
                   </a>
-                  <a name="inquiry2" href="[[rootPath]]inquiry2" style="display: none">
+                  <a name="inquiry2" href="[[rootPath]]inquiry2">
                     <paper-icon-item toggles="true" class="menuSelected">
                       <iron-icon icon="my-icons:inquiry1" slot="item-icon"></iron-icon>
                       <span>Inquiry</span>
                     </paper-icon-item>
                   </a>
-                  <!-- <a name="inquire-one" href="[[rootPath]]inquire-one" style="display: none">
-                    <paper-icon-item toggles="true" class="menuSelected">
-                      <iron-icon icon="my-icons:dashboard" slot="item-icon"></iron-icon>
-                      <span>Inquiry 2</span>
-                    </paper-icon-item>
-                  </a> -->
                   <a name="hotels" href="[[rootPath]]hotels">
                     <paper-icon-item toggles="true" class="menuSelected">
                       <iron-icon icon="my-icons:location-city" slot="item-icon"></iron-icon>
@@ -474,7 +459,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                       <span>Agents</span>
                     </paper-icon-item>
                   </a>
-                  <a name="profile" href="[[rootPath]]profile" style="display: none">
+                  <a name="profile" href="[[rootPath]]profile">
                     <paper-icon-item toggles="true" class="menuSelected">
                       <iron-icon icon="my-icons:profile" slot="item-icon"></iron-icon>
                       <span>My Profile</span>
@@ -492,13 +477,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </app-drawer>
             <!-- Main content -->
             <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
-              <my-inquire-one name="inquire-one" route="{{subroute}}" account-key="{{user.accountkey}}"></my-inquire-one>
-              <my-inquiry-one name="inquiry-one" route="{{subroute}}" account-key="{{user.accountkey}}"></my-inquiry-one>
               <my-availability name="availability" route="{{subroute}}" account-key="{{user.accountkey}}"></my-availability>
               <my-allocation name="allocation" route="{{subroute}}" account-key="{{user.accountkey}}"></my-allocation>
               <my-blocking name="blocking" route="{{subroute}}" account-key="{{user.accountkey}}"></my-blocking>
               <my-booking name="booking" route="{{subroute}}" account-key="{{user.accountkey}}"></my-booking>
-              <!-- <my-users name="users" route="{{subroute}}"></my-users> -->
               <my-inquiry2 name="inquiry2" route="{{subroute}}" account-key="{{user.accountkey}}"></my-inquiry2>
               <my-hotels name="hotels" route="{{subroute}}" account-key="{{user.accountkey}}"></my-hotels>
               <my-group name="group" route="{{subroute}}" account-key="{{user.accountkey}}"></my-group>
@@ -523,7 +505,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <div class="email">[[user.role]]</div>
                   </div>
                 </app-header>
-
                 <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
                   <a name="inquiry2" href="[[rootPath]]inquiry2">
                     <paper-icon-item toggles="true" class="menuSelected">
@@ -531,12 +512,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                       <span>Inquiry</span>
                     </paper-icon-item>
                   </a>
-                  <!-- <a name="inquire-one" href="[[rootPath]]inquire-one" style="display:none">
-                    <paper-icon-item toggles="true" class="menuSelected">
-                      <iron-icon icon="my-icons:dashboard" slot="item-icon"></iron-icon>
-                      <span>Inquiry 2</span>
-                    </paper-icon-item>
-                  </a> -->
                   <a name="profile" href="[[rootPath]]profile">
                     <paper-icon-item toggles="true" class="menuSelected">
                       <iron-icon icon="my-icons:profile" slot="item-icon"></iron-icon>
@@ -554,8 +529,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </app-drawer>
             <!-- Main content -->
             <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
-              <my-inquire-one name="inquire-one" route="{{subroute}}" account-key="{{user.accountkey}}" agent-key="{{user.agent}}"></my-inquire-one>
-              <my-inquiry-one name="inquiry-one" route="{{subroute}}" account-key="{{user.accountkey}}" agent-key="{{user.agent}}"></my-inquiry-one>
               <my-inquiry2 name="inquiry2" route="{{subroute}}" account-key="{{user.accountkey}}" agent-key="{{user.agent}}"></my-inquiry2>
               <my-profile name="profile" route="{{subroute}}" account-key="{{user.accountkey}}"></my-profile>
               <my-view404 name="view404"></my-view404>

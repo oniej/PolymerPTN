@@ -140,23 +140,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <template is="dom-if" if="{{editActive}}" restamp>
             <my-edit-user id="d25" edit-key='{{editData._id}}' prev-route="{{route.prefix}}"></my-edit-user>
         </template>
-
-        <!-- <vaadin-dialog id="deactivate" no-close-on-esc no-close-on-outside-click>
-            <template>
-                <h3 style="text-align: center">Deactivated User?</h3>
-                <hr>
-                <paper-button on-tap="_deactivate">Yes</paper-button>
-                <paper-button on-tap="_close">No</paper-button>
-            </template>
-        </vaadin-dialog> -->
-        <!-- <vaadin-dialog id="activate" no-close-on-esc no-close-on-outside-click>
-            <template>
-                <h3 style="text-align: center">Successfully Updated.</h3>
-                <hr>
-                <paper-button on-tap="_deactivated">Yes</paper-button>
-                <paper-button on-tap="_close">No</paper-button>
-            </template>
-        </vaadin-dialog> -->
         <vaadin-dialog id="deactivateSuccess" no-close-on-esc no-close-on-outside-click>
             <template>
                 <h3 style="text-align: center">User Deactivated</h3>
@@ -186,34 +169,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 },
                 activate: String
             },
-            // _deactivateSelected() {
-            //     this.$.deactivate.opened = true;
-            // },
-
-            // _activateSelected() {
-            //     this.$.activate.opened = true;
-            // },
-            // _deactivate() {
-            //     if (this.selectedItem.length > 0) {
-            //         this.editKey = this.selectedItem[0]._id;
-            //         if (this.editKey) {
-            //             this.method = 'PUT';
-            //             this.$.ajax.url = '/users/block/' + this.editKey;
-            //             this.$.ajax.contentType = "application/json";
-            //             this.$.ajax.body = {
-            //                 active: this.active = false,
-            //             };
-            //             // console.log(this.$.ajax.body);
-            //             this.$.ajax.generateRequest();
-            //             this.$.deactivateSuccess = true;
-            //             this.url = '/users/dummy';
-            //             // console.log(this.editKey);
-            //         }
-
-            //         else { }
-
-            //     }
-            // },
             _close() {
                 this.$.activate.opened = false;
                 this.$.deactivate.opened = false;

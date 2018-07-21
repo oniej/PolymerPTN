@@ -7,7 +7,6 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
@@ -21,36 +20,58 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/salte-dialog/salte-dialog.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
-
-<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
-<link rel="import" href="../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
-<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
-
-<link rel="import" href="../bower_components/neon-animation/web-animations.html">
-<link rel="import" href="../bower_components/neon-animation/neon-animations.html">
-<script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-
-
+<link rel="import" href="time-element.html">
 <link rel="import" href="shared-styles.html">
-<link rel="import" href="search-bar.html">
+<link rel="import" href="my-icons.html">
+
 <dom-module id="my-agent">
     <template>
         <style include="shared-styles">
             :host {
-                height: 100vh;
-                margin: 0;
-                display: flex;
-                flex-direction: column;
+                display: block;
+
+                padding: 10px;
             }
 
-            @media (max-width: 768px) {}
+            @media (max-width: 768px) {
+                div .availability {
+                    margin: 16px;
+                    /* margin-top: 16px; */
+                    display: flex;
+                    /* height: 100vh; */
+                    flex-direction: column;
+                    border-radius: 3px;
+                    /* box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2); */
+                }
+                paper-search-bar {
+                    margin-left: 80px;
+                    width: 50%;
+                    color: black;
+                }
+            }
 
+            @media (min-width: 768px) {
+                div .availability {
+                    width: 765px;
+                    margin: 16px auto;
+                    /* margin-bottom: 1000px; */
+                    /* height: 100vh; */
+                    border-radius: 3px;
 
-            paper-fab.fab {
+                    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+                }
+                paper-search-bar {
+                    margin-left: 50px;
+                    width: 50%;
+                    color: black;
+                }
+            }
+
+            paper-fab.blue {
                 position: fixed;
-                bottom: 30px;
-                right: 30px;
-                background-color: #3F51B5;
+                bottom: 32px;
+                right: 32px;
+
             }
 
             app-header {
@@ -60,121 +81,77 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 /* background-color: #388E3C; */
             }
 
-            #tool1 {
-                color: rgb(255, 255, 255);
-                background-color: darkorange;
+            paper-icon-button.delete {
+                color: rgb(233, 79, 164);
             }
 
-            #tool2 {
-                background-color: white;
+            paper-icon-button.edit {
+                color: rgb(233, 79, 164);
             }
 
-            .item {
-                @apply --layout-horizontal;
-                /* padding: 20px; */
-                background-color: white;
-                border-bottom: 1px solid #ddd;
-                cursor: pointer;
-                margin-bottom: 10px;
-                box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-            }
-
-            .pad {
-                padding: 0 16px;
-                @apply --layout-flex;
-                @apply --layout-vertical;
-            }
-
-            #action {
-                /* display: inline-block; */
-                margin-top: 10px;
-                float: right;
-            }
-
-            div .option {
-                position: absolute;
-                left: 300px;
-                top: 200px;
-            }
-
-            #btn-clear {
-                position: fixed;
-                right: 80px;
-                color: gray;
-            }
-
-            #btn-arrow {
-                position: absolute;
-                color: black;
-            }
-
-            #btn-menu {
-                color: gray;
-                position: fixed;
-                right: 40px;
-            }
-
-            hr {
-                background-color: #eee;
-                border: 0 none;
-                color: #eee;
-                height: 1px;
-            }
-
-            paper-fab.blue {
-                position: fixed;
-                bottom: 32px;
-                right: 32px;
-                background-color: darkorange;
+            paper-icon-button.edit {
+                color: rgb(233, 79, 164);
             }
         </style>
-
-        <iron-ajax verbose id="ajax" method="[[method]]" on-response="_handleResponse"></iron-ajax>
-        <iron-ajax id="ajaxGet" url="{{urlthis}}" method="GET" handle-as="json" on-response="_agentLoaded" loading="{{loadingData}}"
-            debounce-duration="300"></iron-ajax>
+        <custom-style>
+            <style is="custom-style">
+                paper-fab.blue {
+                    /* --paper-fab-background: var(--paper-indigo-500); */
+                    --paper-fab-background: darkorange;
+                    --paper-fab-keyboard-focus-background: var(--paper-light-blue-900);
+                }
+            </style>
+        </custom-style>
+        <!-- <iron-ajax auto url="{{urlInqury}}" params='{}' handle-as="json" on-response="_inquiryLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax> -->
         <iron-pages selected="[[route.path]]" attr-for-selected="name" fallback-selection="view404" role="main">
             <div name="">
                 <app-header-layout fullbleed has-scrolling-region>
                     <app-header fixed slot="header">
-                        <app-toolbar primary id="tool1">
+                        <app-toolbar>
                             <paper-icon-button class="menu" icon="my-icons:menu" drawer-toggle on-tap="toggleDrawer"></paper-icon-button>
-                            <div main-title>Agents</div>
+                            <div main-title>Group</div>
                         </app-toolbar>
                     </app-header>
                     <iron-scroll-document id="threshold">
-                        <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_usersLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
-                        <template is="dom-repeat" items="[[user_datas]]" as="item">
-                            <div class="item" id="{{item._id}}" on-tap="_editAgent">
+                        <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_agentsLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
+                        <template is="dom-repeat" items="[[agentsLoad]]" as="item">
+                            <div class="item" id="{{item._id}}" on-tap="_editGroup">
                                 <iron-image class="avatar" sizing="contain" src="../images/user.png"></iron-image>
                                 <div class="pad" id="{{item._id}}">
-                                    <div class="primary">[[item.name]]</div>
+                                    <div id="{{item._id}}" class="primary">[[item.name]]</div>
                                 </div>
+                                <!-- <paper-icon-button id="{{item._id}}" noink on-tap="_editUsers" data-args="{{item._id}}" icon="my-icons:edit" alt="{{item._id}}"
+                                    style="float: right; margin-top:-10px; margin-right:-10px;color: black;"></paper-icon-button> -->
                             </div>
                         </template>
                     </iron-scroll-document>
-                    <paper-fab on-tap="_openAdd" style=" float: right; " class="blue" icon="my-icons:person-add"></paper-fab>
                 </app-header-layout>
-            </div>
+                <paper-fab noink on-tap="_addNew" icon="my-icons:person-add" class="blue"></paper-fab>
         </iron-pages>
-        <salte-dialog id="editAgents">
-            <h2>Edit Agent</h2>
-            <paper-input label="Code" value="{{code}}" readonly></paper-input>
-            <paper-input label="Name" value="{{name}}"></paper-input>
-            <span class="buttons" style="float: right">
-                <paper-button dialog-dismiss>Cancel</paper-button>
-                <paper-button dialog-confirm on-tap="_submit">Update</paper-button>
+        <salte-dialog id="addGroup">
+            <h2 id="add">Add Agent</h2>
+            <span>
+                <paper-input always-float-label label="Code" value="{{code}}" auto-focus></paper-input>
+                <paper-input always-float-label label="Name" value="{{name}}"></paper-input>
             </span>
-        </salte-dialog>
-        <salte-dialog id="addAgents">
-            <h2>Add Agent</h2>
-            <paper-input label="Code" value="{{code}}"></paper-input>
-            <paper-input label="Name" value="{{name}}"></paper-input>
-            <span class="buttons" style="float: right">
+            <div class="buttons">
                 <paper-button dialog-dismiss>Cancel</paper-button>
-                <paper-button dialog-confirm on-tap="_submit">Save</paper-button>
-            </span>
+                <paper-button dialog-confirm on-tap="_saveGroup" id="submit">Save</paper-button>
+            </div>
         </salte-dialog>
-        <!-- <iron-ajax verbose id="ajax" method="[[method]]" on-response="_handleResponse"></iron-ajax> -->
+        <salte-dialog id="editGroup">
+            <h2 id="add">Edit Agent</h2>
+            <span>
+                <paper-input always-float-label label="Code" value="{{code}}" readonly></paper-input>
+                <paper-input always-float-label label="Name" value="{{name}}" auto-focus></paper-input>
+            </span>
+            <div class="buttons">
+                <paper-button dialog-dismiss>Cancel</paper-button>
+                <paper-button dialog-confirm on-tap="_saveGroup" id="submit">Update</paper-button>
+            </div>
+        </salte-dialog>
+        </vaadin-dialog>
+        <iron-ajax verbose id="ajax" method="[[method]]" on-response="_handleResponse"></iron-ajax>
 
     </template>
 
@@ -184,31 +161,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             properties: {
                 route: Object,
                 routeData: Object,
-                accountKey: String,
+                data: Object,
                 editKey: String,
-                agentDetails: {
-                    type: Array,
-                    notify: true,
-                    value: [],
-                },
-                editingAgentDetails: Object,
+                accountKey: String
             },
             ready() {
                 this.url = '/agent/read';
-                // this.urlthis = '/agent/read';
-                // this.editingAgentDetails = null;
-                // Polymer.dom(this.root).querySelector("#ajaxGet");
-                // this.$.ajaxGet.handleAs = "json";
-                // this.$.ajax.generateRequest();
             },
-            _openAdd() {
-                this.$.addAgents.opened = true;
-                this.code = "";
-                this.name = "";
+            // _closeModal() {
+            //     this.$.successAdd.opened = false;
+            //     window.location.assign('/agent');
+            // },
+            _addNew() {
+                this.$.addGroup.opened = true;
+                this.group = "";
             },
-            _usersLoaded(data) {
-                if (data.detail.response.data) {
-                    this.user_datas = data.detail.response.data;
+            _editGroup(e) {
+                var data_args = Polymer.dom(e).rootTarget.getAttribute("id");
+                this.$.editGroup.opened = true;
+                this.editKey = data_args;
+                this.method = 'GET';
+                this.$.ajax.url = '/agent/edit/' + this.editKey;
+                this.$.ajax.contentType = "application/json";
+                this.$.ajax.generateRequest();
+            },
+            _agentsLoaded(data) {
+                if (data.detail.response) {
+                    this.agentsLoad = data.detail.response.data;
                 }
             },
             _handleResponse(data) {
@@ -217,18 +196,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     this.name = data.detail.response.data.name;
                 }
             },
-            _editAgent(e) {
-                var data_args = Polymer.dom(e).rootTarget.getAttribute("id");
-                this.$.editAgents.opened = true;
-                this.editKey = data_args;
-                this.method = 'GET';
-                this.$.ajax.url = '/agent/edit/' + this.editKey;
-                this.$.ajax.contentType = "application/json";
-                this.$.ajax.generateRequest();
-                this.code = "";
-                this.name = "";
-            },
-            _submit() {
+            _saveGroup() {
                 if (this.editKey) {
                     this.method = 'PUT';
                     this.$.ajax.url = '/agent/update/' + this.editKey;
@@ -238,6 +206,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         name: this.name
                     };
                     this.$.ajax.generateRequest();
+                    // this.$.successAdd.opened = true;
+                    this.url = '';
                 } else {
                     this.method = 'POST';
                     this.$.ajax.url = '/agent/add';
@@ -247,8 +217,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         name: this.name
                     };
                     this.$.ajax.generateRequest();
+                    // this.$.successAdd.opened = true;
+                    this.url = '';
                 }
-            }
+            },
+            toggleDrawer() {
+                this.dispatchEvent(new CustomEvent('toggleDrawer', {
+                    bubbles: true, composed: true, detail: {
+                        narrow: this.$.narrow
+                    }
+                }));
+                this.$.narrow = !this.$.narrow;
+            },
         });
     </script>
 </dom-module>

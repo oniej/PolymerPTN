@@ -72,7 +72,8 @@
     "g-element": "tigerlegab/g-element",
     "paper-input": "PolymerElements/paper-input#^2.2.3",
     "gold-password-input": "GeoloeG/gold-password-input#^2.1.0",
-    "iron-icon": "PolymerElements/iron-icon#^2.1.0"
+    "iron-icon": "PolymerElements/iron-icon#^2.1.0",
+    "paper-progress": "PolymerElements/paper-progress#^2.1.1"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^6.0.0"

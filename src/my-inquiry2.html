@@ -291,7 +291,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     </div>
                 </app-header-layout>
         </iron-pages>
-        <paper-dialog id="moreDetails">
+        <paper-dialog id="moreDetails" no-overlap horizontal-align="left" vertical-align="top">
             <div>
                 <h2>Hotel: {{hotel}}</h2>
                 <h3>Room: {{rooms}}</h3>
@@ -376,7 +376,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
             },
             _tappedChanged(e) {
-                console.log(e);
                 var [hotel, rooms, stat, nonpeak, peak, seasondates, blocking, cancel, pdayscutoff, nonpdayscutoff, currentdate, cutoffdate, ispeak] = e.split("~");
                 var newdate = new Date(currentdate);
                 newdate.setDate(newdate.getDate() - parseInt(nonpdayscutoff));
@@ -484,16 +483,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
 
             _createTable(group, checkin, checkout, data) {
-                // var finalMerge = _uniqArray(data);
-                // function _uniqArray(array) {
-                //     array = array.filter((array, index, self) =>
-                //         index === self.findIndex((data) => (
-                //             data.room === array.room
-                //         ))
-                //     );
-                //     return array;
-                // }
-                // console.log(finalMerge);
                 var currentGroup = group;
                 var startDate = new Date(checkin); //YYYY-MM-DD
                 var endDate = new Date(checkout); //YYYY-MM-DD
@@ -618,8 +607,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                 cutoffdates.push((newdate.getMonth() + 1) + "-" + newdate.getDate());
                             });
                         });
-
-
                         for (var x = 0; x < data.length; x++) {
                             var tr2 = document.createElement('tr');
                             tr2.setAttribute("class", "trdetail");
