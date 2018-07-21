@@ -117,6 +117,7 @@
 
         <iron-ajax auto url="/hotel/readMe/{{editKey}}" handle-as="json" on-response="_hotelsLoaded" debounce-duration="300"></iron-ajax>
         <iron-ajax auto url="{{urluser}}" params='{}' handle-as="json" on-response="_userLoaded"></iron-ajax>
+        <iron-ajax auto url="{{urlavailability}}" params='{}' handle-as="json" on-response="availabilityLoaded"></iron-ajax>
 
         <app-drawer-layout fullbleed narrow="{{narrow}}" id="drawerLayout">
             <app-header-layout id="appheader" has-scrolling-region>
@@ -207,6 +208,7 @@
                 route: Object,
                 data: Object,
                 createdAt: String,
+                availhotelname: String,
                 rooms: {
                     type: Array,
                     value: []
@@ -231,7 +233,6 @@
                 this.$.hotelDelete.opened = false;
                 this.$.UpdateModal.opened = false;
             },
-
             addField() {
                 this._openField(null, null, this);
             },
@@ -284,6 +285,8 @@
                     else {
                         this.method = 'PUT';
                         this.$.ajax.url = '/hotel/update/' + this.editKey;
+                        // this.urlavailability = '/hotel/availupdateMany/' + this.hotelname;
+                        // console.log(this.urlavailability);
                         this.$.ajax.contentType = "application/json";
                         this.$.ajax.body = {
                             hotel: this.hotel,
@@ -292,10 +295,20 @@
                             created_by: this.created_by,
                             updated_by: this.modifiedBy,
                         };
+                        // console.log(this.$.ajax.body);
                         this.$.ajax.generateRequest();
                         this.$.successModalUpdate.opened = true;
                         this.$.UpdateModal.opened = false;
                     }
+                    // this.method = 'PUT';
+                    // console.log(this.urlavailability);
+                    // this.$.ajax.contentType = "application/json";
+                    // this.$.ajax.body = {
+                    //     type: roomupdate,
+                    // };
+                    // console.log(this.$.ajax.body);
+                    // this.$.ajax.generateRequest();
+
                 }
             },
             _cancel() {
@@ -331,6 +344,10 @@
                         // this.updatedby = data.detail.response.data.updated_by;
                         this.updatedAt = data.detail.response.data.updatedAt;
                     }
+                    this.method = 'GET';
+                    this.urlavailability = '/hotel/getavail/' + this.hotelname;
+                    this.$.ajax.handleAs = "json";
+                    this.$.ajax.generateRequest();
                 }
                 this.method = 'GET';
                 this.urluser = '/user/getkey/' + this.accountKey;
@@ -340,7 +357,12 @@
             _userLoaded(data) {
                 if (data.detail.response.data) {
                     this.modifiedBy = data.detail.response.data.name;
-                    console.log(this.modifiedBy);
+                }
+            },
+            availabilityLoaded(data) {
+                if (data.detail.response) {
+                    var dataavail = data.detail.response.data;
+                    console.log(dataavail);
                 }
             },
             _timeStampToDateTime(ts) {

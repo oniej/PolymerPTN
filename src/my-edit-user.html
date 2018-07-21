@@ -87,6 +87,8 @@
             }
         </style>
         <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_usersLoad" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
+        <iron-ajax auto id="groups" url="{{urlgroup}}" params='{}' handle-as="json" on-response="_groupLoaded"></iron-ajax>
+        <iron-ajax auto id="agents" url="{{urlagent}}" params='{}' handle-as="json" on-response="_agentLoaded"></iron-ajax>
         <app-drawer-layout fullbleed narrow="{{narrow}}" id="drawerLayout">
             <app-header-layout id="appheader" has-scrolling-region>
                 <app-header fixed slot="header">
@@ -106,25 +108,26 @@
                         <paper-input value="{{fullname}}" float-label label="Full Name"></paper-input>
                         <paper-input value="{{email}}" float-label label="Email"></paper-input>
                         <paper-dropdown-menu style="cursor:pointer" label="Account Type" id="role">
-                            <paper-listbox slot="dropdown-content" class="dropdown-content" selected="{{roleAdd}}" value="{{role}}">
-                                <!-- <paper-item>Admin Staff</paper-item> -->
-                                <paper-item>Staff</paper-item>
-                                <paper-item>Agent</paper-item>
+                            <paper-listbox slot="dropdown-content" class="dropdown-content" selected="{{roleAdd}}" attr-for-selected="name">
+                                <paper-item name="Admin">Admin</paper-item>
+                                <paper-item name="Staff">Staff</paper-item>
+                                <paper-item name="Agent">Agent</paper-item>
                             </paper-listbox>
                         </paper-dropdown-menu>
-                        <paper-dropdown-menu style="cursor:pointer" label="Group" id="group">
-                            <paper-listbox slot="dropdown-content" class="dropdown-content" selected="{{groupAdd}}" value="{{group}}">
-                                <paper-item>Tabikobu</paper-item>
-                                <paper-item>PTN</paper-item>
-                            </paper-listbox>
-                        </paper-dropdown-menu>
-                        <!-- <paper-dropdown-input id="idagent" label="Agent" items='[[AgentItems]]' filter-property="code" value="{{code}}" max-size="10">
+                        <paper-dropdown-input id="group" label="Group" items='[[groupItems]]' filter-property="group" value="{{group}}" max-size="10">
                             <template>
                                 <template is="dom-repeat" items="[[items]]" as="item">
-                                    <paper-item label="[[item.code]]">[[item.name]]</paper-item>
+                                    <paper-item label="[[item.group]]">[[item.group]]</paper-item>
                                 </template>
                             </template>
-                        </paper-dropdown-input> -->
+                        </paper-dropdown-input>
+                        <paper-dropdown-input id="agent" label="Agent" items='[[AgentItems]]' filter-property="name" value="{{name}}" max-size="10">
+                            <template>
+                                <template is="dom-repeat" items="[[items]]" as="item">
+                                    <paper-item label="[[item.name]]">[[item.name]]</paper-item>
+                                </template>
+                            </template>
+                        </paper-dropdown-input>
                     </div>
                     <br>
                     <br>
@@ -201,32 +204,21 @@
                 },
                 selectedItems: Object,
                 roleAdd: {
-                    type: Number,
+                    type: String,
                     observer: 'roleAddChanged'
                 },
                 role: String,
-                groupAd: {
-                    type: Number,
-                    observer: '_groupAddChanged',
-                },
                 group: String,
             },
-            _groupAddChanged() {
-                if (this.groupAd == 0) {
-                    this.group = 'Tabikobu'
-                } else {
-                    this.group = 'PTN'
-                }
-            },
             roleAddChanged() {
-                if (this.roleAdd == 0) {
-                    this.role = 'Admin Staff';
+                if (this.roleAdd === "Admin") {
+                    Polymer.dom(this.root).querySelector("#agent").setAttribute("style", "display:none");
                 }
-                else if (this.roleAdd == 1) {
-                    this.role = 'Staff';
+                else if (this.roleAdd === "Staff") {
+                    Polymer.dom(this.root).querySelector("#agent").setAttribute("style", "display:none");
                 }
-                else if (this.roleAdd == 2) {
-                    this.role = 'Agent';
+                else if (this.roleAdd === "Agent") {
+                    Polymer.dom(this.root).querySelector("#agent").setAttribute("style", "display:inline-block");
                 }
             },
             guid: function () {
@@ -246,49 +238,27 @@
             _deactivateSelected() {
                 this.$.deactivate.opened = true;
             },
-            // _deactivate() {
-            //     if (this.editKey) {
-            //         this.method = 'PUT';
-            //         this.$.ajax.url = '/users/block/' + this.editKey;
-            //         this.$.ajax.contentType = "application/json";
-            //         this.$.ajax.body = {
-            //             active: this.active = false,
-            //         };
-            //         // console.log(this.$.ajax.body);
-            //         this.$.ajax.generateRequest();
-            //         this.$.deactivate.opened = false;
-            //         this.$.deactivateSuccess.opened = true;
-            //         this.url = '/users/dummy';
-            //     }
-            //     else {
-            //         this.msg = "All fields required";
-            //     }
-            // },
             _update() {
-                if (!this.fullname || !this.email || !this.role || !this.group) {
-                    alert('Please fill up all required fields..');
-                } else {
-                    var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-                    if (!filter.test(this.email)) {
-                        alert('Please provide a valid email address');
-                        this.email.focus;
-                        return false;
-                    }
-                    else {
-                        this.method = 'PUT';
-                        this.$.ajax.url = '/user/update/' + this.editKey;
-                        this.$.ajax.contentType = "application/json";
-                        this.$.ajax.body = {
-                            name: this.fullname,
-                            email: this.email,
-                            role: this.role,
-                            group: this.group,
-                        };
-                        this.$.ajax.generateRequest();
-                        this.$.UpdateModal.opened = false;
-                        this.$.successModal.opened = true;
-                        this.url = '';
-                    }
+                var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                if (!filter.test(this.email)) {
+                    alert('Please provide a valid email address');
+                    this.email.focus;
+                    return false;
+                }
+                else {
+                    this.method = 'PUT';
+                    this.$.ajax.url = '/user/update/' + this.editKey;
+                    this.$.ajax.contentType = "application/json";
+                    this.$.ajax.body = {
+                        name: this.fullname,
+                        email: this.email,
+                        role: this.roleAdd,
+                        group: this.group,
+                    };
+                    this.$.ajax.generateRequest();
+                    this.$.UpdateModal.opened = false;
+                    this.$.successModal.opened = true;
+                    this.url = '';
                 }
             },
             _ok() {
@@ -310,13 +280,34 @@
                             this.fullname = data.detail.response.data.name;
                             this.email = data.detail.response.data.email;
                             this.account_key = data.detail.response.data.accountkey;
-                            this.role = data.detail.response.data.role;
-                            this.group = data.detail.response.data.group;
-
-                            Polymer.dom(this.root).querySelector("#group").value = this.group;
-                            Polymer.dom(this.root).querySelector("#role").value = this.role;
+                            this.roleAdd = data.detail.response.data.role;
+                            this.$.group.value = data.detail.response.data.group;
+                            this.$.agent.value = data.detail.response.data.agent;
                         }
                     }
+                    this.method = 'GET';
+                    this.urlgroup = '/group/read';
+                    this.urlagent = '/agent/read';
+                    this.$.groups.handleAs = "json";
+                    this.$.agents.handleAs = "json";
+                    this.$.groups.generateRequest();
+                    this.$.agents.generateRequest();
+
+                    if (this.roleAdd === "Admin" || this.roleAdd === "Staff") {
+                        Polymer.dom(this.root).querySelector("#agent").setAttribute("style", "display:none");
+                    } else {
+                        Polymer.dom(this.root).querySelector("#agent").setAttribute("style", "display:inline-block");
+                    }
+                }
+            },
+            _groupLoaded(data) {
+                if (data.detail.response.data) {
+                    this.groupItems = data.detail.response.data;
+                }
+            },
+            _agentLoaded(data) {
+                if (data.detail.response.data) {
+                    this.AgentItems = data.detail.response.data;
                 }
             },
             toggleDrawer() { },

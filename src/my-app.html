@@ -338,12 +338,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                       <span>Inquiry</span>
                     </paper-icon-item>
                   </a>
-                  <a name="inquire-one" href="[[rootPath]]inquire-one" style="display: none">
+                  <!-- <a name="inquire-one" href="[[rootPath]]inquire-one" style="display: none">
                     <paper-icon-item toggles="true" class="menuSelected">
                       <iron-icon icon="my-icons:dashboard" slot="item-icon"></iron-icon>
                       <span>Inquiry 2</span>
                     </paper-icon-item>
-                  </a>
+                  </a> -->
                   <a name="hotels" href="[[rootPath]]hotels">
                     <paper-icon-item toggles="true" class="menuSelected">
                       <iron-icon icon="my-icons:location-city" slot="item-icon"></iron-icon>
@@ -362,15 +362,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                       <span>Group</span>
                     </paper-icon-item>
                   </a>
-                  <a name="agent" href="[[rootPath]]agent" style="display: none">
+                  <a name="agent" href="[[rootPath]]agent">
                     <paper-icon-item toggles="true" class="menuSelected">
-                      <iron-icon icon="my-icons:person" slot="item-icon"></iron-icon>
+                      <iron-icon icon="my-icons:agents" slot="item-icon"></iron-icon>
                       <span>Agents</span>
                     </paper-icon-item>
                   </a>
-                  <a name="profile" href="[[rootPath]]profile" style="display: none">
+                  <a name="profile" href="[[rootPath]]profile">
                     <paper-icon-item toggles="true" class="menuSelected">
-                      <iron-icon icon="my-icons:account-circle" slot="item-icon"></iron-icon>
+                      <iron-icon icon="my-icons:profile" slot="item-icon"></iron-icon>
                       <span>My Profile</span>
                     </paper-icon-item>
                   </a>
@@ -450,12 +450,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                       <span>Inquiry</span>
                     </paper-icon-item>
                   </a>
-                  <a name="inquire-one" href="[[rootPath]]inquire-one" style="display: none">
+                  <!-- <a name="inquire-one" href="[[rootPath]]inquire-one" style="display: none">
                     <paper-icon-item toggles="true" class="menuSelected">
                       <iron-icon icon="my-icons:dashboard" slot="item-icon"></iron-icon>
                       <span>Inquiry 2</span>
                     </paper-icon-item>
-                  </a>
+                  </a> -->
                   <a name="hotels" href="[[rootPath]]hotels">
                     <paper-icon-item toggles="true" class="menuSelected">
                       <iron-icon icon="my-icons:location-city" slot="item-icon"></iron-icon>
@@ -468,15 +468,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                       <span>Group</span>
                     </paper-icon-item>
                   </a>
-                  <a name="agent" href="[[rootPath]]agent" style="display: none">
+                  <a name="agent" href="[[rootPath]]agent">
                     <paper-icon-item toggles="true" class="menuSelected">
-                      <iron-icon icon="my-icons:person" slot="item-icon"></iron-icon>
+                      <iron-icon icon="my-icons:agents" slot="item-icon"></iron-icon>
                       <span>Agents</span>
                     </paper-icon-item>
                   </a>
                   <a name="profile" href="[[rootPath]]profile" style="display: none">
                     <paper-icon-item toggles="true" class="menuSelected">
-                      <iron-icon icon="my-icons:account-circle" slot="item-icon"></iron-icon>
+                      <iron-icon icon="my-icons:profile" slot="item-icon"></iron-icon>
                       <span>My Profile</span>
                     </paper-icon-item>
                   </a>
@@ -531,15 +531,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                       <span>Inquiry</span>
                     </paper-icon-item>
                   </a>
-                  <a name="inquire-one" href="[[rootPath]]inquire-one" style="display:none">
+                  <!-- <a name="inquire-one" href="[[rootPath]]inquire-one" style="display:none">
                     <paper-icon-item toggles="true" class="menuSelected">
                       <iron-icon icon="my-icons:dashboard" slot="item-icon"></iron-icon>
                       <span>Inquiry 2</span>
                     </paper-icon-item>
-                  </a>
+                  </a> -->
                   <a name="profile" href="[[rootPath]]profile">
                     <paper-icon-item toggles="true" class="menuSelected">
-                      <iron-icon icon="my-icons:account-circle" slot="item-icon"></iron-icon>
+                      <iron-icon icon="my-icons:profile" slot="item-icon"></iron-icon>
                       <span>My Profile</span>
                     </paper-icon-item>
                   </a>
@@ -637,7 +637,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           Polymer.dom(this.root).querySelector("#overlay").style.display = 'none';
           Polymer.dom(this.root).querySelector("#spinner").active = false;
           if (active == true) {
-            if (role === 'Admin Staff' || role === 'Staff') {
+            if (role === 'Admin' || role === 'Staff') {
               this.page = page || 'availability';
             } else {
               this.page = page || 'inquiry2';
@@ -686,7 +686,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         // console.log(drawerlayout);
       }
       _checkAdmin(e) {
-        if (e === 'Admin Staff') return true;
+        if (e === 'Admin') return true;
         else return false;
       }
       _checkStaff(e) {

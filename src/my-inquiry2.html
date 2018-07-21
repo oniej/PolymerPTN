@@ -158,7 +158,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 /* For IE8 and earlier */
             }
 
-
+            detailyellow:hover {
+                opacity: 0.5;
+                filter: alpha(opacity=100);
+                /* For IE8 and earlier */
+            }
 
             .detailgreen {
                 text-align: center;
@@ -174,6 +178,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             .detailred {
                 text-align: center;
                 background: url(/images/colorred.png);
+                opacity: 1.0;
+                filter: alpha(opacity=50);
+                background-repeat: no-repeat;
+                background-size: 95% 95%;
+                background-position: center;
+                color: white;
+            }
+
+            .detailyellow {
+                text-align: center;
+                background: url(/images/coloryellow.png);
                 opacity: 1.0;
                 filter: alpha(opacity=50);
                 background-repeat: no-repeat;
@@ -296,9 +311,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <div id="cancellation">Cancellation: {{cancel}}</div>
                 </h4>
             </div>
-            <div class="buttons">
+            <!-- <div class="buttons">
                 <paper-button class="darkorange" dialog-dismiss raised>Close</paper-button>
-            </div>
+            </div> -->
         </paper-dialog>
     </template>
 
@@ -320,6 +335,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             observers: [
                 '_endCheckout(checkout)',
                 '_tappedChanged(tapped)',
+                '_tappedChangedC(opened)',
                 '_createTable(group,checkin,checkout,data)'
             ],
             ready() {
@@ -345,7 +361,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.agentsload = data.detail.response.data;
             },
             checkRole(c) {
-                if (c === "Admin Staff" || c === "Staff") return true;
+                if (c === "Admin" || c === "Staff") return true;
                 else { }
             },
             checkinChange(e) {
@@ -354,7 +370,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 _maxDate.setMonth(_maxDate.getMonth() + 1);
                 this.checkoutMax = _maxDate.getFullYear() + "-" + ("0" + (_maxDate.getMonth() + 1)).slice(-2) + "-" + ("0" + (_maxDate.getDate() - 1)).slice(-2)
             },
+            _tappedChangedC(f) {
+                if (this.$.moreDetails.opened == true) {
+                    this.$.moreDetails.opened = false;
+                }
+            },
             _tappedChanged(e) {
+                console.log(e);
                 var [hotel, rooms, stat, nonpeak, peak, seasondates, blocking, cancel, pdayscutoff, nonpdayscutoff, currentdate, cutoffdate, ispeak] = e.split("~");
                 var newdate = new Date(currentdate);
                 newdate.setDate(newdate.getDate() - parseInt(nonpdayscutoff));
@@ -445,7 +467,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
             _endCheckout(f) {
                 this.to = f;
-                if (this.role === "Admin Staff" || this.role === "Staff") {
+                if (this.role === "Admin" || this.role === "Staff") {
                     this.urlFilterend = '/allocation/inquirySource2/' + this.from + "_" + this.to + "_" + this.group + "_" + this.name;
                     this.$.endalloc.generateRequest();
                 }
@@ -457,6 +479,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             _urlFilterend(data) {
                 if (data.detail.response.data) {
                     this.data = data.detail.response.data;
+                    console.log(this.data);
                 }
             },
 
@@ -658,6 +681,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                                 tr2.appendChild(tdDateData);
                                             }
                                         }
+                                        else if (statusColors[x] === "yellow") {
+                                            if (blocking[x]) {
+                                                var alloca = document.createTextNode(pkqnty[x] + blocking[x]);
+                                                tdDateData.appendChild(alloca);
+                                                tdDateData.style.textAlign = "center";
+                                                tdDateData.setAttribute("class", "detailyellow");
+                                                tdDateData.style.color = "white";
+                                                tr2.appendChild(tdDateData);
+                                            } else {
+                                                var allocas = document.createTextNode(pkqnty[x]);
+                                                tdDateData.appendChild(allocas);
+                                                tdDateData.style.textAlign = "center";
+                                                tdDateData.setAttribute("class", "detailyellow");
+                                                tdDateData.style.color = "white";
+                                                tr2.appendChild(tdDateData);
+                                            }
+
+                                        }
 
                                     }
                                     else {
@@ -700,6 +741,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                             }
 
                                         }
+                                        else if (statusColors[x] === "yellow") {
+                                            if (blocking[x]) {
+                                                var alloca = document.createTextNode(npkqnty[x] + blocking[x]);
+                                                tdDateData.appendChild(alloca);
+                                                tdDateData.style.textAlign = "center";
+                                                tdDateData.setAttribute("class", "detailyellow");
+                                                tdDateData.style.color = "white";
+                                                tr2.appendChild(tdDateData);
+                                            } else {
+                                                var allocas = document.createTextNode(npkqnty[x] ? npkqnty[x] : 0);
+                                                tdDateData.appendChild(allocas);
+                                                tdDateData.style.textAlign = "center";
+                                                tdDateData.setAttribute("class", "detailyellow");
+                                                tdDateData.style.color = "white";
+                                                tr2.appendChild(tdDateData);
+                                            }
+
+                                        }
                                     }
                                     // if (statusColors[x] === "red") {
                                     //     if (!pkqnty[x] && !cutoffpk[x] && !npkqnty[x] && !cutoffnpk[x]) {
@@ -725,8 +784,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                     // }
                                     tdDateData.setAttribute('id', hotels[x] + "~" + roomnames[x] + "~" + statuses[x] + "~" + npkqnty[x] + "~" + pkqnty[x] + "~" + seasons[x] + "~" + blocking[x] + "~" + cancellations[x] + "~" + cutoffpk[x] + "~" + cutoffnpk[x] + "~" + myDates[z] + "~" + cutoffdates[x] + "~" + isPeak[x]);
                                     var self = this;
-                                    tdDateData.addEventListener('click', function (e) {
+                                    tdDateData.addEventListener('mouseover', function (e) {
                                         self.tapped = e.target.id;
+                                    });
+                                    tdDateData.addEventListener('mouseout', function (f) {
+                                        self.opened = f.target.id;
                                     });
                                 } else {
                                     var tdDateData = document.createElement('td');
@@ -735,8 +797,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                     tr2.appendChild(tdDateData);
                                     tdDateData.setAttribute('id', hotels[x] + "~" + roomnames[x] + "~" + "No update" + "~" + npkqnty[x] + "~" + pkqnty[x] + "~" + seasons[x] + "~" + blocking[x] + "~" + cancellations[x] + "~" + cutoffpk[x] + "~" + cutoffnpk[x] + "~" + myDates[z] + "~" + cutoffdates[x] + "~" + isPeak[x]);
                                     var self = this;
-                                    tdDateData.addEventListener('click', function (e) {
+                                    tdDateData.addEventListener('mouseover', function (e) {
                                         self.tapped = e.target.id;
+                                    });
+                                    tdDateData.addEventListener('mouseout', function (f) {
+                                        self.opened = f.target.id;
                                     });
                                 }
                             }

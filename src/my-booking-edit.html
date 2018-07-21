@@ -127,9 +127,9 @@
                             </paper-input>
                         </div>
                         <paper-dropdown-menu id="deductions" label="Booking Source" style="margin-left: 10px;">
-                            <paper-listbox slot="dropdown-content" selected="{{selectedBook}}" value="{{deduction}}">
-                                <paper-item>Allocation</paper-item>
-                                <paper-item>Blocking</paper-item>
+                            <paper-listbox slot="dropdown-content" selected="{{selectedBook}}" attr-for-selected="name">
+                                <paper-item name="Allocation">Allocation</paper-item>
+                                <paper-item name="Blocking">Blocking</paper-item>
                             </paper-listbox>
                         </paper-dropdown-menu>
                     </div>
@@ -196,20 +196,17 @@
                 agent: String,
                 deduction: String,
                 selectedBook: {
-                    type: Number,
-                    value: '',
+                    type: String,
+                    observer: '_selectedBookingChanged',
                 }
             },
             observers: ['_hotelChanged(hotel,room,agent)',
-                '_selectedBookingChanged(selectedBook)',
                 '_checkinChanged(checkin)',
                 '_checkoutChanged(hotel,room,agent,checkin,checkout)',],
-            // '_queryAll(hotel,room,agent,checkin,checkout)'
-            _selectedBookingChanged(a) {
-                if (a == 0) {
-                    this.deduction = "Allocation";
+            _selectedBookingChanged() {
+                if (this.selectedBook === "Allocation") {
                 } else {
-                    this.deduction = "Blocking";
+                    this.selectedBook === "Blocking"
                 }
             },
             _openDelete() {
@@ -245,7 +242,7 @@
                         checkin: this.checkin,
                         checkout: this.checkout,
                         numrooms: this.numRooms,
-                        deduction: this.deduction
+                        deduction: this.selectedBook
                     };
                     this.$.ajax.generateRequest();
                     this.$.successModal.opened = true;
@@ -257,8 +254,6 @@
                 window.location.assign('/booking');
             },
             _ok() {
-                // window.location.assign('/booking');
-                // this.$.availabilitySave.opened = false;
             },
             toggleDrawer() { },
             _cancel() { },
@@ -296,11 +291,6 @@
                 }
             },
             _allocationloaded(data) {
-                // console.log(data.detail.response);
-                // if (data.detail.response.data) {
-                //     var datas = data.detail.response.data;
-                //     console.log(datas);
-                // }
             },
             _roomsloaded(data) {
                 if (data.detail.response.data) {
@@ -308,8 +298,6 @@
                 }
             },
             _handleResponse(data) {
-                // console.log(data.detail.response);
-
             },
             _onkeyChanged() {
                 if (this.editKey) {
@@ -329,24 +317,17 @@
                 if (data.detail.response.data) {
                     this.reference = data.detail.response.data.reference;
                     this.guest = data.detail.response.data.guest;
-                    this.agent = data.detail.response.data.agent;
-                    this.hotel = data.detail.response.data.hotel;
-                    this.room = data.detail.response.data.room;
+                    this.$.agents.value = data.detail.response.data.agent;
+                    this.$.hotels.value = data.detail.response.data.hotel;
+                    this.$.roombook.value = data.detail.response.data.room;
                     this.checkin = data.detail.response.data.checkin;
                     this.checkout = data.detail.response.data.checkout;
                     this.numRooms = data.detail.response.data.numrooms;
-                    this.deduction = data.detail.response.data.deduction;
+                    this.selectedBook = data.detail.response.data.deduction;
 
                     this.filterrooms = '/hotel/filteredit/' + this.hotel;
                     this.$.rooms.handleAs = "json";
                     this.$.rooms.generateRequest();
-
-                    Polymer.dom(this.root).querySelector("#deductions").value = this.deduction;
-                    this.$.hotels.value = this.hotel;
-                    this.$.roombook.value = this.room;
-                    this.$.agents.value = this.agent;
-
-
                 }
             }
         })

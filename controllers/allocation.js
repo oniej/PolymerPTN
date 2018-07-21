@@ -1,7 +1,6 @@
 // first we import our dependencies…
 const express = require('express');
 const Allocation = require('../models/allocation');
-const AllocPeak = require('../models/allocation');
 const Blocking = require('../models/blocking');
 const Booking = require('../models/booking');
 const Availability = require('../models/availability_model');

@@ -1,6 +1,7 @@
 // first we import our dependencies…
 const express = require('express');
 const Hotels = require('../models/hotels_model');
+const Availability = require('../models/availability_model');
 
 // and create our instances
 const router = express.Router();
@@ -64,7 +65,6 @@ router.get('/filteredit/:hotel', (req, res) => {
         return res.json({ success: true, data: hotelsedit });
     });
 });
-
 router.get('/read', (req, res) => {
     Hotels.find((err, hotels) => {
         if (err) return res.json({ success: false, error: err });
@@ -112,7 +112,6 @@ router.put('/update/:editKey', (req, res) => {
         });
     });
 });
-
 router.delete('/delete/:editKey', (req, res) => {
     const { editKey } = req.params;
     if (!editKey) {
@@ -123,5 +122,25 @@ router.delete('/delete/:editKey', (req, res) => {
         return res.json({ success: true });
     });
 });
-
+//get availability to be updated
+router.get('/getavail/:hotelname', (req, res) => {
+    const hotelname = req.params.hotelname;
+    Availability.find({ hotelname: hotelname }, (error, hotelsedit) => {
+        if (error) return res.json({ success: false, error });
+        return res.json({ success: true, data: hotelsedit });
+    });
+});
+//update availability specific hotel
+// router.put('/availupdateMany/:hotelname', (req, res) => {
+//     const { hotelname } = req.params;
+//     Hotels.find(hotelname, (error, availability) => {
+//         if (error) return res.json({ success: false, error });
+//         const { hotel, hotelname, room, created_by, updated_by } = req.body;
+//         availability.type = room;
+//         availability.save(error => {
+//             if (error) return res.json({ success: false, error });
+//             return res.json({ success: true });
+//         });
+//     });
+// });
 module.exports = router;

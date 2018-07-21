@@ -116,10 +116,10 @@
                         <paper-input value="{{fullname}}" float-label label="Full Name"></paper-input>
                         <paper-input value="{{email}}" float-label label="Email"></paper-input>
                         <paper-dropdown-menu style="cursor:pointer" label="Account Type">
-                            <paper-listbox slot="dropdown-content" class="dropdown-content" selected="{{roleAdd}}">
-                                <paper-item>Admin</paper-item>
-                                <paper-item>Staff</paper-item>
-                                <paper-item>Agent</paper-item>
+                            <paper-listbox slot="dropdown-content" class="dropdown-content" selected="{{roleAdd}}" attr-for-selected="name">
+                                <paper-item name="Admin">Admin</paper-item>
+                                <paper-item name="Staff">Staff</paper-item>
+                                <paper-item name="Agent">Agent</paper-item>
                             </paper-listbox>
                         </paper-dropdown-menu>
                         <paper-dropdown-input id="idgroup" label="Group" items='[[groupItems]]' filter-property="group" value="{{group}}" max-size="10">
@@ -162,8 +162,7 @@
                 },
                 selectedItems: Object,
                 roleAdd: {
-                    type: Number,
-                    value: 1,
+                    type: String,
                     observer: 'roleAddChanged'
                 },
                 role: String,
@@ -185,14 +184,14 @@
             },
             roleAddChanged() {
                 this.account_key = this.guid();
-                if (this.roleAdd == 0) {
-                    this.role = 'Admin Staff';
+                if (this.roleAdd === "Admin") {
+                    Polymer.dom(this.root).querySelector("#idagent").setAttribute("style", "display:none");
                 }
-                else if (this.roleAdd == 1) {
-                    this.role = 'Staff';
+                else if (this.roleAdd === "Staff") {
+                    Polymer.dom(this.root).querySelector("#idagent").setAttribute("style", "display:none");
                 }
-                else if (this.roleAdd == 2) {
-                    this.role = 'Agent';
+                else if (this.roleAdd === "Agent") {
+                    Polymer.dom(this.root).querySelector("#idagent").setAttribute("style", "display:inline-block");
                 }
                 this.method = 'GET';
                 this.urlgroup = '/group/read';
@@ -236,7 +235,7 @@
                         this.$.ajax.body = {
                             name: this.fullname,
                             email: this.email,
-                            role: this.role,
+                            role: this.roleAdd,
                             group: this.$.idgroup.selectedItemLabel,
                             agent: this.$.idagent.selectedItemLabel,
                             // active: this.active = true,
@@ -245,14 +244,12 @@
                         };
                         this.$.ajax.generateRequest();
                         this.$.successModal.opened = true;
-                        // var Successfully = Polymer.dom(this.root).querySelector("#successModal");
-                        // Successfully.open();
                         this.url = '';
                     }
                 }
             },
             _handleResponse(e) {
-                console.log(e.detail.response);
+                // console.log(e.detail.response);
             },
             _ok() {
                 window.location.assign('/users');

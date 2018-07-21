@@ -21,8 +21,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/salte-dialog/salte-dialog.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
-
-
 <link rel="import" href="time-element.html">
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="my-icons.html">
@@ -133,10 +131,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </iron-pages>
         <salte-dialog id="addGroup">
             <h2 id="add">Add Group</h2>
-            <h2 id="edit" style="display: none">Edit Group</h2>
-            <h2>
-                <paper-icon-button id="delete" style="display: none" class="menu" icon="my-icons:delete-forever" on-tap="_openDelete"></paper-icon-button>
-            </h2>
+            <span>
+                <paper-input always-float-label label="Group" value="{{group}}" auto-focus></paper-input>
+            </span>
+            <div class="buttons">
+                <paper-button dialog-dismiss>Cancel</paper-button>
+                <paper-button dialog-confirm on-tap="_saveGroup" id="submit">Submit</paper-button>
+            </div>
+        </salte-dialog>
+        <salte-dialog id="editGroup">
+            <h2 id="add">Edit Group</h2>
             <span>
                 <paper-input always-float-label label="Group" value="{{group}}" auto-focus></paper-input>
             </span>
@@ -175,38 +179,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             ready() {
                 this.url = '/group/read';
             },
-            // _openDelete() {
-            //     this.$.groupDelete.opened = true;
-            // },
             _closeModal() {
                 this.$.successAdd.opened = false;
                 window.location.assign('/group');
             },
             _addNew() {
                 this.$.addGroup.opened = true;
+                this.group = "";
             },
-            // _delete() {
-            //     this.method = 'DELETE';
-            //     this.$.ajax.url = '/group/delete/' + this.editKey;
-            //     this.$.ajax.generateRequest();
-            //     this.$.groupDelete.opened = false;
-            //     this.$.successAdd.opened = true;
-
-            // },
             _editGroup(e) {
-                var add = Polymer.dom(this.root).querySelector("#add").setAttribute("style", "display:none");
-                var edit = Polymer.dom(this.root).querySelector("#edit").setAttribute("style", "display:inline-block");
-                // var pasagdi = Polymer.dom(this.root).querySelector("#delete").setAttribute("style", "display:float-right");
-
                 var data_args = Polymer.dom(e).rootTarget.getAttribute("id");
-                this.$.addGroup.opened = true;
+                this.$.editGroup.opened = true;
                 this.editKey = data_args;
                 this.method = 'GET';
                 this.$.ajax.url = '/group/readMe/' + this.editKey;
                 this.$.ajax.contentType = "application/json";
                 this.$.ajax.generateRequest();
             },
-
             _groupsLoaded(data) {
                 if (data.detail.response) {
                     this.groups = data.detail.response.data;

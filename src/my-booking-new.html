@@ -135,9 +135,9 @@
                             </paper-input>
                         </div>
                         <paper-dropdown-menu label="Booking Source" style="margin-left: 10px;">
-                            <paper-listbox slot="dropdown-content" selected="{{selectedBook}}">
-                                <paper-item>Allocation</paper-item>
-                                <paper-item>Blocking</paper-item>
+                            <paper-listbox slot="dropdown-content" selected="{{selectedBook}}" attr-for-selected="name">
+                                <paper-item name="Allocation">Allocation</paper-item>
+                                <paper-item name="Blocking">Blocking</paper-item>
                             </paper-listbox>
                         </paper-dropdown-menu>
                     </div>
@@ -176,23 +176,21 @@
                 numRooms: Number,
                 deduction: String,
                 selectedBook: {
-                    type: Number,
-                    value: 0,
+                    type: String,
+                    observer: '_selectedBookingChanged',
                 }
             },
             observers: ['_hotelChanged(hotel,room,agent)',
                 '_checkinChanged(checkin)',
                 '_checkoutChanged(hotel,room,agent,checkin,checkout)',
-                '_selectedBookingChanged(selectedBook)'],
-            // '_queryAll(hotel,room,agent,checkin,checkout)'
+            ],
             _openField() {
 
             },
-            _selectedBookingChanged(a) {
-                if (a == 0) {
-                    this.deduction = "Allocation";
+            _selectedBookingChanged() {
+                if (this.selectedBook === "Allocation") {
                 } else {
-                    this.deduction = "Blocking";
+                    this.selectedBook === "Blocking";
                 }
             },
             _submit() {
@@ -208,7 +206,7 @@
                     checkin: this.checkin,
                     checkout: this.checkout,
                     numrooms: this.numRooms,
-                    deduction: this.deduction
+                    deduction: this.selectedBook,
                 };
                 this.$.ajax.generateRequest();
                 this.$.availabilitySave.opened = true;
@@ -265,19 +263,9 @@
                 if (co) {
                 }
                 if (h && r && ci && co) {
-                    // var date1 = new Date(ci);
-                    // var date2 = new Date(co);
-                    // var timeDiff = Math.abs(date2.getTime() - date1.getTime());
-                    // var numberOfNights = Math.ceil(timeDiff / (1000 * 3600 * 24));
-                    // console.log(numberOfNights + " nights");
-
                     this.filterallocation = '/allocation/filterall/' + h + "_" + r + "_" + ci + "_" + co;
-                    // this.filterblocking = '/hotel/read/';
                     this.$.allocation.handleAs = "json";
-                    // this.$.blocking.handleAs = "json";
                     this.$.allocation.generateRequest();
-                    // this.$.blocking.generateRequest();
-                    // console.log(this.filterallocation);
                 }
             },
             _allocationloaded(data) {
