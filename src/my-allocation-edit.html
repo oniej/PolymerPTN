@@ -146,9 +146,10 @@
                 background: green;
                 color: black;
             }
-            paper-button{
+            paper-button {
                 background-color: cornflowerblue;
                 color: white;
+                height: 32px;
             }
         </style>
         <custom-style>
@@ -198,22 +199,14 @@
                 </app-header>
                 <div class="docu">
                     <div class="docu-header">
-                        <div>
+                        <!-- <div>
                             <paper-toggle-button style="float: right;" value="{{active}}" id="active" on-tap="_active">ACTIVE</paper-toggle-button>
-                        </div>
+                        </div> -->
                         <div class="groupdiv">
                             <paper-input always-float-label label="Group" value="{{group}}" readonly></paper-input>
                         </div>
                     </div>
-                    <!-- <div style="position: absolute; top: 20px; right: 40px;">
-                        <paper-dropdown-menu always-float-label style="cursor:pointer;width:150px;" label="Group">
-                            <paper-listbox attr-for-selected="name" slot="dropdown-content" class="dropdown-content" selected="{{group}}">
-                                <paper-item name="PTN">PTN</paper-item>
-                                <paper-item name="Tabikobu">Tabikobu</paper-item>
-                            </paper-listbox>
-                        </paper-dropdown-menu>
-                    </div> -->
-                    <div class="details" id="form">
+                   <div class="details" id="form">
                         <paper-input always-float-label value="{{hotel}}" hidden></paper-input>
                         <paper-input always-float-label value="{{hotelname}}" label="HOTEL" readonly></paper-input>
                         <paper-textarea always-float-label value="{{note}}" label="REMARKS" style="width: 49%; float: right;"></paper-textarea>
@@ -226,42 +219,45 @@
 
                             </template>
                         </range-datepicker-input>
-                        <paper-input always-float-label value="{{pk_coff}}" label="PEAK CUT-OFF" style="width: 49%; float: left;"></paper-input>
-                        <paper-input always-float-label value="{{npk_coff}}" label="NON-PEAK CUT-OFF" style="width: 49%; float: right;"></paper-input>
-                        <br>
+                        <paper-input always-float-label value="{{pk_coff}}" label="PEAK CUT-OFF" style="width: 31%; float: left;"></paper-input>
+                        <paper-input always-float-label value="{{npk_coff}}" label="NON-PEAK CUT-OFF" style="width: 31%; float: left; margin-left: 10px;"></paper-input>
+                        <paper-input always-float-label value="{{high_coff}}" label="HIGH CUT-OFF" style="width: 31%; float: left; margin-left: 10px;"></paper-input>
+                       <br>
                         <x-array-data-provider items="{{allocationDetailsEdit}}" size="200"></x-array-data-provider>
                         <div style="margin-bottom: 20px">
-                            <!-- <vaadin-combo-box id="room" style="width: 245px;" always-float-label label="ROOM" items='[[roomItems]]' filter-property="hotel"
-                            value="{{room}}">
-                            <template is="dom-repeat" items="[[items]]" as="item">
-                                <paper-item>[[item]]</paper-item>
-                            </template>
-                        </vaadin-combo-box> -->
-                            <vaadin-combo-box style="width: 245px;" id="room" label="ROOM"></vaadin-combo-box>
-                            <vaadin-text-field style="width: 180px;" id="pk" label="PK"></vaadin-text-field>
-                            <vaadin-text-field style="width: 180px;" id="npk" label="NPK"></vaadin-text-field>
-                            <paper-button on-click="_addAllocationDetails">Add</paper-button>
+                        <vaadin-combo-box style="width: 215px;" id="room" label="ROOM"></vaadin-combo-box>
+                        <vaadin-text-field style="width: 130px;" id="pk" label="PK"></vaadin-text-field>
+                        <vaadin-text-field style="width: 130px;" id="npk" label="NPK"></vaadin-text-field>
+                        <vaadin-text-field style="width: 130px;" id="high" label="HIGH"></vaadin-text-field>
+                        <paper-button on-click="_addAllocationDetails">Add</paper-button>
                         </div>
                         <vaadin-grid theme="compact" id="grid" items="[[allocationDetails]]">
-                            <vaadin-grid-column width="240px" resizable>
+                            <vaadin-grid-column width="210px" resizable>
                                 <template class="header">ROOM</template>
                                 <template>
-                                    <vaadin-text-field style="width: 230px;" id="room-[[index]]" value="[[item.roomname]]" readonly></vaadin-text-field>
+                                    <vaadin-text-field style="width: 200px;" id="room-[[index]]" value="[[item.roomname]]" readonly></vaadin-text-field>
                                 </template>
                             </vaadin-grid-column>
 
-                            <vaadin-grid-column width="180px" resizable>
+                            <vaadin-grid-column width="130px" resizable>
                                 <template class="header">PK</template>
                                 <template>
-                                    <vaadin-text-field style="width: 170px;" id="pk-[[index]]" value="[[item.pk]]" readonly$="[[!_isEditingAllocationDetails(editingAllocationDetails, item)]]"></vaadin-text-field>
+                                    <vaadin-text-field style="width: 120px;" id="pk-[[index]]" value="[[item.pk]]" readonly$="[[!_isEditingAllocationDetails(editingAllocationDetails, item)]]"></vaadin-text-field>
                                 </template>
                             </vaadin-grid-column>
 
 
-                            <vaadin-grid-column width="180px" resizable>
+                            <vaadin-grid-column width="130px" resizable>
                                 <template class="header">NPK</template>
                                 <template>
-                                    <vaadin-text-field style="width:170px;" id="npk-[[index]]" value="[[item.npk]]" readonly$="[[!_isEditingAllocationDetails(editingAllocationDetails, item)]]"></vaadin-text-field>
+                                    <vaadin-text-field style="width:120px;" id="npk-[[index]]" value="[[item.npk]]" readonly$="[[!_isEditingAllocationDetails(editingAllocationDetails, item)]]"></vaadin-text-field>
+                                </template>
+                            </vaadin-grid-column>
+
+                            <vaadin-grid-column width="130px" resizable>
+                                <template class="header">HIGH</template>
+                                <template>
+                                    <vaadin-text-field style="width: 120px;" id="high-[[index]]" value="[[item.high]]" readonly$="[[!_isEditingAllocationDetails(editingAllocationDetails, item)]]"></vaadin-text-field>
                                 </template>
                             </vaadin-grid-column>
 
@@ -381,21 +377,30 @@
                 <template>
                     <h3 style="text-align: center">Deleted Successfully</h3>
                     <hr>
-                    <paper-button on-tap="_closeModal" style="float: right">Ok</paper-button>
+                    <a href="/allocation/group/{{prevRoute}}">
+                    <paper-button on-tap="_closeModal" style="float: right; padding: 5px;">Ok</paper-button>
+                    </a>
+                    <br>
                 </template>
             </vaadin-dialog>
             <vaadin-dialog id="successAddModal" no-close-on-esc no-close-on-outside-click>
                 <template>
                     <h3 style="text-align: center">Added Successfully</h3>
                     <hr>
-                    <paper-button on-tap="_closeModal" style="float: right">Ok</paper-button>
+                    <a href="/allocation/group/{{prevRoute}}">
+                    <paper-button on-tap="_closeModal" style="float: right; padding: 5px;">Ok</paper-button>
+                    </a>
+                    <br>
                 </template>
             </vaadin-dialog>
             <vaadin-dialog id="successUpdate" no-close-on-esc no-close-on-outside-click>
                 <template>
                     <h3 style="text-align: center">Updated Successfully</h3>
                     <hr>
-                    <paper-button on-tap="_closeModal" style="float: right">Ok</paper-button>
+                    <a href="/allocation/group/{{prevRoute}}">
+                    <paper-button on-tap="_closeModal" style="float: right;padding: 5px;">Ok</paper-button>
+                    </a>
+                    <br>
                 </template>
             </vaadin-dialog>
             </div>
@@ -481,23 +486,18 @@
 
                             this.allocations = data.detail.response.data;
                             this.group = data.detail.response.data.group;
-                            this.active = data.detail.response.data.active;
+                            // this.active = data.detail.response.data.active;
                             this.hotel = data.detail.response.data.hotel;
                             this.hotelname = data.detail.response.data.hotelname;
                             this.pk_coff = data.detail.response.data.pk_coff;
                             this.npk_coff = data.detail.response.data.npk_coff;
-                            // this.dateFrom = new Date(data.detail.response.data.dateFrom);
-                            // this.dateTo = new Date(data.detail.response.data.dateTo);
+                            this.high_coff = data.detail.response.data.high_coff;
                             var _rangeDate = Polymer.dom(this.root).querySelector("#rangeDate");
                             _rangeDate.dateFrom = new Date(data.detail.response.data.dateFrom);
                             _rangeDate.dateTo = new Date(data.detail.response.data.dateTo);
-
                             this.note = data.detail.response.data.note;
-
                             this.allocationDetails = data.detail.response.data.rooms;
-
                             this.seasonDetails = data.detail.response.data.seasondate;
-
                             this.createdAt = data.detail.response.data.createdAt;
                             this.updatedAt = data.detail.response.data.updatedAt;
                             this.created_by = data.detail.response.data.created_by;
@@ -505,12 +505,12 @@
                         }
 
                     }
-                    if (this.active == true) {
-                        var actoggle = Polymer.dom(this.root).querySelector("#active").checked = this.active;
-                    }
-                    else {
-                        var actoggle = Polymer.dom(this.root).querySelector("#active");
-                    }
+                    // if (this.active == true) {
+                    //     var actoggle = Polymer.dom(this.root).querySelector("#active").checked = this.active;
+                    // }
+                    // else {
+                    //     var actoggle = Polymer.dom(this.root).querySelector("#active");
+                    // }
                 }
 
             },
@@ -536,7 +536,7 @@
             _closeModal() {
                 this.$.successModal.opened = false;
                 this.$.successUpdate.opened = false;
-                window.location.assign('/allocation/group/' + this.prevRoute);
+                // window.location.assign('/allocation/group/' + this.prevRoute);
             },
             _update() {
                 if (this.hotel) {
@@ -546,12 +546,12 @@
                         var _dateToXX = new Date(this.dateTo);
                         var _dateTo = _dateToXX.getFullYear() + "-" + ("0" + (_dateToXX.getMonth() + 1)).slice(-2) + "-" + ("0" + _dateToXX.getDate()).slice(-2)
 
-                        this.active = this.$.active.checked;
+                        // this.active = this.$.active.checked;
                         this.method = 'PUT';
                         this.$.ajax.url = '/allocation/update/' + this.editKey;
                         this.$.ajax.contentType = "application/json";
                         this.$.ajax.body = {
-                            active: this.active,
+                            // active: this.active,
                             group: this.group,
                             hotelname: this.hotelname,
                             // hotel: this.hotel,
@@ -559,6 +559,7 @@
                             dateTo: _dateTo,
                             pk_coff: this.pk_coff,
                             npk_coff: this.npk_coff,
+                            high_coff: this.high_coff,
                             rooms: this.allocationDetails,
                             note: this.note,
                             seasondate: this.seasonDetails,
@@ -637,6 +638,7 @@
                         roomname: this.$.room.selectedItem.label,
                         pk: this.$.pk.value,
                         npk: this.$.npk.value,
+                        high: this.$.high.value
                     }
                     this.allocationDetails.push(roomdata);
                     this.$.grid.clearCache();
@@ -645,6 +647,7 @@
                     this.$.room.selectedItem = null;
                     this.$.pk.value = '';
                     this.$.npk.value = '';
+                    this.$.high.value = '';
                 } else {
                     alert('Field required');
                 }
@@ -670,7 +673,7 @@
                 // item.room = this.$.grid.querySelector('#room-' + e.model.index).value;
                 item.pk = this.$.grid.querySelector('#pk-' + e.model.index).value;
                 item.npk = this.$.grid.querySelector('#npk-' + e.model.index).value;
-
+                item.high = this.$.grid.querySelector('#high-' + e.model.index).value;
                 this.editingAllocationDetails = null;
 
                 this.$.grid.clearCache();
@@ -685,7 +688,7 @@
 
             // Peason Season Grid Function
             _addSeasonDetails(e) {
-                if (this.$.startValue.value !== '' && this.$.endValue.value !== '') {
+                if (this.$.startValue.value !== '' && this.$.endValue.value !== ''  && this.$.season.selectedItemLabel !== '') {
                     var season = {
                         startValue: this.$.startValue.value,
                         endValue: this.$.endValue.value,
@@ -696,6 +699,7 @@
 
                     this.$.startValue.value = '';
                     this.$.endValue.value = '';
+                    this.$.season.selectedItemLabel = '';
 
                 } else {
                     alert('Field required');

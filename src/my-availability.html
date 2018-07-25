@@ -154,18 +154,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <template is="dom-if" if="{{openSearch}}">
                             <app-toolbar primary id="tool2">
                                 <paper-icon-button id="btn-arrow" icon="my-icons:arrow-back" drawer-toggle on-tap="toggleReturn"></paper-icon-button>
-                                <paper-search-bar id="search" query="{{search}}" disable-filter-button></paper-search-bar>
+                                <paper-search-bar id="search" query="{{search}}" placeholder="Search Hotel..." disable-filter-button value="{{filterVal::input}}"></paper-search-bar>
                                 <template is="dom-if" if="{{search}}">
                                     <paper-icon-button id="btn-clear" icon="my-icons:close" drawer-toggle on-tap="toggleClear"></paper-icon-button>
                                 </template>
-                                <paper-menu-button id="btn-menu" horizontal-align="right">
+                                <!-- <paper-menu-button id="btn-menu" horizontal-align="right">
                                     <paper-icon-button slot="dropdown-trigger" icon="my-icons:tune"></paper-icon-button>
                                     <paper-listbox style="cursor:pointer" slot="dropdown-content" selected="{{filterBy}}">
                                         <paper-item style="display:none;">Filter By</paper-item>
                                         <paper-item>Staff Lastname</paper-item>
                                         <paper-item>Hotel</paper-item>
                                     </paper-listbox>
-                                </paper-menu-button>
+                                </paper-menu-button> -->
                             </app-toolbar>
                         </template>
                         <template is="dom-if" if="{{!openSearch}}">
@@ -177,7 +177,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         </template>
                     </app-header>
                     <iron-scroll-document id="threshold">
-                        <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_availabilityLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
+                        <iron-ajax auto url="{{url}}" handle-as="json" on-response="_availabilityLoaded" debounce-duration="300"></iron-ajax>
                         <div class="availability">
                             <a href="/availability/new" style="text-decoration: none;">
                                 <paper-card on-tap="_availnew">
@@ -192,7 +192,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                     <!-- <iron-image src="../images/pluspng.png" sizing="contain" style="width:100px;height:100px;"></iron-image> -->
                                 </paper-card>
                             </a>
-                            <template is="dom-repeat" items="[[availabilities]]" as="item">
+                            <template is="dom-repeat" items="[[availabilities]]" as="item" filter="{{_filter(filterVal)}}">
                                 <paper-card id="{{item._id}}">
                                     <div id="{{item._id}}" class="header" style="background-color:white; padding: 16px; padding-bottom: 5px; font-size: 16px;color: black;font-weight: bold">
                                         <a href="/availability/edit/{{item._id}}">
@@ -202,7 +202,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                         <div>
                                             <iron-icon icon="my-icons:location-city" id="date" style="color: gray;width: 20px;height: 20px;"></iron-icon>
                                             <span id="type">
-                                                [[item.hotel]]
+                                                [[item.hotelname]]
                                             </span>
                                         </div>
                                     </div>
@@ -272,7 +272,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 observers: [
                     '_searchChanged(filterBy, search)',]
             },
-
+            _filter: function(val) {  
+              return function(hotel) {
+                if (!val) return true;
+                if (!hotel) return false;
+                return (hotel.hotelname && ~hotel.hotelname.indexOf(val));
+              };
+            },
             toggleSearch() {
                 this.openSearch = true;
             },

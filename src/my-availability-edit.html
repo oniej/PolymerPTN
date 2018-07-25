@@ -150,6 +150,11 @@
                 animation-timing-function: ease-in;
                 animation-duration: 0.5s;
             }
+            paper-button {
+                background-color: cornflowerblue;
+                color: white;
+                height: 32px;
+            }
         </style>
         <custom-style>
             <style is="custom-style">
@@ -244,45 +249,55 @@
                 <template>
                     <h3 style="text-align: center">Save changes for month of {{updateDate}}?</h3>
                     <hr>
-                    <span style="float: right">
+                    <span style="float: right; padding: 5px;">
                         <paper-button on-tap="_update">Yes</paper-button>
                         <paper-button on-tap="_closeDialog">No</paper-button>
                     </span>
+                    <br>
                 </template>
             </vaadin-dialog>
             <vaadin-dialog id="availabilityDelete" no-close-on-esc no-close-on-outside-click>
                 <template>
-                    <h3 style="text-align: center">Are you sure to delete "{{hotel}}"
+                    <h3 style="text-align: center">Are you sure to delete "{{hotelname}}"
                         <br> availability records permanently?
                         <br>there will be no undo</h3>
                     <hr>
-                    <span style="float: right">
+                    <span style="float: right; padding: 5px;">
                         <paper-button on-tap="_delete" style="color: red">Yes</paper-button>
                         <paper-button on-tap="_closeDialog">No</paper-button>
                     </span>
+                    <br>
                 </template>
             </vaadin-dialog>
             <vaadin-dialog id="successModal" no-close-on-esc no-close-on-outside-click>
                 <template>
                     <h3 style="text-align: center">Deleted Successfully</h3>
                     <hr>
-                    <paper-button on-tap="_back" style="float: right">Ok</paper-button>
+                    <a href="/availability">
+                    <paper-button on-tap="_back" style="float: right; padding: 5px;">Ok</paper-button>
+                    </a>
+                    <br>
                 </template>
             </vaadin-dialog>
             <vaadin-dialog id="successUpdate" no-close-on-esc no-close-on-outside-click>
                 <template>
                     <h3 style="text-align: center">Updated Successfully</h3>
                     <hr>
-                    <paper-button on-tap="_closeModal" style="float: right">Ok</paper-button>
+                    <a href="/availability">
+                    <paper-button on-tap="_closeModal" style="float: right; padding: 5px;">Ok</paper-button>
+                    </a>
+                    <br>
                 </template>
             </vaadin-dialog>
             <paper-dialog id="saveNext">
                 <h3 style="text-align: center">Save changes for month of {{updateDate}}?</h3>
                 <hr>
-                <span style="float: right">
+                <span style="float: right; padding: 5px;">
                     <paper-button on-tap="_saveToDB" auto-focus>Yes</paper-button>
                     <paper-button on-tap="_closeDialog">No</paper-button>
-            </paper-dialog>
+                </span>
+                <br>
+                </paper-dialog>
             </div>
         </app-drawer-layout>
         <iron-ajax verbose id="ajax" method="[[method]]" on-response="_handleResponse"></iron-ajax>
@@ -351,7 +366,7 @@
             _back() {
                 this.$.successModal.opened = false;
                 this.$.successUpdate.opened = false;
-                window.location.assign('/availability');
+                // window.location.assign('/availability');
             },
             _delete() {
                 if (this.hotel) {

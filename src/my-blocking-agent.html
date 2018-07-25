@@ -5,9 +5,6 @@
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
-<link rel="import" href="../bower_components/paper-button-group/paper-button-group.html">
-<link rel="import" href="../bower_components/paper-buttons-group/paper-buttons-group.html">
-<link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/neon-animation/web-animations.html">
@@ -48,33 +45,6 @@
                 margin: 0;
                 display: flex;
                 flex-direction: column;
-            }
-
-            @-webkit-keyframes fadeIn {
-                from {
-                    opacity: 0;
-                }
-                to {
-                    opacity: 1;
-                }
-            }
-
-            @-moz-keyframes fadeIn {
-                from {
-                    opacity: 0;
-                }
-                to {
-                    opacity: 1;
-                }
-            }
-
-            @keyframes fadeIn {
-                from {
-                    opacity: 0;
-                }
-                to {
-                    opacity: 1;
-                }
             }
 
             /* @media (max-width: 768px) {
@@ -279,18 +249,18 @@
                         <template is="dom-if" if="{{openSearch}}">
                             <app-toolbar primary id="tool2">
                                 <paper-icon-button id="btn-arrow" icon="my-icons:arrow-back" drawer-toggle on-tap="toggleReturn"></paper-icon-button>
-                                <paper-search-bar id="search" query="{{search}}" disable-filter-button></paper-search-bar>
+                                <paper-search-bar id="search" query="{{search}}" placeholder="Search Hotel..." disable-filter-button value="{{filterVal::input}}"></paper-search-bar>
                                 <template is="dom-if" if="{{search}}">
                                     <paper-icon-button id="btn-clear" icon="my-icons:close" drawer-toggle on-tap="toggleClear"></paper-icon-button>
                                 </template>
-                                <paper-menu-button id="btn-menu" horizontal-align="right">
+                                <!-- <paper-menu-button id="btn-menu" horizontal-align="right">
                                     <paper-icon-button slot="dropdown-trigger" icon="my-icons:tune"></paper-icon-button>
                                     <paper-listbox style="cursor:pointer" slot="dropdown-content" selected="{{filterBy}}">
                                         <paper-item style="display:none;">Filter By</paper-item>
                                         <paper-item>Staff Lastname</paper-item>
                                         <paper-item>Hotel</paper-item>
                                     </paper-listbox>
-                                </paper-menu-button>
+                                </paper-menu-button> -->
                             </app-toolbar>
                         </template>
                         <template is="dom-if" if="{{!openSearch}}">
@@ -304,9 +274,9 @@
                     <iron-scroll-document id="threshold">
                             <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_blockingLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
                             <div class="blocking">
-                                    <a href="/blocking/add" style="text-decoration: none;">
+                                    <!-- <a href="/blocking/add" style="text-decoration: none;">
                                     <paper-card on-tap="_availnew">
-                                        <div class="card-content">
+                                        <div class="card-content"> 
                                             <center>
                                                 <paper-icon-button icon="my-icons:add" style="color:#4CAF50;width: 110px;height: 90px;">
                                                 </paper-icon-button>
@@ -315,9 +285,27 @@
                                             </center>
                                         </div>
                                     </paper-card>
-                                </a>
-                                <template is="dom-repeat" items="[[blockings]]" as="item">
-                                    <paper-card id="{{item._id}}">
+                                </a> -->
+                                
+                                <template is="dom-repeat" items="[[blockings]]" as="item" filter="{{_filter(filterVal)}}">
+                                    <a href="/blocking/hotel/{{item.hotel}}" style="text-decoration: none;">
+                                            <paper-card on-tap="_showHotel"> 
+                                                <div class="card-content">
+                                                    <center>
+                                                        <div id="{{item.name}}">
+                                                                <paper-icon-button icon="my-icons:location-city" style="color:#4CAF50;width: 110px;height: 55px;">
+                                                                    </paper-icon-button>
+                                                            <br>
+                                                            <span style="color:#4CAF50;">
+                                                                <b>[[item.hotelname]]</b>
+                                                            </span>
+                                                        </div>
+                                                    </center>
+                                                </div>
+                                                <br>
+                                            </paper-card>
+                                        </a>
+                                    <!-- <paper-card id="{{item._id}}">
                                         <div id="{{item._id}}" class="header" style="background-color:white; padding: 16px; padding-bottom: 5px; font-size: 16px;color: black;font-weight: bold">
                                             <a href="/blocking/edit/{{item._id}}">
                                                 <paper-icon-button id="{{item._id}}" noink data-args="{{item._id}}" icon="my-icons:edit" alt="{{item._id}}"
@@ -350,7 +338,7 @@
                                                     &nbsp;by&nbsp;[[item.updated_by]]</span>
                                             </div>
                                         </div>
-                                    </paper-card>
+                                    </paper-card> -->
                                 </template>
                             </div>
                         </iron-scroll-document>
@@ -384,9 +372,14 @@
                     '_searchChanged(filterBy, search)',]
                 // isMousedown: { type: Boolean, value: false, }
             },
+            _filter: function(val) {  
+              return function(hotel) {
+                if (!val) return true;
+                if (!hotel) return false;
+                return (hotel.hotelname && ~hotel.hotelname.indexOf(val));
+              };
+            },
             _onkeyChanged() {
-                // console.log(this.agentKey);
-
                 if (this.agentKey) {
                     this.url = '/blocking/filterA/' + this.agentKey;
                 }
@@ -409,74 +402,10 @@
                 if (this.url = '/blocking/filterA/' + this.agentKey) {
                     if (data.detail.response.data) {
                         this.blockings = data.detail.response.data;
-                        // console.log(this.agentKey);
                     }
-                        // var agent = [];
-                        // this.blockings.forEach(element => {
-                        //     agent.push(element.agent);
-                        // });
-                        // var final = [];
-                        // var uniqueArray = function (arrArg) {
-                        //     return arrArg.filter(function (elem, pos, arr) {
-                        //         return arr.indexOf(elem) == pos;
-                        //     });
-                        // };
-                        // var uniqEs6 = (arrArg) => {
-                        //     return arrArg.filter((elem, pos, arr) => {
-                        //         return arr.indexOf(elem) == pos;
-                        //     });
-                        // }
-                        // this.agent = uniqueArray(final.concat(agent));
-                        // var finalArray = [];
-                        // this.agent.forEach(agentEl => {
-                        //     this.blockings.forEach(blEl => {
-                        //         if(agentEl === blEl.agent){
-                        //             agentEl = blEl.agent;
-                        //         }
-                        //     });
-                        //     finalArray.push(agentEl);
-                        // });
-                        // this.last = finalArray;
-                    
                 }
             },
-            // _availnew() {
-            //     var node = Polymer.dom(this.root).querySelector("#availnew");
-            //     if (node) {
-            //         var oldDiv = Polymer.dom(node.parentNode).querySelector("#d23");
-            //         if (oldDiv) {
-            //             Polymer.dom(node.parentNode).removeChild(oldDiv);
-
-            //         }
-            //         var newDiv = document.createElement("my-blocking-add");
-            //         newDiv.setAttribute("id", "d23");
-            //         newDiv.setAttribute("prev-route", this.route.prefix);
-            //         // newDiv.setAttribute("block ", "3 ")
-            //         //if open existing
-            //         var currentDiv = document.getElementById("availnew");
-            //         Polymer.dom(node.parentNode).insertBefore(newDiv, currentDiv);
-            //     }
-
-            // },
-            // _editBlocking(e) {
-            //     var data_args = Polymer.dom(e).rootTarget.getAttribute("alt");
-            //     var node = Polymer.dom(this.root).querySelector("#availedit");
-            //     if (node) {
-            //         var oldDiv = Polymer.dom(node.parentNode).querySelector("#d24");
-            //         if (oldDiv) {
-            //             Polymer.dom(node.parentNode).removeChild(oldDiv);
-            //         }
-            //         var newDiv = document.createElement("my-blocking-edit");
-            //         newDiv.setAttribute("id", "d24");
-            //         newDiv.setAttribute("edit-key", data_args);
-            //         newDiv.setAttribute("prev-route", this.route.prefix);
-            //         // newDiv.setAttribute("block ", "3 ")
-            //         //if open existing
-            //         // console.log(newDiv);
-            //         var currentDiv = document.getElementById("availedit");
-            //         Polymer.dom(node.parentNode).insertBefore(newDiv, currentDiv);
-            //     }
-            // },
+  
             toggleDrawer() {
                 this.dispatchEvent(new CustomEvent('toggleDrawer', {
                     bubbles: true, composed: true, detail: {

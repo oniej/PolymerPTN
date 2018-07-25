@@ -113,6 +113,11 @@
                 color: #eee;
                 height: 1px;
             }
+            paper-button {
+                background-color: cornflowerblue;
+                color: white;
+                height: 32px;
+            }
         </style>
 
         <iron-ajax auto url="/hotel/readMe/{{editKey}}" handle-as="json" on-response="_hotelsLoaded" debounce-duration="300"></iron-ajax>
@@ -136,8 +141,8 @@
                     </div>
                     <div>
                         <span>
-                            <paper-button on-tap="addField" id="buttonform" style="color: cornflowerblue;">
-                                <iron-icon icon="my-icons:add-box" on-tap="addField" style="color: cornflowerblue;"></iron-icon>
+                            <paper-button on-tap="addField" id="buttonform">
+                                <iron-icon icon="my-icons:add-box" on-tap="addField"></iron-icon>
                                 Add room</paper-button>
                         </span>
                         <iron-icon id="iconform" icon="my-icons:add-box" on-tap="addField" style="color: cornflowerblue;"></iron-icon>
@@ -146,11 +151,11 @@
                     <br>
                     <span style="color:red; font-size:13px; float:left; margin-top: -16px;">{{msg}}</span>
                     <span style="float: right; margin-top: -30px;">
-                        <!-- ? <a href="/hotels" style="text-decoration:none"> -->
-                        <paper-button id="favright" class="cancel" on-tap="_cancel">Cancel</paper-button>
-                        <!-- </a> -->
+                        <a href="/hotels" style="text-decoration:none; padding: 5px;">
+                        <paper-button id="favright" class="cancel" >Cancel</paper-button>
+                        </a>
                         <paper-button id="favleft" class="darkorange" on-click="_openUpdate" raised>Update</paper-button>
-
+                        <br>
                     </span>
                 </div>
             </app-header-layout>
@@ -159,38 +164,42 @@
                     <h3 style="text-align: center">Delete {{hotel}}?
                     </h3>
                     <hr>
-                    <span style="float: right">
+                    <span style="float: right; padding: 5px;">
                         <paper-button on-tap="_delete" style="color: red">Yes</paper-button>
                         <paper-button on-tap="_close">No</paper-button>
                     </span>
+                    <br>
                 </template>
             </vaadin-dialog>
             <vaadin-dialog id="successModalDelete" no-close-on-esc no-close-on-outside-click>
                 <template>
                     <h3 style="text-align: center">Deleted Successfully</h3>
                     <hr>
-                    <!-- <a href="/hotels"> -->
-                    <paper-button on-tap="_ok" style="float: right">Ok</paper-button>
-                    <!-- </a> -->
+                    <a href="/hotels">
+                    <paper-button on-tap="_ok" style="float: right; padding: 5px;">Ok</paper-button>
+                    </a>
+                    <br>
                 </template>
             </vaadin-dialog>
             <vaadin-dialog id="UpdateModal" no-close-on-esc no-close-on-outside-click>
                 <template>
-                    <h3 style="text-align: center">Update {{hotel}}?</h3>
+                    <h3 style="text-align: center">Update {{hotelname}}?</h3>
                     <hr>
-                    <span style="float: right">
+                    <span style="float: right; padding: 5px;">
                         <paper-button on-tap="_update">Yes</paper-button>
                         <paper-button on-tap="_close">No</paper-button>
                     </span>
+                    <br>
                 </template>
             </vaadin-dialog>
             <vaadin-dialog id="successModalUpdate" no-close-on-esc no-close-on-outside-click>
                 <template>
                     <h3 style="text-align: center">Successfully Updated.</h3>
                     <hr>
-                    <!-- <a href="/hotels"> -->
-                    <paper-button on-tap="_ok" style="float: right">Ok</paper-button>
-                    <!-- </a> -->
+                    <a href="/hotels">
+                    <paper-button on-tap="_ok" style="float: right; padding: 5px;">Ok</paper-button>
+                    </a>
+                    <br>
                 </template>
             </vaadin-dialog>
         </app-drawer-layout>
@@ -297,9 +306,9 @@
                     }
                 }
             },
-            _cancel() {
-                window.location.assign('/hotels');
-            },
+            // _cancel() {
+            //     window.location.assign('/hotels');
+            // },
             _delete() {
                 if (this.editKey) {
                     this.method = 'DELETE';
@@ -313,7 +322,7 @@
             _ok() {
                 this.$.successModalDelete.opened = false;
                 this.$.successModalUpdate.opened = false;
-                window.location.assign("/hotels");
+                // window.location.assign("/hotels");
             },
             _hotelsLoaded(data) {
                 if (data.detail.response.data) {

@@ -82,6 +82,11 @@
             #errorMsgDiv {
                 color: red;
             }
+            paper-button {
+                background-color: cornflowerblue;
+                color: white;
+                height: 32px;
+            }
         </style>
         <mongo-auth id="auth" path="/user/login" status-known="{{statusKnown}}" user="{{user}}" on-error="handleError"></mongo-auth>
 

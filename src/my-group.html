@@ -95,6 +95,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             paper-icon-button.edit {
                 color: rgb(233, 79, 164);
             }
+            paper-button {
+                background-color: cornflowerblue;
+                color: white;
+                height: 32px;
+            }
         </style>
         <custom-style>
             <style is="custom-style">
@@ -133,7 +138,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </iron-pages>
         <salte-dialog id="addGroup">
             <h2 id="add">Add Group</h2>
-            <h2 id="edit" style="display: none">Edit Group</h2>
+            <!-- <h2 id="edit" style="display: none">Edit Group</h2> -->
             <h2>
                 <paper-icon-button id="delete" style="display: none" class="menu" icon="my-icons:delete-forever" on-tap="_openDelete"></paper-icon-button>
             </h2>
@@ -145,6 +150,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <paper-button dialog-confirm on-tap="_saveGroup" id="submit">Submit</paper-button>
             </div>
         </salte-dialog>
+        <salte-dialog id="editGroup">
+                <h2 id="edit" style="display: none">Edit Agent</h2>
+                <h2>
+                    <paper-icon-button id="delete" style="display: none" class="menu" icon="my-icons:delete-forever" on-tap="_openDelete"></paper-icon-button>
+                </h2>
+                <span>
+                        <paper-input always-float-label label="Group" value="{{group}}" auto-focus></paper-input>
+                </span>
+                <div class="buttons">
+                    <paper-button dialog-dismiss>Cancel</paper-button>
+                    <a href="/agent">
+                    <paper-button dialog-confirm on-tap="_saveGroup" id="submit">Submit</paper-button>
+                    </a>
+                </div>
+            </salte-dialog>
         <vaadin-dialog id="successAdd" no-close-on-esc no-close-on-outside-click>
             <template>
                 <h3 id="addSuccess" style="text-align: center">Success</h3>
@@ -184,6 +204,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
             _addNew() {
                 this.$.addGroup.opened = true;
+                this.group = '';
             },
             // _delete() {
             //     this.method = 'DELETE';
@@ -194,12 +215,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             // },
             _editGroup(e) {
-                var add = Polymer.dom(this.root).querySelector("#add").setAttribute("style", "display:none");
+                // var add = Polymer.dom(this.root).querySelector("#add").setAttribute("style", "display:none");
                 var edit = Polymer.dom(this.root).querySelector("#edit").setAttribute("style", "display:inline-block");
                 // var pasagdi = Polymer.dom(this.root).querySelector("#delete").setAttribute("style", "display:float-right");
 
                 var data_args = Polymer.dom(e).rootTarget.getAttribute("id");
-                this.$.addGroup.opened = true;
+                this.$.editGroup.opened = true;
                 this.editKey = data_args;
                 this.method = 'GET';
                 this.$.ajax.url = '/group/readMe/' + this.editKey;

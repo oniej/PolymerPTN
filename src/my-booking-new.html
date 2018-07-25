@@ -67,6 +67,11 @@
                 color: #eee;
                 height: 1px;
             }
+            paper-button {
+                background-color: cornflowerblue;
+                color: white;
+                height: 32px;
+            }
         </style>
         <iron-ajax id="agent" url="{{filteragent}}" handle-as="json" method="GET" on-response="_agentoaded"></iron-ajax>
         <iron-ajax id="hotel" url="{{filterhotel}}" handle-as="json" method="GET" on-response="_hotelloaded"></iron-ajax>
@@ -88,7 +93,10 @@
                         <template>
                             <h3 style="text-align: center">New Booking Added</h3>
                             <hr>
-                            <paper-button on-tap="_ok" style="float: right">Ok</paper-button>
+                            <a href="/booking">
+                            <paper-button on-tap="_ok" style="float: right; padding: 5px;">Ok</paper-button>
+                            </a>
+                            <br>
                         </template>
                     </vaadin-dialog>
                 </app-header>
@@ -145,10 +153,11 @@
                     <br>
                     <span style="color:red; font-size:13px; float:left; margin-top: -16px;">{{msg}}</span>
                     <span style="float: right; margin-top: -30px;">
-                        <a href="/booking" style="text-decoration:none">
+                        <a href="/booking" style="text-decoration:none; padding: 5px;">
                             <paper-button id="cancelButton" class="cancel" on-tap="_cancel">Cancel</paper-button>
                         </a>
                         <paper-button id="submitButton" class="darkorange" on-click="_submit" raised>Book</paper-button>
+                        <br>
                     </span>
                 </div>
             </app-header-layout>
@@ -158,7 +167,9 @@
             <template>
                 <h3 style="text-align: center">Added Successfully</h3>
                 <hr>
-                <paper-button on-tap="_ok" style="float: right">Ok</paper-button>
+                <a href="/booking">
+                <paper-button on-tap="_ok" style="float: right; padding: 5px;">Ok</paper-button>
+                </a>
             </template>
         </vaadin-dialog>
         <iron-ajax verbose id="ajax" method="[[method]]" on-response="_handleResponse"></iron-ajax>
@@ -214,7 +225,7 @@
                 this.$.availabilitySave.opened = true;
             },
             _ok() {
-                window.location.assign('/booking');
+                // window.location.assign('/booking');
                 this.$.availabilitySave.opened = false;
             },
             toggleDrawer() { },

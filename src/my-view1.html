@@ -15,7 +15,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-list/iron-list.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="shared-styles.html">
-
+<link rel="import" href="../bower_components/file-input/file-input.html">
 <dom-module id="my-view1">
   <template>
     <style include="shared-styles">
@@ -48,9 +48,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
-    <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_commentsLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
+    <!-- <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_commentsLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax> -->
 
-    <div style="background: white; padding: 26px;">
+    <div class="card">
+        <file-input class="btn btn-primary" extensions='["jpeg", "jpg","png"]' min-size="500000" max-size="3000000">
+            Select a file
+        </file-input>
+        <!-- <paper-button raised on-tap="_upload">Submit</paper-button> -->
+    </div>
+
+    <div>
+        <br/>
+        <p>We've restricted files to those with a "jpeg" or jpg" extension.  Files also must be between 500 kB and 3 MB in size.</p>
+    </div>
+
+    <h3>valid selected files:</h3>
+    <div id="validFiles">
+        No files selected.
+    </div>
+
+    <h3>invalid selected files:</h3>
+    <div id="invalidFiles">
+        No files selected.
+    </div>
+
+    <!-- <div style="background: white; padding: 26px;">
       <paper-input readonly value="{{id}}" label="ID" always-float-label></paper-input>
       <paper-input value="{{author}}" label="Author" always-float-label></paper-input>
       <paper-input value="{{text}}" label="Message" always-float-label></paper-input>
@@ -74,7 +96,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </div>
         </div>
       </template>
-    </iron-list>
+    </iron-list> -->
 
     <div class="loadingIndicator">
       <paper-spinner active="{{loadingData}}"></paper-spinner>
@@ -86,7 +108,49 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <iron-ajax verbose id="ajax" method="[[method]]" on-response="_handleResponse"></iron-ajax>
 
   </template>
-
+  <script>
+  document.getElementsByTagName('file-input')[0].addEventListener('change', function(event) {
+        var valid = event.detail.valid,
+            invalid = event.detail.invalid,
+            validFilesEl = document.getElementById('validFiles'),
+            validFiles = [],
+            invalidFilesEl = document.getElementById('invalidFiles'),
+            invalidFiles = {};
+        
+        if (valid.length) {
+            validFiles = valid.map(function(file) {
+                return {
+                    name: file.name,
+                    size: file.size
+                };
+            });
+            validFilesEl.className = 'pre'
+            validFilesEl.innerHTML = JSON.stringify(validFiles, null, 3);
+        }
+        else {
+            validFilesEl.className = ''
+            validFilesEl.innerHTML = 'No valid files.';
+        }
+        if (invalid.count) {
+            Object.keys(invalid).forEach(function(key) {
+                if (key !== 'count') {
+                    invalidFiles[key] = invalid[key].map(function(file) {
+                        return {
+                            name: file.name,
+                            size: file.size
+                        };    
+                    });
+                }    
+            });
+            invalidFilesEl.className = 'pre'
+            invalidFilesEl.innerHTML = JSON.stringify(invalidFiles, null, 3);
+        }
+        else {
+            invalidFilesEl.className = ''
+            invalidFilesEl.innerHTML = 'No invalid files.';
+        }
+    });
+  </script>
   <script>
     class MyView1 extends Polymer.Element {
       static get is() { return 'my-view1'; }
@@ -95,87 +159,131 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         return {
           baseUrl: String
         };
+        
       }
+      
+    //   _upload(){
+    //     document.getElementsByTagName('file-input')[0].addEventListener('change', function(event) {
+    //     var valid = event.detail.valid,
+    //         invalid = event.detail.invalid,
+    //         validFilesEl = document.getElementById('validFiles'),
+    //         validFiles = [],
+    //         invalidFilesEl = document.getElementById('invalidFiles'),
+    //         invalidFiles = {};
+        
+    //     if (valid.length) {
+    //         validFiles = valid.map(function(file) {
+    //             return {
+    //                 name: file.name,
+    //                 size: file.size
+    //             };
+    //         });
+    //         validFilesEl.className = 'pre'
+    //         validFilesEl.innerHTML = JSON.stringify(validFiles, null, 3);
+    //     }
+    //     else {
+    //         validFilesEl.className = ''
+    //         validFilesEl.innerHTML = 'No valid files.';
+    //     }
+    //     if (invalid.count) {
+    //         Object.keys(invalid).forEach(function(key) {
+    //             if (key !== 'count') {
+    //                 invalidFiles[key] = invalid[key].map(function(file) {
+    //                     return {
+    //                         name: file.name,
+    //                         size: file.size
+    //                     };    
+    //                 });
+    //             }    
+    //         });
+    //         invalidFilesEl.className = 'pre'
+    //         invalidFilesEl.innerHTML = JSON.stringify(invalidFiles, null, 3);
+    //     }
+    //     else {
+    //         invalidFilesEl.className = ''
+    //         invalidFilesEl.innerHTML = 'No invalid files.';
+    //     }
+    // });}
 
-      ready() {
-        super.ready();
-        this.url = '/comment/read';
-      }
+    //   ready() {
+    //     super.ready();
+    //     this.url = '/user/read';
+    //   }
 
-      loadMoreData() {
-        // load async stuff. e.g. XHR
-        this.$.threshold.clearTriggers();
-      }
+    //   loadMoreData() {
+    //     // load async stuff. e.g. XHR
+    //     this.$.threshold.clearTriggers();
+    //   }
 
-      _commentsLoaded(data) {
-        if (data.detail.response.data !== null) {
-          this.comments = data.detail.response.data;
-        }
-      }
+    //   _commentsLoaded(data) {
+    //     if (data.detail.response.data !== null) {
+    //       this.comments = data.detail.response.data;
+    //     }
+    //   }
 
-      _handleResponse(e) {
-        this.url = '/comment/read';
-        this.id = '';
-        this.author = '';
-        this.text = '';
-        this.method = '';
-      }
+    //   _handleResponse(e) {
+    //     this.url = '/comment/read';
+    //     this.id = '';
+    //     this.author = '';
+    //     this.text = '';
+    //     this.method = '';
+    //   }
 
-      _addOrUpdate() {
-        if (this.author && this.text) {
-          if (this.id) {
-            this.method = 'PUT';
-            this.$.ajax.url = '/comment/edit/' + this.id;
-            this.$.ajax.contentType = "application/json";
-            this.$.ajax.body = {
-              author: this.author,
-              text: this.text
-            };
-            this.$.ajax.generateRequest();
-            alert('OK');
-            this.url = '';
-          }
-          else {
-            for (var i = 0; i < 5000; i++) {
-              this.method = 'POST';
-              this.$.ajax.url = '/comment/add';
-              this.$.ajax.contentType = "application/json";
-              this.$.ajax.body = {
-                author: this.author + [i],
-                text: this.text + [i]
-              };
-              this.$.ajax.generateRequest();
-            }
-            alert('OK');
-            this.url = '';
-          }
-        }
-      }
+    //   _addOrUpdate() {
+    //     if (this.author && this.text) {
+    //       if (this.id) {
+    //         this.method = 'PUT';
+    //         this.$.ajax.url = '/comment/edit/' + this.id;
+    //         this.$.ajax.contentType = "application/json";
+    //         this.$.ajax.body = {
+    //           author: this.author,
+    //           text: this.text
+    //         };
+    //         this.$.ajax.generateRequest();
+    //         alert('OK');
+    //         this.url = '';
+    //       }
+    //       else {
+    //         for (var i = 0; i < 5000; i++) {
+    //           this.method = 'POST';
+    //           this.$.ajax.url = '/comment/add';
+    //           this.$.ajax.contentType = "application/json";
+    //           this.$.ajax.body = {
+    //             author: this.author + [i],
+    //             text: this.text + [i]
+    //           };
+    //           this.$.ajax.generateRequest();
+    //         }
+    //         alert('OK');
+    //         this.url = '';
+    //       }
+    //     }
+    //   }
 
-      _delete() {
-        if (this.id) {
-          this.method = 'DELETE';
-          this.$.ajax.url = '/comment/delete/' + this.id;
-          this.$.ajax.generateRequest();
-          alert('OK');
-          this.url = '';
-        }
-      }
+    //   _delete() {
+    //     if (this.id) {
+    //       this.method = 'DELETE';
+    //       this.$.ajax.url = '/comment/delete/' + this.id;
+    //       this.$.ajax.generateRequest();
+    //       alert('OK');
+    //       this.url = '';
+    //     }
+    //   }
 
-      _clear() {
-        this.id = '';
-        this.author = '';
-        this.text = '';
-      }
+    //   _clear() {
+    //     this.id = '';
+    //     this.author = '';
+    //     this.text = '';
+    //   }
 
-      _select(e) {
-        var data_args = Polymer.dom(e).rootTarget.getAttribute("id");
-        var [id, author, text] = data_args.split("~");
+    //   _select(e) {
+    //     var data_args = Polymer.dom(e).rootTarget.getAttribute("id");
+    //     var [id, author, text] = data_args.split("~");
 
-        this.id = id;
-        this.author = author;
-        this.text = text;
-      }
+    //     this.id = id;
+    //     this.author = author;
+    //     this.text = text;
+    //   }
 
     }
 

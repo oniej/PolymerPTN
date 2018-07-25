@@ -1,175 +1,74 @@
-<!--
-@license
-Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-
-<link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
-<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
-<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
-<link rel="import" href="../bower_components/paper-button-group/paper-button-group.html">
-<link rel="import" href="../bower_components/paper-buttons-group/paper-buttons-group.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
-<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/neon-animation/web-animations.html">
-<link rel="import" href="../bower_components/paper-item/paper-item.html">
-<link rel="import" href="../bower_components/paper-item/paper-icon-item.html">
-<link rel="import" href="../bower_components/paper-item/paper-item-body.html">
-<link rel="import" href="../bower_components/paper-menu-button/paper-menu-button.html">
-<link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="../bower_components/iron-list/iron-list.html">
 <link rel="import" href="../bower_components/iron-scroll-threshold/iron-scroll-threshold.html">
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
-
+<link rel="import" href="../bower_components/salte-dialog/salte-dialog.html">
 <link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
-<link rel="import" href="../bower_components/paper-radio-button/paper-radio-button.html">
-<link rel="import" href="../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
-<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="../bower_components/paper-tooltip/paper-tooltip.html">
-<link rel="import" href="../bower_components/vaadin-dialog/vaadin-dialog.html">
-<link rel="import" href="../bower_components/vaadin-grid/vaadin-grid.html">
-<link rel="import" href="../bower_components/vaadin-button/vaadin-button.html">
-<link rel="import" href="../bower_components/vaadin-text-field/vaadin-text-field.html">
-<link rel="import" href="../bower_components/vaadin-lumo-styles/icons.html">
-
 <link rel="import" href="time-element.html">
 <link rel="import" href="shared-styles.html">
-<!-- <link rel="import" href="my-hotel-view.html"> -->
+<link rel="import" href="my-icons.html">
 
-<link rel="import" href="../bower_components/neon-animation/web-animations.html">
-<link rel="import" href="../bower_components/neon-animation/neon-animations.html">
-<script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-
-
-<link rel="import" href="search-bar.html">
 <dom-module id="my-agent">
     <template>
         <style include="shared-styles">
             :host {
-                height: 100vh;
-                margin: 0;
-                display: flex;
-                flex-direction: column;
+                display: block;
+
+                padding: 10px;
             }
 
             @media (max-width: 768px) {}
 
+            @media (min-width: 768px) {}
 
-            paper-fab.fab {
+            paper-fab.blue {
                 position: fixed;
-                bottom: 30px;
-                right: 30px;
-                background-color: #3F51B5;
+                bottom: 32px;
+                right: 32px;
+
             }
 
             app-header {
                 color: rgb(255, 255, 255);
                 background-color: darkorange;
-                /* background-color: var(--paper-indigo-500); */
-                /* background-color: #388E3C; */
             }
 
-            #tool1 {
-                color: rgb(255, 255, 255);
-                background-color: darkorange;
+            paper-icon-button.delete {
+                color: rgb(233, 79, 164);
             }
 
-            #tool2 {
-                background-color: white;
+            paper-icon-button.edit {
+                color: rgb(233, 79, 164);
             }
 
-            .item {
-                @apply --layout-horizontal;
-                /* padding: 20px; */
-                background-color: white;
-                border-bottom: 1px solid #ddd;
-                cursor: pointer;
-                margin-bottom: 10px;
-                box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+            paper-icon-button.edit {
+                color: rgb(233, 79, 164);
             }
-
-            .pad {
-                padding: 0 16px;
-                @apply --layout-flex;
-                @apply --layout-vertical;
-            }
-
-            #action {
-                /* display: inline-block; */
-                margin-top: 10px;
-                float: right;
-            }
-
-            div .option {
-                position: absolute;
-                left: 300px;
-                top: 200px;
-            }
-
-            #btn-clear {
-                position: fixed;
-                right: 80px;
-                color: gray;
-            }
-
-            #btn-arrow {
-                position: absolute;
-                color: black;
-            }
-
-            #btn-menu {
-                color: gray;
-                position: fixed;
-                right: 40px;
-            }
-
-            hr {
-                background-color: #eee;
-                border: 0 none;
-                color: #eee;
-                height: 1px;
+            paper-button {
+                background-color: cornflowerblue;
+                color: white;
+                height: 32px;
             }
         </style>
         <custom-style>
             <style is="custom-style">
                 paper-fab.blue {
-                    /* --paper-fab-background: var(--paper-indigo-500); */
                     --paper-fab-background: darkorange;
-                    /* --paper-fab-background: darkorange; */
-                    /* --paper-fab-keyboard-focus-background: var(--paper-light-blue-900); */
+                    --paper-fab-keyboard-focus-background: var(--paper-light-blue-900);
                 }
-
-                paper-radio-button {
-                    --paper-radio-button-label-spacing: 5px;
-                    --paper-radio-button-size: 24px;
-                }
-
-                paper-radio-button.close {
-                    --paper-radio-button-label-color: red;
-                }
-
-                paper-radio-button.limited {
-                    --paper-radio-button-label-color: yellow;
-                }
-
-                /* paper-radio-button.available {
-                    --paper-radio-button-label-color: red;
-                } */
             </style>
         </custom-style>
-
-        <app-route route="{{route}}" pattern="/edit/:_id" data="{{editData}}" active="{{editActive}}"></app-route>
-        <app-route route="{{route}}" pattern="/view/:_id" data="{{viewData}}" active="{{viewActive}}"></app-route>
-
         <iron-pages selected="[[route.path]]" attr-for-selected="name" fallback-selection="view404" role="main">
             <div name="">
                 <app-header-layout fullbleed has-scrolling-region>
@@ -177,189 +76,126 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <app-toolbar>
                             <paper-icon-button class="menu" icon="my-icons:menu" drawer-toggle on-tap="toggleDrawer"></paper-icon-button>
                             <div main-title>Agent</div>
-                            <template is="dom-if" if="{{openSearch}}">
-                                <!-- <paper-dropdown-input label="Filter Hotel" items='[[hotelItems]]' filter-property="hotel" value="{{hotelId}}">
-                                    <template>
-                                        <template is="dom-repeat" items="[[items]]" as="item">
-                                            <paper-item>[[item.hotel]]</paper-item>
-                                        </template>
-                                    </template>
-                                </paper-dropdown-input> -->
-                                <paper-icon-button id="clear" class="menu" icon="my-icons:close" drawer-toggle on-tap="toggleReturn"></paper-icon-button>
-                            </template>
-                            <paper-icon-button id="search" class="menu" icon="my-icons:search" drawer-toggle on-tap="toggleSearch"></paper-icon-button>
                         </app-toolbar>
                     </app-header>
-
-                    <iron-ajax auto url="{{url}}" handle-as="json" on-response="_agentLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
                     <iron-scroll-document id="threshold">
-
-                        <div class="card">
-                            <!-- <x-array-data-provider items="{{agentDetails}}" size="200"></x-array-data-provider> -->
-                            <!-- <div style="margin-bottom: 20px">
-                                    <vaadin-text-field id="code" label="Code"></vaadin-text-field>
-                                    <vaadin-text-field id="name" label="Name"></vaadin-text-field>
-                                    <vaadin-button on-click="_addAgentDetails">Add</vaadin-button>
+                        <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_agentLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
+                        <template is="dom-repeat" items="[[user_datas]]" as="item">
+                            <div class="item" id="{{item._id}}" on-tap="_editGroup">
+                                <iron-image class="avatar" sizing="contain" src="../images/user.png"></iron-image>
+                                <div class="pad" id="{{item._id}}">
+                                    <div class="primary">[[item.name]]</div>
                                 </div>
-                                <vaadin-grid theme="compact" id="grid" items="[[agentDetails]]">
-        
-                                    <vaadin-grid-column resizable>
-                                        <template class="header">Code</template>
-                                        <template>
-                                            <vaadin-text-field id="code-[[index]]" value="[[item.code]]" readonly$="[[!_isEditingAgentDetails(editingAgentDetails, item)]]"></vaadin-text-field>
-                                        </template>
-                                    </vaadin-grid-column>
-        
-                                    <vaadin-grid-column  resizable>
-                                        <template class="header">Name</template>
-                                        <template>
-                                            <vaadin-text-field  id="name-[[index]]" value="[[item.name]]" readonly$="[[!_isEditingAgentDetails(editingAgentDetails, item)]]"></vaadin-text-field>
-                                        </template>
-                                    </vaadin-grid-column>
-        
-                                    <vaadin-grid-column width="12em">
-                                        <template>
-                                            <div style="text-align: right;">
-                                                <vaadin-button id="edit-button" hidden="[[editingAgentDetails]]" on-click="_editAgentDetails" focus-target$="[[!editingAgentDetails]]"
-                                                    theme="icon" aria-label="Edit">
-                                                    <iron-icon icon="lumo:edit"></iron-icon>
-                                                </vaadin-button>
-                                                <vaadin-button hidden="[[editingAgentDetails]]" on-click="_removeAgentDetails" theme="icon error" aria-label="Delete">
-                                                    <iron-icon icon="lumo:cross"></iron-icon>
-                                                </vaadin-button>
-                                                <vaadin-button hidden="[[!_isEditingAgentDetails(editingAgentDetails, item)]]" on-click="_saveAgentDetails" focus-target$="[[editingAgentDetails]]"
-                                                    theme="primary">Save</vaadin-button>
-                                                <vaadin-button hidden="[[!_isEditingAgentDetails(editingAgentDetails, item)]]" on-click="_cancelAgentDetails">Cancel</vaadin-button>
-                                            </div>
-                                        </template>
-                                    </vaadin-grid-column>
-                                </vaadin-grid> -->
-                            <paper-input label="Code" value="{{code}}"></paper-input>
-                            <paper-input label="Name" value="{{name}}"></paper-input>
-                        </div>
+                              </div>
 
-                        <div class="card">
-                            <table width="100%">
-                                <tr>
-                                    <td>Code</td>
-                                    <td>Name</td>
-                                </tr>
-                                <template is="dom-repeat" items="[[agent]]" as="item">
-
-                                    <tr>
-                                        <td>
-                                            [[item.code]]
-                                        </td>
-                                        <td>
-                                            [[item.name]]
-                                        </td>
-                                    </tr>
-                                </template>
-                            </table>
-                        </div>
+                        </template>
                     </iron-scroll-document>
-                    <paper-fab on-tap="_submit" style=" float: right; " class="fab" icon="my-icons:save">+</paper-fab>
                 </app-header-layout>
-
-            </div>
-
+                <paper-fab noink on-tap="_addNew" icon="my-icons:person-add" class="blue"></paper-fab>
         </iron-pages>
-
+        <salte-dialog id="addGroup">
+            <h2 id="add">Add Agent</h2>
+            <h2>
+                <paper-icon-button id="delete" style="display: none" class="menu" icon="my-icons:delete-forever" on-tap="_openDelete"></paper-icon-button>
+            </h2>
+            <span>
+                <paper-input label="Code" value="{{code}}"></paper-input>
+                <paper-input label="Name" value="{{name}}"></paper-input>
+            </span>
+            <div class="buttons">
+                <paper-button dialog-dismiss>Cancel</paper-button>
+                <paper-button dialog-confirm on-tap="_saveGroup" id="submit">Submit</paper-button>
+            </div>
+        </salte-dialog>
+        <salte-dialog id="editGroup">
+            <h2 id="edit" style="display: none">Edit Agent</h2>
+            <h2>
+                <paper-icon-button id="delete" style="display: none" class="menu" icon="my-icons:delete-forever" on-tap="_openDelete"></paper-icon-button>
+            </h2>
+            <span>
+                <paper-input label="Code" value="{{code}}" readonly></paper-input>
+                <paper-input label="Name" value="{{name}}"></paper-input>
+            </span>
+            <div class="buttons">
+                <paper-button dialog-dismiss>Cancel</paper-button>
+                <a href="/agent">
+                <paper-button dialog-confirm on-tap="_saveGroup" id="submit">Submit</paper-button>
+                </a>
+            </div>
+        </salte-dialog>
         <iron-ajax verbose id="ajax" method="[[method]]" on-response="_handleResponse"></iron-ajax>
+
     </template>
 
     <script>
         Polymer({
             is: 'my-agent',
             properties: {
-                agentDetails: {
-                    type: Array,
-                    notify: true,
-                    value: [],
-                },
-                editingAgentDetails: Object,
+                editKey: String
             },
             ready() {
-
                 this.url = '/agent/read';
-
-                this.editingAgentDetails = null;
             },
-            _agentLoaded(data) {
-                if (data.detail.response) {
-                    this.agent = data.detail.response.data;
-                }
-            },
-            // _addAgentDetails(e) {
-            //     if (this.$.code.value !== '' && this.$.name.value !== '' ) {
-            //         var agentdata = {
-
-            //             code: this.$.code.value,
-            //             name: this.$.name.value,
-
-            //         }
-            //         this.agentDetails.push(agentdata);
-            //         this.$.grid.clearCache();
-
-            //         this.$.code.value = '';
-            //         this.$.name.value = '';
-            //     } else {
-            //         alert('Field required');
-            //     }
-
-            // },
-            // _isEditingAgentDetails(editing, item) {
-            //     return item === editing;
-            // },
-            // _removeAgentDetails(e) {
-            //     var index = this.agentDetails.indexOf(e.model.item);
-            //     this.agentDetails.splice(index, 1);
-
-            //     this.$.grid.clearCache();
-            // },
-            // _editAgentDetails(e) {
-            //     var item = e.model.item;
-            //     this.editingAgentDetails = item;
-
-            //     this.$.grid.querySelector('#code-' + e.model.index).focus();
-            // },
-            // _saveAgentDetails(e) {
-            //     var item = e.model.item;
-            //     item.code = this.$.grid.querySelector('#code-' + e.model.index).value;
-            //     item.name = this.$.grid.querySelector('#name-' + e.model.index).value;
-
-            //     this.editingAgentDetails = null;
-
-            //     this.$.grid.clearCache();
-            //     this.$.grid.querySelector('#edit-button').focus();
-            // },
-            // _cancelAgentDetails() {
-            //     this.editingAgentDetails = null;
-
-            //     this.$.grid.clearCache();
-            //     this.$.grid.querySelector('#edit-button').focus();
-            // },
-
-            _submit() {
-                // console.log(this.$.code.value);
-                // console.log(this.$.name.value);
-                // console.log(this.agentDetails);
-                this.method = 'POST';
-                this.$.ajax.url = '/agent/add';
-                this.$.ajax.contentType = "application/json";
-                this.$.ajax.body = {
-
-                    code: this.code,
-                    name: this.name
-                    // agent: this.agentDetails,
-
-                };
-                this.$.ajax.generateRequest();
+            _addNew() {
+                this.$.addGroup.opened = true;
                 this.code = '';
                 this.name = '';
             },
+            _editGroup(e) {
+                var edit = Polymer.dom(this.root).querySelector("#edit").setAttribute("style", "display:inline-block");
 
+                var data_args = Polymer.dom(e).rootTarget.getAttribute("id");
+                this.$.editGroup.opened = true;
+                this.editKey = data_args;
+                this.method = 'GET';
+                this.$.ajax.url = '/agent/readMe/' + this.editKey;
+                this.$.ajax.contentType = "application/json";
+                this.$.ajax.generateRequest();
+            },
+            _agentLoaded(data) {
+                if (data.detail.response) {
+                    this.user_datas = data.detail.response.data;
+                }
+            },
+            _handleResponse(data) {
+                if (data.detail.response) {
+                    this.code = data.detail.response.data.code;
+                    this.name = data.detail.response.data.name;
+                }
+            },
+            _saveGroup() {
+                if (this.editKey) {
+                    this.method = 'PUT';
+                    this.$.ajax.url = '/agent/update/' + this.editKey;
+                    this.$.ajax.contentType = "application/json";
+                    this.$.ajax.body = {
+                        code: this.code,
+                        name: this.name
 
+                    };
+                    this.$.ajax.generateRequest();
+                    // this.url = '/agent';
+                    window.location.href('/agent');
+                } else {
+                    this.method = 'POST';
+                    this.$.ajax.url = '/agent/add';
+                    this.$.ajax.contentType = "application/json";
+                    this.$.ajax.body = {
+                        code: this.code,
+                        name: this.name
+                    };
+                    this.$.ajax.generateRequest();
+                    this.url = '/agent';
+                }
+            },
+            toggleDrawer() {
+                this.dispatchEvent(new CustomEvent('toggleDrawer', {
+                    bubbles: true, composed: true, detail: {
+                        narrow: this.$.narrow
+                    }
+                }));
+                this.$.narrow = !this.$.narrow;
+            },
         });
     </script>
 </dom-module>

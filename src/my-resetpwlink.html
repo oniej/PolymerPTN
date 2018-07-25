@@ -72,6 +72,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 /* font-weight: 400; */
                 text-align: justify;
             }
+            paper-button {
+                background-color: cornflowerblue;
+                color: white;
+                height: 32px;
+            }
         </style>
 
         <iron-ajax verbose id="ajax" method="POST" url="/user/resetPassword/{{token}}" on-response="_handleResponse"></iron-ajax>

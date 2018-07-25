@@ -5,9 +5,6 @@
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
-<link rel="import" href="../bower_components/paper-button-group/paper-button-group.html">
-<link rel="import" href="../bower_components/paper-buttons-group/paper-buttons-group.html">
-<link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/neon-animation/web-animations.html">
@@ -18,7 +15,6 @@
 <link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="../bower_components/iron-list/iron-list.html">
 <link rel="import" href="../bower_components/iron-scroll-threshold/iron-scroll-threshold.html">
-<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../bower_components/datetime-picker/date-picker.html">
 <link rel="import" href="../bower_components/pf-calendar/pf-calendar.html">
 <link rel="import" href="../bower_components/pf-calendar-events/pf-calendar-events.html">
@@ -49,34 +45,6 @@
                 display: flex;
                 flex-direction: column;
             }
-
-            @-webkit-keyframes fadeIn {
-                from {
-                    opacity: 0;
-                }
-                to {
-                    opacity: 1;
-                }
-            }
-
-            @-moz-keyframes fadeIn {
-                from {
-                    opacity: 0;
-                }
-                to {
-                    opacity: 1;
-                }
-            }
-
-            @keyframes fadeIn {
-                from {
-                    opacity: 0;
-                }
-                to {
-                    opacity: 1;
-                }
-            }
-
             @media (max-width: 768px) {
                 paper-card {
                     width: 100%;
@@ -106,15 +74,7 @@
                     color: black;
                 }
             }
-
-            paper-fab.orange {
-                position: fixed;
-                bottom: 32px;
-                right: 32px;
-
-            }
-
-            app-header {
+       app-header {
                 color: rgb(255, 255, 255);
                 background-color: darkorange;
             }
@@ -173,15 +133,6 @@
                 right: 40px;
             }
         </style>
-        <custom-style>
-            <style is="custom-style">
-                paper-fab.orange {
-                    --paper-fab-background: darkorange;
-
-                }
-            </style>
-        </custom-style>
-
         <app-route route="{{route}}" pattern="/group/:_group" data="{{groupData}}" active="{{groupActive}}"></app-route>
         <app-route route="{{route}}" pattern="/edit/:_id" data="{{editData}}" active="{{editActive}}"></app-route>
 
@@ -213,7 +164,7 @@
                             <app-toolbar primary id="tool1">
                                 <paper-icon-button class="menu" icon="my-icons:menu" drawer-toggle on-tap="toggleDrawer"></paper-icon-button>
                                 <div main-title>Allocation</div>
-                                <paper-icon-button class="menu" icon="my-icons:search" drawer-toggle on-tap="toggleSearch"></paper-icon-button>
+                                <!-- <paper-icon-button class="menu" icon="my-icons:search" drawer-toggle on-tap="toggleSearch"></paper-icon-button> -->
                             </app-toolbar>
                         </template>
                     </app-header>
@@ -252,17 +203,18 @@
 
             <div name="view404 ">Not found.</div>
         </iron-pages>
-
-        <div hidden$="{{!groupActive}}">
+        <template is="dom-if" if="{{groupActive}}" restamp>
+        <!-- <div hidden$="{{!groupActive}}"> -->
             <div id="allocationgroup"></div>
             <my-allocation-group id="d24" group-key='{{groupData._group}}' prev-route="{{groupData._group}}"></my-allocation-group>
-        </div>
-
-        <div hidden$="{{!editActive}}">
+        <!-- </div> -->
+        </template>
+        <template is="dom-if" if="{{editActive}}" restamp>
+        <!-- <div hidden$="{{!editActive}}"> -->
             <div id="allocationedit"></div>
             <my-allocation-edit id="d25" edit-key='{{editData._id}}' prev-route="{{groupData._group}}"></my-allocation-edit>
-        </div>
-
+        <!-- </div> -->
+        </template>
     </template>
     <script>
         Polymer({

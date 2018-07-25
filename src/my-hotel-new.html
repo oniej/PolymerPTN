@@ -101,6 +101,11 @@
                 color: #eee;
                 height: 1px;
             }
+            paper-button {
+                background-color: cornflowerblue;
+                color: white;
+                height: 32px;
+            }
         </style>
         <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_commentsLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
 
@@ -116,9 +121,12 @@
 
                     <vaadin-dialog id="successModal" no-close-on-esc no-close-on-outside-click>
                         <template>
-                            <h3 style="text-align: center">Successfully Added {{hotel}}.</h3>
+                            <h3 style="text-align: center">Successfully Added {{hotelname}}.</h3>
                             <hr>
-                            <paper-button on-tap="_ok" style="float: right">Ok</paper-button>
+                            <a href="/hotels">
+                            <paper-button on-tap="_ok" style="float: right; padding: 5px;">Ok</paper-button>
+                            </a>
+                            <br>
                         </template>
                     </vaadin-dialog>
                 </app-header>
@@ -132,8 +140,8 @@
                     </div>
                     <div>
                         <span>
-                            <paper-button on-tap="_openField" id="buttonform" style="color: cornflowerblue;">
-                                <iron-icon icon="my-icons:add-box" on-tap="_openField" style="color: cornflowerblue;"></iron-icon>
+                            <paper-button on-tap="_openField" id="buttonform">
+                                <iron-icon icon="my-icons:add-box" on-tap="_openField"></iron-icon>
                                 Add room</paper-button>
                         </span>
                         <iron-icon id="iconform" icon="my-icons:add-box" on-tap="_openField" style="color: cornflowerblue;"></iron-icon>
@@ -147,10 +155,11 @@
                     <br>
                     <span style="color:red; font-size:13px; float:left; margin-top: -16px;">{{msg}}</span>
                     <span style="float: right; margin-top: -30px;">
-                        <a href="/hotels" style="text-decoration:none">
+                        <a href="/hotels" style="text-decoration:none;padding: 5px;">
                             <paper-button id="cancelButton" class="cancel" on-tap="_cancel">Cancel</paper-button>
                         </a>
                         <paper-button id="submitButton" class="darkorange" on-click="_submit" raised>Add</paper-button>
+                        <br>
                     </span>
                 </div>
 
@@ -257,7 +266,7 @@
             },
             _ok() {
                 this.$.successModal.opened = false;
-                window.location.assign('/hotels');
+                // window.location.assign('/hotels');
             },
             toggleDrawer() { },
             _cancel() { },

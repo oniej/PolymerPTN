@@ -164,6 +164,11 @@
             #month {
                 font-weight: bold;
             }
+            paper-button {
+                background-color: cornflowerblue;
+                color: white;
+                height: 32px;
+            }
         </style>
         <custom-style>
             <style is="custom-style">
@@ -254,7 +259,10 @@
                 <template>
                     <!-- <h3 style="text-align: center">Added Successfully</h3> -->
                     <hr>
-                    <paper-button on-tap="_closeDialog" style="float: right">Ok</paper-button>
+                    <a href="/availability">
+                    <paper-button on-tap="_closeDialog" style="float: right; padding: 5px;">Ok</paper-button>
+                    </a>
+                    <br>
                 </template>
             </vaadin-dialog>
 
@@ -262,7 +270,10 @@
                 <template>
                     <h3 style="text-align: center">Added Successfully</h3>
                     <hr>
-                    <paper-button on-tap="_closeDialog" style="float: right">Ok</paper-button>
+                    <a href="/availability">
+                    <paper-button on-tap="_closeDialog" style="float: right; padding: 5px;">Ok</paper-button>
+                    </a>
+                    <br>
                 </template>
             </vaadin-dialog>
             </div>
@@ -391,7 +402,7 @@
                 }
             },
             _closeDialog() {
-                window.location.assign('/availability');
+                // window.location.assign('/availability');
                 this.$.availabilitySave.opened = false;
             },
             _available() {

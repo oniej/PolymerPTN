@@ -65,6 +65,11 @@
                 color: #eee;
                 height: 1px;
             }
+            paper-button {
+                background-color: cornflowerblue;
+                color: white;
+                height: 32px;
+            }
         </style>
         <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_editLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
         <iron-ajax id="agent" url="{{filteragent}}" handle-as="json" method="GET" on-response="_agentoaded"></iron-ajax>
@@ -154,34 +159,42 @@
                     <br> Booking record permanently?
                     <br>there will be no undo</h3>
                 <hr>
-                <span style="float: right">
+                <span style="float: right; padding: 5px;">
                     <paper-button on-tap="_delete" style="color: red">Yes</paper-button>
                     <paper-button on-tap="_closeDialog">No</paper-button>
                 </span>
+                <br>
             </template>
         </vaadin-dialog>
         <vaadin-dialog id="deleteModal" no-close-on-esc no-close-on-outside-click>
             <template>
                 <h3 style="text-align: center">Deleted Successfully</h3>
                 <hr>
-                <paper-button on-tap="_back" style="float: right">Ok</paper-button>
+                <a href="/booking">
+                <paper-button on-tap="_back" style="float: right; padding: 5px;">Ok</paper-button>
+                </a>
+                <br>
             </template>
         </vaadin-dialog>
         <vaadin-dialog id="successModal" no-close-on-esc no-close-on-outside-click>
             <template>
                 <h3 style="text-align: center">Successfully Updated.</h3>
                 <hr>
-                <paper-button on-tap="_back" style="float: right">Ok</paper-button>
+                <a href="/booking">
+                <paper-button on-tap="_back" style="float: right; padding: 5px;">Ok</paper-button>
+                </a>
+                <br>
             </template>
         </vaadin-dialog>
         <vaadin-dialog id="openUpdate" no-close-on-esc no-close-on-outside-click>
             <template>
                 <h3 style="text-align: center">Update Booking?</h3>
                 <hr>
-                <span style="float: right">
+                <span style="float: right; padding: 5px;">
                     <paper-button on-tap="_submit">Yes</paper-button>
                     <paper-button on-tap="_closeDialog">No</paper-button>
                 </span>
+                <br>
             </template>
         </vaadin-dialog>
         <iron-ajax verbose id="ajax" method="[[method]]" on-response="_handleResponse"></iron-ajax>
@@ -255,7 +268,7 @@
             _back() {
                 this.$.deleteModal.opened = false;
                 this.$.successModal.opened = false;
-                window.location.assign('/booking');
+                // window.location.assign('/booking');
             },
             _ok() {
                 // window.location.assign('/booking');

@@ -152,18 +152,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <template is="dom-if" if="{{openSearch}}">
                             <app-toolbar primary id="tool2">
                                 <paper-icon-button id="btn-arrow" icon="my-icons:arrow-back" drawer-toggle on-tap="toggleReturn"></paper-icon-button>
-                                <paper-search-bar id="search" query="{{search}}" disable-filter-button></paper-search-bar>
+                                <paper-search-bar id="search" query="{{search}}" placeholder="Search Guest..." disable-filter-button value="{{filterVal::input}}"></paper-search-bar>
                                 <template is="dom-if" if="{{search}}">
                                     <paper-icon-button id="btn-clear" icon="my-icons:close" drawer-toggle on-tap="toggleClear"></paper-icon-button>
                                 </template>
-                                <paper-menu-button id="btn-menu" horizontal-align="right">
+                                <!-- <paper-menu-button id="btn-menu" horizontal-align="right">
                                     <paper-icon-button slot="dropdown-trigger" icon="my-icons:tune"></paper-icon-button>
                                     <paper-listbox style="cursor:pointer" slot="dropdown-content" selected="{{filterBy}}">
                                         <paper-item style="display:none;">Filter By</paper-item>
                                         <paper-item>Staff Lastname</paper-item>
                                         <paper-item>Hotel</paper-item>
                                     </paper-listbox>
-                                </paper-menu-button>
+                                </paper-menu-button> -->
                             </app-toolbar>
                         </template>
                         <template is="dom-if" if="{{!openSearch}}">
@@ -191,7 +191,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                     </div>
                                 </paper-card>
                             </a>
-                            <template is="dom-repeat" items="[[bookings]]" as="item">
+                            <template is="dom-repeat" items="[[bookings]]" as="item" filter="{{_filter(filterVal)}}">
                                 <paper-card id="{{item._id}}">
                                     <div id="{{item._id}}" class="header" style="background-color:white; padding: 16px; padding-bottom: 5px; font-size: 16px;color: black;font-weight: bold">
                                         <a href="/booking/edit/{{item._id}}">
@@ -259,7 +259,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 observers: [
                     '_searchChanged(filterBy, search)',]
             },
-
+            _filter: function(val) {  
+              return function(hotel) {
+                if (!val) return true;
+                if (!hotel) return false;
+                return (hotel.guest && ~hotel.guest.indexOf(val));
+              };
+            },
             toggleSearch() {
                 this.openSearch = true;
             },

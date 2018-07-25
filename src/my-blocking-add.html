@@ -188,9 +188,10 @@
                     width: 100%;
                 }
             }
-            paper-button{
+            paper-button {
                 background-color: cornflowerblue;
                 color: white;
+                height: 32px;
             }
             paper-toast {
                 width: 20%;
@@ -200,6 +201,7 @@
                 margin-left: 20%;
             }
         </style>
+        
         <iron-ajax auto url="/users/read" handle-as="json" on-response="_agentLoaded" debounce-duration="300"></iron-ajax>
         <iron-ajax auto url="/hotel/read" handle-as="json" on-response="_hotelLoaded" debounce-duration="300"></iron-ajax>
         <iron-ajax id="ajaxRoom" handle-as="json" on-response="_roomsLoaded"></iron-ajax>
@@ -218,15 +220,18 @@
                         <template>
                             <h3 style="text-align: center">Successfully Added.</h3>
                             <hr>
-                            <paper-button on-tap="_ok" style="float: right">Ok</paper-button>
+                            <a href="/blocking/agent/{{prevRoute}}">
+                            <paper-button on-tap="_ok" style="float: right; padding: 5px;">Ok</paper-button>
+                            </a>
+                            <br>
                         </template>
                     </vaadin-dialog>
                 </app-header>
                 <div class="card">
                     <div class="docu-header">
-                        <div class="activediv">
+                        <!-- <div class="activediv">
                             <paper-toggle-button style="float: right;" value="{{active}}" id="active" on-tap="_active" checked>ACTIVE</paper-toggle-button>
-                        </div>
+                        </div> -->
                         <div class="groupdiv">
                             <paper-dropdown-input class="group" label="Group" items='[[groupItems]]' filter-property="group" value="{{group}}">
                                 <template>
@@ -254,7 +259,7 @@
                         </paper-dropdown-input>
                         <paper-textarea always-float-label value="{{note}}" label="REMARKS"></paper-textarea>
 
-                        <x-array-data-provider items="{{blockingDetails}}" size="200"></x-array-data-provider>
+                        <!-- <x-array-data-provider items="{{blockingDetails}}" size="200"></x-array-data-provider> -->
                         <div style="margin-bottom: 20px">
                             <!-- <vaadin-combo-box id="room" style="width: 245px;" always-float-label label="ROOM" items='[[roomItems]]' filter-property="hotel"
                                 value="{{room}}">
@@ -264,13 +269,13 @@
                             </vaadin-combo-box> -->
                             <vaadin-combo-box style="width: 205px;float: left;" id="room" label="ROOM"></vaadin-combo-box> &nbsp;
                             <vaadin-text-field style="width:80px;float: left;margin-left: 5px;" id="block" label="QUANTITY"></vaadin-text-field>
-                            <paper-input type="date" style="width: 160px;float: left; margin-left: 5px;" label="Start" id="dateFrom" value="{{dateFrom}}" max="{{dateTo}}"></paper-input>
-                            <paper-input type="date" style="width: 160px;float: left;margin-left: 5px;" label="End" id="dateTo" value="{{dateTo}}" min="{{dateFrom}}"></paper-input>
-                            <paper-input type="date" style="width: 160px;float: left;margin-left: 5px;" id="cancel" label="CANCELLATION" max="{{dateFrom}}"></paper-input>
-                            <paper-button on-click="_addBlockingDetails">Add</paper-button>
+                            <paper-input type="date" style="width: 160px;float: left; margin-left: 5px; margin-top: 10px;" label="Start" id="dateFrom" value="{{dateFrom}}" max="{{dateTo}}"></paper-input>
+                            <paper-input type="date" style="width: 160px;float: left;margin-left: 5px; margin-top: 10px;" label="End" id="dateTo" value="{{dateTo}}" min="{{dateFrom}}"></paper-input>
+                            <paper-input type="date" style="width: 160px;float: left;margin-left: 5px; margin-top: 10px;" id="cancel" label="CANCELLATION" max="{{dateFrom}}"></paper-input>
+                            <!-- <paper-button on-click="_addBlockingDetails" style="margin-top: 20px;">Add</paper-button> -->
                         </div>
                         <br>
-                        <vaadin-grid theme="compact" id="grid" items="[[blockingDetails]]">
+                        <!-- <vaadin-grid theme="compact" id="grid" items="[[blockingDetails]]">
 
                             <vaadin-grid-column width="205px" resizable>
                                 <template class="header">ROOM</template>
@@ -323,7 +328,7 @@
                                 </template>
                             </vaadin-grid-column>
                         </vaadin-grid>
-                    </div>
+                    </div> -->
                 </div>
                 <paper-fab on-tap="_submit" style=" float: right; " class="fab" icon="my-icons:save"></paper-fab>
             </app-header-layout>
@@ -375,7 +380,8 @@
                 editingBlockingDetails: Object,
                 accountKey: String,
             },
-            observers: ['_hotelIdChanged(hotel,accountKey)'],
+            observers: ['_hotelIdChanged(hotel,accountKey)',
+        ],
             _hotelIdChanged(e,f) {
                 this.$.ajaxRoom.method = 'GET';
                 this.$.ajaxRoom.url = '/hotel/filterHotel/' + e;
@@ -402,7 +408,7 @@
                     alert(this.msg);
                 }
                 else {
-                    var active = this.$.active.checked;
+                    // var active = this.$.active.checked;
 
                     this.method = 'POST';
                     this.$.ajax.url = '/blocking/add';
@@ -410,12 +416,17 @@
 
 
                     this.$.ajax.body = {
-                        active: active,
                         agent: this.prevRoute,
                         group: this.group,
                         hotel: this.hotel,
                         hotelname: this.$.hotelLbl.selectedItemLabel,
-                        rooms: this.blockingDetails,
+                        // rooms: this.blockingDetails,
+                        room: this.$.room.selectedItem.value,
+                        roomname: this.$.room.selectedItem.label,
+                        dateFrom: this.$.dateFrom.value,
+                        dateTo: this.$.dateTo.value,
+                        block: this.$.block.value,
+                        cancel: this.$.cancel.value,
                         note: this.note,
                         created_by: this.createdBy,
                         updated_by: this.modifiedBy,
@@ -423,24 +434,41 @@
                     this.$.ajax.generateRequest();
                     this.$.successModal.opened = true;
                     this.url = '';
+                    this.group ="";
+                    this.hotel = "";
+                    this.$.hotelLbl.selectedItem.label = "";
+                    this.$.hotelLbl.selectedItem.value = "";
+                    this.$.room.selectedItem.value = "";
+                    this.$.room.selectedItem.label = "";
+                    this.note = "";
+                    this.dateFrom = "";
+                    this.dateTo = "";
+                    this.$.block.value ="";
+                    this.$.cancel.value = "";
 
                 }
             },
             _ok() {
                 this.$.successModal.opened = false;
-                window.location.assign('/blocking');
+                // window.location.assign('/blocking/agent/' + this.prevRoute);
             },
             toggleDrawer() { },
             _cancel() { },
             ready() {
-                this.fullname = "";
-                this.room = "";
-                this.msg = "";
                 this.url = '/hotel/read';
-
                 this.editingBlockingDetails = null;
 
-                // console.log(this.accountKey);
+                this.group ="";
+                this.hotel = "";
+                this.$.hotelLbl.selectedItem.label = "";
+                this.$.hotelLbl.selectedItem.value = "";
+                this.$.room.selectedItem.value = "";
+                this.$.room.selectedItem.label = "";
+                this.dateFrom = "";
+                this.dateTo = "";
+                this.note = "";
+                this.$.block.value ="";
+                this.$.cancel.value = "";
             },
             _hotelLoaded(data) {
                 if (data.detail.response) {

@@ -35,7 +35,6 @@
 
 <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
 
-
 <dom-module id="my-allocation-add">
     <template>
         <style include="shared-styles">
@@ -74,11 +73,8 @@
                     margin-left: 16px;
                     margin-right: 16px;
                     padding: 16px;
-
-
                     background-color: #fff;
                     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-
                     opacity: 0;
                 }
             }
@@ -139,6 +135,7 @@
             paper-button {
                 background-color: cornflowerblue;
                 color: white;
+                height: 32px;
             }
 
             paper-checkbox {
@@ -163,7 +160,10 @@
                         <template>
                             <h3 style="text-align: center">Successfully Added.</h3>
                             <hr>
-                            <paper-button on-tap="_ok" style="float: right">Ok</paper-button>
+                            <a href="/allocation/group/{{prevRoute}}">
+                            <paper-button on-tap="_ok" style="float: right; padding: 5px;">Ok</paper-button>
+                            </a>
+                            <br>
                         </template>
                     </vaadin-dialog>
                 </app-header>
@@ -172,9 +172,9 @@
                         <div class="groupdiv">
                             <paper-input always-float-label label="Group" value="{{prevRoute}}" readonly></paper-input>
                         </div>
-                        <div class="activediv">
+                        <!-- <div class="activediv">
                             <paper-toggle-button style="float: right;" value="{{active}}" id="active" on-tap="_active" checked>ACTIVE</paper-toggle-button>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="details" id="form">
                         <paper-dropdown-input id="hotelLbl" always-float-label style="width: 100%" label="Hotel" items='[[hotelItems]]' filter-property="hotel"
@@ -194,41 +194,45 @@
                                 </div>
                             </template>
                         </range-datepicker-input>
-                        <paper-input always-float-label value="{{pk_coff}}" label="PEAK CUT-OFF" style="width: 49%; float: left;"></paper-input>
-                        <paper-input always-float-label value="{{npk_coff}}" label="NON-PEAK CUT-OFF" style="width: 49%; float: right;"></paper-input>
+                        <paper-input always-float-label value="{{pk_coff}}" label="PEAK CUT-OFF" style="width: 31%; float: left;"></paper-input>
+                        <paper-input always-float-label value="{{npk_coff}}" label="NON-PEAK CUT-OFF" style="width: 31%; float: left; margin-left: 10px;"></paper-input>
+                        <paper-input always-float-label value="{{high_coff}}" label="HIGH CUT-OFF" style="width: 31%; float: left; margin-left: 10px;"></paper-input>
                         <br>
                         <x-array-data-provider items="{{allocationDetails}}" size="200"></x-array-data-provider>
                         <div style="margin-bottom: 20px">
-                            <!-- <vaadin-combo-box id="room" style="width: 245px;" always-float-label label="ROOM" items='[[roomItems]]' filter-property="name">
-                                <template is="dom-repeat" items="[[items]]" as="item">
-                                    <paper-item>[[item.name]]</paper-item>
-                                </template>
-                            </vaadin-combo-box> -->
-                            <vaadin-combo-box style="width: 245px;" id="room" label="ROOM"></vaadin-combo-box>
-                            <vaadin-text-field style="width: 180px;" id="pk" label="PK"></vaadin-text-field>
-                            <vaadin-text-field style="width: 180px;" id="npk" label="NPK"></vaadin-text-field>
+                             <vaadin-combo-box style="width: 215px;" id="room" label="ROOM"></vaadin-combo-box>
+                            <vaadin-text-field style="width: 130px;" id="pk" label="PK"></vaadin-text-field>
+                            <vaadin-text-field style="width: 130px;" id="npk" label="NPK"></vaadin-text-field>
+                            <vaadin-text-field style="width: 130px;" id="high" label="HIGH"></vaadin-text-field>
                             <paper-button on-click="_addAllocationDetails">Add</paper-button>
                         </div>
                         <vaadin-grid theme="compact" id="grid" items="[[allocationDetails]]">
 
-                            <vaadin-grid-column width="240px" resizable>
+                            <vaadin-grid-column width="210px" resizable>
                                 <template class="header">ROOM</template>
                                 <template>
-                                    <vaadin-text-field style="width: 230px;" id="room-[[index]]" value="[[item.roomname]]" readonly></vaadin-text-field>
+                                    <vaadin-text-field style="width: 200px;" id="room-[[index]]" value="[[item.roomname]]" readonly></vaadin-text-field>
                                 </template>
                             </vaadin-grid-column>
 
-                            <vaadin-grid-column width="180px" resizable>
+                            <vaadin-grid-column width="130px" resizable>
                                 <template class="header">PK</template>
                                 <template>
-                                    <vaadin-text-field style="width: 170px;" id="pk-[[index]]" value="[[item.pk]]" readonly$="[[!_isEditingAllocationDetails(editingAllocationDetails, item)]]"></vaadin-text-field>
+                                    <vaadin-text-field style="width: 120px;" id="pk-[[index]]" value="[[item.pk]]" readonly$="[[!_isEditingAllocationDetails(editingAllocationDetails, item)]]"></vaadin-text-field>
                                 </template>
                             </vaadin-grid-column>
 
-                            <vaadin-grid-column width="180px" resizable>
+                            <vaadin-grid-column width="130px" resizable>
                                 <template class="header">NPK</template>
                                 <template>
-                                    <vaadin-text-field style="width: 170px;" id="npk-[[index]]" value="[[item.npk]]" readonly$="[[!_isEditingAllocationDetails(editingAllocationDetails, item)]]"></vaadin-text-field>
+                                    <vaadin-text-field style="width: 120px;" id="npk-[[index]]" value="[[item.npk]]" readonly$="[[!_isEditingAllocationDetails(editingAllocationDetails, item)]]"></vaadin-text-field>
+                                </template>
+                            </vaadin-grid-column>
+
+                            <vaadin-grid-column width="130px" resizable>
+                                <template class="header">HIGH</template>
+                                <template>
+                                    <vaadin-text-field style="width: 120px;" id="high-[[index]]" value="[[item.high]]" readonly$="[[!_isEditingAllocationDetails(editingAllocationDetails, item)]]"></vaadin-text-field>
                                 </template>
                             </vaadin-grid-column>
 
@@ -312,7 +316,9 @@
                         </vaadin-grid>
                     </div>
                 </div>
+
                 <paper-fab on-tap="_submit" style="float: right;" class="fab" icon="my-icons:save"></paper-fab>
+                
             </app-header-layout>
         </app-drawer-layout>
         <iron-ajax verbose id="ajax" method="[[method]]" on-response="_handleResponse"></iron-ajax>
@@ -406,12 +412,12 @@
                     var _dateFrom = _dateFromXX.getFullYear() + "-" + ("0" + (_dateFromXX.getMonth() + 1)).slice(-2) + "-" + ("0" + _dateFromXX.getDate()).slice(-2)
                     var _dateToXX = new Date(this.dateTo);
                     var _dateTo = _dateToXX.getFullYear() + "-" + ("0" + (_dateToXX.getMonth() + 1)).slice(-2) + "-" + ("0" + _dateToXX.getDate()).slice(-2)
-                    var active = this.$.active.checked;
+                    // var active = this.$.active.checked;
                     this.method = 'POST';
                     this.$.ajax.url = '/allocation/add';
                     this.$.ajax.contentType = "application/json";
                     this.$.ajax.body = {
-                        active: active,
+                        // active: active,
                         group: this.prevRoute,
                         hotel: this.hotel,
                         hotelname: this.$.hotelLbl.selectedItemLabel,
@@ -419,6 +425,7 @@
                         dateTo: _dateTo,
                         pk_coff: this.pk_coff,
                         npk_coff: this.npk_coff,
+                        high_coff: this.high_coff,
                         rooms: this.allocationDetails,
                         note: this.note,
                         seasondate: this.seasonDetails,
@@ -429,17 +436,36 @@
                     this.$.successModal.opened = true;
                     this.url = '';
                 }
-
+                this.hotel = "";
+                this.$.hotelLbl.selectedItem.label = "";
+                this.dateFrom = "";
+                this.dateTo = "";
+                this.pk_coff = "";
+                this.npk_coff = "";
+                this.high_coff = "";
+                this.note = "";
+                this.allocationDetails = null;
+                this.seasonDetails = null;
             },
 
             _ok() {
                 this.$.successModal.opened = false;
-                window.location.assign('/allocation');
+                // location.assign('/allocation/group/' + this.prevRoute);
             },
             toggleDrawer() { },
             _cancel() { },
             ready() {
                 this.url = '/hotel/read';
+                this.hotel = "";
+                this.$.hotelLbl.selectedItem.label = "";
+                this.dateFrom = "";
+                this.dateTo = "";
+                this.pk_coff = "";
+                this.npk_coff = "";
+                this.high_coff = "";
+                this.note = "";
+                this.allocationDetails = null;
+                this.seasonDetails = null;
 
                 this.editingAllocationDetails = null;
                 this.editingSeasonDetails = null;
@@ -476,6 +502,7 @@
                         roomname: this.$.room.selectedItem.label,
                         pk: this.$.pk.value,
                         npk: this.$.npk.value,
+                        high: this.$.high.value
                     }
                     this.allocationDetails.push(roomdata);
                     this.$.grid.clearCache();
@@ -484,6 +511,7 @@
                     this.$.room.selectedItem = null;
                     this.$.pk.value = '';
                     this.$.npk.value = '';
+                    this.$.high.value = '';
                 } else {
                     alert('Field required');
                 }
@@ -508,7 +536,7 @@
                 var item = e.model.item;
                 item.pk = this.$.grid.querySelector('#pk-' + e.model.index).value;
                 item.npk = this.$.grid.querySelector('#npk-' + e.model.index).value;
-
+                item.high = this.$.grid.querySelector('#high-' + e.model.index).value;
                 this.editingAllocationDetails = null;
 
                 this.$.grid.clearCache();
@@ -523,7 +551,7 @@
 
             // Peason Season Grid Function
             _addSeasonDetails(e) {
-                if (this.$.startValue.value !== '' && this.$.endValue.value !== '') {
+                if (this.$.startValue.value !== '' && this.$.endValue.value !== '' && this.$.season.selectedItemLabel !== '') {
                     var season = {
                         startValue: this.$.startValue.value,
                         endValue: this.$.endValue.value,
@@ -535,6 +563,8 @@
 
                     this.$.startValue.value = '';
                     this.$.endValue.value = '';
+                    this.$.season.selectedItem.label = '';
+                    this.$.season.selectedItem.value = '';
 
                 } else {
                     alert('Field required');

@@ -85,8 +85,15 @@
                 color: #eee;
                 height: 1px;
             }
+            paper-button {
+                background-color: cornflowerblue;
+                color: white;
+                height: 32px;
+            }
         </style>
         <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_usersLoad" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
+        <iron-ajax auto id="groups" url="{{urlgroup}}" params='{}' handle-as="json" on-response="_groupLoaded"></iron-ajax>
+        <iron-ajax auto id="agents" url="{{urlagent}}" params='{}' handle-as="json" on-response="_agentLoaded"></iron-ajax>
         <app-drawer-layout fullbleed narrow="{{narrow}}" id="drawerLayout">
             <app-header-layout id="appheader" has-scrolling-region>
                 <app-header fixed slot="header">
@@ -106,28 +113,36 @@
                         <paper-input value="{{fullname}}" float-label label="Full Name"></paper-input>
                         <paper-input value="{{email}}" float-label label="Email"></paper-input>
                         <paper-dropdown-menu style="cursor:pointer" label="Account Type" id="role">
-                            <paper-listbox slot="dropdown-content" class="dropdown-content" selected="{{roleAdd}}" value="{{role}}">
-                                <!-- <paper-item>Admin Staff</paper-item> -->
-                                <paper-item>Staff</paper-item>
-                                <paper-item>Agent</paper-item>
+                            <paper-listbox slot="dropdown-content" class="dropdown-content" selected="{{roleAdd}}" attr-for-selected="name">
+                                <paper-item name="Admin">Admin</paper-item>
+                                <paper-item name="Staff">Staff</paper-item>
+                                <paper-item name="Agent">Agent</paper-item>
                             </paper-listbox>
                         </paper-dropdown-menu>
-                        <paper-dropdown-menu style="cursor:pointer" label="Group" id="group">
-                            <paper-listbox slot="dropdown-content" class="dropdown-content" selected="{{groupAdd}}" value="{{group}}">
-                                <paper-item>Tabikobu</paper-item>
-                                <paper-item>PTN</paper-item>
-                            </paper-listbox>
-                        </paper-dropdown-menu>
+                        <paper-dropdown-input id="group" label="Group" items='[[groupItems]]' filter-property="group" value="{{group}}" max-size="10">
+                            <template>
+                                <template is="dom-repeat" items="[[items]]" as="item">
+                                    <paper-item label="[[item.group]]">[[item.group]]</paper-item>
+                                </template>
+                            </template>
+                        </paper-dropdown-input>
+                        <paper-dropdown-input id="agent" label="Agent" items='[[AgentItems]]' filter-property="name" value="{{name}}" max-size="10">
+                            <template>
+                                <template is="dom-repeat" items="[[items]]" as="item">
+                                    <paper-item label="[[item.name]]">[[item.name]]</paper-item>
+                                </template>
+                            </template>
+                        </paper-dropdown-input>
                     </div>
                     <br>
                     <br>
                     <span style="color:red; font-size:13px; float:left; margin-top: -16px;">{{msg}}</span>
                     <span style="float: right; margin-top: -30px;">
-                        <a href="/users" style="text-decoration:none">
+                        <a href="/users" style="text-decoration:none; padding: 5px;">
                             <paper-button id="favright" class="cancel" on-tap="_cancel">Cancel</paper-button>
                         </a>
                         <paper-button id="favleft" class="darkorange" on-click="_submit" raised>Update</paper-button>
-
+                        <br>
                     </span>
                 </div>
 
@@ -137,13 +152,17 @@
                         <hr>
                         <paper-button on-tap="_update">Yes</paper-button>
                         <paper-button on-tap="_close">No</paper-button>
+                        <br><br>
                     </template>
                 </vaadin-dialog>
                 <vaadin-dialog id="successModal" no-close-on-esc no-close-on-outside-click>
                     <template>
                         <h3 style="text-align: center">Successfully Updated.</h3>
                         <hr>
-                        <paper-button on-tap="_ok" style="float: right">Ok</paper-button>
+                        <a href="/users">
+                        <paper-button on-tap="_ok" style="float: right; padding: 5px;">Ok</paper-button>
+                        </a>
+                        <br>
                     </template>
                 </vaadin-dialog>
             </app-header-layout>
@@ -156,6 +175,7 @@
                 <hr>
                 <paper-button on-tap="_activate">Yes</paper-button>
                 <paper-button on-tap="_close">No</paper-button>
+                <br><br>
             </template>
         </vaadin-dialog>
 
@@ -165,13 +185,17 @@
                 <hr>
                 <paper-button on-tap="_deactivate">Yes</paper-button>
                 <paper-button on-tap="_close">No</paper-button>
+                <br><br>
             </template>
         </vaadin-dialog>
         <vaadin-dialog id="deactivateSuccess" no-close-on-esc no-close-on-outside-click>
             <template>
                 <h3 style="text-align: center">User Deactivated</h3>
                 <hr>
-                <paper-button on-tap="_ok" style="float: right">Ok</paper-button>
+                <a href="/users">
+                <paper-button on-tap="_ok" style="float: right; padding: 5px;">Ok</paper-button>
+                </a>
+                <br>
             </template>
         </vaadin-dialog>
 
@@ -212,15 +236,15 @@
                 }
             },
             roleAddChanged() {
-                if (this.roleAdd == 0) {
-                    this.role = 'Staff';
+                if (this.roleAdd === "Admin") {
+                    Polymer.dom(this.root).querySelector("#agent").setAttribute("style", "display:none");
                 }
-                else if (this.roleAdd == 1) {
-                    this.role = 'Agent';
+                else if (this.roleAdd == "Staff") {
+                    Polymer.dom(this.root).querySelector("#agent").setAttribute("style", "display:none");
                 }
-                // else if (this.roleAdd == 2) {
-                //     this.role = 'Agent';
-                // }
+                else if (this.roleAdd === "Agent") {
+                    Polymer.dom(this.root).querySelector("#agent").setAttribute("style", "display:inline-block");
+                }
             },
             guid: function () {
                 var uid = new ShortUniqueId();
@@ -234,29 +258,11 @@
                 this.$.deactivate.opened = false;
             }, _ok() {
                 this.$.deactivateSuccess.opened = false;
-                window.location.assign('/users');
+                // window.location.assign('/users');
             },
             _deactivateSelected() {
                 this.$.deactivate.opened = true;
             },
-            // _deactivate() {
-            //     if (this.editKey) {
-            //         this.method = 'PUT';
-            //         this.$.ajax.url = '/users/block/' + this.editKey;
-            //         this.$.ajax.contentType = "application/json";
-            //         this.$.ajax.body = {
-            //             active: this.active = false,
-            //         };
-            //         // console.log(this.$.ajax.body);
-            //         this.$.ajax.generateRequest();
-            //         this.$.deactivate.opened = false;
-            //         this.$.deactivateSuccess.opened = true;
-            //         this.url = '/users/dummy';
-            //     }
-            //     else {
-            //         this.msg = "All fields required";
-            //     }
-            // },
             _update() {
                 if (!this.fullname || !this.email || !this.role || !this.group) {
                     alert('Please fill up all required fields..');
@@ -274,7 +280,7 @@
                         this.$.ajax.body = {
                             name: this.fullname,
                             email: this.email,
-                            role: this.role,
+                            role: this.roleAdd,
                             group: this.group,
                         };
                         this.$.ajax.generateRequest();
@@ -286,7 +292,7 @@
             },
             _ok() {
                 this.$.successModal.opened = false;
-                window.location.assign('/users');
+                // window.location.assign('/users');
             },
             _editKeyChanged() {
                 if (this.editKey) {
@@ -297,19 +303,41 @@
                 }
             },
             _usersLoad(data) {
-                if (data.detail.response) {
+                if (data.detail.response.data) {
                     if (this.editKey) {
                         if (this.url === '/user/edit/' + this.editKey) {
                             this.fullname = data.detail.response.data.name;
                             this.email = data.detail.response.data.email;
                             this.account_key = data.detail.response.data.accountkey;
-                            this.role = data.detail.response.data.role;
-                            this.group = data.detail.response.data.group;
-
-                            Polymer.dom(this.root).querySelector("#group").value = this.group;
-                            Polymer.dom(this.root).querySelector("#role").value = this.role;
+                            this.roleAdd = data.detail.response.data.role;
+                            this.$.group.value = data.detail.response.data.group;
+                            this.$.agent.value = data.detail.response.data.agent;
+                        }
+                        if (this.role === "Admin" || this.role === "Staff") {
+                            Polymer.dom(this.root).querySelector("#agent").setAttribute("style", "display:none");
+                        } else {
+                            Polymer.dom(this.root).querySelector("#agent").setAttribute("style", "display:inline-block");
                         }
                     }
+                    this.method = 'GET';
+                    this.urlgroup = '/group/read';
+                    this.urlagent = '/group/read';
+                    this.$.groups.handleAs = "json";
+                    this.$.agents.handleAs = "json";
+                    this.$.groups.generateRequest();
+                    this.$.agents.generateRequest();
+                }
+            },
+            _groupLoaded(data) {
+                if (data.detail.response.data) {
+                    this.groupItems = data.detail.response.data;
+                    console.log(data.detail.response.data);
+                }
+            },
+            _agentLoaded(data) {
+                if (data.detail.response.data) {
+                    this.AgentItems = data.detail.response.data;
+                    console.log(data.detail.response.data);
                 }
             },
             toggleDrawer() { },

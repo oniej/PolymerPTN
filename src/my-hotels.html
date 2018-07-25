@@ -15,9 +15,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
-<link rel="import" href="../bower_components/paper-button-group/paper-button-group.html">
-<link rel="import" href="../bower_components/paper-buttons-group/paper-buttons-group.html">
-<link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/neon-animation/web-animations.html">
@@ -210,7 +207,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <iron-pages selected="[[route.path]]" attr-for-selected="name" fallback-selection="view404" role="main">
             <div name="">
                 <app-header-layout fullbleed has-scrolling-region>
-                    <app-header fixed slot="header">
+                        <app-header fixed slot="header">
+                                <template is="dom-if" if="{{openSearch}}">
+                                    <app-toolbar primary id="tool2">
+                                        <paper-icon-button id="btn-arrow" icon="my-icons:arrow-back" drawer-toggle on-tap="toggleReturn"></paper-icon-button>
+                                        <paper-search-bar id="search" query="{{search}}" placeholder="Search Hotel..." disable-filter-button value="{{filterVal::input}}"></paper-search-bar>
+                                        <template is="dom-if" if="{{search}}">
+                                            <paper-icon-button id="btn-clear" icon="my-icons:close" drawer-toggle on-tap="toggleClear"></paper-icon-button>
+                                        </template>
+                                        <!-- <paper-menu-button id="btn-menu" horizontal-align="right">
+                                            <paper-icon-button slot="dropdown-trigger" icon="my-icons:tune"></paper-icon-button>
+                                            <paper-listbox style="cursor:pointer" slot="dropdown-content" selected="{{filterBy}}">
+                                                <paper-item style="display:none;">Filter By</paper-item>
+                                                <paper-item>Staff Lastname</paper-item>
+                                                <paper-item>Hotel</paper-item>
+                                            </paper-listbox>
+                                        </paper-menu-button> -->
+                                    </app-toolbar>
+                                </template>
+                                <template is="dom-if" if="{{!openSearch}}">
+                                    <app-toolbar primary id="tool1">
+                                        <paper-icon-button class="menu" icon="my-icons:menu" drawer-toggle on-tap="toggleDrawer"></paper-icon-button>
+                                        <div main-title>Hotels</div>
+                                        <paper-icon-button class="menu" icon="my-icons:search" drawer-toggle on-tap="toggleSearch"></paper-icon-button>
+                                    </app-toolbar>
+                                </template>
+                            </app-header>
+                    <!-- <app-header fixed slot="header">
                         <app-toolbar>
                             <paper-icon-button class="menu" icon="my-icons:menu" drawer-toggle on-tap="toggleDrawer"></paper-icon-button>
                             <div main-title>Hotels</div>
@@ -226,11 +249,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             </template>
                             <paper-icon-button id="search" class="menu" icon="my-icons:search" drawer-toggle on-tap="toggleSearch"></paper-icon-button>
                         </app-toolbar>
-                    </app-header>
+                    </app-header> -->
 
                     <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_hotelsLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
                     <iron-scroll-document id="threshold">
-                        <template is="dom-repeat" items="[[hotels]]" as="item">
+                        <template is="dom-repeat" items="[[hotels]]" as="item" filter="{{_filter(filterVal)}}">
                             <div class="availability">
                                 <div id="header" class="header" style="background-color:cornflowerblue; padding: 16px; padding-bottom: 5px; font-size: 14px;">
                                     <div style="color: white;">
@@ -328,6 +351,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 },
                 observers: [
                     '_hotelIdChanged(hotelId)',]
+            },
+            _filter: function(val) {  
+              return function(hotel) {
+                if (!val) return true;
+                if (!hotel) return false;
+                return (hotel.hotelname && ~hotel.hotelname.indexOf(val));
+              };
             },
             ready() {
                 this.url = '/hotel/read';

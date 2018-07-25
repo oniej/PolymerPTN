@@ -173,14 +173,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         @apply --layout-vertical;
       }
 
-      paper-button.green {
+      /* paper-button.green {
         background-color: var(--paper-green-500);
         color: white;
       }
 
       paper-button.green[active] {
         background-color: var(--paper-red-500);
-      }
+      } */
 
       #Pbtn {
         background: none;
@@ -195,12 +195,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         color: rgb(91, 55, 252);
       }
 
-      .action paper-button {
+      /* .action paper-button {
         height: 32px;
         font-size: 12px;
         font-weight: 400;
         width: 80px;
-      }
+      } */
 
       #overlay {
         position: absolute;
@@ -272,6 +272,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         top: 0;
         opacity: 0;
       }
+
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+      ::-webkit-scrollbar-thumb {
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+        background: rgb(180, 180, 180);
+      }
+      ::-webkit-scrollbar-track{
+        background: rgb(224, 224, 224);
+      }
     </style>
     <div id="overlay">
       <paper-spinner id="spinner" active></paper-spinner>
@@ -322,28 +334,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   </a>
                   <a name="blocking" href="[[rootPath]]blocking">
                     <paper-icon-item toggles="true" class="menuSelected">
-                      <iron-icon icon="my-icons:block" slot="item-icon"></iron-icon>
+                      <iron-icon icon="my-icons:blockme" slot="item-icon"></iron-icon>
                       <span>Blocking</span>
                     </paper-icon-item>
                   </a>
                   <a name="booking" href="[[rootPath]]booking">
                     <paper-icon-item toggles="true" class="menuSelected">
-                      <iron-icon icon="my-icons:bookmark" slot="item-icon"></iron-icon>
+                      <iron-icon icon="my-icons:booking" slot="item-icon"></iron-icon>
                       <span>Booking</span>
                     </paper-icon-item>
                   </a>
                   <a name="inquiry2" href="[[rootPath]]inquiry2">
                     <paper-icon-item toggles="true" class="menuSelected">
-                      <iron-icon icon="my-icons:dashboard" slot="item-icon"></iron-icon>
-                      <span>Inquiry 1</span>
+                      <iron-icon icon="my-icons:inquiry1" slot="item-icon"></iron-icon>
+                      <span>Inquiry</span>
                     </paper-icon-item>
                   </a>
-                  <a name="inquire-one" href="[[rootPath]]inquire-one" style="display: none">
+                  <!-- <a name="inquire-one" href="[[rootPath]]inquire-one" style="display: none">
                     <paper-icon-item toggles="true" class="menuSelected">
                       <iron-icon icon="my-icons:dashboard" slot="item-icon"></iron-icon>
                       <span>Inquiry 2</span>
                     </paper-icon-item>
-                  </a>
+                  </a> -->
                   <a name="hotels" href="[[rootPath]]hotels">
                     <paper-icon-item toggles="true" class="menuSelected">
                       <iron-icon icon="my-icons:location-city" slot="item-icon"></iron-icon>
@@ -358,22 +370,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   </a>
                   <a name="group" href="[[rootPath]]group">
                     <paper-icon-item toggles="true" class="menuSelected">
-                      <iron-icon icon="my-icons:group" slot="item-icon"></iron-icon>
+                      <iron-icon icon="my-icons:groupmany" slot="item-icon"></iron-icon>
                       <span>Group</span>
                     </paper-icon-item>
                   </a>
-                  <a name="agent" href="[[rootPath]]agent" style="display: none">
+                  <a name="agent" href="[[rootPath]]agent">
                     <paper-icon-item toggles="true" class="menuSelected">
                       <iron-icon icon="my-icons:person" slot="item-icon"></iron-icon>
                       <span>Agents</span>
                     </paper-icon-item>
                   </a>
-                  <a name="profile" href="[[rootPath]]profile" style="display: none">
+                  <a name="profile" href="[[rootPath]]profile">
                     <paper-icon-item toggles="true" class="menuSelected">
                       <iron-icon icon="my-icons:account-circle" slot="item-icon"></iron-icon>
                       <span>My Profile</span>
                     </paper-icon-item>
                   </a>
+                  <!-- <a name="view1" href="[[rootPath]]view1">
+                    <paper-icon-item toggles="true" class="menuSelected">
+                      <iron-icon icon="my-icons:dashboard" slot="item-icon"></iron-icon>
+                      <span>View 1</span>
+                    </paper-icon-item>
+                  </a> -->
                   <hr>
                   <a on-tap="_signOut" href="#">
                     <paper-icon-item toggles="true">
@@ -399,6 +417,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <my-group name="group" route="{{subroute}}" account-key="{{user.accountkey}}"></my-group>
               <my-agent name="agent" route="{{subroute}}" account-key="{{user.accountkey}}"></my-agent>
               <my-profile name="profile" route="{{subroute}}" account-key="{{user.accountkey}}"></my-profile>
+              <!-- <my-view1 name="view1" route="{{subroute}}"></my-view1> -->
               <my-view404 name="view404"></my-view404>
             </iron-pages>
           </app-drawer-layout>
@@ -434,37 +453,37 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   </a>
                   <a name="blocking" href="[[rootPath]]blocking">
                     <paper-icon-item toggles="true" class="menuSelected">
-                      <iron-icon icon="my-icons:block" slot="item-icon"></iron-icon>
+                      <iron-icon icon="my-icons:blockme" slot="item-icon"></iron-icon>
                       <span>Blocking</span>
                     </paper-icon-item>
                   </a>
                   <a name="booking" href="[[rootPath]]booking">
                     <paper-icon-item toggles="true" class="menuSelected">
-                      <iron-icon icon="my-icons:bookmark" slot="item-icon"></iron-icon>
+                      <iron-icon icon="my-icons:booking" slot="item-icon"></iron-icon>
                       <span>Booking</span>
                     </paper-icon-item>
                   </a>
                   <a name="inquiry2" href="[[rootPath]]inquiry2" style="display: none">
                     <paper-icon-item toggles="true" class="menuSelected">
-                      <iron-icon icon="my-icons:dashboard" slot="item-icon"></iron-icon>
-                      <span>Inquiry 1</span>
+                      <iron-icon icon="my-icons:inquiry1" slot="item-icon"></iron-icon>
+                      <span>Inquiry</span>
                     </paper-icon-item>
                   </a>
-                  <a name="inquire-one" href="[[rootPath]]inquire-one" style="display: none">
+                  <!-- <a name="inquire-one" href="[[rootPath]]inquire-one" style="display: none">
                     <paper-icon-item toggles="true" class="menuSelected">
                       <iron-icon icon="my-icons:dashboard" slot="item-icon"></iron-icon>
                       <span>Inquiry 2</span>
                     </paper-icon-item>
-                  </a>
+                  </a> -->
                   <a name="hotels" href="[[rootPath]]hotels">
                     <paper-icon-item toggles="true" class="menuSelected">
                       <iron-icon icon="my-icons:location-city" slot="item-icon"></iron-icon>
                       <span>Hotels</span>
                     </paper-icon-item>
                   </a>
-                  <a name="group" href="[[rootPath]]group">
+                  <a name="group" href="[[rootPath]]group" style="display: none">
                     <paper-icon-item toggles="true" class="menuSelected">
-                      <iron-icon icon="my-icons:group" slot="item-icon"></iron-icon>
+                      <iron-icon icon="my-icons:groupmany" slot="item-icon"></iron-icon>
                       <span>Group</span>
                     </paper-icon-item>
                   </a>
@@ -527,16 +546,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
                   <a name="inquiry2" href="[[rootPath]]inquiry2">
                     <paper-icon-item toggles="true" class="menuSelected">
-                      <iron-icon icon="my-icons:dashboard" slot="item-icon"></iron-icon>
-                      <span>Inquiry 1</span>
+                      <iron-icon icon="my-icons:inquiry1" slot="item-icon"></iron-icon>
+                      <span>Inquiry</span>
                     </paper-icon-item>
                   </a>
-                  <a name="inquire-one" href="[[rootPath]]inquire-one">
+                  <!-- <a name="inquire-one" href="[[rootPath]]inquire-one" style="display:none">
                     <paper-icon-item toggles="true" class="menuSelected">
                       <iron-icon icon="my-icons:dashboard" slot="item-icon"></iron-icon>
                       <span>Inquiry 2</span>
                     </paper-icon-item>
-                  </a>
+                  </a> -->
                   <a name="profile" href="[[rootPath]]profile">
                     <paper-icon-item toggles="true" class="menuSelected">
                       <iron-icon icon="my-icons:account-circle" slot="item-icon"></iron-icon>
@@ -545,7 +564,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   </a>
                   <a on-tap="_signOut" href="#">
                     <paper-icon-item toggles="true">
-                      <iron-icon icon="my-icons:settings-new" slot="item-icon"></iron-icon>
+                      <iron-icon icon="my-icons:power-settings-new" slot="item-icon"></iron-icon>
                       <span>Sign-out</span>
                     </paper-icon-item>
                   </a>
@@ -584,10 +603,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   </template>
   <script>
-    // Gesture events like tap and track generated from touch will not be
-    // preventable, allowing for better scrolling performance.
-    // Polymer.setPassiveTouchGestures(true);
-
     class MyApp extends Polymer.Element {
       static get is() { return 'my-app'; }
 
@@ -637,7 +652,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           Polymer.dom(this.root).querySelector("#overlay").style.display = 'none';
           Polymer.dom(this.root).querySelector("#spinner").active = false;
           if (active == true) {
-            if (role === 'Admin Staff' || role === 'Staff') {
+            if (role === 'Admin' || role === 'Staff') {
               this.page = page || 'availability';
             } else {
               this.page = page || 'inquiry2';
@@ -686,7 +701,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         // console.log(drawerlayout);
       }
       _checkAdmin(e) {
-        if (e === 'Admin Staff') return true;
+        if (e === 'Admin') return true;
         else return false;
       }
       _checkStaff(e) {
@@ -704,6 +719,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         var resolvedPageUrl = this.resolveUrl('my-' + page + '.html');
         loader.style.display = 'flex';
         spinner.active = true;
+
+        // if(!window.location.hash) {
+        // window.location = window.location + '#';
+        // window.location.reload();
+        // }
+
         Polymer.importHref(
           resolvedPageUrl,
           function () {

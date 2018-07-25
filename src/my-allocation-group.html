@@ -5,9 +5,6 @@
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
-<link rel="import" href="../bower_components/paper-button-group/paper-button-group.html">
-<link rel="import" href="../bower_components/paper-buttons-group/paper-buttons-group.html">
-<link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/neon-animation/web-animations.html">
@@ -48,33 +45,7 @@
                 flex-direction: column;
             }
 
-            @-webkit-keyframes fadeIn {
-                from {
-                    opacity: 0;
-                }
-                to {
-                    opacity: 1;
-                }
-            }
-
-            @-moz-keyframes fadeIn {
-                from {
-                    opacity: 0;
-                }
-                to {
-                    opacity: 1;
-                }
-            }
-
-            @keyframes fadeIn {
-                from {
-                    opacity: 0;
-                }
-                to {
-                    opacity: 1;
-                }
-            }
-
+       
             @media (max-width: 768px) {
                 paper-card {
                     width: 100%;
@@ -98,6 +69,7 @@
                     padding: 16px;
                     margin: 20px;
                     margin: 0 auto;
+                    border-top: 100px;
                 }
                 paper-card {
                     width: 46%;
@@ -190,18 +162,18 @@
                     <app-toolbar primary id="tool2">
                         <paper-icon-button id="btn-arrow" icon="my-icons:arrow-back" drawer-toggle on-tap="toggleReturn"></paper-icon-button>
                         <!-- Start of Search -->
-                        <paper-search-bar id="search" query="{{search}}" disable-filter-button></paper-search-bar>
+                     <paper-search-bar id="search" query="{{search}}" placeholder="Search Hotel..." disable-filter-button value="{{filterVal::input}}"></paper-search-bar>
                         <template is="dom-if" if="{{search}}">
-                            <paper-icon-button id="btn-clear" icon="my-icons:close" drawer-toggle on-tap="toggleClear"></paper-icon-button>
+                         <paper-icon-button id="btn-clear" icon="my-icons:close" drawer-toggle on-tap="toggleClear"></paper-icon-button>
                         </template>
-                        <paper-menu-button id="btn-menu" horizontal-align="right">
+                        <!-- <paper-menu-button id="btn-menu" horizontal-align="right">
                             <paper-icon-button slot="dropdown-trigger" icon="my-icons:tune"></paper-icon-button>
                             <paper-listbox style="cursor:pointer" slot="dropdown-content" selected="{{filterBy}}">
                                 <paper-item style="display:none;">Filter By</paper-item>
                                 <paper-item>Staff Lastname</paper-item>
                                 <paper-item>Hotel</paper-item>
                             </paper-listbox>
-                        </paper-menu-button>
+                        </paper-menu-button> -->
                         <!-- End of Search -->
                     </app-toolbar>
                 </template>
@@ -214,7 +186,7 @@
                 </template>
             </app-header>
             <iron-scroll-document id="threshold">
-                <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_allocationLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
+                <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_allocationLoaded" loading="{{loadingData}}"></iron-ajax>
                 <div class="allocation">
                     <a href="/allocation/add" style="text-decoration: none;">
                         <paper-card on-tap="_availnew">
@@ -228,7 +200,7 @@
                             </div>
                         </paper-card>
                     </a>
-                    <template is="dom-repeat" items="[[allocations]]" as="item">
+                    <template is="dom-repeat" items="[[allocations]]" as="item" filter="{{_filter(filterVal)}}">
                         <paper-card id="{{item._id}}">
                             <div id="{{item._id}}" class="header" style="background-color:white; padding: 16px; padding-bottom: 5px; font-size: 16px;color: black;font-weight: bold">
                                 <a href="/allocation/edit/{{item._id}}">
@@ -293,7 +265,16 @@
                     value: 2
                 },
                 observers: [
-                    '_searchChanged(filterBy, search)',]
+                    // '_searchChanged(filterBy, search)',
+                    '_searchChanged(search)',
+                ]
+            },
+            _filter: function(val) {  
+              return function(hotel) {
+                if (!val) return true;
+                if (!hotel) return false;
+                return (hotel.hotelname && ~hotel.hotelname.indexOf(val));
+              };
             },
             _onkeyChanged() {
                 if (this.groupKey) {
@@ -311,8 +292,9 @@
             toggleClear() {
                 this.search = '';
             },
-            _searchChanged(g, e) {
-
+            _searchChanged(e) {
+                e = this.search;
+                console.log(e);
             },
             _allocationLoaded(data) {
                 if (data.detail.response) {

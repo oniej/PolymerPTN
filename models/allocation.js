@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 // create new instance of the mongoose.schema. the schema takes an
 // object that shows the shape of your database entries.
 const AllocationSchema = new Schema({
-    active: Boolean,
+    // active: Boolean,
     group: String,
     hotel: String,
     hotelname: String,
@@ -13,6 +13,7 @@ const AllocationSchema = new Schema({
     note: String,
     pk_coff: String,
     npk_coff: String,
+    high_coff: String,
     seasondate: Object,
     created_by: String,
     updated_by:String
