@@ -8,12 +8,15 @@ const BlockingSchema = new Schema({
     group: String,
     hotel: String,
     hotelname: String,
-    // dateFrom: String,
-    // dateTo: String,
-    rooms: Object,
+    room:String,
+    roomname:String,
+    dateFrom:String,
+    dateTo:String,
+    block:String,
+    cancel:String,
     note: String,
-    created_by: String,
-    updated_by:String
+    updated_by:String,
+    created_by: String
 }, { timestamps: true });
 // export our module to use in server.js
 module.exports = mongoose.model('blocking', BlockingSchema);

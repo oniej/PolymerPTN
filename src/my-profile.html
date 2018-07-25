@@ -8,6 +8,10 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/app-route/app-location.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
@@ -19,6 +23,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/salte-dialog/salte-dialog.html">
+
 
 
 
@@ -93,13 +99,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             <div main-title>Profile Info</div>
                         </app-toolbar>
                     </app-header>
-
                     <div class="card">
                         <paper-input label="Full Name" value="{{name}}" readonly></paper-input>
                         <paper-input label="Email" value="{{email}}" readonly></paper-input>
                         <paper-input label="Group" value="{{group}}" readonly></paper-input>
                         <paper-input label="Role" value="{{role}}" readonly></paper-input>
-
                     </div>
                 </app-header-layout>
         </iron-pages>
@@ -109,9 +113,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <script>
         Polymer({
             is: 'my-profile',
-            route: Object,
-            routeData: Object,
             properties: {
+                route: Object,
+                routeData: Object,
                 accountKey: String,
             },
             ready() {

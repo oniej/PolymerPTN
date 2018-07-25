@@ -5,13 +5,16 @@ const Schema = mongoose.Schema;
 const BookingSchema = new Schema({
     reference: String,
     agent: String,
-    guest:String,
+    agentname:String,
+    guest: String,
     hotel: String,
-    room:String,
-    checkin:String,
-    checkout:String,
-    numrooms:Number,
-    deduction:String,
+    hotelname: String,
+    room: String,
+    roomname: String,
+    checkin: String,
+    checkout: String,
+    numrooms: Number,
+    deduction: String,
 }, { timestamps: true });
 // export our module to use in server.js
 module.exports = mongoose.model('booking', BookingSchema);

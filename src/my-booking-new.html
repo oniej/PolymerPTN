@@ -1,5 +1,7 @@
-<link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
 <link rel="import" href="../bower_components/neon-animation/web-animations.html">
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
@@ -96,7 +98,7 @@
                     <div>
                         <paper-input value="{{reference}}" always-float-label label="Reference" autofocus></paper-input>
                         <paper-input value="{{guest}}" always-float-label label="Guest" autofocus></paper-input>
-                        <paper-dropdown-input id="agents" label="Agent" items='[[agentItems]]' filter-property="fullname" value="{{agent}}">
+                        <paper-dropdown-input id="agents" label="Agent" items='[[agentItems]]' filter-property="code" value="{{code}}">
                             <template>
                                 <template is="dom-repeat" items="[[items]]" as="item">
                                     <paper-item label="[[item.code]]">[[item.name]]</paper-item>
@@ -110,10 +112,10 @@
                                 </template>
                             </template>
                         </paper-dropdown-input>
-                        <paper-dropdown-input label="Room" items='[[roomItems]]' filter-property="name" value="{{room}}" style="margin-left: 30px;">
+                        <paper-dropdown-input id="room" label="Room" items='[[roomItems]]' filter-property="room" value="{{room}}" style="margin-left: 30px;">
                             <template>
                                 <template is="dom-repeat" items="[[items]]" as="item">
-                                    <paper-item>[[item.name]]</paper-item>
+                                    <paper-item label="[[item.room]]">[[item.name]]</paper-item>
                                 </template>
                             </template>
                         </paper-dropdown-input>
@@ -169,6 +171,7 @@
             is: 'my-booking-new',
             properties: {
                 hotel: String,
+                code: String,
                 room: String,
                 agent: String,
                 checkin: String,
@@ -200,14 +203,18 @@
                 this.$.ajax.body = {
                     reference: this.reference,
                     guest: this.guest,
-                    agent: this.$.agents.selectedItemLabel,
-                    hotel: this.$.hotels.selectedItemLabel,
+                    agent: this.code,
+                    agentname: this.$.agents.selectedItemLabel,
+                    hotel: this.hotel,
+                    hotelname: this.$.hotels.selectedItemLabel,
                     room: this.room,
+                    roomname: this.$.room.selectedItemLabel,
                     checkin: this.checkin,
                     checkout: this.checkout,
                     numrooms: this.numRooms,
                     deduction: this.selectedBook,
                 };
+                console.log(this.$.ajax.body);
                 this.$.ajax.generateRequest();
                 this.$.availabilitySave.opened = true;
             },
@@ -244,7 +251,7 @@
             _hotelChanged(h, r, a) {
                 this.checkin = "";
                 this.checkout = "";
-                this.filterrooms = '/hotel/filter/' + h;
+                this.filterrooms = '/hotel/filter/' + this.$.hotels.selectedItemLabel;
                 this.$.rooms.handleAs = "json";
                 this.$.rooms.generateRequest();
                 if (h && r && a) {

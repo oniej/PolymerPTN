@@ -8,6 +8,9 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
@@ -18,13 +21,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-scroll-threshold/iron-scroll-threshold.html">
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
-<link rel="import" href="../bower_components/salte-dialog/salte-dialog.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/salte-dialog/salte-dialog.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="time-element.html">
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="my-icons.html">
 
-<dom-module id="my-agent">
+<dom-module id="my-agentlist">
     <template>
         <style include="shared-styles">
             :host {
@@ -109,91 +113,84 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <app-header fixed slot="header">
                         <app-toolbar>
                             <paper-icon-button class="menu" icon="my-icons:menu" drawer-toggle on-tap="toggleDrawer"></paper-icon-button>
-                            <div main-title>Group</div>
+                            <div main-title>Agent</div>
                         </app-toolbar>
                     </app-header>
                     <iron-scroll-document id="threshold">
-                        <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_agentsLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
-                        <template is="dom-repeat" items="[[agentsLoad]]" as="item">
-                            <div class="item" id="{{item._id}}" on-tap="_editGroup">
+                        <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_agentLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
+                        <template is="dom-repeat" items="[[user_datas]]" as="item">
+                            <div class="item" id="{{item._id}}" on-tap="_editAgent">
                                 <iron-image class="avatar" sizing="contain" src="../images/user.png"></iron-image>
                                 <div class="pad" id="{{item._id}}">
-                                    <div id="{{item._id}}" class="primary">[[item.name]]</div>
+                                    <div class="primary">[[item.name]]</div>
                                 </div>
-                                <!-- <paper-icon-button id="{{item._id}}" noink on-tap="_editUsers" data-args="{{item._id}}" icon="my-icons:edit" alt="{{item._id}}"
-                                    style="float: right; margin-top:-10px; margin-right:-10px;color: black;"></paper-icon-button> -->
                             </div>
                         </template>
                     </iron-scroll-document>
                 </app-header-layout>
                 <paper-fab noink on-tap="_addNew" icon="my-icons:person-add" class="blue"></paper-fab>
         </iron-pages>
-        <salte-dialog id="addGroup">
-            <h2 id="add">Add Agent</h2>
+        <salte-dialog id="addGroup" style="width: 30%;">
+            <h2 id="add">Add Group</h2>
             <span>
-                <paper-input always-float-label label="Code" value="{{code}}" auto-focus></paper-input>
-                <paper-input always-float-label label="Name" value="{{name}}"></paper-input>
+                <paper-input label="Code" value="{{code}}"></paper-input>
+                <paper-input label="Name" value="{{name}}"></paper-input>
             </span>
             <div class="buttons">
                 <paper-button dialog-dismiss>Cancel</paper-button>
                 <paper-button dialog-confirm on-tap="_saveGroup" id="submit">Save</paper-button>
             </div>
         </salte-dialog>
-        <salte-dialog id="editGroup">
-            <h2 id="add">Edit Agent</h2>
+        <salte-dialog id="editGroup" style="width: 30%;">
+            <h2 id="add">Edit Group</h2>
             <span>
-                <paper-input always-float-label label="Code" value="{{code}}" readonly></paper-input>
-                <paper-input always-float-label label="Name" value="{{name}}" auto-focus></paper-input>
+                <paper-input label="Code" value="{{code}}" readonly></paper-input>
+                <paper-input label="Name" value="{{name}}"></paper-input>
             </span>
             <div class="buttons">
                 <paper-button dialog-dismiss>Cancel</paper-button>
                 <paper-button dialog-confirm on-tap="_saveGroup" id="submit">Update</paper-button>
             </div>
         </salte-dialog>
-        </vaadin-dialog>
         <iron-ajax verbose id="ajax" method="[[method]]" on-response="_handleResponse"></iron-ajax>
 
     </template>
 
     <script>
         Polymer({
-            is: 'my-agent',
+            is: 'my-agentlist',
             properties: {
-                route: Object,
-                routeData: Object,
-                data: Object,
-                editKey: String,
-                accountKey: String
+                editKey: String
             },
             ready() {
                 this.url = '/agent/read';
             },
             // _closeModal() {
             //     this.$.successAdd.opened = false;
-            //     window.location.assign('/agent');
+            //     window.location.assign('/group');
             // },
             _addNew() {
                 this.$.addGroup.opened = true;
-                this.group = "";
+                this.code = "";
+                this.name = "";
             },
             _editGroup(e) {
                 var data_args = Polymer.dom(e).rootTarget.getAttribute("id");
                 this.$.editGroup.opened = true;
                 this.editKey = data_args;
                 this.method = 'GET';
-                this.$.ajax.url = '/agent/edit/' + this.editKey;
+                this.$.ajax.url = '/group/readMe/' + this.editKey;
                 this.$.ajax.contentType = "application/json";
                 this.$.ajax.generateRequest();
             },
-            _agentsLoaded(data) {
+            _agentLoaded(data) {
                 if (data.detail.response) {
-                    this.agentsLoad = data.detail.response.data;
+                    this.user_datas = data.detail.response.data;
                 }
             },
             _handleResponse(data) {
-                if (data.detail.response.data) {
-                    this.code = data.detail.response.data.code;
-                    this.name = data.detail.response.data.name;
+                if (data.detail.response) {
+                    this.group = data.detail.response.data.group;
                 }
             },
             _saveGroup() {
@@ -204,9 +201,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     this.$.ajax.body = {
                         code: this.code,
                         name: this.name
+
                     };
                     this.$.ajax.generateRequest();
-                    // this.$.successAdd.opened = true;
                     this.url = '';
                 } else {
                     this.method = 'POST';
@@ -217,7 +214,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         name: this.name
                     };
                     this.$.ajax.generateRequest();
-                    // this.$.successAdd.opened = true;
                     this.url = '';
                 }
             },

@@ -1,0 +1,153 @@
+                        for (var x = 0; x < data.length; x++) {
+                            var tr2 = document.createElement('tr');
+                            tr2.setAttribute("class", "trdetail");
+                            var tdHotel = document.createElement('th');
+                            var hotel = document.createTextNode(hotels[x]);
+                            tdHotel.appendChild(hotel);
+                            tdHotel.setAttribute("class", "hotel");
+                            tr2.appendChild(tdHotel);
+
+                            var tdRoom = document.createElement('th');
+                            var room = document.createTextNode(roomnames[x]);
+                            tdRoom.appendChild(room);
+                            tdRoom.setAttribute("class", "room");
+                            tr2.appendChild(tdRoom);
+
+                            for (var z = 0; z < myDates.length; z++) {
+                                if (myDates[z] === dataDates[x]) {
+                                    var tdDateData = document.createElement('td');
+                                    if (isPeak[x]) {
+                                        if (statusColors[x] === "green") {
+                                            if (blocking[x]) {
+                                                var alloc = document.createTextNode(pkqnty[x] + blocking[x]);
+                                                tdDateData.appendChild(alloc);
+                                                tdDateData.style.textAlign = "center";
+                                                tdDateData.setAttribute("class", "detailgreen");
+                                                tdDateData.style.color = "white";
+                                                tr2.appendChild(tdDateData);
+                                            } else {
+                                                var allocs = document.createTextNode(pkqnty[x]);
+                                                tdDateData.appendChild(allocs);
+                                                tdDateData.style.textAlign = "center";
+                                                tdDateData.setAttribute("class", "detailgreen");
+                                                tdDateData.style.color = "white";
+                                                tr2.appendChild(tdDateData);
+                                            }
+                                        }
+                                        else if (statusColors[x] === "red") {
+                                            if (blocking[x]) {
+                                                var allocs = document.createTextNode(pkqnty[x] + blocking[x]);
+                                                tdDateData.appendChild(allocs);
+                                                tdDateData.style.textAlign = "center";
+                                                tdDateData.setAttribute("class", "detailred");
+                                                tdDateData.style.color = "white";
+                                                tr2.appendChild(tdDateData);
+                                            } else {
+                                                var allocsa = document.createTextNode(pkqnty[x]);
+                                                tdDateData.appendChild(allocsa);
+                                                tdDateData.style.textAlign = "center";
+                                                tdDateData.setAttribute("class", "detailred");
+                                                tdDateData.style.color = "white";
+                                                tr2.appendChild(tdDateData);
+                                            }
+                                        }
+                                        else if (statusColors[x] === "yellow") {
+                                            if (blocking[x]) {
+                                                var alloca = document.createTextNode(pkqnty[x] + blocking[x]);
+                                                tdDateData.appendChild(alloca);
+                                                tdDateData.style.textAlign = "center";
+                                                tdDateData.setAttribute("class", "detailyellow");
+                                                tdDateData.style.color = "white";
+                                                tr2.appendChild(tdDateData);
+                                            } else {
+                                                var allocas = document.createTextNode(pkqnty[x]);
+                                                tdDateData.appendChild(allocas);
+                                                tdDateData.style.textAlign = "center";
+                                                tdDateData.setAttribute("class", "detailyellow");
+                                                tdDateData.style.color = "white";
+                                                tr2.appendChild(tdDateData);
+                                            }
+
+                                        }
+
+                                    }
+                                    else {
+                                        if (statusColors[x] === "green") {
+                                            if (blocking[x]) {
+                                                var allocsaa = document.createTextNode(npkqnty[x] + blocking[x]);
+                                                tdDateData.appendChild(allocsaa);
+                                                tdDateData.style.textAlign = "center";
+                                                tdDateData.setAttribute("class", "detailgreen");
+                                                tdDateData.style.color = "white";
+                                                tr2.appendChild(tdDateData);
+                                            } else {
+                                                var allocsaaa = document.createTextNode(npkqnty[x] ? npkqnty[x] : 0);
+                                                tdDateData.appendChild(allocsaaa);
+                                                tdDateData.style.textAlign = "center";
+                                                tdDateData.setAttribute("class", "detailgreen");
+                                                tdDateData.style.color = "white";
+                                                tr2.appendChild(tdDateData);
+                                            }
+                                        }
+                                        else if (statusColors[x] === "red") {
+                                            if (blocking[x]) {
+                                                var alloca = document.createTextNode(npkqnty[x] + blocking[x]);
+                                                tdDateData.appendChild(alloca);
+                                                tdDateData.style.textAlign = "center";
+                                                tdDateData.setAttribute("class", "detailred");
+                                                tdDateData.style.color = "white";
+                                                tr2.appendChild(tdDateData);
+                                            } else {
+                                                var allocas = document.createTextNode(npkqnty[x] ? npkqnty[x] : 0);
+                                                tdDateData.appendChild(allocas);
+                                                tdDateData.style.textAlign = "center";
+                                                tdDateData.setAttribute("class", "detailred");
+                                                tdDateData.style.color = "white";
+                                                tr2.appendChild(tdDateData);
+                                            }
+
+                                        }
+                                        else if (statusColors[x] === "yellow") {
+                                            if (blocking[x]) {
+                                                var alloca = document.createTextNode(npkqnty[x] + blocking[x]);
+                                                tdDateData.appendChild(alloca);
+                                                tdDateData.style.textAlign = "center";
+                                                tdDateData.setAttribute("class", "detailyellow");
+                                                tdDateData.style.color = "white";
+                                                tr2.appendChild(tdDateData);
+                                            } else {
+                                                var allocas = document.createTextNode(npkqnty[x] ? npkqnty[x] : 0);
+                                                tdDateData.appendChild(allocas);
+                                                tdDateData.style.textAlign = "center";
+                                                tdDateData.setAttribute("class", "detailyellow");
+                                                tdDateData.style.color = "white";
+                                                tr2.appendChild(tdDateData);
+                                            }
+
+                                        }
+                                    }
+                                    tdDateData.setAttribute('id', hotels[x] + "~" + roomnames[x] + "~" + statuses[x] + "~" + npkqnty[x] + "~" + pkqnty[x] + "~" + seasons[x] + "~" + blocking[x] + "~" + cancellations[x] + "~" + cutoffpk[x] + "~" + cutoffnpk[x] + "~" + myDates[z] + "~" + cutoffdates[x] + "~" + isPeak[x]);
+                                    var self = this;
+                                    tdDateData.addEventListener('mouseover', function (e) {
+                                        self.tapped = e.target.id;
+                                    });
+                                    tdDateData.addEventListener('mouseout', function (f) {
+                                        self.opened = f.target.id;
+                                    });
+                                } else {
+                                    var tdDateData = document.createElement('td');
+                                    var alloc = document.createTextNode(" ");
+                                    tdDateData.appendChild(alloc);
+                                    tr2.appendChild(tdDateData);
+                                    tdDateData.setAttribute('id', hotels[x] + "~" + roomnames[x] + "~" + "No update" + "~" + npkqnty[x] + "~" + pkqnty[x] + "~" + seasons[x] + "~" + blocking[x] + "~" + cancellations[x] + "~" + cutoffpk[x] + "~" + cutoffnpk[x] + "~" + myDates[z] + "~" + cutoffdates[x] + "~" + isPeak[x]);
+                                    var self = this;
+                                    tdDateData.addEventListener('mouseover', function (e) {
+                                        self.tapped = e.target.id;
+                                    });
+                                    tdDateData.addEventListener('mouseout', function (f) {
+                                        self.opened = f.target.id;
+                                    });
+                                }
+                            }
+                            table.appendChild(tr2);
+                        }
