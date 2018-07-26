@@ -70,33 +70,6 @@
                 background-color: darkorange;
             }
 
-            @-webkit-keyframes fadeIn {
-                from {
-                    opacity: 0;
-                }
-                to {
-                    opacity: 1;
-                }
-            }
-
-            @-moz-keyframes fadeIn {
-                from {
-                    opacity: 0;
-                }
-                to {
-                    opacity: 1;
-                }
-            }
-
-            @keyframes fadeIn {
-                from {
-                    opacity: 0;
-                }
-                to {
-                    opacity: 1;
-                }
-            }
-
             @media (max-width: 420px) {
                 .docu {
                     margin-left: 16px;
@@ -275,60 +248,6 @@
                             <!-- <paper-button on-click="_addBlockingDetails" style="margin-top: 20px;">Add</paper-button> -->
                         </div>
                         <br>
-                        <!-- <vaadin-grid theme="compact" id="grid" items="[[blockingDetails]]">
-
-                            <vaadin-grid-column width="205px" resizable>
-                                <template class="header">ROOM</template>
-                                <template>
-                                    <vaadin-text-field style="width: 200px;" id="room-[[index]]" value="[[item.roomname]]" readonly></vaadin-text-field>
-                                </template>
-                            </vaadin-grid-column>
-
-                            <vaadin-grid-column width="80px" resizable>
-                                <template class="header">QUANTITY</template>
-                                <template>
-                                    <vaadin-text-field style="width: 75px;" id="block-[[index]]" value="[[item.block]]" readonly$="[[!_isEditingBlockingDetails(editingBlockingDetails, item)]]"></vaadin-text-field>
-                                </template>
-                            </vaadin-grid-column>
-
-                            <vaadin-grid-column width="160px" resizable>
-                                <template class="header">START</template>
-                                <template>
-                                    <paper-input type="date" style="width: 155px;" id="dateFrom-[[index]]" value="[[item.dateFrom]]" max="[[item.dateTo]]" readonly$="[[!_isEditingBlockingDetails(editingBlockingDetails, item)]]"></paper-input>
-                                </template>
-                            </vaadin-grid-column>
-
-                            <vaadin-grid-column width="160px" resizable>
-                                <template class="header">END</template>
-                                <template>
-                                    <paper-input type="date" style="width: 155px;" id="dateTo-[[index]]" value="[[item.dateTo]]" min="[[item.dateFrom]]" readonly$="[[!_isEditingBlockingDetails(editingBlockingDetails, item)]]"></paper-input>
-                                </template>
-                            </vaadin-grid-column>
-
-                            <vaadin-grid-column width="160px" resizable>
-                                <template class="header">CANCELLATION</template>
-                                <template>
-                                    <paper-input type="date" style="width: 155px;" id="cancel-[[index]]" value="[[item.cancel]]" max="[[item.dateTo]]" readonly$="[[!_isEditingBlockingDetails(editingBlockingDetails, item)]]"></paper-input>
-                                </template>
-                            </vaadin-grid-column>
-                            <vaadin-grid-column width="12em">
-                                <template>
-                                    <div style="text-align: right;">
-                                        <paper-button id="edit-button" hidden="[[editingBlockingDetails]]" on-click="_editBlockingDetails" focus-target$="[[!editingBlockingDetails]]"
-                                            theme="icon" aria-label="Edit">
-                                            <iron-icon icon="lumo:edit"></iron-icon>
-                                        </paper-button>
-                                        <paper-button hidden="[[editingBlockingDetails]]" on-click="_removeBlockingDetails" theme="icon error" aria-label="Delete">
-                                            <iron-icon icon="lumo:cross"></iron-icon>
-                                        </paper-button>
-                                        <paper-button hidden="[[!_isEditingBlockingDetails(editingBlockingDetails, item)]]" on-click="_saveBlockingDetails" focus-target$="[[editingBlockingDetails]]"
-                                            theme="primary">Save</paper-button>
-                                        <paper-button hidden="[[!_isEditingBlockingDetails(editingBlockingDetails, item)]]" on-click="_cancelBlockingDetails">Cancel</paper-button>
-                                    </div>
-                                </template>
-                            </vaadin-grid-column>
-                        </vaadin-grid>
-                    </div> -->
                 </div>
                 <paper-fab on-tap="_submit" style=" float: right; " class="fab" icon="my-icons:save"></paper-fab>
             </app-header-layout>
@@ -504,66 +423,6 @@
             },
             _getEditPrevRouteLink(e) {
                 return '/blocking/agent/' + e.toString();
-            },
-
-            // Blocking Grid Function
-            _addBlockingDetails(e) {
-                if (this.$.room.selectedItem.label !== '' && this.$.dateFrom.value !== '' && this.$.dateTo.value && this.$.block.value && this.$.cancel.value) {
-                    var roomdata = {
-                        room: this.$.room.selectedItem.value,
-                        roomname: this.$.room.selectedItem.label,
-                        dateFrom: this.$.dateFrom.value,
-                        dateTo: this.$.dateTo.value,
-                        block: this.$.block.value,
-                        cancel: this.$.cancel.value
-                    }
-                    this.blockingDetails.push(roomdata);
-                    this.$.grid.clearCache();
-
-                    this.$.room.value = '';
-                    this.$.room.selectedItem = null;
-                    this.$.dateFrom.value = '';
-                    this.$.dateTo.value = '';
-                    this.$.block.value = '';
-                    this.$.cancel.value = '';
-                } else {
-                    alert('Field required');
-                }
-
-            },
-            _isEditingBlockingDetails(editing, item) {
-                return item === editing;
-            },
-            _removeBlockingDetails(e) {
-                var index = this.blockingDetails.indexOf(e.model.item);
-                this.blockingDetails.splice(index, 1);
-
-                this.$.grid.clearCache();
-            },
-            _editBlockingDetails(e) {
-                var item = e.model.item;
-                this.editingBlockingDetails = item;
-
-                this.$.grid.querySelector('#room-' + e.model.index).focus();
-            },
-            _saveBlockingDetails(e) {
-                var item = e.model.item;
-                // item.room = this.$.grid.querySelector('#room-' + e.model.index).value;
-                item.dateFrom = this.$.grid.querySelector('#dateFrom-' + e.model.index).value;
-                item.dateTo = this.$.grid.querySelector('#dateTo-' + e.model.index).value;
-                item.block = this.$.grid.querySelector('#block-' + e.model.index).value;
-                item.cancel = this.$.grid.querySelector('#cancel-' + e.model.index).value;
-
-                this.editingBlockingDetails = null;
-
-                this.$.grid.clearCache();
-                this.$.grid.querySelector('#edit-button').focus();
-            },
-            _cancelBlockingDetails() {
-                this.editingBlockingDetails = null;
-
-                this.$.grid.clearCache();
-                this.$.grid.querySelector('#edit-button').focus();
             },
 
         })
