@@ -35,7 +35,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 display: flex;
                 flex-direction: column;
             }
-
             @media (max-width: 768px) {
                 div .availability {
                     margin: 16px;
@@ -47,7 +46,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     display: flex;
                 }
             }
-
             @media (min-width: 768px) {
                 div .availability {
                     width: 765px;
@@ -56,32 +54,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
                 }
             }
-
             #hotels {
                 border-collapse: collapse;
                 width: 100%;
             }
-
             /* #hotels tr:nth-child(even) {
                 background-color: #f2f2f2;
             } */
-
             /* #hotels tr:hover {
                 border: 1px solid rgb(0, 0, 0);
-
             }
              */
-
             #hotels td {
                 height: 25px;
                 border: 1px solid rgb(100, 100, 100);
             }
-
             #hotels th {
                 text-align: left;
                 height: 25.5px;
             }
-
             .avatar-container-profile {
                 position: relative;
                 border: 2px solid darkorange;
@@ -91,25 +82,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 width: 90px;
                 margin: 20px auto;
             }
-
             app-header {
                 color: rgb(255, 255, 255);
                 background-color: darkorange;
             }
-
             hr {
                 background-color: #eee;
                 border: 0 none;
                 color: #eee;
                 height: 1px;
-
             }
-
             .dateclass {
                 background-color: #1B5E20;
                 color: white;
             }
-
             .hotel {
                 position: absolute;
                 width: 14.5em;
@@ -118,7 +104,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 border-bottom: 1px solid;
                 text-align: left;
             }
-
             .room {
                 position: absolute;
                 width: 13.4em;
@@ -127,43 +112,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 border-bottom: 1px solid;
                 text-align: left;
             }
-
             .detail {
                 text-align: center;
                 border: 1px solid rgb(100, 100, 100);
             }
-
             .trdetail:nth-child(even) {
-                background-color: rgb(230, 230, 230);
+                background-color: #c0c0c0;
             }
-
             .trdetail:nth-child(odd) {
                 background-color: white;
             }
-
             #hotels td:hover {
                 cursor: pointer;
                 background-color: navajowhite;
             }
-
             .detailgreen:hover {
                 opacity: 0.5;
                 filter: alpha(opacity=100);
                 /* For IE8 and earlier */
             }
-
             .detailred:hover {
                 opacity: 0.5;
                 filter: alpha(opacity=100);
                 /* For IE8 and earlier */
             }
-
             detailyellow:hover {
                 opacity: 0.5;
                 filter: alpha(opacity=100);
                 /* For IE8 and earlier */
             }
-
             .detailgreen {
                 text-align: center;
                 background: url(/images/colorgreen.png);
@@ -174,7 +151,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 background-position: center;
                 color: black;
             }
-
             .detailred {
                 text-align: center;
                 background: url(/images/colorred.png);
@@ -185,7 +161,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 background-position: center;
                 color: white;
             }
-
             .detailyellow {
                 text-align: center;
                 background: url(/images/coloryellow.png);
@@ -196,30 +171,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 background-position: center;
                 color: white;
             }
-
             #table {
                 overflow: auto;
             }
-
             .table {
                 width: auto;
                 margin-left: 27.8em;
                 overflow: auto;
             }
-
             #moreDetails {
                 width: 30%;
             }
-            paper-dialog{
+            paper-dialog {
                 background-color: rgb(245, 245, 245);
                 border-top-left-radius: 5px;
                 border-top-right-radius: 5px;
                 border-bottom-right-radius: 5px;
                 border-bottom-left-radius: 5px;
-                box-shadow: 2px 2px 5px 3px rgb(151, 151, 151);
+                box-shadow: 0.5px;
             }
             #moreDetails #header {
-                background-color: rgb(255, 255, 255);   
+                background-color: rgb(255, 255, 255);
                 height: 30px;
                 border-bottom: 1px solid rgb(196, 196, 196);
                 padding: 5px;
@@ -231,7 +203,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 border-top-left-radius: 5px;
                 border-top-right-radius: 5px; */
             }
-
             #moreDetails #footer {
                 margin-bottom: 0;
                 margin-top: 37px;
@@ -285,10 +256,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                                 </template>
                                             </template>
                                         </paper-dropdown-input>
-                                        <paper-dropdown-input style="margin-left: 10px;" label="Select Agent" items='[[agentsload]]' filter-property="name" value="{{name}}">
+                                        <paper-dropdown-input style="margin-left: 10px;" label="Select Agent" items='[[agentsload]]' filter-property="code" value="{{code}}">
                                             <template>
                                                 <template is="dom-repeat" items="[[items]]" as="item">
-                                                    <paper-item>[[item.name]]</paper-item>
+                                                    <paper-item label="[[item.code]]">[[item.name]]</paper-item>
                                                 </template>
                                             </template>
                                         </paper-dropdown-input>
@@ -344,19 +315,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </div>
             </div>
             <div>
-                    <div><b>Room Details</b></div>
-                    <hr id="alloc" style="background-color: rgb(100, 100, 100)">
-                    <div id="allocation">
-                        <div style="font-size: 20px;">Allocation</div>
-                        <div>Room Qty: <b>{{allocation}}</b></div>
-                        <div id="cutoff"> Cut-Off Date:<b>{{cutoffdate}}</b></div>
+                <div>
+                    <b>Room Details</b>
+                </div>
+                <hr id="alloc" style="background-color: rgb(100, 100, 100)">
+                <div id="allocation">
+                    <div style="font-size: 20px;">Allocation</div>
+                    <div>Room Qty:
+                        <b>{{allocation}}</b>
                     </div>
-                    <hr id="block" style="background-color: rgb(100, 100, 100)">
-                    <div id="blocking">
-                        <div style="font-size: 20px;">Blocking</div>
-                        <div>Room Qty: <b>{{blocking}}</b></div>
-                        <div id="cancellation"> Cancellation Date: <b>{{cancel}}</b></div>
+                    <div id="cutoff"> Cut-Off Date:
+                        <b>{{cutoffdate}}</b>
                     </div>
+                </div>
+                <hr id="block" style="background-color: rgb(100, 100, 100)">
+                <div id="blocking">
+                    <div style="font-size: 20px;">Blocking</div>
+                    <div>Room Qty:
+                        <b>{{blocking}}</b>
+                    </div>
+                    <div id="cancellation"> Cancellation Date:
+                        <b>{{cancel}}</b>
+                    </div>
+                </div>
             </div>
             <div id="footer">
                 <br>
@@ -368,6 +349,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         Polymer({
             is: 'my-inquiry2',
             properties: {
+                code: String,
                 checkin: { type: String, observer: 'checkinChange' },
                 checkout: String,
                 checkoutMax: String,
@@ -423,6 +405,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
             },
             _tappedChanged(e) {
+                console.log(e);
                 var [hotel, rooms, stat, nonpeak, peak, seasondates, blocking, cancel, pdayscutoff, nonpdayscutoff, currentdate, cutoffdate, ispeak] = e.split("~");
                 var newdate = new Date(currentdate);
                 newdate.setDate(newdate.getDate() - parseInt(nonpdayscutoff));
@@ -430,76 +413,100 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 var dates = new Date(currentdate);
                 dates.setDate(dates.getDate() - parseInt(pdayscutoff));
                 var _currentDateAllocquery2 = dates.getFullYear() + "-" + ("0" + (dates.getMonth() + 1)).slice(-2) + "-" + ("0" + dates.getDate()).slice(-2);
+                var currentdates = new Date(currentdate);
+                var _currentDates = currentdates.getFullYear() + "-" + ("0" + (currentdates.getMonth() + 1)).slice(-2) + "-" + ("0" + currentdates.getDate()).slice(-2);
+                // if (e) {
                 if (ispeak) {
-                    if (blocking) {
+                    if (blocking != 0) {
                         this.allocation = peak;
                         this.season = seasondates;
-                        this.cdate = currentdate;
+                        this.cdate = _currentDates;
                         this.hotel = hotel;
                         this.rooms = rooms;
                         this.status = stat;
                         this.cancel = cancel;
                         this.blocking = blocking;
-                        this.cutoffdate = _currentDateAllocquery2;
-                        this.$.moreDetails.opened = true;
-                    } else {
-                        this.season = seasondates;
-                        this.allocation = peak;
-                        this.cdate = currentdate;
-                        this.hotel = hotel;
-                        this.rooms = rooms;
-                        this.status = stat;
-                        this.blocking = " ";
                         this.cutoffdate = _currentDateAllocquery2;
                         Polymer.dom(this.root).querySelector("#peakseason").setAttribute("style", "display:block");
-                        Polymer.dom(this.root).querySelector("#blocking").setAttribute("style", "display:none");
-                        Polymer.dom(this.root).querySelector("#cancellation").setAttribute("style", "display:none");
+                        Polymer.dom(this.root).querySelector("#blocking").setAttribute("style", "display:block");
+                        Polymer.dom(this.root).querySelector("#cancellation").setAttribute("style", "display:block");
+                        this.$.moreDetails.opened = true;
+                    } else {
+                        this.season = seasondates;
+                        this.allocation = peak;
+                        this.cdate = _currentDates;
+                        this.hotel = hotel;
+                        this.rooms = rooms;
+                        this.status = stat;
+                        this.blocking = blocking;
+                        this.cutoffdate = _currentDateAllocquery2;
+                        Polymer.dom(this.root).querySelector("#peakseason").setAttribute("style", "display:block");
+                        Polymer.dom(this.root).querySelector("#blocking").setAttribute("style", "display:block");
+                        Polymer.dom(this.root).querySelector("#cancellation").setAttribute("style", "display:block");
                         this.$.moreDetails.opened = true;
                     }
-                }
-                if (ispeak === "undefined") {
-                    if (blocking) {
-                        Polymer.dom(this.root).querySelector("#peakseason").setAttribute("style", "display:none");
-                        Polymer.dom(this.root).querySelector("#cancellation").setAttribute("style", "display:block");
-                        Polymer.dom(this.root).querySelector("#blocking").setAttribute("style", "display:block");
-                        this.allocation = nonpeak;
-                        this.cdate = currentdate;
-                        this.hotel = hotel;
-                        this.rooms = rooms;
-                        this.status = stat;
-                        this.cancel = cancel;
-                        this.blocking = blocking;
-                        this.cutoffdate = _currentDateAllocquery;
-                    } else {
-                        Polymer.dom(this.root).querySelector("#peakseason").setAttribute("style", "display:none");
-                        Polymer.dom(this.root).querySelector("#cancellation").setAttribute("style", "display:none");
-                        Polymer.dom(this.root).querySelector("#blocking").setAttribute("style", "display:none");
-                        this.allocation = nonpeak;
-                        this.cdate = currentdate;
-                        this.hotel = hotel;
-                        this.rooms = rooms;
-                        this.status = stat;
-                        this.cutoffdate = _currentDateAllocquery;
-                    }
-                }
-                if (this.blocking === "NaN" && this.cancel === "undefined") {
-                    Polymer.dom(this.root).querySelector("#blocking").setAttribute("style", "display:none");
-                    Polymer.dom(this.root).querySelector("#cancellation").setAttribute("style", "display:none");
-                    Polymer.dom(this.root).querySelector("#block").setAttribute("style", "display:none");
                 } else {
-                    Polymer.dom(this.root).querySelector("#blocking").setAttribute("style", "display:block");
-                    Polymer.dom(this.root).querySelector("#cancellation").setAttribute("style", "display:block");
-                    Polymer.dom(this.root).querySelector("#block").setAttribute("style", "display:block");
+                    // if (blocking != 0) {
+                    //     this.season = "";
+                    //     this.allocation = peak;
+                    //     this.cdate = _currentDates;
+                    //     this.hotel = hotel;
+                    //     this.rooms = rooms;
+                    //     this.status = stat;
+                    //     this.blocking = blocking;
+                    //     this.cutoffdate = _currentDateAllocquery2;
+                    //     Polymer.dom(this.root).querySelector("#peakseason").setAttribute("style", "display:none");
+                    //     Polymer.dom(this.root).querySelector("#blocking").setAttribute("style", "display:block");
+                    //     Polymer.dom(this.root).querySelector("#cancellation").setAttribute("style", "display:block");
+                    //     this.$.moreDetails.opened = true;
+                    // } else {
+                    // }
                 }
-                if (this.allocation === "NaN") {
-                    Polymer.dom(this.root).querySelector("#allocation").setAttribute("style", "display:none");
-                    Polymer.dom(this.root).querySelector("#cutoff").setAttribute("style", "display:none");
-                    Polymer.dom(this.root).querySelector("#alloc").setAttribute("style", "display:none");
-                } else {
-                    Polymer.dom(this.root).querySelector("#allocation").setAttribute("style", "display:block");
-                    Polymer.dom(this.root).querySelector("#cutoff").setAttribute("style", "display:block");
-                    Polymer.dom(this.root).querySelector("#alloc").setAttribute("style", "display:block");
-                }
+                // if (ispeak === "undefined") {
+                //     if (blocking) {
+                //         Polymer.dom(this.root).querySelector("#peakseason").setAttribute("style", "display:none");
+                //         Polymer.dom(this.root).querySelector("#cancellation").setAttribute("style", "display:block");
+                //         Polymer.dom(this.root).querySelector("#blocking").setAttribute("style", "display:block");
+                //         this.allocation = nonpeak;
+                //         this.cdate = currentdate;
+                //         this.hotel = hotel;
+                //         this.rooms = rooms;
+                //         this.status = stat;
+                //         this.cancel = cancel;
+                //         this.blocking = blocking;
+                //         this.cutoffdate = _currentDateAllocquery;
+                //     } else {
+                //         Polymer.dom(this.root).querySelector("#peakseason").setAttribute("style", "display:none");
+                //         Polymer.dom(this.root).querySelector("#cancellation").setAttribute("style", "display:none");
+                //         Polymer.dom(this.root).querySelector("#blocking").setAttribute("style", "display:none");
+                //         this.allocation = nonpeak;
+                //         this.cdate = currentdate;
+                //         this.hotel = hotel;
+                //         this.rooms = rooms;
+                //         this.status = stat;
+                //         this.cutoffdate = _currentDateAllocquery;
+                //     }
+                // }
+                // if (blocking == 0) {
+                //     Polymer.dom(this.root).querySelector("#blocking").setAttribute("style", "display:none");
+                //     Polymer.dom(this.root).querySelector("#cancellation").setAttribute("style", "display:none");
+                //     Polymer.dom(this.root).querySelector("#block").setAttribute("style", "display:none");
+                // } else {
+                //     Polymer.dom(this.root).querySelector("#blocking").setAttribute("style", "display:block");
+                //     Polymer.dom(this.root).querySelector("#cancellation").setAttribute("style", "display:block");
+                //     Polymer.dom(this.root).querySelector("#block").setAttribute("style", "display:block");
+                // }
+                // if (this.allocation === "NaN") {
+                //     Polymer.dom(this.root).querySelector("#allocation").setAttribute("style", "display:none");
+                //     Polymer.dom(this.root).querySelector("#cutoff").setAttribute("style", "display:none");
+                //     Polymer.dom(this.root).querySelector("#alloc").setAttribute("style", "display:none");
+                // } else {
+                //     Polymer.dom(this.root).querySelector("#allocation").setAttribute("style", "display:block");
+                //     Polymer.dom(this.root).querySelector("#cutoff").setAttribute("style", "display:block");
+                //     Polymer.dom(this.root).querySelector("#alloc").setAttribute("style", "display:block");
+                // }
+                // } else {
+                // }
             },
             _hotelIdChanged(j) {
                 this.stardate = this.checkin;
@@ -513,28 +520,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
             _endCheckout(f) {
                 this.to = f;
-                if (this.role === "Admin" || this.role === "Staff") {
-                    this.urlFilterend = '/allocation/inquirySource2/' + this.from + "_" + this.to + "_" + this.group + "_" + this.name;
-                    this.$.endalloc.generateRequest();
-                }
-                else {
-                    this.urlFilterend = '/allocation/inquirySource2/' + this.from + "_" + this.to + "_" + this.group + "_" + this.agent;
-                    this.$.endalloc.generateRequest();
+                if (f) {
+                    if (this.role === "Admin" || this.role === "Staff") {
+                        this.urlFilterend = '/allocation/inquirySource2/' + this.from + "_" + this.to + "_" + this.group + "_" + this.code;
+                        this.$.endalloc.generateRequest();
+                    }
+                    else {
+                        this.urlFilterend = '/allocation/inquirySource2/' + this.from + "_" + this.to + "_" + this.group + "_" + this.code;
+                        this.$.endalloc.generateRequest();
+                    }
                 }
             },
             _urlFilterend(data) {
                 if (data.detail.response.data) {
                     this.data = data.detail.response.data;
-                    // console.log(this.data);
                 }
             },
-
             _createTable(group, checkin, checkout, data) {
                 var currentGroup = group;
                 var startDate = new Date(checkin); //YYYY-MM-DD
                 var endDate = new Date(checkout); //YYYY-MM-DD
                 var dateArr = getDateArray(startDate, endDate);
-
                 function getDateArray(start, end) {
                     var arr = new Array();
                     var dt = new Date(start);
@@ -544,7 +550,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     }
                     return arr;
                 }
-
                 var myDates = [];
                 var myDates2 = [];
                 for (var i = 0; i < dateArr.length; i++) {
@@ -563,23 +568,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     // return monthNames[finalMonth] + "-" + d + "-" + y;
                     return monthNames[finalMonth] + "-" + d;
                 }
-
                 function formatDate(date) {
                     var d = new Date(date),
                         month = '' + (d.getMonth() + 1),
                         day = '' + d.getDate(),
                         year = d.getFullYear();
-
                     if (month.length < 2) month = '0' + month;
                     if (day.length < 2) day = '0' + day;
-
                     return [year, month, day].join('-');
                 }
-
                 if (group && checkin && checkout) {
                     var table = Polymer.dom(this.root).querySelector('#hotels');
                     var tr1 = document.createElement('tr');
-
                     //delete onchanged sa input date
                     while (table.hasChildNodes()) {
                         table.removeChild(table.lastChild);
@@ -591,14 +591,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     thHotel.setAttribute("class", "hotel");
                     thHotel.style.textAlign = "center";
                     tr1.appendChild(thHotel);
-
                     var thRoom = document.createElement('th');
                     var roomName = document.createTextNode("Rooms");
                     thRoom.appendChild(roomName);
                     thRoom.setAttribute("class", "room");
                     thRoom.style.textAlign = "center";
                     tr1.appendChild(thRoom);
-
                     for (var y = 0; y < myDates.length; y++) {
                         var thDates = document.createElement('td');
                         var dateHeader = document.createTextNode(myDates2[y]);
@@ -610,228 +608,129 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     //table header
                     //table td / data
                     if (data) {
-                        var hotels = [];
-                        var rooms = [];
-                        var roomnames = [];
-                        // var totalAlloc = [];
-                        var dataDates = [];
-                        var statuses = [];
-                        var statusColors = [];
-                        var pkqnty = [];
-                        var npkqnty = [];
-                        var cutoffpk = [];
-                        var cutoffnpk = [];
-                        var groups = [];
-                        var blocking = [];
-                        var seasons = [];
-                        var isPeak = [];
-                        var cancellations = [];
-                        var cutoffdates = [];
                         data.forEach(element => {
-                            cancellations.push(element.cancellation);
-                            seasons.push(element.season);
-                            blocking.push(parseInt(element.blocking));
-                            groups.push(element.group);
-                            statusColors.push(element.classColor);
-                            hotels.push(element.hotel);
-                            // rooms.push(element.room);
-                            isPeak.push(element.isPeak);
-                            roomnames.push(element.roomname);
-                            // totalAlloc.push(alloc);
-                            dataDates.push(element.date);
-                            statuses.push(element.status);
-                            pkqnty.push(parseInt(element.peakAmount));
-                            npkqnty.push(parseInt(element.npeakAmount));
-                            cutoffpk.push(parseInt(element.pcutoff));
-                            cutoffnpk.push(parseInt(element.npcutoff));
-                            myDates.forEach(datele => {
-                                var newdate = new Date(datele);
-                                if (cutoffnpk) {
-                                    newdate.setDate(newdate.getDate() - parseInt(cutoffnpk));
-                                } else {
-                                    newdate.setDate(newdate.getDate() - parseInt(cutoffpk));
-                                }
-                                cutoffdates.push((newdate.getMonth() + 1) + "-" + newdate.getDate());
-                            });
-                        });
-
-
-                        for (var x = 0; x < data.length; x++) {
                             var tr2 = document.createElement('tr');
                             tr2.setAttribute("class", "trdetail");
                             var tdHotel = document.createElement('th');
-                            var hotel = document.createTextNode(hotels[x]);
+                            var hotel = document.createTextNode(element.hotelname);
                             tdHotel.appendChild(hotel);
                             tdHotel.setAttribute("class", "hotel");
                             tr2.appendChild(tdHotel);
-
                             var tdRoom = document.createElement('th');
-                            var room = document.createTextNode(roomnames[x]);
+                            var room = document.createTextNode(element.roomname);
                             tdRoom.appendChild(room);
                             tdRoom.setAttribute("class", "room");
                             tr2.appendChild(tdRoom);
-
-                            for (var z = 0; z < myDates.length; z++) {
-                                if (myDates[z] === dataDates[x]) {
+                            element.dates.forEach(cdate => {
+                                if ((cdate.details.availability.length + cdate.details.allocation.length + cdate.details.blocking.length + cdate.details.booking.length) > 0) {
                                     var tdDateData = document.createElement('td');
-                                    if (isPeak[x]) {
-                                        if (statusColors[x] === "green") {
-                                            if (blocking[x]) {
-                                                var alloc = document.createTextNode(pkqnty[x] + blocking[x]);
+                                    if (cdate.details.seasondetails.length > 0) {
+                                        if ((cdate.details.availability.length > 0 ? cdate.details.availability[0].classColor : "") === "green") {
+                                            if (cdate.details.blocking.length > 0) {
+                                                var alloc = document.createTextNode(parseInt((cdate.details.allocation.length > 0 ? cdate.details.allocation[0].pk_qty : 0)) + parseInt((cdate.details.blocking.length > 0 ? cdate.details.blocking[0].block : 0)));
                                                 tdDateData.appendChild(alloc);
                                                 tdDateData.style.textAlign = "center";
                                                 tdDateData.setAttribute("class", "detailgreen");
                                                 tdDateData.style.color = "white";
                                                 tr2.appendChild(tdDateData);
                                             } else {
-                                                var allocs = document.createTextNode(pkqnty[x]);
+                                                var allocs = document.createTextNode(parseInt((cdate.details.allocation.length > 0 ? cdate.details.allocation[0].pk_qty : 0)));
                                                 tdDateData.appendChild(allocs);
                                                 tdDateData.style.textAlign = "center";
                                                 tdDateData.setAttribute("class", "detailgreen");
                                                 tdDateData.style.color = "white";
                                                 tr2.appendChild(tdDateData);
                                             }
-                                            if (!pkqnty[x] && !cutoffpk) {
-                                                tdDateData.setAttribute("class", "detailgreen");
-                                                tr2.appendChild(tdDateData);
-                                            }
                                         }
-                                        else if (statusColors[x] === "red") {
-                                            if (blocking[x]) {
-                                                var allocs = document.createTextNode(pkqnty[x] + blocking[x]);
+                                        else if ((cdate.details.availability.length > 0 ? cdate.details.availability[0].classColor : "") === "red") {
+                                            if (cdate.details.blocking.length > 0) {
+                                                var allocs = document.createTextNode(parseInt((cdate.details.allocation.length > 0 ? cdate.details.allocation[0].pk_qty : 0)) + parseInt((cdate.details.blocking.length > 0 ? cdate.details.blocking[0].block : 0)));
                                                 tdDateData.appendChild(allocs);
                                                 tdDateData.style.textAlign = "center";
                                                 tdDateData.setAttribute("class", "detailred");
                                                 tdDateData.style.color = "white";
                                                 tr2.appendChild(tdDateData);
                                             } else {
-                                                var allocsa = document.createTextNode(pkqnty[x]);
+                                                var allocsa = document.createTextNode(parseInt(cdate.details.allocation.length > 0 ? cdate.details.allocation[0].pk_qty : 0));
                                                 tdDateData.appendChild(allocsa);
                                                 tdDateData.style.textAlign = "center";
                                                 tdDateData.setAttribute("class", "detailred");
                                                 tdDateData.style.color = "white";
                                                 tr2.appendChild(tdDateData);
                                             }
-                                            if (!pkqnty[x] && !cutoffpk) {
-                                                tdDateData.setAttribute("class", "detailred");
-                                                tr2.appendChild(tdDateData);
-                                            }
                                         }
-                                        else if (statusColors[x] === "yellow") {
-                                            if (blocking[x]) {
-                                                var alloca = document.createTextNode(pkqnty[x] + blocking[x]);
+                                        else if ((cdate.details.availability.length > 0 ? cdate.details.availability[0].classColor : "") === "yellow") {
+                                            if (cdate.details.blocking.length > 0) {
+                                                var alloca = document.createTextNode(parseInt((cdate.details.allocation.length > 0 ? cdate.details.allocation[0].pk_qty : 0)) + parseInt((cdate.details.blocking.length > 0 ? cdate.details.blocking[0].block : 0)));
                                                 tdDateData.appendChild(alloca);
                                                 tdDateData.style.textAlign = "center";
                                                 tdDateData.setAttribute("class", "detailyellow");
                                                 tdDateData.style.color = "white";
                                                 tr2.appendChild(tdDateData);
                                             } else {
-                                                var allocas = document.createTextNode(pkqnty[x]);
+                                                var allocas = document.createTextNode(parseInt(cdate.details.allocation.length > 0 ? cdate.details.allocation[0].pk_qty : 0));
                                                 tdDateData.appendChild(allocas);
                                                 tdDateData.style.textAlign = "center";
                                                 tdDateData.setAttribute("class", "detailyellow");
                                                 tdDateData.style.color = "white";
                                                 tr2.appendChild(tdDateData);
                                             }
-
                                         }
-
                                     }
                                     else {
-                                        if (statusColors[x] === "green") {
-                                            if (blocking[x]) {
-                                                var allocsaa = document.createTextNode(npkqnty[x] + blocking[x]);
+                                        if ((cdate.details.availability.length > 0 ? cdate.details.availability[0].classColor : "") === "green") {
+                                            if (cdate.details.blocking.length > 0) {
+                                                var allocsaa = document.createTextNode(parseInt((cdate.details.allocation.length > 0 ? cdate.details.allocation[0].npk_qty : 0)) + parseInt((cdate.details.blocking.length > 0 ? cdate.details.blocking[0].block : 0)));
                                                 tdDateData.appendChild(allocsaa);
                                                 tdDateData.style.textAlign = "center";
                                                 tdDateData.setAttribute("class", "detailgreen");
                                                 tdDateData.style.color = "white";
                                                 tr2.appendChild(tdDateData);
                                             } else {
-                                                var allocsaaa = document.createTextNode(npkqnty[x] ? npkqnty[x] : 0);
+                                                var allocsaaa = document.createTextNode((cdate.details.allocation.length > 0 ? cdate.details.allocation[0].npk_qty : 0));
                                                 tdDateData.appendChild(allocsaaa);
                                                 tdDateData.style.textAlign = "center";
                                                 tdDateData.setAttribute("class", "detailgreen");
                                                 tdDateData.style.color = "white";
                                                 tr2.appendChild(tdDateData);
                                             }
-                                            if (!pkqnty[x] && !cutoffpk) {
-                                                tdDateData.setAttribute("class", "detailgreen");
-                                                tr2.appendChild(tdDateData);
-                                            }
                                         }
-                                        else if (statusColors[x] === "red") {
-                                            if (blocking[x]) {
-                                                var alloca = document.createTextNode(npkqnty[x] + blocking[x]);
+                                        else if ((cdate.details.availability.length > 0 ? cdate.details.availability[0].classColor : "") === "red") {
+                                            if (cdate.details.blocking.length > 0) {
+                                                var alloca = document.createTextNode(parseInt((cdate.details.allocation.length > 0 ? cdate.details.allocation[0].npk_qty : 0)) + parseInt(cdate.details.blocking.length > 0 ? cdate.details.blocking[0].block : 0));
                                                 tdDateData.appendChild(alloca);
                                                 tdDateData.style.textAlign = "center";
                                                 tdDateData.setAttribute("class", "detailred");
                                                 tdDateData.style.color = "white";
                                                 tr2.appendChild(tdDateData);
                                             } else {
-                                                var allocas = document.createTextNode(npkqnty[x] ? npkqnty[x] : 0);
+                                                var allocas = document.createTextNode((cdate.details.allocation.length > 0 ? cdate.details.allocation[0].npk_qty : 0));
                                                 tdDateData.appendChild(allocas);
                                                 tdDateData.style.textAlign = "center";
                                                 tdDateData.setAttribute("class", "detailred");
                                                 tdDateData.style.color = "white";
                                                 tr2.appendChild(tdDateData);
                                             }
-
                                         }
-                                        else if (statusColors[x] === "yellow") {
-                                            if (blocking[x]) {
-                                                var alloca = document.createTextNode(npkqnty[x] + blocking[x]);
+                                        else if ((cdate.details.availability.length > 0 ? cdate.details.availability[0].classColor : "") === "yellow") {
+                                            if (cdate.details.blocking.length > 0) {
+                                                var alloca = document.createTextNode(parseInt((cdate.details.allocation.length > 0 ? cdate.details.allocation[0].npk_qty : 0)) + parseInt(cdate.details.blocking.length > 0 ? cdate.details.blocking[0].block : 0));
                                                 tdDateData.appendChild(alloca);
                                                 tdDateData.style.textAlign = "center";
                                                 tdDateData.setAttribute("class", "detailyellow");
                                                 tdDateData.style.color = "white";
                                                 tr2.appendChild(tdDateData);
                                             } else {
-                                                var allocas = document.createTextNode(npkqnty[x] ? npkqnty[x] : 0);
+                                                var allocas = document.createTextNode((cdate.details.allocation.length > 0 ? cdate.details.allocation[0].npk_qty : 0));
                                                 tdDateData.appendChild(allocas);
                                                 tdDateData.style.textAlign = "center";
                                                 tdDateData.setAttribute("class", "detailyellow");
                                                 tdDateData.style.color = "white";
                                                 tr2.appendChild(tdDateData);
                                             }
-
                                         }
                                     }
-                                    // if (statusColors[x] === "red") {
-                                    //     if (!pkqnty[x] && !cutoffpk[x] && !npkqnty[x] && !cutoffnpk[x]) {
-                                    //         var tdDateData = document.createElement('td');
-                                    //         tdDateData.setAttribute("class", "detailred");
-                                    //         tdDateData.appendChild(alloc);
-                                    //         tr2.appendChild(tdDateData);
-                                    //         tdDateData.setAttribute('id', hotels[x] + "~" + roomnames[x] + "~" + statuses[x] + "~" + "" + "~" + "" + "~" + "" + "~" + "" + "~" + "" + "~" + "" + "~" + "" + "~" + myDates[z] + "~" + "" + "~" + "");
-                                    //         var self = this;
-                                    //         tdDateData.addEventListener('click', function (e) {
-                                    //             self.tapped = e.target.id;
-                                    //         });
-                                    //     }
-                                    // } else if (statusColors[x] === "green") {
-                                    //     if (!pkqnty[x] && !cutoffpk[x] && !npkqnty[x] && !cutoffnpk[x]) {
-                                    //         var tdDateData = document.createElement('td');
-                                    //         var alloc = document.createTextNode(" ");
-                                    //         tdDateData.setAttribute("class", "detailgreen");
-                                    //         tdDateData.appendChild(alloc);
-                                    //         tr2.appendChild(tdDateData);
-
-                                    //     }
-                                    // }
-                                    tdDateData.setAttribute('id', hotels[x] + "~" + roomnames[x] + "~" + statuses[x] + "~" + npkqnty[x] + "~" + pkqnty[x] + "~" + seasons[x] + "~" + blocking[x] + "~" + cancellations[x] + "~" + cutoffpk[x] + "~" + cutoffnpk[x] + "~" + myDates[z] + "~" + cutoffdates[x] + "~" + isPeak[x]);
-                                    var self = this;
-                                    tdDateData.addEventListener('mouseover', function (e) {
-                                        self.tapped = e.target.id;
-                                    });
-                                    tdDateData.addEventListener('mouseout', function (f) {
-                                        self.opened = f.target.id;
-                                    });
-                                } else {
-                                    var tdDateData = document.createElement('td');
-                                    var alloc = document.createTextNode(" ");
-                                    tdDateData.appendChild(alloc);
-                                    tr2.appendChild(tdDateData);
-                                    tdDateData.setAttribute('id', hotels[x] + "~" + roomnames[x] + "~" + "No update" + "~" + npkqnty[x] + "~" + pkqnty[x] + "~" + seasons[x] + "~" + blocking[x] + "~" + cancellations[x] + "~" + cutoffpk[x] + "~" + cutoffnpk[x] + "~" + myDates[z] + "~" + cutoffdates[x] + "~" + isPeak[x]);
+                                    tdDateData.setAttribute('id', element.hotelname + "~" + element.roomname + "~" + (cdate.details.availability.length > 0 ? cdate.details.availability[0].status : "No Update") + "~" + (cdate.details.allocation.length > 0 ? cdate.details.allocation[0].npk_qty : 0) + "~" + (cdate.details.allocation.length > 0 ? cdate.details.allocation[0].pk_qty : 0) + "~" + (cdate.details.seasondetails.length > 0 ? cdate.details.seasondetails[0].season : "") + "~" + (cdate.details.blocking.length > 0 ? cdate.details.blocking[0].block : 0) + "~" + (cdate.details.blocking.length > 0 ? cdate.details.blocking[0].cancel : null) + "~" + (cdate.details.allocation.length > 0 ? cdate.details.allocation[0].pk_coff : 0) + "~" + (cdate.details.allocation.length > 0 ? cdate.details.allocation[0].npk_coff : 0) + "~" + cdate.date + "~" + "" + "~" + (cdate.details.seasondetails.length > 0 ? true : false));
                                     var self = this;
                                     tdDateData.addEventListener('mouseover', function (e) {
                                         self.tapped = e.target.id;
@@ -840,10 +739,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                         self.opened = f.target.id;
                                     });
                                 }
-                            }
+                                else {
+                                    var tdDateData = document.createElement('td');
+                                    var alloc = document.createTextNode(" ");
+                                    tdDateData.appendChild(alloc);
+                                    tr2.appendChild(tdDateData);
+                                    tdDateData.setAttribute('id', element.hotelname + "~" + element.roomname + "~" + "No update" + "~" + "" + "~" + "" + "~" + "" + "~" + "" + "~" + "" + "~" + "" + "~" + "" + "~" + "" + "~" + "" + "~" + "");
+                                    var self = this;
+                                    tdDateData.addEventListener('mouseover', function (e) {
+                                        self.tapped = e.target.id;
+                                    });
+                                    tdDateData.addEventListener('mouseout', function (f) {
+                                        self.opened = f.target.id;
+                                    });
+                                }
+                            });
                             table.appendChild(tr2);
-                        }
-                      
+                        });
                     }
                 }
             },
