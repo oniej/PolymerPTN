@@ -48,4 +48,15 @@ router.put('/update/:editKey', (req, res) => {
         });
     });
 });
+router.delete('/delete/:editKey', (req, res) => {
+    const { editKey } = req.params;
+    // console.log(editKey);
+    if (!editKey) {
+        return res.json({ success: false, error: 'No comment id provided' });
+    }
+    Agent.remove({ _id: editKey }, (error, hotel) => {
+        if (error) return res.json({ success: false, error });
+        return res.json({ success: true });
+    });
+});
 module.exports = router;
