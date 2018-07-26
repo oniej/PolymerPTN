@@ -21,8 +21,7 @@ router.post('/register', function (req, res) {
         isActive: false,
         isEmailVerified: false,
         group: req.body.group,
-        role: req.body.role,
-        agent:req.body.agent
+        role: req.body.role
     });
 
     User.saveUser(newUser, function (err, user) {
@@ -168,12 +167,11 @@ router.put('/update/:editKey', (req, res) => {
     }
     User.findById(editKey, (error, updateUser) => {
         if (error) return res.json({ success: false, error });
-        const { name, email, role, group, agent } = req.body;
+        const { name, email, role, group } = req.body;
         updateUser.name = name;
         updateUser.email = email;
         updateUser.role = role;
         updateUser.group = group;
-        updateUser.agent = agent;
         updateUser.save(error => {
             if (error) return res.json({ success: false, error });
             return res.json({ success: true });
