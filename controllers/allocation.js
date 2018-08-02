@@ -133,6 +133,7 @@ router.get('/inquirySource2/:xparams', getAvailability, getAllocation, getBlocki
         if (err) return res.json({ success: false, error: err });
 
         var rawdata = [];
+        var raws = [];
         hotels.forEach(hotel => {
             hotel.room.forEach(_room => {
                 var _xdates = [];
@@ -141,33 +142,74 @@ router.get('/inquirySource2/:xparams', getAvailability, getAllocation, getBlocki
                     var _cdate_foravailability_str = _cdate_foravailability.getFullYear() + "-" + ("0" + (_cdate_foravailability.getMonth())).slice(-2) + "-" + ("0" + _cdate_foravailability.getDate()).slice(-2);
                     var _cdate_str = _cdate_foravailability.getFullYear() + "-" + ("0" + (_cdate_foravailability.getMonth() + 1)).slice(-2) + "-" + ("0" + _cdate_foravailability.getDate()).slice(-2);
 
-                    var _x_availability = inquiry[0].filter(f => (f.date >= _cdate_foravailability_str && f.date <= _cdate_foravailability_str) && f.hotel == hotel.hotel && f.room == _room.room);
+                    var _x_availability = inquiry[0].filter(f => (f.date >= _cdate_foravailability_str && f.date <= _cdate_foravailability_str) && f.hotel == hotel.hotel && f.room == _room.room.split(" ").join(""));
                     var _x_allocation = inquiry[1].filter(f => (_cdate_str >= f.dateFrom && _cdate_str <= f.dateTo) && f.hotel == hotel.hotel && f.room == _room.room);
                     var _x_blocking = inquiry[2].filter(f => (_cdate_str >= f.dateFrom && _cdate_str <= f.dateTo) && f.hotel == hotel.hotel && f.room == _room.room);
                     var _x_booking = inquiry[3].filter(f => (_cdate_str >= f.checkin && _cdate_str < f.checkout) && f.hotel == hotel.hotel && f.room == _room.room);
 
+                    var x_block = 0;
+                    var x_blocking = [];
+                    _x_blocking.forEach(element => {
+                        x_blocking = [{
+                            agent: element.agent,
+                            group: element.group,
+                            hotel: element.hotel,
+                            hotelname: element.hotelname,
+                            room: element.room,
+                            roomname: element.roomname,
+                            blocking: x_block += parseInt(element.block),
+                            cancellation: element.cancel,
+                            dateFrom: element.dateFrom,
+                            dateTo: element.dateTo
+                        }];
+                    });
+
+                    var x_book = [];
+                    _x_booking.forEach(x_element => {
+                        if (x_book.length > 0) {
+                            x_book.forEach(x_ele => {
+                                if (x_element.group === x_ele.group && x_element.agent === x_ele.agent && x_element.deduction === x_ele.deduction) {
+                                    x_book = [{
+                                        agent: x_element.agent,
+                                        agentname: x_element.agentname,
+                                        checkin: x_element.checkin,
+                                        checkout: x_element.checkout,
+                                        deduction: x_element.deduction,
+                                        group: x_element.group,
+                                        hotel: x_element.hotel,
+                                        hotelname: x_element.hotelname,
+                                        numrooms: parseInt(x_element.numrooms) + parseInt(x_ele.numrooms),
+                                        room: x_element.room,
+                                        roomname: x_element.roomname,
+                                        updatedAt: x_element.updatedAt
+                                    }];
+                                }
+                                else {
+                                    x_book = x_ele;
+                                }
+                            });
+                        } else {
+                            x_book = _x_booking;
+                        }
+                    });
                     var seasondates_x = [];
                     _x_allocation.forEach(element => {
-                        if(element.seasondate)
-                        {
+                        if (element.seasondate) {
                             element.seasondate.forEach(xx => {
                                 seasondates_x.push(xx);
                             });
                         }
-                        
                     });
 
                     var _seasondetails = [];
-                    _seasondetails = seasondates_x.filter(t=>_cdate_str >= t.startValue && _cdate_str <= t.endValue);
-    
-
+                    _seasondetails = seasondates_x.filter(t => _cdate_str >= t.startValue && _cdate_str <= t.endValue);
                     _xdates.push({
                         date: cdate,
                         details: {
                             availability: _x_availability,
                             allocation: _x_allocation,
-                            blocking: _x_blocking,
-                            booking: _x_booking,
+                            blocking: x_blocking,
+                            booking: x_book,
                             seasondetails: _seasondetails
                         }
                     });
@@ -184,7 +226,7 @@ router.get('/inquirySource2/:xparams', getAvailability, getAllocation, getBlocki
             });
         });
 
-        res.json({ success: true, data: rawdata });
+        return res.json({ success: true, data: rawdata });
     });
 
 });
@@ -209,23 +251,12 @@ function getAvailability(req, res, next) {
             var availability = [];
             if (_availabilityData) {
                 _availabilityData.forEach(element => {
-                    availability = availability.concat(_removeItemFromArrayAvailability(element.hotel, element.hotelname, element.availability, _currentEndDate));
+                    availability = availability.concat(_removeItemFromArrayAvailability(element.hotel, element.hotelname, element.availability, element.updatedAt, _currentEndDate));
                 });
             }
             if (!req.body.inquiry) { req.body.inquiry = [] };
-
-            // var _availability_out = [];
-            // availability.forEach(element => {
-            //     element.forEach(element_dates => {
-
-            //     });
-            // });
-
-
-
             req.body.inquiry.push(availability);
             next();
-            // return res.json({ success: true, data: _availabilityData })
         });
 }
 function getAllocation(req, res, next) {
@@ -235,11 +266,10 @@ function getAllocation(req, res, next) {
     var _currentDateAllocquery = _currentDate.getFullYear() + "-" + ("0" + (_currentDate.getMonth() + 1)).slice(-2) + "-" + ("0" + _currentDate.getDate()).slice(-2);
     var _currentendDateAllocquery = _endDate.getFullYear() + "-" + ("0" + (_endDate.getMonth() + 1)).slice(-2) + "-" + ("0" + _endDate.getDate()).slice(-2);
 
-    var availability = req.body.inquiry;
     Allocation.find(
         {
-            active: true,
-            group: group,
+            // active: true,
+            // group: group,
             $and: [
                 {
                     $or: [
@@ -261,6 +291,7 @@ function getAllocation(req, res, next) {
             _allocationData.forEach(allocation => {
                 allocation.rooms.forEach(room => {
                     _x_allocation.push({
+                        group: allocation.group,
                         hotel: allocation.hotel,
                         hotelname: allocation.hotelname,
                         dateFrom: allocation.dateFrom,
@@ -273,16 +304,16 @@ function getAllocation(req, res, next) {
                         high_qty: room.high,
                         npk_qty: room.npk,
                         pk_qty: room.pk,
-                        seasondate: allocation.seasondate
-
+                        seasondate: allocation.seasondate,
+                        updatedAt: allocation.updatedAt
                     });
                 });
             });
 
             req.body.inquiry.push(_x_allocation);
             next();
+            // return res.json({ success: true, data: _x_allocation })
 
-            // return res.json({ success: true, data: _x_allocation });
         });
 }
 function getBlocking(req, res, next) {
@@ -292,61 +323,28 @@ function getBlocking(req, res, next) {
     var _currentDateAllocquery = _currentDate.getFullYear() + "-" + ("0" + (_currentDate.getMonth() + 1)).slice(-2) + "-" + ("0" + _currentDate.getDate()).slice(-2);
     var _currentendDateAllocquery = _endDate.getFullYear() + "-" + ("0" + (_endDate.getMonth() + 1)).slice(-2) + "-" + ("0" + _endDate.getDate()).slice(-2);
 
-    var availability = req.body.inquiry;
     Blocking.find({
+
+        group: group,
+        agent: agent,
         $and: [
-            { group: group },
-            { agent: agent },
-            { dateFrom: { $gte: _currentDateAllocquery } },
-            { dateTo: { $lte: _currentendDateAllocquery } }
+            {
+                $or: [
+                    { dateFrom: { $gte: _currentDateAllocquery } },
+                    { dateFrom: { $lte: _currentendDateAllocquery } }
+                ]
+            },
+            {
+                $or: [
+                    { dateTo: { $gte: _currentDateAllocquery } },
+                    { dateTo: { $lte: _currentendDateAllocquery } }
+                ]
+            }
         ]
     }, (error, _blockingData) => {
         if (error) return res.json({ success: false, error });
-
-
-        // var newData = [];
-        // if (_blockingData) {
-        //     _blockingData.forEach(block => {
-        //         availability.forEach(availeach => {
-        //             if (block.group === availeach.group) {
-        //                 if (block.hotelname === availeach.hotel) {
-        //                     availeach.availability.forEach(availdate => {
-        //                         var availDate = new Date(availdate.date);
-        //                         availDate.setMonth(availDate.getMonth() + 1);
-        //                         block.rooms.forEach(blockdata => {
-        //                             if (new Date(availDate) >= new Date(blockdata.dateFrom) && new Date(availDate) <= new Date(blockdata.dateTo)) {
-        //                                 if (blockdata.roomname === availdate.roomname) {
-        //                                     availdate.blocking = blockdata.block;
-        //                                     availdate.cancellation = blockdata.cancel;
-        //                                     availdate.blockstart = blockdata.dateFrom;
-        //                                     availdate.blockend = blockdata.dateTo;
-        //                                     availdate.agent = block.agent;
-        //                                 }
-        //                                 newData.push(availeach);
-        //                             }
-        //                             else {
-        //                                 if (blockdata.roomname === availdate.roomname) {
-        //                                     availdate.blocking = blockdata.block;
-        //                                     availdate.cancellation = blockdata.cancel;
-        //                                     availdate.blockstart = blockdata.dateFrom;
-        //                                     availdate.blockend = blockdata.dateTo;
-        //                                     availdate.agent = block.agent;
-        //                                 }
-        //                                 newData.push(availeach);
-        //                             }
-        //                         });
-
-        //                     });
-        //                 }
-        //             }
-        //         })
-        //     });
-        // }
-        // newData = availability;
-
         req.body.inquiry.push(_blockingData); //_uniqArray(newData);
         next();
-        // return res.json({ success: true, data: _blockingData });
     });
 }
 function getBooking(req, res, next) {
@@ -355,8 +353,6 @@ function getBooking(req, res, next) {
     var _endDate = new Date(dateto);
     var _currentDateAllocquery = _currentDate.getFullYear() + "-" + ("0" + (_currentDate.getMonth() + 1)).slice(-2) + "-" + ("0" + _currentDate.getDate()).slice(-2);
     var _currentendDateAllocquery = _endDate.getFullYear() + "-" + ("0" + (_endDate.getMonth() + 1)).slice(-2) + "-" + ("0" + _endDate.getDate()).slice(-2);
-
-    var availability = req.body.inquiry;
     Booking.find({
         $and: [
             { agent: agent }
@@ -376,57 +372,12 @@ function getBooking(req, res, next) {
         ]
     }, (error, _bookingData) => {
         if (error) return res.json({ success: false, error });
-        // if (_bookingData.length == 0) {
-        //     req.body.inquiry = availability;
-        //     next();
-        // }
-        // var newData = [];
-        // _bookingData.forEach(book => {
-        //     availability.forEach(availbook => {
-        //         availbook.availability.forEach(availdeduct => {
-        //             if (availbook.hotel === book.hotel) {
-        //                 if (book.deduction === "Blocking") {
-        //                     if (availdeduct.roomname === book.room) {
-        //                         availdeduct.block = parseInt(availdeduct.blocking) - book.numrooms;
-        //                     }
-        //                     newData.push(availbook);
-        //                 } else {
-        //                     if (availdeduct.isPeak) {
-        //                         availdeduct.block = parseInt(availdeduct.peakAmount) - book.numrooms;
-        //                     } else {
-        //                         availdeduct.block = parseInt(availdeduct.npeakAmount) - book.numrooms;
-        //                     }
-        //                     newData.push(availbook);
-        //                 }
-        //             } else {
-        //                 newData.push(availbook);
-        //             }
-        //         });
-        //     })
-        // });
         req.body.inquiry.push(_bookingData);//_uniqArray(newData);
         next();
+        // return res.json({ success: true, data: _bookingData })
     });
 }
-function _uniqArray(array) {
-    array = array.filter((array, index, self) =>
-        index === self.findIndex((data) => (
-            data.hotel === array.hotel
-        ))
-    );
-    return array;
-}
-function _removeItemFromArray(array, date) {
-    var newArray = [];
-    for (var i = 0; i < array.length; i++) {
-        if (new Date(array[i].date) > new Date(date)) { }
-        else {
-            newArray.push(array[i]);
-        }
-    }
-    return newArray;
-}
-function _removeItemFromArrayAvailability(hotel, hotelname, array, date) {
+function _removeItemFromArrayAvailability(hotel, hotelname, array, updatedAt, date) {
     var newArray = [];
     for (var i = 0; i < array.length; i++) {
         if (new Date(array[i].date) > new Date(date)) { }
@@ -438,7 +389,8 @@ function _removeItemFromArrayAvailability(hotel, hotelname, array, date) {
                 room: array[i].room,
                 roomname: array[i].roomname,
                 classColor: array[i].classColor,
-                status: array[i].status
+                status: array[i].status,
+                updatedAt: updatedAt
 
             });
         }

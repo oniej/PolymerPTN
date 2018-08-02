@@ -339,14 +339,6 @@
                 },
                 dateCreated: String,
                 msg: String,
-                created_by: {
-                    type: String,
-                    value: 'Peter Villaceran'
-                },
-                updated_by: {
-                    type: String,
-                    value: 'Ardie Derrayal'
-                },
                 room: String,
                 rooms: {
                     type: Array,
@@ -388,6 +380,7 @@
                 this.$.ajax.handleAs = "json";
                 this.$.ajax.generateRequest();
 
+                this.notifyPath("allocationDetails",[]);
             },
           
             _userLoaded(data) {
@@ -432,17 +425,19 @@
                     this.$.ajax.generateRequest();
                     this.$.successModal.opened = true;
                     this.url = '';
+
+                    this.dateFrom = "";
+                    this.dateTo = "";
+                    this.pk_coff = "";
+                    this.npk_coff = "";
+                    this.high_coff = "";
+                    this.note = "";
+                    this.allocationDetails = null;
+                    this.seasonDetails = null;
+                    this.$.hotelLbl.value = "";
+                    this.$.season.value = "";
+                    this.$.room.value = "";
                 }
-                this.hotel = "";
-                this.$.hotelLbl.selectedItem.label = "";
-                this.dateFrom = "";
-                this.dateTo = "";
-                this.pk_coff = "";
-                this.npk_coff = "";
-                this.high_coff = "";
-                this.note = "";
-                this.allocationDetails = null;
-                this.seasonDetails = null;
             },
 
             _ok() {
@@ -453,20 +448,26 @@
             _cancel() { },
             ready() {
                 this.url = '/hotel/read';
-                this.hotel = "";
-                this.$.hotelLbl.selectedItem.label = "";
-                this.dateFrom = "";
-                this.dateTo = "";
-                this.pk_coff = "";
-                this.npk_coff = "";
-                this.high_coff = "";
-                this.note = "";
-                this.allocationDetails = null;
-                this.seasonDetails = null;
-
+            //     this.dateFrom = "";
+            //     this.dateTo = "";
+            //     this.pk_coff = "";
+            //     this.npk_coff = "";
+            //     this.high_coff = "";
+            //     this.note = "";
+            //     this.allocationDetails = null;
+            //     this.seasonDetails = null;
+                
+            //    this.$.pk.selectedItem = null;
+            //     this.$.npk.selectedItem = null;
+            //     this.$.high.selectedItem = null;
+            //     this.$.room.selectedItem = null;
+            //     this.$.season.selectedItem = null;
+            //     this.hotelLbl.selectedItem = null;
+            //     this.$.hotelLbl.selectedItem = null;
                 this.editingAllocationDetails = null;
                 this.editingSeasonDetails = null;
-              
+                this.$.room.selectedItem.label = null;
+               
             },
             _hotelLoaded(data) {
                 if (data.detail.response) {
@@ -479,9 +480,10 @@
                 }
             },
             _roomsLoaded(data) {
+                // this.allocationDetails = "";
                 if (data.detail.response) {
                     // this.roomItems = data.detail.response.data.room;
-
+                  
                     var combobox = Polymer.dom(this.root).querySelector('#room');
                     combobox.items = data.detail.response.data;
 

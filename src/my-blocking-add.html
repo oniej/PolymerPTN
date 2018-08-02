@@ -206,7 +206,7 @@
                             <paper-toggle-button style="float: right;" value="{{active}}" id="active" on-tap="_active" checked>ACTIVE</paper-toggle-button>
                         </div> -->
                         <div class="groupdiv">
-                            <paper-dropdown-input class="group" label="Group" items='[[groupItems]]' filter-property="group" value="{{group}}">
+                            <paper-dropdown-input id="group" class="group" label="Group" items='[[groupItems]]' filter-property="group" value="{{group}}">
                                 <template>
                                     <template is="dom-repeat" items="[[items]]" as="item">
                                         <paper-item>[[item.group]]</paper-item>
@@ -310,6 +310,7 @@
                     this.urluser = '/user/getkey/' + f;
                     this.$.ajax.handleAs = "json";
                     this.$.ajax.generateRequest();
+                    
             },
             _active() {
                 this.$.active.checked;
@@ -322,10 +323,16 @@
             },
             _submit() {
 
-                if (!this.hotel || !this.note || !this.group) {
-                    this.msg = "All fields required";
+                if (!this.hotel) {
+                    this.msg = "All fields required hotel";
                     alert(this.msg);
                 }
+                else if (!this.note)
+                { this.msg = "All fields required note";
+                    alert(this.msg);}
+                else if (!this.group)
+                { this.msg = "All fields required group";
+                    alert(this.msg);}
                 else {
                     // var active = this.$.active.checked;
 
@@ -353,18 +360,15 @@
                     this.$.ajax.generateRequest();
                     this.$.successModal.opened = true;
                     this.url = '';
-                    this.group ="";
-                    this.hotel = "";
-                    this.$.hotelLbl.selectedItem.label = "";
-                    this.$.hotelLbl.selectedItem.value = "";
-                    this.$.room.selectedItem.value = "";
-                    this.$.room.selectedItem.label = "";
-                    this.note = "";
-                    this.dateFrom = "";
-                    this.dateTo = "";
-                    this.$.block.value ="";
-                    this.$.cancel.value = "";
-
+                   
+                    this.note = '';
+                    this.dateFrom = '';
+                    this.dateTo ='';
+                    this.$.block.value ='';
+                    this.$.cancel.value = '';
+                    this.$.hotelLbl.value = "";
+                    this.$.room.value = "";
+                    this.$.group.value = "";
                 }
             },
             _ok() {
@@ -379,10 +383,13 @@
 
                 this.group ="";
                 this.hotel = "";
-                this.$.hotelLbl.selectedItem.label = "";
-                this.$.hotelLbl.selectedItem.value = "";
-                this.$.room.selectedItem.value = "";
-                this.$.room.selectedItem.label = "";
+                // this.$.group.selectedItem.value = null;
+                // this.$.group.selectedItem.label = null;
+                // this.$.group.value = null;
+                // this.$.hotelLbl.selectedItem.value = null;
+                // this.$.hotelLbl.selectedItem.label = null;
+                // this.$.room.selectedItem.label = null;
+                // this.$.room.selectedItem.value = null;
                 this.dateFrom = "";
                 this.dateTo = "";
                 this.note = "";

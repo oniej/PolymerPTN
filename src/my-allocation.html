@@ -212,7 +212,7 @@
         <template is="dom-if" if="{{editActive}}" restamp>
         <!-- <div hidden$="{{!editActive}}"> -->
             <div id="allocationedit"></div>
-            <my-allocation-edit id="d25" edit-key='{{editData._id}}' prev-route="{{groupData._group}}"></my-allocation-edit>
+            <my-allocation-edit id="d25" account-key='{{accountKey}}' edit-key='{{editData._id}}' prev-route="{{groupData._group}}"></my-allocation-edit>
         <!-- </div> -->
         </template>
     </template>
@@ -301,6 +301,7 @@
                     newDiv.setAttribute("id", "d25");
                     newDiv.setAttribute("edit-key", data_args);
                     newDiv.setAttribute("prev-route", data_args);
+                    newDiv.setAttribute("account-key", this.accountKey);
                     // newDiv.setAttribute("block ", "3 ")
                     //if open existing
                     // console.log(newDiv);

@@ -185,6 +185,7 @@
         </custom-style>
         <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_allocationLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
         <iron-ajax id="ajaxRoom" handle-as="json" on-response="_roomsLoaded"></iron-ajax>
+        <iron-ajax auto url="{{urluser}}" params='{}' handle-as="json" on-response="_userLoaded"></iron-ajax>
         <iron-ajax auto url="/group/read" handle-as="json" on-response="_groupLoaded" debounce-duration="300"></iron-ajax>
         <app-drawer-layout fullbleed narrow="{{narrow}}" id="drawerLayout">
             <app-header-layout id="appheader" has-scrolling-region>
@@ -460,8 +461,9 @@
                 accountKey: String,
                 editingAllocationDetails: Object,
                 editingSeasonDetails: Object,
+                accountKey: String,
             },
-            observers: ['_hotelChanged(hotel)'],
+            observers: ['_hotelChanged(hotel,accountKey)'],
             _hotelChanged(e,f) {
                 this.room = null;
                 this.peak = null;
@@ -474,16 +476,26 @@
                 this.$.ajaxRoom.method = 'GET';
                 this.$.ajaxRoom.url = '/hotel/filterHotel/' + e;
                 this.$.ajaxRoom.generateRequest();
+
+                 this.method = 'GET';
+                this.urluser = '/user/getkey/' + f;
+                this.$.ajax.handleAs = "json";
+                this.$.ajax.generateRequest();
             },
-           
+            
             displayLabels: function (e) {
                 return e.base.join(', ');
+            },
+            _userLoaded(data) {
+                if (data.detail.response.data) {
+                    this.createdBy = data.detail.response.data.name;
+                    this.modifiedBy = data.detail.response.data.name;
+                }
             },
             _allocationLoaded(data) {
                 if (data.detail.response) {
                     if (this.editKey) {
                         if (this.url === '/allocation/readEdit/' + this.editKey) {
-
                             this.allocations = data.detail.response.data;
                             this.group = data.detail.response.data.group;
                             // this.active = data.detail.response.data.active;
@@ -558,7 +570,7 @@
                             note: this.note,
                             seasondate: this.seasonDetails,
                             created_by: this.created_by,
-                            updated_by: this.updated_by,
+                            updated_by: this.modifiedBy,
                         };
                         this.$.ajax.generateRequest();
                         this.$.allocationSave.opened = false;

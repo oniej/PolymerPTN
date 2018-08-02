@@ -62,7 +62,8 @@ router.get('/read', (req, res) => {
     Hotels.find((err, hotels) => {
         if (err) return res.json({ success: false, error: err });
         return res.json({ success: true, data: hotels });
-    }).sort({ _id: -1 }).limit(20);
+    }).sort({ _id: -1 });
+    // .limit(20)
 });
 
 router.post('/add', (req, res) => {

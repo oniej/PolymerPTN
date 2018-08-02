@@ -274,18 +274,18 @@
                     <iron-scroll-document id="threshold">
                             <iron-ajax auto url="{{url}}" params='{}' handle-as="json" on-response="_blockingLoaded" loading="{{loadingData}}" debounce-duration="300"></iron-ajax>
                             <div class="blocking">
-                                    <!-- <a href="/blocking/add" style="text-decoration: none;">
+                                    <a href="/blocking/add" style="text-decoration: none;">
                                     <paper-card on-tap="_availnew">
                                         <div class="card-content"> 
                                             <center>
-                                                <paper-icon-button icon="my-icons:add" style="color:#4CAF50;width: 110px;height: 90px;">
+                                                <paper-icon-button icon="my-icons:add" style="color:#4CAF50;width: 110px;height: 85px;">
                                                 </paper-icon-button>
                                                 <br>
                                                 <span style="color:#4CAF50;">Add Blocking</span>
                                             </center>
                                         </div>
                                     </paper-card>
-                                </a> -->
+                                </a>
                                 
                                 <template is="dom-repeat" items="[[blockings]]" as="item" filter="{{_filter(filterVal)}}">
                                     <a href="/blocking/hotel/{{item.hotel}}" style="text-decoration: none;">
@@ -386,7 +386,6 @@
             },
             toggleSearch() {
                 this.openSearch = true;
-
             },
             toggleReturn() {
                 this.openSearch = false;
